@@ -57,7 +57,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
       const body = section?.body || section || {};
       const res = await updatePageSectionAction("library", key, body);
       if (res.success) {
-        setFeedback({ type: "success", message: `Saved ${key} section to Aiven MySQL successfully!` });
+        setFeedback({ type: "success", message: `Saved ${key} section successfully!` });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save section" });
       }
@@ -95,7 +95,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
             Central Library CMS
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Manage public library resources, metrics, loan circulation policies, and digital resource portals in Aiven MySQL.
+            Manage public library resources, metrics, loan circulation policies, and digital resource portals.
           </p>
         </div>
       </div>
@@ -161,7 +161,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                   className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
-                  {savingKey === "hero" ? "Saving..." : "Save to Aiven"}
+                  {savingKey === "hero" ? "Saving..." : "Save Changes"}
                 </button>
               </div>
 
@@ -254,7 +254,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                     className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                   >
                     <Save className="h-4 w-4" />
-                    {savingKey === "metrics" ? "Saving..." : "Save to Aiven"}
+                    {savingKey === "metrics" ? "Saving..." : "Save Changes"}
                   </button>
                 </div>
               </div>
@@ -339,7 +339,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                   className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
-                  {savingKey === "overview" ? "Saving..." : "Save to Aiven"}
+                  {savingKey === "overview" ? "Saving..." : "Save Changes"}
                 </button>
               </div>
 
@@ -440,7 +440,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                   className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
-                  {savingKey === "portals" ? "Saving..." : "Save to Aiven"}
+                  {savingKey === "portals" ? "Saving..." : "Save Changes"}
                 </button>
               </div>
 
@@ -514,7 +514,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                   className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
-                  {savingKey === "hours_policy" ? "Saving..." : "Save to Aiven"}
+                  {savingKey === "hours_policy" ? "Saving..." : "Save Changes"}
                 </button>
               </div>
 
@@ -637,7 +637,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                     className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                   >
                     <Save className="h-4 w-4" />
-                    {savingKey === "loan_rules" ? "Saving..." : "Save to Aiven"}
+                    {savingKey === "loan_rules" ? "Saving..." : "Save Changes"}
                   </button>
                 </div>
               </div>
@@ -737,7 +737,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                   className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
-                  {savingKey === "contact" ? "Saving..." : "Save to Aiven"}
+                  {savingKey === "contact" ? "Saving..." : "Save Changes"}
                 </button>
               </div>
 

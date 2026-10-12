@@ -42,7 +42,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
     try {
       const res = await updatePageSectionAction("advisory-board", "hero", heroBody);
       if (res.success) {
-        setFeedback({ type: "success", message: "Saved Advisory Board hero to Aiven MySQL!" });
+        setFeedback({ type: "success", message: "Saved Advisory Board hero successfully!" });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save hero" });
       }
@@ -59,7 +59,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
     try {
       const res = await updatePageSectionAction("advisory-board", "members", { members });
       if (res.success) {
-        setFeedback({ type: "success", message: "Saved Advisory Board members to Aiven MySQL!" });
+        setFeedback({ type: "success", message: "Saved Advisory Board members successfully!" });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save members" });
       }
@@ -136,7 +136,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
             Advisory Board CMS
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Manage global academic deans, corporate leaders, portraits, and display order saved in Aiven MySQL.
+            Manage global academic deans, corporate leaders, portraits, and display order.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -156,7 +156,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
                 className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
               >
                 <Save className="h-4 w-4" />
-                {saving ? "Saving..." : "Save to Aiven"}
+                {saving ? "Saving..." : "Save Changes"}
               </button>
             </>
           ) : (
@@ -167,7 +167,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
               className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
             >
               <Save className="h-4 w-4" />
-              {saving ? "Saving..." : "Save to Aiven"}
+              {saving ? "Saving..." : "Save Changes"}
             </button>
           )}
         </div>

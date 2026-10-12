@@ -51,7 +51,7 @@ export function InstitutionalPagesCmsDashboard({
       const body = section?.body || section || {};
       const res = await updatePageSectionAction(pageSlug, key, body);
       if (res.success) {
-        setFeedback({ type: "success", message: `Saved ${key} section for /${pageSlug} to Aiven MySQL!` });
+        setFeedback({ type: "success", message: `Saved ${key} section for /${pageSlug} successfully!` });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save section" });
       }
@@ -68,7 +68,7 @@ export function InstitutionalPagesCmsDashboard({
     try {
       const res = await updatePageSeoAction(pageSlug, seoData);
       if (res.success) {
-        setFeedback({ type: "success", message: `Saved SEO metadata for /${pageSlug} to Aiven MySQL!` });
+        setFeedback({ type: "success", message: `Saved SEO metadata for /${pageSlug} successfully!` });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save SEO metadata" });
       }
@@ -108,7 +108,7 @@ export function InstitutionalPagesCmsDashboard({
             {pageSlug.replace(/-/g, " ")} CMS
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Manage live content sections for <code className="bg-slate-100 px-1 py-0.5 rounded font-mono">/{pageSlug}</code> stored in Aiven MySQL.
+            Manage live content sections for <code className="bg-slate-100 px-1 py-0.5 rounded font-mono">/{pageSlug}</code>.
           </p>
         </div>
         <a
@@ -278,7 +278,7 @@ export function InstitutionalPagesCmsDashboard({
               <h3 className="font-serif text-lg font-bold text-[#0A1F44] capitalize">
                 {activeTab.replace(/_/g, " ")} Section
               </h3>
-              <p className="text-xs text-slate-500">Edit values and save to Aiven MySQL database.</p>
+              <p className="text-xs text-slate-500">Edit values and save section changes.</p>
             </div>
             <button
               type="button"
@@ -292,7 +292,7 @@ export function InstitutionalPagesCmsDashboard({
                 </>
               ) : (
                 <>
-                  <Save className="h-4 w-4" /> Save to Aiven
+                  <Save className="h-4 w-4" /> Save Changes
                 </>
               )}
             </button>

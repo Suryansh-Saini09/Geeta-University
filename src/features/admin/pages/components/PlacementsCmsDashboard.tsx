@@ -115,7 +115,7 @@ export function PlacementsCmsDashboard({ initialData }: PlacementsCmsDashboardPr
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-serif font-bold text-[#0A1F44]">Placements CMS Editor</h1>
             <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">
-              Aiven MySQL Backed
+              Database Backed
             </span>
           </div>
           <p className="mt-1 text-sm text-slate-500">

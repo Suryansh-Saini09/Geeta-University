@@ -1,54 +1,34 @@
-import Link from "next/link";
-import {
-  BarChart3,
-  BookOpen,
-  CalendarDays,
-  FileText,
-  GalleryHorizontalEnd,
-  GraduationCap,
-  Image,
-  LayoutDashboard,
-  Megaphone,
-  Newspaper,
-  Settings,
-  Inbox,
-  ScrollText,
-  Shield,
-  Sparkles,
-  Trophy,
-  Users,
-  UserCog,
-  Library,
-  Medal,
-} from "lucide-react";
+import { BarChart3, Shield } from "lucide-react";
 
 import type { AdminSessionUser } from "@/server/auth/session";
 import { hasPermission } from "@/server/auth/permissions";
 import { logoutAction } from "@/features/admin/auth/actions";
+import { AdminSidebarNav } from "./AdminSidebarNav";
 
 const navigation = [
-  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { label: "Home CMS", href: "/admin/home", icon: FileText },
-  { label: "About CMS", href: "/admin/about", icon: FileText },
-  { label: "Admissions CMS", href: "/admin/admissions", icon: GraduationCap },
-  { label: "GU Edge CMS", href: "/admin/gu-edge", icon: BookOpen },
-  { label: "Campus Life CMS", href: "/admin/campus-life", icon: Sparkles },
-  { label: "Placements CMS", href: "/admin/placements", icon: Trophy },
-  { label: "Library CMS", href: "/admin/library", icon: Library },
-  { label: "Advisory Board CMS", href: "/admin/advisory-board", icon: Users },
-  { label: "Medal Policy CMS", href: "/admin/medal-policy", icon: Medal },
-  { label: "Pages", href: "/admin/pages", icon: FileText },
-  { label: "Departments", href: "/admin/departments", icon: GraduationCap },
-  { label: "Programs", href: "/admin/programs", icon: BookOpen },
-  { label: "Notices", href: "/admin/notices", icon: Megaphone },
-  { label: "News", href: "/admin/news", icon: Newspaper },
-  { label: "Events", href: "/admin/events", icon: CalendarDays },
-  { label: "Gallery", href: "/admin/gallery", icon: GalleryHorizontalEnd },
-  { label: "Media", href: "/admin/media", icon: Image },
-  { label: "Submissions", href: "/admin/submissions", icon: Inbox },
-  { label: "Users", href: "/admin/users", icon: UserCog },
-  { label: "Activity", href: "/admin/activity", icon: ScrollText },
-  { label: "Settings", href: "/admin/settings", icon: Settings },
+  { label: "Dashboard", href: "/admin" },
+  { label: "Home CMS", href: "/admin/home" },
+  { label: "About CMS", href: "/admin/about" },
+  { label: "Admissions CMS", href: "/admin/admissions" },
+  { label: "GU Edge CMS", href: "/admin/gu-edge" },
+  { label: "Campus Life CMS", href: "/admin/campus-life" },
+  { label: "Placements CMS", href: "/admin/placements" },
+  { label: "Library CMS", href: "/admin/library" },
+  { label: "Advisory Board CMS", href: "/admin/advisory-board" },
+  { label: "Medal Policy CMS", href: "/admin/medal-policy" },
+  { label: "Pages", href: "/admin/pages" },
+  { label: "Departments", href: "/admin/departments" },
+  { label: "Faculty", href: "/admin/faculty" },
+  { label: "Programs", href: "/admin/programs" },
+  { label: "Notices", href: "/admin/notices" },
+  { label: "News", href: "/admin/news" },
+  { label: "Events", href: "/admin/events" },
+  { label: "Gallery", href: "/admin/gallery" },
+  { label: "Media", href: "/admin/media" },
+  { label: "Submissions", href: "/admin/submissions" },
+  { label: "Users", href: "/admin/users" },
+  { label: "Activity", href: "/admin/activity" },
+  { label: "Settings", href: "/admin/settings" },
 ];
 
 export default function AdminShell({
@@ -74,28 +54,15 @@ export default function AdminShell({
             </div>
           </div>
 
-          <nav className="space-y-1 p-4">
-            {navigation.filter((item) => {
+          <AdminSidebarNav
+            items={navigation.filter((item) => {
               if (item.href === "/admin/users") return hasPermission(user.role, "manageUsers");
               if (item.href === "/admin/activity") return hasPermission(user.role, "viewAuditLogs");
               if (item.href === "/admin/submissions") return hasPermission(user.role, "viewSubmissions");
               if (item.href === "/admin/settings") return hasPermission(user.role, "manageSettings");
               return true;
-            }).map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-white/78 transition-colors hover:bg-white/10 hover:text-white"
-                >
-                  <Icon className="h-4 w-4 text-[#E8871A]" />
-                  {item.label}
-                </Link>
-              );
             })}
-          </nav>
+          />
         </aside>
 
         <div className="flex min-w-0 flex-col">

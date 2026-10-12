@@ -127,7 +127,7 @@ export function GuEdgeCmsDashboard({
       if (res.success) {
         setFeedback({
           type: "success",
-          text: `Section "${activeSectionKey}" saved successfully to Aiven DB!`,
+          text: `Section "${activeSectionKey}" saved successfully!`,
         });
         if (sections[activeSectionKey]) {
           sections[activeSectionKey].body = activeBodyState;

@@ -51,7 +51,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
       const body = section?.body || section || {};
       const res = await updatePageSectionAction("medal-policy", key, body);
       if (res.success) {
-        setFeedback({ type: "success", message: `Saved ${key} section to Aiven MySQL successfully!` });
+        setFeedback({ type: "success", message: `Saved ${key} section successfully!` });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save section" });
       }
@@ -89,7 +89,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
             GU Medal Policy CMS
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Manage academic medals, batch cohort size thresholds, Chancellor's Medal weightages, and convocation ranker PDFs in Aiven MySQL.
+            Manage academic medals, batch cohort size thresholds, Chancellor's Medal weightages, and convocation ranker PDFs.
           </p>
         </div>
       </div>
@@ -163,7 +163,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
-                  {savingKey === "academic_medals" ? "Saving..." : "Save to Aiven"}
+                  {savingKey === "academic_medals" ? "Saving..." : "Save Changes"}
                 </button>
               </div>
 
@@ -242,7 +242,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
-                  {savingKey === "thresholds" ? "Saving..." : "Save to Aiven"}
+                  {savingKey === "thresholds" ? "Saving..." : "Save Changes"}
                 </button>
               </div>
 
@@ -311,7 +311,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
-                  {savingKey === "chancellor" ? "Saving..." : "Save to Aiven"}
+                  {savingKey === "chancellor" ? "Saving..." : "Save Changes"}
                 </button>
               </div>
 
@@ -376,7 +376,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
-                  {savingKey === "chancellor_weightage" ? "Saving..." : "Save to Aiven"}
+                  {savingKey === "chancellor_weightage" ? "Saving..." : "Save Changes"}
                 </button>
               </div>
 
@@ -443,7 +443,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
-                  {savingKey === "rankers_document" ? "Saving..." : "Save to Aiven"}
+                  {savingKey === "rankers_document" ? "Saving..." : "Save Changes"}
                 </button>
               </div>
 
@@ -519,7 +519,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
-                  {savingKey === "hero" ? "Saving..." : "Save to Aiven"}
+                  {savingKey === "hero" ? "Saving..." : "Save Changes"}
                 </button>
               </div>
 

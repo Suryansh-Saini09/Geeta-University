@@ -101,3 +101,61 @@ export async function archiveFacultyAction(formData: FormData) {
   revalidatePath("/admin");
   redirect("/admin/faculty?archived=1");
 }
+
+export async function reorderFacultyAction(formData: FormData) {
+  const session = await requireAdminSession();
+  assertPermission(session.user.role, "manageContent");
+  const id = String(formData.get("id") ?? "");
+  const direction = String(formData.get("direction") ?? "");
+
+  if (!id || (direction !== "up" && direction !== "down")) {
+    redirect("/admin/faculty?error=invalid-reorder");
+  }
+
+  const current = await prisma.facultyMember.findUnique({ where: { id } });
+  if (!current) redirect("/admin/faculty?error=not-found");
+
+  const where: Prisma.FacultyMemberWhereInput = {
+    status: { not: ContentStatus.ARCHIVED },
+    ...(current.departmentId ? { departmentId: current.departmentId } : {}),
+  };
+
+  const siblings = await prisma.facultyMember.findMany({
+    where,
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+    select: { id: true, sortOrder: true },
+  });
+
+  const currentIndex = siblings.findIndex((s) => s.id === id);
+  if (currentIndex === -1) redirect("/admin/faculty?error=not-found");
+
+  const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+  if (targetIndex < 0 || targetIndex >= siblings.length) {
+    redirect("/admin/faculty");
+  }
+
+  const target = siblings[targetIndex];
+
+  let currentNewOrder = target.sortOrder;
+  let targetNewOrder = current.sortOrder;
+
+  if (currentNewOrder === targetNewOrder) {
+    currentNewOrder = direction === "up" ? target.sortOrder - 1 : target.sortOrder + 1;
+  }
+
+  await prisma.$transaction([
+    prisma.facultyMember.update({
+      where: { id: current.id },
+      data: { sortOrder: currentNewOrder },
+    }),
+    prisma.facultyMember.update({
+      where: { id: target.id },
+      data: { sortOrder: targetNewOrder },
+    }),
+  ]);
+
+  revalidatePath("/admin/faculty");
+  revalidatePath("/admin/departments");
+  revalidatePath("/admin");
+  redirect("/admin/faculty?reordered=1");
+}
