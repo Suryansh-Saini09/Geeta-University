@@ -42,8 +42,12 @@ export default function CourseSharedSections({
 
   // 1. Meet Our Mentors: Directly imported and shared from the main program page
   const faculty =
-    resolvedSchool?.faculty && resolvedSchool.faculty.length > 0
+    course.faculty && course.faculty.length > 0
+      ? course.faculty
+      : resolvedSchool?.faculty && resolvedSchool.faculty.length > 0
       ? resolvedSchool.faculty
+      : resolvedSchool?.mentorsSection?.faculty && resolvedSchool.mentorsSection.faculty.length > 0
+      ? resolvedSchool.mentorsSection.faculty
       : computerScienceSchool.faculty;
 
   // 2. Highlights of Our Learning Spaces: Shared from department spaces
