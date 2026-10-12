@@ -19,7 +19,11 @@ import {
 } from "lucide-react";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
 
-export default function XEdgePage() {
+import type { EdgePageData } from "@/data/edge/types";
+
+export default function XEdgePage({ pageData }: { pageData?: EdgePageData }) {
+  const heroImage = pageData?.hero?.image || "https://geetauniversity.edu.in/uploads/all/120/conversions/2-xedge-full.webp";
+
   return (
     <main className="min-h-screen bg-[#F8FAFC] text-[#1A1A2E]">
       {/* ── 1. Hero Section (Hero image preserved) ── */}
@@ -27,7 +31,7 @@ export default function XEdgePage() {
         {/* Full-width responsive banner image with ample vertical presence */}
         <div className="relative w-full h-[320px] sm:h-[420px] md:h-[500px] lg:h-[560px]">
           <Image
-            src="https://geetauniversity.edu.in/uploads/all/120/conversions/2-xedge-full.webp"
+            src={heroImage}
             alt="XEDGE - Geeta University"
             fill
             priority

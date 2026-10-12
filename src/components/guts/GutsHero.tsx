@@ -4,15 +4,28 @@ import React from "react";
 import Image from "next/image";
 import { Check } from "lucide-react";
 
-export default function GutsHero() {
+interface GutsHeroProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    bannerImage?: string;
+    applyUrl?: string;
+  };
+}
+
+export default function GutsHero({ data }: GutsHeroProps) {
+  const title = data?.title || "GUTS – Geeta University Test of Scholarship";
+  const subtitle = data?.subtitle || "GUTS is Geeta University's in-house scholarship test to identify students' capability and interest to excel academically. Depending on how well they perform in the test, students can pursue their dream of acquiring higher education with 0 tuition fees.";
+  const bannerImage = data?.bannerImage || "https://geetauniversity.edu.in/uploads/all/1912/Guts_banner.jpg";
+
   return (
     <section className="w-full bg-white">
       {/* 1. Large Top Hero Banner Image */}
       <div className="relative w-full overflow-hidden bg-[#0A1F44]">
         <div className="relative h-[220px] sm:h-[320px] md:h-[420px] lg:h-[500px] xl:h-[560px] w-full">
           <Image
-            src="https://geetauniversity.edu.in/uploads/all/1912/Guts_banner.jpg"
-            alt="GUTS - Geeta University Test of Scholarship"
+            src={bannerImage}
+            alt={title}
             fill
             priority
             sizes="100vw"
@@ -25,15 +38,11 @@ export default function GutsHero() {
       <div className="gu-container py-12 sm:py-16 md:py-20 border-b border-[#E2E8F0]">
         <div className="max-w-4xl mx-auto space-y-6">
           <h1 className="font-serif text-[34px] sm:text-[44px] md:text-[50px] font-black text-[#0A1F44] leading-[1.15] tracking-[-1px]">
-            GUTS – Geeta University{" "}
-            <span className="text-[#E8871A]">Test of Scholarship</span>
+            {title}
           </h1>
 
           <p className="text-[16.5px] sm:text-[18px] leading-[1.8] text-[#334155]">
-            GUTS is Geeta University&apos;s in-house scholarship test to identify students&apos; capability and
-            interest to excel academically. Depending on how well they perform in the test, students can pursue
-            their dream of acquiring higher education with <strong>0 tuition fees</strong>. Students who are already eligible
-            for any other scholarship offered by GU, can also take the test to increase their scholarship amount.
+            {subtitle}
           </p>
 
           {/* Benefits Box */}

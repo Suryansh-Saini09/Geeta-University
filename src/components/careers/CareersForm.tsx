@@ -65,21 +65,39 @@ const initialFormState: FormDataState = {
   reference_source: "",
 };
 
-export default function CareersForm() {
+interface CareersFormProps {
+  formConfig?: {
+    heading?: string;
+    description?: string;
+    categories?: string[];
+    departments?: Array<{
+      value: string;
+      label: string;
+      categories: ("Teaching" | "Non Teaching" | "Admissions & Marketing" | "Essentials")[];
+    }>;
+  } | null;
+}
+
+export default function CareersForm({ formConfig }: CareersFormProps) {
   const [formData, setFormData] = useState<FormDataState>(initialFormState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const availableDepts =
+    formConfig?.departments && formConfig.departments.length > 0
+      ? formConfig.departments
+      : DEPARTMENTS;
+
   // Filter available departments dynamically based on chosen job application category
   const filteredDepartments = useMemo(() => {
-    if (!formData.job_application_for) return DEPARTMENTS;
-    return DEPARTMENTS.filter((dept) =>
+    if (!formData.job_application_for) return availableDepts;
+    return availableDepts.filter((dept) =>
       dept.categories.includes(
         formData.job_application_for as "Teaching" | "Non Teaching" | "Admissions & Marketing" | "Essentials"
       )
     );
-  }, [formData.job_application_for]);
+  }, [formData.job_application_for, availableDepts]);
 
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const category = e.target.value;
@@ -144,10 +162,24 @@ export default function CareersForm() {
         {/* Section Title */}
         <div className="mx-auto mb-14 max-w-3xl text-center">
           <h2 className="font-serif text-[36px] font-black text-[#0A1F44] sm:text-[44px]">
-            Join the <span className="text-[#E8871A]">Geeta Faculty & Staff</span>
+            {formConfig?.heading ? (
+              formConfig.heading.includes("Faculty & Staff") ? (
+                <>
+                  {formConfig.heading.replace("Faculty & Staff", "").trim()}{" "}
+                  <span className="text-[#E8871A]">Faculty & Staff</span>
+                </>
+              ) : (
+                formConfig.heading
+              )
+            ) : (
+              <>
+                Join the <span className="text-[#E8871A]">Geeta Faculty & Staff</span>
+              </>
+            )}
           </h2>
           <p className="mt-3 text-[16px] leading-[1.7] text-[#64748B]">
-            Fill out the form below to register your application. Fields marked with an asterisk (<span className="text-red-500">*</span>) are mandatory.
+            {formConfig?.description ||
+              "Fill out the form below to register your application. Fields marked with an asterisk (*) are mandatory."}
           </p>
         </div>
 

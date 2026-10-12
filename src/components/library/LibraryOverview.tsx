@@ -1,8 +1,25 @@
 import React from "react";
 import Link from "next/link";
-import { libraryOverviewData } from "@/data/libraryData";
+import { libraryOverviewData as fallbackOverview } from "@/data/libraryData";
 
-export default function LibraryOverview() {
+interface LibraryOverviewProps {
+  overview?: {
+    title?: string;
+    paragraphs?: string[];
+    referenceSection?: {
+      title?: string;
+      count?: string;
+      description?: string;
+    };
+  } | null;
+}
+
+export default function LibraryOverview({ overview }: LibraryOverviewProps) {
+  const data = overview || fallbackOverview;
+  const title = data.title || fallbackOverview.title;
+  const paragraphs = data.paragraphs || fallbackOverview.paragraphs;
+  const refSection = data.referenceSection || fallbackOverview.referenceSection;
+
   return (
     <section className="w-full bg-white py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -10,11 +27,11 @@ export default function LibraryOverview() {
           {/* Left Main Overview Content */}
           <div className="lg:col-span-8 space-y-6">
             <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#0A1F44] leading-tight">
-              {libraryOverviewData.title}
+              {title}
             </h2>
 
             <div className="space-y-4 text-base text-slate-700 leading-relaxed font-sans">
-              {libraryOverviewData.paragraphs.map((para, idx) => (
+              {paragraphs.map((para, idx) => (
                 <p key={idx}>{para}</p>
               ))}
             </div>
@@ -23,12 +40,12 @@ export default function LibraryOverview() {
             <div className="mt-8 rounded-2xl border-l-4 border-[#E8871A] bg-amber-50/60 p-6 sm:p-8 shadow-sm space-y-4">
               <div>
                 <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
-                  {libraryOverviewData.referenceSection.title}
+                  {refSection.title}
                 </h3>
               </div>
 
               <p className="text-sm text-slate-700 leading-relaxed font-sans">
-                {libraryOverviewData.referenceSection.description}
+                {refSection.description}
               </p>
 
               {/* Button to Knowledge Resource Centre */}

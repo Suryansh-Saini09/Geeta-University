@@ -1,8 +1,16 @@
 import React from "react";
 import { FileText, Presentation, FolderCheck, Video, Download, ExternalLink } from "lucide-react";
-import { ugcDocuments } from "@/data/ugcData";
+import { ugcDocuments as fallbackDocuments, UGCDocument } from "@/data/ugcData";
 
-export default function UGCDocumentsGrid() {
+interface UGCDocumentsGridProps {
+  title?: string;
+  documents?: UGCDocument[] | null;
+}
+
+export default function UGCDocumentsGrid({ title, documents }: UGCDocumentsGridProps) {
+  const sectionTitle = title || "Official UGC Performa & Inspection Files";
+  const docsList = documents && documents.length > 0 ? documents : fallbackDocuments;
+
   const getDocumentIcon = (name: string) => {
     switch (name) {
       case "Presentation":
@@ -22,15 +30,15 @@ export default function UGCDocumentsGrid() {
         {/* Section Header */}
         <div className="mx-auto max-w-3xl text-center mb-12 md:mb-16">
           <h2 className="mt-3 font-serif text-3xl font-bold tracking-tight text-[#0A1F44] sm:text-4xl">
-            Official UGC Performa & Inspection Files
+            {sectionTitle}
           </h2>
         </div>
 
         {/* Grid Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {ugcDocuments.map((doc) => (
+          {docsList.map((doc) => (
             <div
-              key={doc.id}
+              key={doc.id || doc.filename}
               className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-[#F7F9FC] p-6 sm:p-8 transition-all duration-300 hover:border-[#E8871A]/50 hover:bg-white hover:shadow-xl"
             >
               <div>
@@ -61,24 +69,11 @@ export default function UGCDocumentsGrid() {
                   href={doc.fileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#0A1F44] px-6 py-3.5 text-sm font-bold text-white shadow-md transition-all duration-200 hover:bg-[#E8871A] hover:shadow-lg active:scale-[0.99] font-sans"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-3 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:bg-[#E8871A] hover:text-white"
                   style={{ color: "#ffffff" }}
                 >
-                  {doc.isExternal ? (
-                    <>
-                      <span className="text-white" style={{ color: "#ffffff" }}>
-                        Open Geo-Tagged Media Drive
-                      </span>
-                      <ExternalLink className="h-4 w-4 shrink-0 text-[#E8871A] group-hover:text-white" />
-                    </>
-                  ) : (
-                    <>
-                      <Download className="h-4 w-4 shrink-0 text-[#E8871A] group-hover:text-white" />
-                      <span className="text-white" style={{ color: "#ffffff" }}>
-                        Download / View PDF File
-                      </span>
-                    </>
-                  )}
+                  <Download className="h-4 w-4" />
+                  <span>Download / View Document</span>
                 </a>
               </div>
             </div>

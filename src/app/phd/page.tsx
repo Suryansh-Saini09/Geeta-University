@@ -12,53 +12,39 @@ import PhdNoticeAndContact from "@/components/phd/PhdNoticeAndContact";
 import FAQSection from "@/components/programs/FAQSection";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
 import { phdFaqsData } from "@/data/phdData";
+import { getPublishedAdmissionsPage } from "@/server/services/pages";
 
-export const metadata: Metadata = {
-  title: "PhD in Private University in India | Best Research Programs at GU",
-  description:
-    "Enroll in a UGC-compliant PhD at a leading private university with expert faculty, advanced labs, and interdisciplinary research opportunities. Apply Now!",
-  keywords: [
-    "PhD in Private University in India",
-    "Best Research Programs at GU",
-    "Pursue Cutting-Edge Research with Ph.D. Admissions 2026",
-    "Geeta University Panipat",
-    "phd in computer science",
-    "phd in management",
-    "phd in pharmacy",
-    "phd in agriculture",
-  ],
-  openGraph: {
-    title: "PhD in Private University in India | Best Research Programs at GU",
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPublishedAdmissionsPage("phd");
+  return {
+    title: seo?.title || "PhD in Private University in India | Best Research Programs at GU",
     description:
+      seo?.description ||
       "Enroll in a UGC-compliant PhD at a leading private university with expert faculty, advanced labs, and interdisciplinary research opportunities. Apply Now!",
-    url: "https://geetauniversity.edu.in/phd",
-    type: "website",
-    images: [
-      {
-        url: "https://geetauniversity.edu.in/uploads/all/1871/Ph.d.webp",
-        width: 1200,
-        height: 630,
-        alt: "PhD Admissions at Geeta University",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "PhD in Private University in India | Best Research Programs at GU",
-    description:
-      "Enroll in a UGC-compliant PhD at a leading private university with expert faculty, advanced labs, and interdisciplinary research opportunities. Apply Now!",
-    images: ["https://geetauniversity.edu.in/uploads/all/1871/Ph.d.webp"],
-  },
-  alternates: {
-    canonical: "https://geetauniversity.edu.in/phd",
-  },
-};
+    keywords: (seo?.keywords as string[]) || ["PhD in Private University in India", "Best Research Programs at GU"],
+    openGraph: {
+      title: seo?.ogTitle || seo?.title || "PhD in Private University in India | Best Research Programs at GU",
+      description:
+        seo?.description ||
+        "Enroll in a UGC-compliant PhD at a leading private university with expert faculty, advanced labs, and interdisciplinary research opportunities. Apply Now!",
+      url: seo?.canonical || "https://geetauniversity.edu.in/phd",
+      type: "website",
+      images: seo?.ogImage ? [{ url: seo.ogImage }] : [{ url: "https://geetauniversity.edu.in/uploads/all/1871/Ph.d.webp" }],
+    },
+  };
+}
 
-export default function PhdPage() {
+export default async function PhdPage() {
+  const { sections } = await getPublishedAdmissionsPage("phd");
+
+  const heroData = sections.hero;
+  const faqsData = sections.faqs;
+  const legacyData = sections.legacy_ecosystem;
+
   return (
     <div className="min-w-0 overflow-x-hidden bg-white text-[#0A1F44]">
       {/* 1. Hero Banner */}
-      <PhdHero />
+      <PhdHero data={heroData} />
 
       {/* 2. About Program & Disciplines with Lead Enquiry Form */}
       <PhdAboutAndEnquiry />
@@ -87,16 +73,19 @@ export default function PhdPage() {
       {/* 10. Frequently Asked Questions */}
       <section id="faqs" className="w-full scroll-mt-20">
         <FAQSection
-          title="FAQs – Ph.D. at Geeta University"
-          subtitle="Clear your doubts about Ph.D. eligibility, entrance examination structure, fellowships, exemptions, and coursework delivery."
-          faqs={phdFaqsData}
+          title={faqsData?.title || "FAQs – Ph.D. at Geeta University"}
+          subtitle={
+            faqsData?.subtitle ||
+            "Clear your doubts about Ph.D. eligibility, entrance examination structure, fellowships, exemptions, and coursework delivery."
+          }
+          faqs={faqsData?.items || phdFaqsData}
         />
       </section>
 
       {/* 11. Legacy & Ecosystem Section */}
       <LegacyEcosystem
         id="legacy-ecosystem"
-        contextText="Ph.D. scholars benefit from the integrated ecosystem of:"
+        contextText={legacyData?.contextText || "Ph.D. scholars benefit from the integrated ecosystem of:"}
       />
     </div>
   );

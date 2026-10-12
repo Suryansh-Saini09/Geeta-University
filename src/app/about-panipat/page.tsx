@@ -1,98 +1,91 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import {
   ChevronRight,
   MapPin,
-  Landmark,
-  Compass,
   Users,
-  ShieldCheck,
-  Building,
   GraduationCap,
-  Calendar,
-  Sparkles,
 } from "lucide-react";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
+import { getPublishedAboutPanipatPage } from "@/server/services/pages";
 
-export const metadata = {
-  title: "About Panipat",
-  description:
-    "Explore the rich history, three major battles, famous landmarks, geography, and textile heritage of Panipat, Haryana — the proud home of Geeta University.",
-};
+export const revalidate = 60;
 
-const battles = [
-  {
-    number: "First Battle",
-    title: "The First Battle of Panipat",
-    date: "21 April 1526",
-    opponents: "Babur vs. Ibrahim Lodhi",
-    image: "https://geetauniversity.edu.in/uploads/all/221/Battle-of-Panipat.jpg",
-    description:
-      "Fought on 21 April 1526 between Ibrahim Lodhi, the Afghan Sultan of Delhi, and the Turko-Mongol warlord Babur. Babur’s strategic forces defeated Ibrahim Lodhi’s significantly larger army of over one hundred thousand soldiers. This decisive confrontation brought an end to the Delhi-based Lodi dynasty and laid the cornerstone for Mughal rule across Northern India.",
-    keyOutcome: "Decisive end to the Lodi Dynasty and founding of Mughal rule in India.",
-  },
-  {
-    number: "Second Battle",
-    title: "The Second Battle of Panipat",
-    date: "5 November 1556",
-    opponents: "Mughal Forces (Akbar & Bairam Khan) vs. Hem Chandra Vikramaditya (Hemu)",
-    image: "https://geetauniversity.edu.in/uploads/all/222/Second-battle-panipat-1.jpg",
-    description:
-      "Fought on 5 November 1556 between the Mughal armies of Akbar and Hem Chandra Vikramaditya (Raja Hemu), the last Hindu emperor of Delhi. Hemu had successfully reclaimed Agra and Delhi, crowning himself king at Purana Qila. In the heat of the battle, a stray arrow struck Hemu in the eye, turning the tide. Panipat is recorded in the Ain-i-Akbari as an imperial pargana contributing 10,756,647 dams with a strategic brick fortress.",
-    keyOutcome: "Restoration of the Mughal throne in Delhi and martyrdom of Emperor Hemu.",
-  },
-  {
-    number: "Third Battle",
-    title: "The Third Battle of Panipat",
-    date: "14 January 1761",
-    opponents: "Maratha Empire vs. Ahmad Shah Abdali (Durrani Empire)",
-    image: "https://geetauniversity.edu.in/uploads/all/223/third_battel.webp",
-    description:
-      "Fought on 14 January 1761 between the Maratha Empire under Sadashivrao Bhau and the Afghan Durrani forces under Ahmad Shah Abdali. One of the largest battles of the 18th century, it involved over 185,000 troops and thousands of non-combatant pilgrims. The heavy casualties on both sides and subsequent Afghan withdrawal permanently reshaped Indian subcontinent geopolitics, setting the stage for future historical eras.",
-    keyOutcome: "One of the most consequential military engagements in 18th-century Asia.",
-  },
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPublishedAboutPanipatPage();
 
-const landmarks = [
-  {
-    title: "Geeta University",
-    subtitle: "AI-Enabled Higher Education Hub",
-    image: "https://geetauniversity.edu.in/uploads/all/224/new-building-3.webp",
+  return {
+    metadataBase: new URL("https://geetauniversity.edu.in"),
+    title: seo?.title || "About Panipat",
     description:
-      "Originating from the prestigious lineage of the Geeta Group of Institutions founded in 1985, Geeta University represents modern Panipat’s educational renaissance. Spanning across a sprawling, high-tech campus, it empowers thousands of scholars in engineering, pharmacy, management, legal studies, and allied sciences.",
-  },
-  {
-    title: "Hemu Samadhi Sthal",
-    subtitle: "Memorial of the Last Hindu Emperor",
-    image: "https://geetauniversity.edu.in/uploads/all/225/Hemus-Samadhi-Sthal.jpg",
-    description:
-      "Located at Shodapur on Jind Road, Panipat, this sacred memorial commemorates Raja Hem Chandra Vikramaditya. Capturing his fearless leadership during the Second Battle of Panipat, this revered site is preserved as an important regional monument celebrating historical courage and heritage.",
-  },
-  {
-    title: "Ibrahim Lodhi Tomb",
-    subtitle: "Historic Monument on the Grand Trunk Road",
-    image: "https://geetauniversity.edu.in/uploads/all/226/ibrahim_lodi_4.jpg",
-    description:
-      "Dedicated to the fallen Sultan of Delhi after the First Battle of Panipat in 1526. Later elevated with a masonry platform in 1866 alongside the historic Grand Trunk Road, the monument features classic Persian-inscribed stone tablets recounting the legendary clash.",
-  },
-  {
-    title: "Babur Kabuli Bagh Mosque",
-    subtitle: "Mughal Architectural Legacy (1527 CE)",
-    image: "https://geetauniversity.edu.in/uploads/all/227/Babari_Maszid_at_Panipat.webp",
-    description:
-      "Commissioned by Emperor Babur to mark his monumental victory over Ibrahim Lodhi, named after his queen, Mussammat Kabuli Begum. Humayun later expanded the compound with a masonry platform named ‘Chabutra Fateh Mubarak’ inscribed in 934 Hijri.",
-  },
-  {
-    title: "Kala Amb Memorial Park",
-    subtitle: "Sadashivrao Bhau Maratha Command Site",
-    image: "https://geetauniversity.edu.in/uploads/all/228/park_pic4.webp",
-    description:
-      "Situated 8 km from Panipat city center, where Sadashivrao Bhau directed the Maratha forces under a historic Black Mango tree (Kala Amb). Today, the site features a dedicated brick pillar and manicured memorial park maintained by the Haryana heritage society.",
-  },
-];
+      seo?.description ||
+      "Explore the rich history, three major battles, famous landmarks, geography, and textile heritage of Panipat, Haryana — the proud home of Geeta University.",
+    keywords: Array.isArray(seo?.keywords)
+      ? (seo.keywords as string[])
+      : [
+          "About Panipat",
+          "Panipat history",
+          "Battles of Panipat",
+          "Landmarks of Panipat",
+          "Geeta University location",
+          "City of Weavers",
+        ],
+    alternates: {
+      canonical: seo?.canonical || "https://geetauniversity.edu.in/about-panipat/",
+    },
+    openGraph: {
+      title: seo?.ogTitle || seo?.title || "About Panipat",
+      description:
+        seo?.description ||
+        "Explore the rich history, three major battles, famous landmarks, geography, and textile heritage of Panipat, Haryana — the proud home of Geeta University.",
+      images: seo?.ogImage ? [{ url: seo.ogImage }] : ["https://geetauniversity.edu.in/uploads/all/253/conversions/f-block-(1)-full.webp"],
+    },
+  };
+}
 
-export default function AboutPanipatPage() {
+export default async function AboutPanipatPage() {
+  const { hero, battles, landmarks, geographyDemographics, legacyEcosystem } =
+    await getPublishedAboutPanipatPage();
+
+  // Fallbacks for data safety
+  const heroTitle = hero?.title || "About Panipat";
+  const heroSubtitle =
+    hero?.subtitle ||
+    "Panipat is a prestigious, historic city in Haryana, situated on NH-44, 95 km north of Delhi and 169 km south of Chandigarh. Globally renowned as the “City of Weavers” and India's textile recycling capital, Panipat seamlessly blends a storied 500-year history with rapid industrial growth and modern educational excellence.";
+  const heroImage =
+    hero?.heroImage ||
+    "https://geetauniversity.edu.in/uploads/all/253/conversions/f-block-(1)-full.webp";
+  const heroImageAlt = hero?.heroImageAlt || "Geeta University campus in Panipat";
+
+  const battleList = Array.isArray(battles?.battles) ? battles.battles : [];
+  const landmarkList = Array.isArray(landmarks?.landmarks) ? landmarks.landmarks : [];
+
+  const geoTitle = geographyDemographics?.geographyTitle || "Geographical Location";
+  const geoText1 =
+    geographyDemographics?.geographyText1 ||
+    "Panipat is positioned at coordinates 29.3875° N, 76.9700° E on the Indo-Gangetic plain. It has an average elevation of 219 metres (718 feet) above sea level.";
+  const geoText2 =
+    geographyDemographics?.geographyText2 ||
+    "Centrally positioned on the National Highway 44 (NH-44 / Grand Trunk Road), it enjoys seamless direct expressway connectivity to New Delhi, IGI International Airport, Karnal, Kurukshetra, Ambala, and Chandigarh.";
+
+  const demoTitle = geographyDemographics?.demographicsTitle || "Demographics & Population";
+  const demoText1 =
+    geographyDemographics?.demographicsText1 ||
+    "According to the official census, the total population of Panipat District stands at 1,202,811 (646,324 males and 556,487 females), constituting approximately 4.74% of the entire state of Haryana.";
+  const demoText2 =
+    geographyDemographics?.demographicsText2 ||
+    "As one of the most commercially active industrial cities in Northern India, Panipat attracts a diverse and vibrant workforce, entrepreneurs, exporters, and academic scholars from across the country.";
+
+  const ctaHeading =
+    geographyDemographics?.ctaHeading || "Study in the Heart of Panipat at Geeta University";
+  const ctaSubtitle =
+    geographyDemographics?.ctaSubtitle ||
+    "Experience world-class academic programs, high-tech labs, and vibrant campus life.";
+  const ctaLinkText = geographyDemographics?.ctaLinkText || "Explore Programs";
+  const ctaLinkHref = geographyDemographics?.ctaLinkHref || "/programs-after-12th";
+
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* ── Page Hero Header ── */}
@@ -100,8 +93,8 @@ export default function AboutPanipatPage() {
         {/* Campus Background with Overlay */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://geetauniversity.edu.in/uploads/all/253/conversions/f-block-(1)-full.webp"
-            alt="Geeta University campus in Panipat"
+            src={heroImage}
+            alt={heroImageAlt}
             fill
             className="object-cover opacity-20"
             priority
@@ -121,112 +114,128 @@ export default function AboutPanipatPage() {
 
             {/* Title */}
             <h1 className="font-serif text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[54px] leading-tight">
-              About <span className="text-[#E8871A]">Panipat</span>
+              {heroTitle.includes("Panipat") ? (
+                <>
+                  About <span className="text-[#E8871A]">Panipat</span>
+                </>
+              ) : (
+                heroTitle
+              )}
             </h1>
 
             {/* Subtitle */}
             <p className="mt-5 text-base text-slate-200 md:text-lg leading-relaxed max-w-3xl mx-auto">
-              Panipat is a prestigious, historic city in Haryana, situated on NH-44, 95 km north of Delhi and 169 km south of Chandigarh. Globally renowned as the “City of Weavers” and India&apos;s textile recycling capital, Panipat seamlessly blends a storied 500-year history with rapid industrial growth and modern educational excellence.
+              {heroSubtitle}
             </p>
           </div>
         </div>
       </section>
 
       {/* ── The 3 Historic Battles Section ── */}
-      <section className="py-10 md:py-14">
-        <div className="gu-container">
+      {battleList.length > 0 && (
+        <section className="py-10 md:py-14">
+          <div className="gu-container">
+            {/* Battles List Cards */}
+            <div className="space-y-10 max-w-5xl mx-auto">
+              {battleList.map((battle: any, index: number) => {
+                const isEven = index % 2 === 1;
+                return (
+                  <div
+                    key={battle.title || index}
+                    className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-lg shadow-slate-100 transition-all hover:shadow-xl hover:border-slate-300"
+                  >
+                    <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-center ${isEven ? "lg:flex-row-reverse" : ""}`}>
+                      {/* Content Column */}
+                      <div className={`lg:col-span-7 space-y-4 ${isEven ? "lg:order-2" : "lg:order-1"}`}>
+                        <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#0A1F44]">
+                          {battle.title}
+                        </h3>
 
-          {/* Battles List Cards */}
-          <div className="space-y-10 max-w-5xl mx-auto">
-            {battles.map((battle, index) => {
-              const isEven = index % 2 === 1;
-              return (
-                <div
-                  key={battle.title}
-                  className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-lg shadow-slate-100 transition-all hover:shadow-xl hover:border-slate-300"
-                >
-                  <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-center ${isEven ? "lg:flex-row-reverse" : ""}`}>
-                    {/* Content Column */}
-                    <div className={`lg:col-span-7 space-y-4 ${isEven ? "lg:order-2" : "lg:order-1"}`}>
+                        {battle.opponents && (
+                          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                            Opponents: <span className="text-slate-800">{battle.opponents}</span>
+                          </p>
+                        )}
 
-                      <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#0A1F44]">
-                        {battle.title}
-                      </h3>
+                        <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                          {battle.description}
+                        </p>
 
-                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                        Opponents: <span className="text-slate-800">{battle.opponents}</span>
-                      </p>
-
-                      <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                        {battle.description}
-                      </p>
-
-                      <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-3.5 text-xs sm:text-sm font-medium text-slate-700">
-                        <strong className="text-[#0A1F44]">Historic Impact:</strong> {battle.keyOutcome}
+                        {battle.keyOutcome && (
+                          <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-3.5 text-xs sm:text-sm font-medium text-slate-700">
+                            <strong className="text-[#0A1F44]">Historic Impact:</strong> {battle.keyOutcome}
+                          </div>
+                        )}
                       </div>
-                    </div>
 
-                    {/* Image Column */}
-                    <div className={`lg:col-span-5 ${isEven ? "lg:order-1" : "lg:order-2"}`}>
-                      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-slate-200 shadow-md">
-                        <Image
-                          src={battle.image}
-                          alt={battle.title}
-                          fill
-                          className="object-cover transition-transform duration-500 hover:scale-105"
-                          sizes="(max-width: 768px) 100vw, 400px"
-                        />
-                      </div>
+                      {/* Image Column */}
+                      {battle.image && (
+                        <div className={`lg:col-span-5 ${isEven ? "lg:order-1" : "lg:order-2"}`}>
+                          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-slate-200 shadow-md">
+                            <Image
+                              src={battle.image}
+                              alt={battle.title || "Historic Battle of Panipat"}
+                              fill
+                              className="object-cover transition-transform duration-500 hover:scale-105"
+                              sizes="(max-width: 768px) 100vw, 400px"
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── Landmarks of Panipat Section ── */}
-      <section className="bg-slate-100/70 py-10 md:py-14 border-y border-slate-200">
-        <div className="gu-container">
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0A1F44]">
-              Famous <span className="text-[#E8871A]">Landmarks</span> of Panipat
-            </h2>
-          </div>
+      {landmarkList.length > 0 && (
+        <section className="bg-slate-100/70 py-10 md:py-14 border-y border-slate-200">
+          <div className="gu-container">
+            <div className="text-center max-w-3xl mx-auto mb-14">
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0A1F44]">
+                Famous <span className="text-[#E8871A]">Landmarks</span> of Panipat
+              </h2>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {landmarks.map((site) => (
-              <div
-                key={site.title}
-                className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:border-slate-300"
-              >
-                {/* Image */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
-                  <Image
-                    src={site.image}
-                    alt={site.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {landmarkList.map((site: any, idx: number) => (
+                <div
+                  key={site.title || idx}
+                  className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:border-slate-300"
+                >
+                  {/* Image */}
+                  {site.image && (
+                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                      <Image
+                        src={site.image}
+                        alt={site.title || "Landmark of Panipat"}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  )}
 
-                {/* Body */}
-                <div className="flex flex-1 flex-col p-6">
-                  <h3 className="font-serif text-xl font-bold text-[#0A1F44] mt-1 mb-3">
-                    {site.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed flex-1">
-                    {site.description}
-                  </p>
+                  {/* Body */}
+                  <div className="flex flex-1 flex-col p-6">
+                    <h3 className="font-serif text-xl font-bold text-[#0A1F44] mt-1 mb-3">
+                      {site.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed flex-1">
+                      {site.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── Geography & Demographics Section ── */}
       <section className="py-10 md:py-14">
@@ -239,28 +248,20 @@ export default function AboutPanipatPage() {
                 <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-6">
                   <div className="flex items-center gap-2 text-[#0A1F44] font-serif text-lg font-bold">
                     <MapPin className="h-5 w-5 text-[#E8871A]" />
-                    <h3>Geographical Location</h3>
+                    <h3>{geoTitle}</h3>
                   </div>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    Panipat is positioned at coordinates <strong className="text-slate-800">29.3875° N, 76.9700° E</strong> on the Indo-Gangetic plain. It has an average elevation of <strong className="text-slate-800">219 metres (718 feet)</strong> above sea level.
-                  </p>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    Centrally positioned on the National Highway 44 (NH-44 / Grand Trunk Road), it enjoys seamless direct expressway connectivity to New Delhi, IGI International Airport, Karnal, Kurukshetra, Ambala, and Chandigarh.
-                  </p>
+                  <p className="text-sm text-slate-600 leading-relaxed">{geoText1}</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">{geoText2}</p>
                 </div>
 
                 {/* Demographics */}
                 <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-6">
                   <div className="flex items-center gap-2 text-[#0A1F44] font-serif text-lg font-bold">
                     <Users className="h-5 w-5 text-[#E8871A]" />
-                    <h3>Demographics &amp; Population</h3>
+                    <h3>{demoTitle}</h3>
                   </div>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    According to the official census, the total population of Panipat District stands at <strong className="text-slate-800">1,202,811</strong> (646,324 males and 556,487 females), constituting approximately <strong className="text-slate-800">4.74% of the entire state of Haryana</strong>.
-                  </p>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    As one of the most commercially active industrial cities in Northern India, Panipat attracts a diverse and vibrant workforce, entrepreneurs, exporters, and academic scholars from across the country.
-                  </p>
+                  <p className="text-sm text-slate-600 leading-relaxed">{demoText1}</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">{demoText2}</p>
                 </div>
               </div>
 
@@ -268,18 +269,18 @@ export default function AboutPanipatPage() {
               <div className="mt-8 rounded-2xl bg-gradient-to-r from-[#0A1F44] to-[#1A3A6B] p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="space-y-1">
                   <h4 className="font-serif text-xl font-bold text-white">
-                    Study in the Heart of Panipat at Geeta University
+                    {ctaHeading}
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-300">
-                    Experience world-class academic programs, high-tech labs, and vibrant campus life.
+                    {ctaSubtitle}
                   </p>
                 </div>
                 <Link
-                  href="/programs-after-12th"
+                  href={ctaLinkHref}
                   className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-md transition-all hover:bg-[#F5A623] active:scale-95"
                 >
                   <GraduationCap className="h-4 w-4" />
-                  Explore Programs
+                  {ctaLinkText}
                 </Link>
               </div>
             </div>
@@ -291,6 +292,7 @@ export default function AboutPanipatPage() {
       <LegacyEcosystem
         id="legacy-ecosystem"
         contextText="Geeta University in Panipat is part of an integrated, future-ready talent development ecosystem:"
+        data={legacyEcosystem}
       />
     </div>
   );

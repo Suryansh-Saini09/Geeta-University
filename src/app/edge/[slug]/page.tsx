@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 import EdgePage from "@/components/edge/EdgePage";
 import {
-  getEdgePageBySlug,
+  getEdgePageDataAsync,
   getDynamicEdgeSlugs,
 } from "@/lib/edge/edgeRepository";
 
@@ -25,7 +25,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const pageData = getEdgePageBySlug(slug);
+  const pageData = await getEdgePageDataAsync(slug);
 
   if (!pageData) {
     return {};
@@ -40,7 +40,7 @@ export async function generateMetadata({
 
 export default async function EdgePageRoute({ params }: PageProps) {
   const { slug } = await params;
-  const pageData = getEdgePageBySlug(slug);
+  const pageData = await getEdgePageDataAsync(slug);
 
   if (!pageData) {
     notFound();

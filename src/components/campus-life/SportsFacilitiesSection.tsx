@@ -5,7 +5,9 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { sportsFacilities } from "@/data/campusLife";
 
-export default function SportsFacilitiesSection() {
+export default function SportsFacilitiesSection({ data }: { data?: any }) {
+  const itemsList = data?.sports || sportsFacilities;
+  const sectionTitle = data?.title || "Sports Facilities";
   const [visibleCards, setVisibleCards] = useState(3);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -26,7 +28,7 @@ export default function SportsFacilitiesSection() {
     return () => window.removeEventListener("resize", updateVisibleCards);
   }, []);
 
-  const totalSlides = Math.max(1, sportsFacilities.length - visibleCards + 1);
+  const totalSlides = Math.max(1, itemsList.length - visibleCards + 1);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % totalSlides);
@@ -126,7 +128,7 @@ export default function SportsFacilitiesSection() {
                 transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
               }}
             >
-              {sportsFacilities.map((sport) => (
+              {itemsList.map((sport: any) => (
                 <div
                   key={sport.id}
                   className="w-full shrink-0 px-3 sm:w-1/2 lg:w-1/3"

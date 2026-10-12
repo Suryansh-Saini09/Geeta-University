@@ -41,10 +41,6 @@ export default function Footer() {
   const quickLinksData: FooterColumnData = {
     title: "Quick Links",
     links: [
-      { label: "Departments", href: "/departments", isInternal: true },
-      { label: "Programs", href: "/programs", isInternal: true },
-      { label: "Faculty", href: "/faculty", isInternal: true },
-      { label: "Notices", href: "/notices", isInternal: true },
       { label: "Blog", href: "https://geetauniversity.edu.in/blog/" },
       { label: "Telephone Directory", href: "https://geetauniversity.edu.in/uploads/all/1179/Telephone_Directory.pdf" },
       { label: "Student Grievances Portal", href: "https://geetauniversity.com/" },

@@ -6,7 +6,19 @@ import { motion } from "framer-motion";
 import { ArrowRight, Globe, Award, Users, BookOpen } from "lucide-react";
 import { INTERNATIONAL_HERO } from "@/data/internationalAdmissions";
 
-export default function InternationalHero() {
+interface InternationalHeroProps {
+  data?: {
+    heading?: string;
+    subheading?: string;
+    heroImage?: string;
+  };
+}
+
+export default function InternationalHero({ data }: InternationalHeroProps) {
+  const heading = data?.heading || "A HUB OF GLOBALLY BENCHMARKED EDUCATION";
+  const subheading = data?.subheading || INTERNATIONAL_HERO.subheading;
+  const heroImage = data?.heroImage || INTERNATIONAL_HERO.heroImage;
+
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -19,7 +31,7 @@ export default function InternationalHero() {
       {/* Background Image Container */}
       <div className="relative min-h-[520px] md:min-h-[600px] w-full flex items-center">
         <Image
-          src={INTERNATIONAL_HERO.heroImage}
+          src={heroImage}
           alt="Geeta University Global Campus"
           fill
           sizes="100vw"
@@ -34,14 +46,13 @@ export default function InternationalHero() {
         {/* Content */}
         <div className="gu-container relative z-10 py-16 md:py-24">
           <div className="max-w-[800px]">
-                        <motion.h1
+            <motion.h1
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
               className="mt-5 text-[clamp(2.2rem,5vw,4.2rem)] font-black leading-[1.1] text-white font-serif tracking-tight"
             >
-              A HUB OF <br />
-              <span className="text-[#E8871A]">GLOBALLY BENCHMARKED</span> EDUCATION
+              {heading}
             </motion.h1>
 
             <motion.p
@@ -50,7 +61,7 @@ export default function InternationalHero() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="mt-6 text-base md:text-xl font-medium leading-relaxed text-white/90 max-w-[700px]"
             >
-              {INTERNATIONAL_HERO.subheading}. Join a vibrant community representing 31+ countries and experience world-class academic excellence in India.
+              {subheading}
             </motion.p>
 
             <motion.div

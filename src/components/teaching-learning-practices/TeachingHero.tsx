@@ -3,15 +3,32 @@
 import React from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { teachingHero } from "@/data/teachingLearningPractices";
+import { teachingHero as fallbackHero } from "@/data/teachingLearningPractices";
 
-export default function TeachingHero() {
+interface TeachingHeroProps {
+  hero?: {
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    heroImage?: string;
+    breadcrumbs?: Array<{ label: string; href: string }>;
+  } | null;
+}
+
+export default function TeachingHero({ hero }: TeachingHeroProps) {
+  const h = hero || fallbackHero;
+  const title = h.title || fallbackHero.title;
+  const description = h.description || fallbackHero.description;
+  const heroImage = h.heroImage || fallbackHero.heroImage;
+  const breadcrumbs =
+    h.breadcrumbs && h.breadcrumbs.length > 0 ? h.breadcrumbs : fallbackHero.breadcrumbs;
+
   return (
     <section className="relative w-full overflow-hidden bg-[#0A1F44] text-white">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src={teachingHero.heroImage}
+          src={heroImage}
           alt="Geeta University Campus"
           className="h-full w-full object-cover object-center opacity-85"
         />
@@ -25,10 +42,10 @@ export default function TeachingHero() {
           aria-label="Breadcrumb"
           className="mb-6 flex items-center gap-2 text-xs font-medium text-slate-300 sm:text-sm"
         >
-          {teachingHero.breadcrumbs.map((crumb, idx) => (
+          {breadcrumbs.map((crumb, idx) => (
             <React.Fragment key={crumb.label}>
               {idx > 0 && <ChevronRight className="h-3.5 w-3.5 text-slate-400" />}
-              {idx === teachingHero.breadcrumbs.length - 1 ? (
+              {idx === breadcrumbs.length - 1 ? (
                 <span className="text-[#E8871A] font-semibold">{crumb.label}</span>
               ) : (
                 <Link
@@ -46,12 +63,19 @@ export default function TeachingHero() {
         <div className="max-w-3xl">
           {/* Heading */}
           <h1 className="mb-4 font-serif text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl leading-[1.15]">
-            Teaching & <span className="text-[#E8871A]">Learning Practices</span>
+            {title.includes("Learning Practices") ? (
+              <>
+                {title.replace("Learning Practices", "").trim()}{" "}
+                <span className="text-[#E8871A]">Learning Practices</span>
+              </>
+            ) : (
+              title
+            )}
           </h1>
 
           {/* Description */}
           <p className="mb-8 text-base text-slate-200 sm:text-lg leading-relaxed max-w-2xl font-sans">
-            {teachingHero.description}
+            {description}
           </p>
 
           {/* Action Buttons */}
@@ -60,10 +84,15 @@ export default function TeachingHero() {
               href="https://admissions.geetauniversity.edu.in/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-[#E8871A] px-6 py-3.5 text-sm font-bold text-white shadow-lg transition-all hover:bg-[#F5A623] hover:shadow-amber-500/25 active:scale-95"
+              className="inline-flex items-center justify-center rounded-xl bg-[#E8871A] px-6 py-3.5 text-sm font-bold text-white shadow-lg transition-all hover:bg-[#F5A623] hover:shadow-amber-500/25 active:scale-95"
             >
-              <span>Apply Now</span>
-              <ChevronRight className="h-4 w-4" />
+              Enroll for 2026 Admissions
+            </a>
+            <a
+              href="#pedagogy-grid"
+              className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20"
+            >
+              Explore Pedagogical Methods
             </a>
           </div>
         </div>

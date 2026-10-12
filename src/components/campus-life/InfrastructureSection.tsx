@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { campusFacilities } from "@/data/campusLife";
 
 interface InfrastructureSectionProps {
+  data?: any;
   onOpenVirtualTour: () => void;
 }
 
@@ -38,7 +39,10 @@ const itemVariants: Variants = {
   },
 };
 
-export default function InfrastructureSection({ onOpenVirtualTour }: InfrastructureSectionProps) {
+export default function InfrastructureSection({ data, onOpenVirtualTour }: InfrastructureSectionProps) {
+  const itemsList = data?.facilities || campusFacilities;
+  const sectionTitle = data?.title || "World Class Infrastructure";
+  const sectionSubtitle = data?.subtitle || "Spacious classrooms, high-tech labs, modern auditoriums & living spaces";
   const [visibleCards, setVisibleCards] = useState(3);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -59,7 +63,7 @@ export default function InfrastructureSection({ onOpenVirtualTour }: Infrastruct
     return () => window.removeEventListener("resize", updateVisibleCards);
   }, []);
 
-  const totalSlides = Math.max(1, campusFacilities.length - visibleCards + 1);
+  const totalSlides = Math.max(1, itemsList.length - visibleCards + 1);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % totalSlides);
@@ -266,7 +270,7 @@ export default function InfrastructureSection({ onOpenVirtualTour }: Infrastruct
                 transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
               }}
             >
-              {campusFacilities.map((facility) => (
+              {itemsList.map((facility: any) => (
                 <div
                   key={facility.id}
                   className="w-full shrink-0 px-3 sm:w-1/2 lg:w-1/3"

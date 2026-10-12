@@ -3,25 +3,36 @@ import type { Metadata } from "next";
 import ConfusedHero from "@/components/confused-about-courses/ConfusedHero";
 import ConfusedContentSections from "@/components/confused-about-courses/ConfusedContentSections";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
+import { getPublishedAdmissionsPage } from "@/server/services/pages";
 
-export const metadata: Metadata = {
-  title: "Are You Confused About Courses? | Geeta University Career Guidance",
-  description:
-    "Confused about courses? Geeta University guides you to the best programs in engineering, management, law, and more. Find your perfect career fit now!",
-  openGraph: {
-    title: "Are You Confused About Courses? | Geeta University Career Guidance",
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPublishedAdmissionsPage("confused-about-courses");
+  return {
+    title: seo?.title || "Are You Confused About Courses? | Geeta University Career Guidance",
     description:
+      seo?.description ||
       "Confused about courses? Geeta University guides you to the best programs in engineering, management, law, and more. Find your perfect career fit now!",
-    url: "https://geetauniversity.edu.in/confused-about-courses",
-    type: "website",
-  },
-};
+    openGraph: {
+      title: seo?.ogTitle || seo?.title || "Are You Confused About Courses? | Geeta University Career Guidance",
+      description:
+        seo?.description ||
+        "Confused about courses? Geeta University guides you to the best programs in engineering, management, law, and more. Find your perfect career fit now!",
+      url: seo?.canonical || "https://geetauniversity.edu.in/confused-about-courses",
+      type: "website",
+      images: seo?.ogImage ? [seo.ogImage] : ["/courses/confused-banner.png"],
+    },
+  };
+}
 
-export default function ConfusedAboutCoursesPage() {
+export default async function ConfusedAboutCoursesPage() {
+  const { sections } = await getPublishedAdmissionsPage("confused-about-courses");
+
+  const heroData = sections.hero;
+
   return (
     <div className="min-w-0 overflow-x-hidden bg-white text-[#0A1F44]">
       {/* 1. Full-Width Career Guidance Hero Banner */}
-      <ConfusedHero />
+      <ConfusedHero data={heroData} />
 
       {/* 2. Structured Decision Framework & Institutional Guidance */}
       <ConfusedContentSections />

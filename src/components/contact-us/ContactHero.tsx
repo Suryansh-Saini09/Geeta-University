@@ -1,15 +1,31 @@
 import React from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { contactHeroData } from "@/data/contactUsData";
+import { contactHeroData as fallbackHero } from "@/data/contactUsData";
 
-export default function ContactHero() {
+interface ContactHeroProps {
+  hero?: {
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    heroImage?: string;
+    breadcrumbs?: Array<{ label: string; href: string }>;
+  } | null;
+}
+
+export default function ContactHero({ hero }: ContactHeroProps) {
+  const h = hero || fallbackHero;
+  const heroImage = h.heroImage || fallbackHero.heroImage;
+  const description = h.description || fallbackHero.description;
+  const breadcrumbs = (h.breadcrumbs && h.breadcrumbs.length > 0) ? h.breadcrumbs : fallbackHero.breadcrumbs;
+  const title = h.title || fallbackHero.title;
+
   return (
     <section className="relative flex min-h-[500px] w-full items-center overflow-hidden bg-[#0A1F44] text-white sm:min-h-[560px] md:min-h-[620px] lg:min-h-[660px]">
       {/* Background Campus Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src={contactHeroData.heroImage}
+          src={heroImage}
           alt="Geeta University Main Campus Contact"
           className="h-full w-full object-cover object-center opacity-80"
         />
@@ -23,10 +39,10 @@ export default function ContactHero() {
           aria-label="Breadcrumb"
           className="mb-6 flex items-center gap-2 text-xs font-medium text-slate-300 sm:text-sm"
         >
-          {contactHeroData.breadcrumbs.map((crumb, idx) => (
+          {breadcrumbs.map((crumb, idx) => (
             <React.Fragment key={crumb.label}>
               {idx > 0 && <ChevronRight className="h-3.5 w-3.5 text-slate-400" />}
-              {idx === contactHeroData.breadcrumbs.length - 1 ? (
+              {idx === breadcrumbs.length - 1 ? (
                 <span className="text-[#E8871A] font-semibold">{crumb.label}</span>
               ) : (
                 <Link
@@ -43,11 +59,18 @@ export default function ContactHero() {
         {/* Hero Title & Subtitle */}
         <div className="max-w-3xl">
           <h1 className="mb-4 font-serif text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl leading-[1.15]">
-            Contact <span className="text-[#E8871A]">Geeta University</span>
+            {title.includes("Geeta University") ? (
+              <>
+                {title.replace("Geeta University", "").trim()}{" "}
+                <span className="text-[#E8871A]">Geeta University</span>
+              </>
+            ) : (
+              title
+            )}
           </h1>
 
           <p className="text-base text-slate-200 sm:text-lg leading-relaxed font-sans">
-            {contactHeroData.description}
+            {description}
           </p>
         </div>
       </div>

@@ -5,9 +5,21 @@ import Link from "next/link";
 import { pgSchoolsData } from "@/data/postGraduatePrograms";
 import ScholarshipCalculator from "@/components/programs-after-12th/ScholarshipCalculator";
 
-export default function PostGraduateListSection() {
-  const col1Schools = pgSchoolsData.slice(0, 4); // Commerce, Sciences, Humanities, Health
-  const col2Schools = pgSchoolsData.slice(4); // CSE, Agriculture, Law, Pharmacy, Hospitality
+export default function PostGraduateListSection({
+  schoolsData,
+  statsData,
+}: {
+  schoolsData?: any;
+  statsData?: any;
+}) {
+  const activeSchools = schoolsData?.schools || pgSchoolsData;
+  const col1Schools = activeSchools.slice(0, Math.ceil(activeSchools.length / 2));
+  const col2Schools = activeSchools.slice(Math.ceil(activeSchools.length / 2));
+
+  const cards = statsData?.cards || [
+    { value: "550+", label: "Top Recruiters" },
+    { value: "3500+", label: "Job Offers" },
+  ];
 
   return (
     <section id="programs-catalog" className="scroll-mt-20 bg-[#F3F5F6] py-12 sm:py-16">
@@ -19,7 +31,7 @@ export default function PostGraduateListSection() {
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               {/* Sub-Column 1 */}
               <div className="space-y-6">
-                {col1Schools.map((school, index) => (
+                {col1Schools.map((school: any, index: number) => (
                   <div
                     key={index}
                     className="rounded-[24px] bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.1)] transition-shadow duration-200 hover:shadow-md"
@@ -29,13 +41,13 @@ export default function PostGraduateListSection() {
                     </h3>
 
                     <ul className="space-y-2 pl-5 list-disc marker:text-[#06355F]">
-                      {school.programs.map((program, pIdx) => (
+                      {school.programs.map((program: any, pIdx: number) => (
                         <li key={pIdx}>
                           <Link
-                            href={program.href}
+                            href={program.href || "#"}
                             className="font-sans text-[15px] sm:text-[16px] text-[#06355F] hover:text-[#E8871A] hover:underline transition-colors leading-snug block"
                           >
-                            {program.name}
+                            {program.name || program.title}
                           </Link>
                         </li>
                       ))}
@@ -46,7 +58,7 @@ export default function PostGraduateListSection() {
 
               {/* Sub-Column 2 */}
               <div className="space-y-6">
-                {col2Schools.map((school, index) => (
+                {col2Schools.map((school: any, index: number) => (
                   <div
                     key={index}
                     className="rounded-[24px] bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.1)] transition-shadow duration-200 hover:shadow-md"
@@ -56,13 +68,13 @@ export default function PostGraduateListSection() {
                     </h3>
 
                     <ul className="space-y-2 pl-5 list-disc marker:text-[#06355F]">
-                      {school.programs.map((program, pIdx) => (
+                      {school.programs.map((program: any, pIdx: number) => (
                         <li key={pIdx}>
                           <Link
-                            href={program.href}
+                            href={program.href || "#"}
                             className="font-sans text-[15px] sm:text-[16px] text-[#06355F] hover:text-[#E8871A] hover:underline transition-colors leading-snug block"
                           >
-                            {program.name}
+                            {program.name || program.title}
                           </Link>
                         </li>
                       ))}
@@ -81,25 +93,16 @@ export default function PostGraduateListSection() {
 
         {/* Horizontal Achievement Cards (2 across) */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 pt-4">
-          {/* Card 1: 550+ */}
-          <div className="rounded-[24px] bg-[#0B2D4C] p-8 text-center text-white shadow-md">
-            <div className="font-serif text-[42px] sm:text-[48px] font-bold text-white leading-none mb-2">
-              550+
+          {cards.map((card: any, cIdx: number) => (
+            <div key={cIdx} className="rounded-[24px] bg-[#0B2D4C] p-8 text-center text-white shadow-md">
+              <div className="font-serif text-[42px] sm:text-[48px] font-bold text-white leading-none mb-2">
+                {card.value}
+              </div>
+              <div className="text-[16px] sm:text-[17px] uppercase tracking-wider text-white font-medium">
+                {card.label}
+              </div>
             </div>
-            <div className="text-[16px] sm:text-[17px] uppercase tracking-wider text-white font-medium">
-              Top Recruiters
-            </div>
-          </div>
-
-          {/* Card 2: 3500+ */}
-          <div className="rounded-[24px] bg-[#0B2D4C] p-8 text-center text-white shadow-md">
-            <div className="font-serif text-[42px] sm:text-[48px] font-bold text-white leading-none mb-2">
-              3500+
-            </div>
-            <div className="text-[16px] sm:text-[17px] uppercase tracking-wider text-white font-medium">
-              Job Offers
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

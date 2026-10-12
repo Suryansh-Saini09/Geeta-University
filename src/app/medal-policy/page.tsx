@@ -1,114 +1,106 @@
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
 import {
-  ChevronRight,
-  Sparkles,
-  Award,
   Medal,
   Trophy,
   CheckCircle2,
-  FileText,
   Download,
-  ExternalLink,
   BookOpen,
   Layers,
   GraduationCap,
-  Users,
+  Award,
 } from "lucide-react";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
+import { getPublishedMedalPolicyPage } from "@/server/services/pages";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Geeta University Medal Policy | Convocation Honors & Awards",
-  description:
-    "Official policy and regulations for awarding Gold, Silver, Bronze Academic Medals and the prestigious Chancellor’s Medal at the Annual Convocation of Geeta University.",
-};
+export const revalidate = 60;
 
-const academicMedals = [
-  {
-    type: "Gold Medal",
-    badge: "1st Position",
+// Presentation styling maps (Design tokens preserved in code, separated from content)
+const MEDAL_THEMES: Record<string, {
+  accentBg: string;
+  borderColor: string;
+  badgeBg: string;
+  textColor: string;
+  iconBg: string;
+}> = {
+  gold: {
     accentBg: "from-amber-100/90 via-amber-50 to-white",
     borderColor: "border-amber-300",
     badgeBg: "bg-amber-500 text-white",
     textColor: "text-amber-900",
     iconBg: "bg-amber-500/10 text-amber-600 ring-amber-500/30",
-    eligibility: [
-      "Awarded to the 1st position holder of a respective batch of a program.",
-      "Must have passed in the normal course duration without any extension.",
-      "Requires at least first division without any appearance in back paper examinations.",
-      "Subject to minimum number of passing students in the batch (Table 1).",
-      "In case of a tie at 1st position, both students receive Gold Medals; no Silver Medal will be awarded in that program.",
-    ],
   },
-  {
-    type: "Silver Medal",
-    badge: "2nd Position",
+  silver: {
     accentBg: "from-slate-200/80 via-slate-50 to-white",
     borderColor: "border-slate-300",
     badgeBg: "bg-slate-600 text-white",
     textColor: "text-slate-900",
     iconBg: "bg-slate-500/10 text-slate-600 ring-slate-400/30",
-    eligibility: [
-      "Awarded to the 2nd position holder of a respective batch of a program.",
-      "Must have passed in the normal course duration without any extension.",
-      "Requires at least first division without any appearance in back paper examinations.",
-      "Subject to minimum number of passing students in the batch (Table 1).",
-    ],
   },
-  {
-    type: "Bronze Medal",
-    badge: "3rd Position",
+  bronze: {
     accentBg: "from-orange-100/80 via-amber-50/50 to-white",
     borderColor: "border-amber-700/30",
     badgeBg: "bg-[#8B5A2B] text-white",
     textColor: "text-amber-950",
     iconBg: "bg-[#8B5A2B]/10 text-[#8B5A2B] ring-[#8B5A2B]/30",
-    eligibility: [
-      "Awarded to the 3rd position holder of a respective batch of a program.",
-      "Must have passed in the normal course duration without any extension.",
-      "Requires at least first division without any appearance in back paper examinations.",
-      "Subject to minimum number of passing students in the batch (Table 1).",
-    ],
   },
-];
+};
 
-const batchThresholds = [
-  { medal: "Gold Medal", pg: "10 students", ug: "20 students", diploma: "20 students" },
-  { medal: "Silver Medal", pg: "15 students", ug: "30 students", diploma: "40 students" },
-  { medal: "Bronze Medal", pg: "20 students", ug: "40 students", diploma: "50 students" },
-];
+const WEIGHTAGE_ICON_MAP: Record<string, React.ElementType> = {
+  "book-open": BookOpen,
+  layers: Layers,
+  "graduation-cap": GraduationCap,
+};
 
-const chancellorsWeightage = [
-  {
-    category: "Academics",
-    weightage: "60%",
-    percent: 60,
-    icon: BookOpen,
-  },
-  {
-    category: "Co-curricular Activities",
-    weightage: "20%",
-    percent: 20,
-    icon: Layers,
-  },
-  {
-    category: "Extracurricular Activities",
-    weightage: "20%",
-    percent: 20,
-    icon: GraduationCap,
-  },
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPublishedMedalPolicyPage();
 
-export default function MedalPolicyPage() {
+  return {
+    metadataBase: new URL("https://geetauniversity.edu.in"),
+    title: seo?.title || "Geeta University Medal Policy | Convocation Honors & Awards",
+    description:
+      seo?.description ||
+      "Official policy and regulations for awarding Gold, Silver, Bronze Academic Medals and the prestigious Chancellor’s Medal at the Annual Convocation of Geeta University.",
+    openGraph: {
+      title: seo?.ogTitle || seo?.title || "Geeta University Medal Policy | Convocation Honors & Awards",
+      description:
+        seo?.description ||
+        "Official policy and regulations for awarding Gold, Silver, Bronze Academic Medals and the prestigious Chancellor’s Medal at the Annual Convocation of Geeta University.",
+      images: seo?.ogImage
+        ? [{ url: seo.ogImage }]
+        : ["https://geetauniversity.edu.in/uploads/all/224/conversions/new-building-3-full.webp"],
+    },
+  };
+}
+
+export default async function MedalPolicyPage() {
+  const {
+    hero,
+    academicMedals,
+    thresholds,
+    chancellor,
+    chancellorWeightage,
+    rankersDocument,
+  } = await getPublishedMedalPolicyPage();
+
+  const heroTitle = hero?.title || "Geeta University";
+  const heroHighlight = hero?.highlight || "Medal Policy";
+  const heroBg =
+    hero?.bgImage ||
+    "https://geetauniversity.edu.in/uploads/all/224/conversions/new-building-3-full.webp";
+
+  const medalsList = academicMedals?.medals || [];
+  const thresholdList = thresholds?.rows || thresholds?.thresholds || [];
+  const weightageList = chancellorWeightage?.categories || chancellorWeightage?.weightages || [];
+
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* ── Page Hero Header ── */}
       <section className="relative overflow-hidden bg-[#0A1F44] pt-32 pb-20 text-white">
-        {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://geetauniversity.edu.in/uploads/all/224/conversions/new-building-3-full.webp"
+            src={heroBg}
             alt="Geeta University Convocation Campus"
             fill
             className="object-cover opacity-20"
@@ -119,10 +111,8 @@ export default function MedalPolicyPage() {
 
         <div className="gu-container relative z-10">
           <div className="mx-auto max-w-3xl text-center">
-
-            {/* Title */}
             <h1 className="font-serif text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[52px] leading-tight">
-              Geeta University <span className="text-[#E8871A]">Medal Policy</span>
+              {heroTitle} <span className="text-[#E8871A]">{heroHighlight}</span>
             </h1>
           </div>
         </div>
@@ -139,44 +129,50 @@ export default function MedalPolicyPage() {
               </span>
               <div>
                 <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#0A1F44]">
-                  Academic Medals
+                  {academicMedals?.title || "Academic Medals"}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500">
-                  Awarded to graduating candidates on the basis of meritorious academic performance across program batches.
+                  {academicMedals?.description ||
+                    "Awarded to graduating candidates on the basis of meritorious academic performance across program batches."}
                 </p>
               </div>
             </div>
 
-            {/* 3 Medal Cards (Gold, Silver, Bronze) */}
+            {/* Medal Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {academicMedals.map((medal) => (
-                <div
-                  key={medal.type}
-                  className={`relative flex flex-col rounded-3xl border ${medal.borderColor} bg-gradient-to-b ${medal.accentBg} p-6 sm:p-7 shadow-lg shadow-slate-200/50 transition-all hover:-translate-y-1 hover:shadow-xl`}
-                >
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ring-2 ${medal.iconBg}`}>
-                      <Medal className="h-6 w-6" />
-                    </div>
-                    <span className={`rounded-full px-3 py-1 text-xs font-bold ${medal.badgeBg}`}>
-                      {medal.badge}
-                    </span>
-                  </div>
+              {medalsList.map((medal: any) => {
+                const themeKey = medal.typeKey || (medal.type?.toLowerCase().includes("gold") ? "gold" : medal.type?.toLowerCase().includes("silver") ? "silver" : "bronze");
+                const theme = MEDAL_THEMES[themeKey] || MEDAL_THEMES.gold;
 
-                  <h3 className={`font-serif text-2xl font-bold ${medal.textColor} mb-4`}>
-                    {medal.type}
-                  </h3>
-
-                  <div className="space-y-2.5 flex-1">
-                    {medal.eligibility.map((item, i) => (
-                      <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
-                        <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 mt-0.5" />
-                        <span className="leading-relaxed">{item}</span>
+                return (
+                  <div
+                    key={medal.id || medal.type}
+                    className={`relative flex flex-col rounded-3xl border ${theme.borderColor} bg-gradient-to-b ${theme.accentBg} p-6 sm:p-7 shadow-lg shadow-slate-200/50 transition-all hover:-translate-y-1 hover:shadow-xl`}
+                  >
+                    <div className="flex items-center justify-between gap-2 mb-4">
+                      <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ring-2 ${theme.iconBg}`}>
+                        <Medal className="h-6 w-6" />
                       </div>
-                    ))}
+                      <span className={`rounded-full px-3 py-1 text-xs font-bold ${theme.badgeBg}`}>
+                        {medal.badge}
+                      </span>
+                    </div>
+
+                    <h3 className={`font-serif text-2xl font-bold ${theme.textColor} mb-4`}>
+                      {medal.type}
+                    </h3>
+
+                    <div className="space-y-2.5 flex-1">
+                      {(medal.eligibility || []).map((item: string, i: number) => (
+                        <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 mt-0.5" />
+                          <span className="leading-relaxed">{item}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Table 1: Minimum Cohort Size */}
@@ -186,10 +182,11 @@ export default function MedalPolicyPage() {
                   Table 1
                 </span>
                 <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
-                  Minimum Number of Passing Students Required in Batch
+                  {thresholds?.title || "Minimum Number of Passing Students Required in Batch"}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                  For the award of respective academic medals, the minimum number of students successfully passing in the batch must satisfy the following thresholds:
+                  {thresholds?.description ||
+                    "For the award of respective academic medals, the minimum number of students successfully passing in the batch must satisfy the following thresholds:"}
                 </p>
               </div>
 
@@ -204,7 +201,7 @@ export default function MedalPolicyPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
-                    {batchThresholds.map((row) => (
+                    {thresholdList.map((row: any) => (
                       <tr key={row.medal} className="hover:bg-slate-50/80 transition-colors">
                         <td className="p-4 font-bold text-[#0A1F44]">{row.medal}</td>
                         <td className="p-4 text-center font-medium text-slate-700">{row.pg}</td>
@@ -231,10 +228,11 @@ export default function MedalPolicyPage() {
               </span>
               <div>
                 <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#0A1F44]">
-                  Chancellor’s Medal (Best All-Rounder)
+                  {chancellor?.sectionTitle || "Chancellor’s Medal (Best All-Rounder)"}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500">
-                  The highest honor bestowed upon a single graduating student across all disciplines at Geeta University.
+                  {chancellor?.sectionSubtitle ||
+                    "The highest honor bestowed upon a single graduating student across all disciplines at Geeta University."}
                 </p>
               </div>
             </div>
@@ -247,21 +245,26 @@ export default function MedalPolicyPage() {
                 </div>
                 <div className="space-y-2">
                   <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0A1F44]">
-                    Premier University Honor: Best All-Rounder
+                    {chancellor?.overviewHeading || chancellor?.title || "Premier University Honor: Best All-Rounder"}
                   </h3>
                   <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-                    The Chancellor’s Medal is awarded to the <strong>“best all-rounder” student across all university programs</strong> on the holistic basis of performance in academics, co-curricular activities, and extracurricular excellence.
+                    {chancellor?.overviewDescription ||
+                      chancellor?.description ||
+                      "The Chancellor’s Medal is awarded to the “best all-rounder” student across all university programs on the holistic basis of performance in academics, co-curricular activities, and extracurricular excellence."}
                   </p>
                   <div className="flex flex-wrap gap-2 pt-2">
-                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1 text-xs font-semibold text-slate-800 border border-slate-200 shadow-sm">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" /> Normal Course Duration (No Extension)
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1 text-xs font-semibold text-slate-800 border border-slate-200 shadow-sm">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" /> At Least First Division
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1 text-xs font-semibold text-slate-800 border border-slate-200 shadow-sm">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" /> Zero Active Backlogs
-                    </span>
+                    {(chancellor?.qualificationPoints || chancellor?.criteria || [
+                      "Normal Course Duration (No Extension)",
+                      "At Least First Division",
+                      "Zero Active Backlogs",
+                    ]).map((crit: string, i: number) => (
+                      <span
+                        key={i}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1 text-xs font-semibold text-slate-800 border border-slate-200 shadow-sm"
+                      >
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" /> {crit}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -271,13 +274,13 @@ export default function MedalPolicyPage() {
             <div className="space-y-4 pt-2">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                 <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
-                  Evaluation Weightage Breakdown
+                  {chancellorWeightage?.title || "Evaluation Weightage Breakdown"}
                 </h3>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {chancellorsWeightage.map((item) => {
-                  const IconComp = item.icon;
+                {weightageList.map((item: any) => {
+                  const IconComp = WEIGHTAGE_ICON_MAP[item.iconKey] || Award;
                   return (
                     <div
                       key={item.category}
@@ -313,21 +316,25 @@ export default function MedalPolicyPage() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="space-y-2 text-center md:text-left">
                 <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
-                  Check List of Rankers for Award of Medals
+                  {rankersDocument?.heading || rankersDocument?.title || "Check List of Rankers for Award of Medals"}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
-                  Download and review the officially verified rank list of candidates awarded Academic and Chancellor&apos;s Medals during the 2nd Convocation of Geeta University.
+                  {rankersDocument?.description ||
+                    "Download and review the officially verified rank list of candidates awarded Academic and Chancellor's Medals during the 2nd Convocation of Geeta University."}
                 </p>
               </div>
 
               <a
-                href="https://geetauniversity.edu.in/uploads/all/1982/Medal-List-24.01.2026.pdf"
+                href={
+                  rankersDocument?.documentUrl ||
+                  "https://geetauniversity.edu.in/uploads/all/1982/Medal-List-24.01.2026.pdf"
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex shrink-0 items-center gap-2.5 rounded-2xl bg-[#E8871A] px-6 py-4 text-sm font-bold text-white shadow-lg shadow-amber-500/25 transition-all hover:bg-[#F5A623] hover:shadow-amber-500/40 active:scale-95"
               >
                 <Download className="h-4 w-4" />
-                <span>View Medal List PDF</span>
+                <span>{rankersDocument?.ctaLabel || "View Medal List PDF"}</span>
               </a>
             </div>
           </div>

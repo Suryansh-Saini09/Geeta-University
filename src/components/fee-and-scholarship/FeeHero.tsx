@@ -3,7 +3,20 @@
 import React from "react";
 import Image from "next/image";
 
-export default function FeeHero() {
+interface FeeHeroProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    bannerImage?: string;
+    paragraphs?: string[];
+  };
+}
+
+export default function FeeHero({ data }: FeeHeroProps) {
+  const title = data?.title || "Fee Structure & Scholarships";
+  const heroImage = data?.bannerImage || "/fee-and-scholarship/scholarship-hero.jpg";
+  const paragraph = data?.paragraphs?.[0] || data?.subtitle || "Geeta University (GU) strongly believes that monetary constraints should not be an obstacle for a student to have access to quality education. Following scholarships are offered at GU:";
+
   return (
     <>
       <style>{`
@@ -87,36 +100,28 @@ export default function FeeHero() {
 
       {/* Desktop / Tablet View (>= 768px) */}
       <div className="fee-hero-container position-relative hidden md:block my-4">
-        <h1 className="fee-hero-heading">Fee Structure &amp; Scholarships</h1>
+        <h1 className="fee-hero-heading">{title}</h1>
         <div className="relative w-full aspect-[960/540]">
           <Image
-            src="/fee-and-scholarship/scholarship-hero.jpg"
-            alt="Fee Structure & Scholarships"
+            src={heroImage}
+            alt={title}
             fill
             priority
             sizes="100vw"
             className="w-full h-auto object-contain"
           />
         </div>
-        <p className="fee-hero-text">
-          Geeta University (GU) strongly believes that monetary constraints
-          should not be an obstacle for a student to have access to quality
-          education. Following scholarships are offered at GU:
-        </p>
+        <p className="fee-hero-text">{paragraph}</p>
       </div>
 
       {/* Mobile View (< 768px) */}
       <div className="block md:hidden fee-hero-mobile">
-        <h1>Fee Structure &amp; Scholarships</h1>
-        <p>
-          Geeta University (GU) strongly believes that monetary constraints
-          should not be an obstacle for a student to have access to quality
-          education. Following scholarships are offered at GU:
-        </p>
+        <h1>{title}</h1>
+        <p>{paragraph}</p>
         <div className="relative w-full aspect-[960/540] mt-4">
           <Image
-            src="/fee-and-scholarship/scholarship-hero.jpg"
-            alt="Fee Structure & Scholarships"
+            src={heroImage}
+            alt={title}
             fill
             priority
             sizes="100vw"

@@ -9,8 +9,12 @@ import {
   CheckSquare,
   Users,
   UserCheck,
+  Award,
 } from "lucide-react";
-import { pedagogicalMethods } from "@/data/teachingLearningPractices";
+import {
+  pedagogicalMethods as fallbackMethods,
+  PedagogicalMethod,
+} from "@/data/teachingLearningPractices";
 
 const iconMap: Record<string, React.ElementType> = {
   Zap,
@@ -20,23 +24,44 @@ const iconMap: Record<string, React.ElementType> = {
   CheckSquare,
   Users,
   UserCheck,
+  Award,
 };
 
-export default function TeachingPedagogyGrid() {
+interface TeachingPedagogyGridProps {
+  pedagogy?: {
+    title?: string;
+    methods?: PedagogicalMethod[];
+  } | null;
+}
+
+export default function TeachingPedagogyGrid({ pedagogy }: TeachingPedagogyGridProps) {
+  const sectionTitle = pedagogy?.title || "Innovative Pedagogical Practices";
+  const methods =
+    pedagogy?.methods && pedagogy.methods.length > 0
+      ? pedagogy.methods
+      : fallbackMethods;
+
   return (
     <section id="pedagogy-grid" className="w-full bg-[#F7F9FC] py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
           <h2 className="font-serif text-3xl font-extrabold text-[#0A1F44] sm:text-4xl md:text-5xl">
-            Innovative <span className="text-[#E8871A]">Pedagogical Practices</span>
+            {sectionTitle.includes("Pedagogical Practices") ? (
+              <>
+                {sectionTitle.replace("Pedagogical Practices", "").trim()}{" "}
+                <span className="text-[#E8871A]">Pedagogical Practices</span>
+              </>
+            ) : (
+              sectionTitle
+            )}
           </h2>
         </div>
 
         {/* Masonry / Natural Flow Layout */}
         <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-          {pedagogicalMethods.map((method) => {
-            const IconComponent = iconMap[method.icon];
+          {methods.map((method) => {
+            const IconComponent = (method.icon && iconMap[method.icon]) || Zap;
 
             return (
               <div
@@ -58,19 +83,25 @@ export default function TeachingPedagogyGrid() {
 
                 {/* Optional Image */}
                 {method.image && (
-                  <div className="mb-4 overflow-hidden rounded-xl border border-slate-100">
+                  <div className="mb-4 overflow-hidden rounded-xl border border-slate-100 bg-slate-50">
                     <img
                       src={method.image}
-                      alt={method.title}
-                      className="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      alt={`${method.headingOrange} ${method.headingBlack}`}
+                      className="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                 )}
 
-                {/* Description */}
-                <p className="text-sm text-slate-600 leading-relaxed font-sans">
-                  {method.description}
-                </p>
+                {/* Body Paragraphs */}
+                <div className="space-y-3 text-sm text-slate-600 font-sans leading-relaxed">
+                  {Array.isArray(method.description) ? (
+                    method.description.map((p: string, idx: number) => (
+                      <p key={idx}>{p}</p>
+                    ))
+                  ) : (
+                    <p>{method.description}</p>
+                  )}
+                </div>
               </div>
             );
           })}

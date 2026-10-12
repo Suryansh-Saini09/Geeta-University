@@ -2,10 +2,15 @@
 
 import React, { useState } from "react";
 import { ArrowRight, X, Sparkles, CheckCircle } from "lucide-react";
-import { libraryPortalsData, LibraryPortal } from "@/data/libraryData";
+import { libraryPortalsData as fallbackPortals, type LibraryPortal } from "@/data/libraryData";
 
-export default function LibraryDigitalResources() {
+interface LibraryDigitalResourcesProps {
+  portals?: LibraryPortal[] | null;
+}
+
+export default function LibraryDigitalResources({ portals }: LibraryDigitalResourcesProps) {
   const [activePortal, setActivePortal] = useState<LibraryPortal | null>(null);
+  const items = portals && portals.length > 0 ? portals : fallbackPortals;
 
   return (
     <section className="w-full bg-[#F7F9FC] py-12 md:py-16 border-t border-b border-slate-200">
@@ -19,7 +24,7 @@ export default function LibraryDigitalResources() {
 
         {/* Portals Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {libraryPortalsData.map((portal) => (
+          {items.map((portal) => (
             <div
               key={portal.id}
               className="group flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[#E8871A]/50 hover:shadow-xl"

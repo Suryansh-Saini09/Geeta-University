@@ -6,6 +6,8 @@ import { Plus, Save, Trash2 } from "lucide-react";
 
 import type { PageSection } from "@/validations/page";
 
+import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
+
 type PageDefaults = {
   id: string;
   title: string;
@@ -67,7 +69,7 @@ export default function PageForm({ page, canPublish, canArchive, action }: {
     <section className="h-fit space-y-5 rounded-lg border border-slate-200 bg-white p-5">
       <div><label htmlFor="status" className="mb-2 block text-sm font-semibold">Status</label><select id="status" name="status" defaultValue={page?.status ?? ContentStatus.DRAFT} className={inputClass}><option value={ContentStatus.DRAFT}>Draft</option>{canPublish || page?.status === ContentStatus.PUBLISHED ? <option value={ContentStatus.PUBLISHED}>Published</option> : null}{canArchive || page?.status === ContentStatus.ARCHIVED ? <option value={ContentStatus.ARCHIVED}>Archived</option> : null}</select></div>
       <div><label htmlFor="revisionNote" className="mb-2 block text-sm font-semibold">Revision note</label><input id="revisionNote" name="revisionNote" maxLength={500} className={inputClass} /></div>
-      <button type="submit" className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#E8871A] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#d77610]"><Save className="h-4 w-4" /> {page ? "Save Changes" : "Create Page"}</button>
+      <CmsSubmitButton label={page ? "Save Changes" : "Create Page"} loadingLabel="Saving..." iconType="save" className="w-full py-2.5" />
     </section>
   </form>;
 }

@@ -1,12 +1,17 @@
 import React from "react";
-import { libraryMetricsData } from "@/data/libraryData";
+import { libraryMetricsData as fallbackMetrics, type LibraryMetricCard } from "@/data/libraryData";
 
-export default function LibraryStatCards() {
+interface LibraryStatCardsProps {
+  metrics?: LibraryMetricCard[] | null;
+}
+
+export default function LibraryStatCards({ metrics }: LibraryStatCardsProps) {
+  const items = metrics && metrics.length > 0 ? metrics : fallbackMetrics;
   return (
     <section className="w-full bg-[#F7F9FC] py-10 md:py-14 border-b border-slate-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {libraryMetricsData.map((item) => (
+          {items.map((item) => (
             <div
               key={item.id}
               className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#E8871A]/50 hover:shadow-md flex flex-col justify-between"

@@ -1,11 +1,31 @@
 import React from "react";
 import { Mail } from "lucide-react";
 import {
-  libraryHoursAndPolicyData,
-  libraryLoanTableData,
+  libraryHoursAndPolicyData as fallbackHours,
+  libraryLoanTableData as fallbackLoans,
+  type LoanRuleItem,
 } from "@/data/libraryData";
 
-export default function LibraryInfoAndPolicy() {
+interface LibraryInfoAndPolicyProps {
+  hoursPolicy?: {
+    operatingDays?: string;
+    timings?: string;
+    workingDaysPerYear?: string;
+    supportEmail?: string;
+    importantInfo?: string[];
+  } | null;
+  loanRules?: LoanRuleItem[] | null;
+}
+
+export default function LibraryInfoAndPolicy({ hoursPolicy, loanRules }: LibraryInfoAndPolicyProps) {
+  const hp = hoursPolicy || fallbackHours;
+  const rules = loanRules && loanRules.length > 0 ? loanRules : fallbackLoans;
+  const operatingDays = hp.operatingDays || fallbackHours.operatingDays;
+  const timings = hp.timings || fallbackHours.timings;
+  const workingDaysPerYear = hp.workingDaysPerYear || fallbackHours.workingDaysPerYear;
+  const supportEmail = hp.supportEmail || fallbackHours.supportEmail;
+  const importantInfo = hp.importantInfo || fallbackHours.importantInfo;
+
   return (
     <section className="w-full bg-white py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
@@ -30,15 +50,15 @@ export default function LibraryInfoAndPolicy() {
               <div className="space-y-3 text-sm font-sans">
                 <div className="flex justify-between items-center py-1">
                   <span className="text-slate-500 font-semibold">Operating Days:</span>
-                  <span className="font-bold text-[#0A1F44]">{libraryHoursAndPolicyData.operatingDays}</span>
+                  <span className="font-bold text-[#0A1F44]">{operatingDays}</span>
                 </div>
                 <div className="flex justify-between items-center py-1">
                   <span className="text-slate-500 font-semibold">Daily Timing:</span>
-                  <span className="font-bold text-[#E8871A]">{libraryHoursAndPolicyData.timings}</span>
+                  <span className="font-bold text-[#E8871A]">{timings}</span>
                 </div>
                 <div className="flex justify-between items-center py-1">
                   <span className="text-slate-500 font-semibold">Working Days / Year:</span>
-                  <span className="font-bold text-[#0A1F44]">{libraryHoursAndPolicyData.workingDaysPerYear}</span>
+                  <span className="font-bold text-[#0A1F44]">{workingDaysPerYear}</span>
                 </div>
               </div>
             </div>
@@ -54,7 +74,7 @@ export default function LibraryInfoAndPolicy() {
               </div>
 
               <ul className="space-y-2.5 text-xs text-slate-700 font-sans">
-                {libraryHoursAndPolicyData.importantInfo.map((info, idx) => (
+                {importantInfo.map((info, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="text-[#E8871A] font-bold">•</span>
                     <span>{info}</span>
@@ -78,12 +98,12 @@ export default function LibraryInfoAndPolicy() {
               </p>
 
               <a
-                href={`mailto:${libraryHoursAndPolicyData.supportEmail}`}
+                href={`mailto:${supportEmail}`}
                 className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-[#E8871A]"
                 style={{ color: "#ffffff" }}
               >
                 <Mail className="h-4 w-4 text-white" style={{ color: "#ffffff" }} />
-                <span style={{ color: "#ffffff" }}>{libraryHoursAndPolicyData.supportEmail}</span>
+                <span style={{ color: "#ffffff" }}>{supportEmail}</span>
               </a>
             </div>
           </div>
@@ -110,7 +130,7 @@ export default function LibraryInfoAndPolicy() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 font-sans">
-                {libraryLoanTableData.map((row) => (
+                {rules.map((row) => (
                   <tr key={row.sn} className="hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4 font-bold text-[#0A1F44]">{row.sn}</td>
                     <td className="px-6 py-4 font-semibold text-[#0A1F44]">{row.category}</td>

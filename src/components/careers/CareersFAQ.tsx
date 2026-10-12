@@ -5,8 +5,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, HelpCircle } from "lucide-react";
 import { CAREER_FAQS } from "@/data/careers";
 
-export default function CareersFAQ() {
+interface CareersFAQProps {
+  faqs?: {
+    title?: string;
+    subtitle?: string;
+    faqs?: Array<{
+      question: string;
+      answer: string;
+    }>;
+  } | null;
+}
+
+export default function CareersFAQ({ faqs }: CareersFAQProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const sectionTitle = faqs?.title || "Frequently Asked Questions";
+  const sectionSubtitle =
+    faqs?.subtitle ||
+    "Find quick answers to common queries regarding recruitment, eligibility, and working at Geeta University.";
+  const faqList = faqs?.faqs && faqs.faqs.length > 0 ? faqs.faqs : CAREER_FAQS;
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -24,16 +41,23 @@ export default function CareersFAQ() {
             </span>
           </div>
           <h2 className="font-serif text-[36px] font-black text-[#0A1F44] sm:text-[44px]">
-            Frequently Asked <span className="text-[#E8871A]">Questions</span>
+            {sectionTitle.includes("Questions") ? (
+              <>
+                {sectionTitle.replace("Questions", "").trim()}{" "}
+                <span className="text-[#E8871A]">Questions</span>
+              </>
+            ) : (
+              sectionTitle
+            )}
           </h2>
           <p className="mt-3 text-[16px] text-[#64748B]">
-            Find quick answers to common queries regarding recruitment, eligibility, and working at Geeta University.
+            {sectionSubtitle}
           </p>
         </div>
 
         {/* FAQ Accordion */}
         <div className="mx-auto max-w-4xl space-y-4">
-          {CAREER_FAQS.map((faq, index) => {
+          {faqList.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
               <div

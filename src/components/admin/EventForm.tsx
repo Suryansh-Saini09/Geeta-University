@@ -3,6 +3,8 @@ import { Save } from "lucide-react";
 
 import { toIndiaDateTimeInput } from "@/validations/event";
 
+import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
+
 const inputClass = "w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#E8871A] focus:bg-white";
 
 export default function EventForm({ event, canPublish, canArchive, action }: {
@@ -34,7 +36,7 @@ export default function EventForm({ event, canPublish, canArchive, action }: {
     </div>
     <section className="h-fit space-y-5 rounded-lg border border-slate-200 bg-white p-5">
       <div><label htmlFor="status" className="mb-2 block text-sm font-semibold">Status</label><select id="status" name="status" defaultValue={event?.status ?? ContentStatus.DRAFT} className={inputClass}><option value={ContentStatus.DRAFT}>Draft</option>{canPublish || event?.status === ContentStatus.PUBLISHED ? <option value={ContentStatus.PUBLISHED}>Published</option> : null}{canArchive || event?.status === ContentStatus.ARCHIVED ? <option value={ContentStatus.ARCHIVED}>Archived</option> : null}</select></div>
-      <button type="submit" className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#E8871A] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#d77610]"><Save className="h-4 w-4" /> {event ? "Save Changes" : "Create Event"}</button>
+      <CmsSubmitButton label={event ? "Save Changes" : "Create Event"} loadingLabel="Saving..." iconType="save" className="w-full py-2.5" />
     </section>
   </form>;
 }

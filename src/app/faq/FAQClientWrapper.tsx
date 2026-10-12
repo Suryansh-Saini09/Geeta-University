@@ -4,10 +4,14 @@ import React from "react";
 import FAQHero from "@/components/faq/FAQHero";
 import FAQAccordionSection from "@/components/faq/FAQAccordionSection";
 
-export default function FAQClientWrapper() {
+interface FAQClientWrapperProps {
+  heroData?: any;
+}
+
+export default function FAQClientWrapper({ heroData }: FAQClientWrapperProps) {
   return (
     <>
-      <FAQHero />
+      <FAQHero data={heroData} />
       <FAQAccordionSection />
     </>
   );

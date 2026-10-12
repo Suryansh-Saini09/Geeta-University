@@ -43,7 +43,47 @@ const BENEFITS = [
   },
 ];
 
-export default function CareersWhyUs() {
+const BENEFIT_THEMES = [
+  { icon: Microscope, color: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
+  { icon: Cpu, color: "bg-blue-500/10 text-blue-600 border-blue-500/20" },
+  { icon: TrendingUp, color: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" },
+  { icon: Award, color: "bg-purple-500/10 text-purple-600 border-purple-500/20" },
+  { icon: Users, color: "bg-cyan-500/10 text-cyan-600 border-cyan-500/20" },
+  { icon: BookOpen, color: "bg-rose-500/10 text-rose-600 border-rose-500/20" },
+];
+
+const ICON_MAP: Record<string, React.ElementType> = {
+  Microscope,
+  Cpu,
+  TrendingUp,
+  Award,
+  Users,
+  BookOpen,
+};
+
+interface CareersWhyUsProps {
+  benefits?: {
+    title?: string;
+    subtitle?: string;
+    items?: Array<{
+      title: string;
+      description: string;
+      icon?: string;
+    }>;
+  } | null;
+}
+
+export default function CareersWhyUs({ benefits }: CareersWhyUsProps) {
+  const sectionTitle = benefits?.title || "Empowering Your Professional Journey";
+  const sectionSubtitle =
+    benefits?.subtitle ||
+    "At Geeta University, we believe our educators and staff are our greatest asset. We provide an environment where innovation thrives, scholarship is celebrated, and professional development is prioritized.";
+
+  const items =
+    benefits?.items && benefits.items.length > 0
+      ? benefits.items
+      : BENEFITS;
+
   return (
     <section id="why-join-us" className="scroll-mt-20 bg-[#F8FAFC] py-10 md:py-14">
       <div className="gu-container">
@@ -57,17 +97,30 @@ export default function CareersWhyUs() {
             <span className="h-px w-8 bg-[#E8871A]" />
           </div>
           <h2 className="font-serif text-[36px] font-black text-[#0A1F44] sm:text-[42px] md:text-[48px]">
-            Empowering Your <span className="text-[#E8871A]">Professional Journey</span>
+            {sectionTitle.includes("Professional Journey") ? (
+              <>
+                {sectionTitle.replace("Professional Journey", "").trim()}{" "}
+                <span className="text-[#E8871A]">Professional Journey</span>
+              </>
+            ) : (
+              sectionTitle
+            )}
           </h2>
           <p className="mt-4 text-[16px] leading-[1.7] text-[#64748B] sm:text-[17px]">
-            At Geeta University, we believe our educators and staff are our greatest asset. We provide an environment where innovation thrives, scholarship is celebrated, and professional development is prioritized.
+            {sectionSubtitle}
           </p>
         </div>
 
         {/* Grid of Cards */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {BENEFITS.map((item, index) => {
-            const Icon = item.icon;
+          {items.map((item, index) => {
+            const theme = BENEFIT_THEMES[index % BENEFIT_THEMES.length];
+            const Icon =
+              typeof item.icon === "string"
+                ? ICON_MAP[item.icon] || theme.icon
+                : item.icon || theme.icon;
+            const colorClass = (item as any).color || theme.color;
+
             return (
               <motion.div
                 key={item.title}
@@ -77,7 +130,7 @@ export default function CareersWhyUs() {
                 transition={{ duration: 0.5, delay: index * 0.08 }}
                 className="group relative flex flex-col rounded-[16px] border border-[#E2E8F0] bg-white p-7 shadow-[0_4px_20px_rgba(10,31,68,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-[#E8871A]/40 hover:shadow-[0_12px_30px_rgba(232,135,26,0.1)]"
               >
-                <div className={`mb-6 flex h-14 w-14 items-center justify-center rounded-[12px] border ${item.color}`}>
+                <div className={`mb-6 flex h-14 w-14 items-center justify-center rounded-[12px] border ${colorClass}`}>
                   <Icon className="h-7 w-7" />
                 </div>
                 <h3 className="font-serif text-[20px] font-extrabold text-[#0A1F44] transition-colors group-hover:text-[#E8871A]">

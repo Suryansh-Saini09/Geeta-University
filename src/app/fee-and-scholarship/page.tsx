@@ -5,28 +5,35 @@ import ScholarshipPredictorSection from "@/components/fee-and-scholarship/Schola
 import TransportAndHostelPredictor from "@/components/fee-and-scholarship/TransportAndHostelPredictor";
 import LegacyEcosystemSection from "@/components/fee-and-scholarship/LegacyEcosystemSection";
 import FeeFaqAndCTA from "@/components/fee-and-scholarship/FeeFaqAndCTA";
+import { getPublishedAdmissionsPage } from "@/server/services/pages";
 
-export const metadata: Metadata = {
-  title: "Fees & Scholarships | Affordable Quality Education at Geeta University",
-  description:
-    "Explore Geeta University fee structure and scholarship options offering financial support, merit-based benefits, hostel charges, and affordable quality education.",
-  keywords: [
-    "Fee Scholarship",
-    "Geeta University Fees",
-    "Scholarship Predictor",
-    "Hostel Fee",
-    "Transport Fee",
-    "Geeta University Admissions Open",
-  ],
-  alternates: {
-    canonical: "https://geetauniversity.edu.in/fee-and-scholarship",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPublishedAdmissionsPage("fee-and-scholarship");
+  return {
+    title: seo?.title || "Fees & Scholarships | Affordable Quality Education at Geeta University",
+    description:
+      seo?.description ||
+      "Explore Geeta University fee structure and scholarship options offering financial support, merit-based benefits, hostel charges, and affordable quality education.",
+    keywords: (seo?.keywords as string[]) || [
+      "Fee Scholarship",
+      "Geeta University Fees",
+      "Scholarship Predictor",
+      "Hostel Fee",
+      "Transport Fee",
+      "Geeta University Admissions Open",
+    ],
+    alternates: {
+      canonical: seo?.canonical || "https://geetauniversity.edu.in/fee-and-scholarship",
+    },
+  };
+}
 
-export default function FeeAndScholarshipPage() {
+export default async function FeeAndScholarshipPage() {
+  const { sections } = await getPublishedAdmissionsPage("fee-and-scholarship");
+
   return (
     <div className="min-w-0 overflow-x-hidden bg-white text-[#0A1F44]">
-      <FeeHero />
+      <FeeHero data={sections.hero} />
       <ScholarshipPredictorSection />
       <TransportAndHostelPredictor />
       <LegacyEcosystemSection />

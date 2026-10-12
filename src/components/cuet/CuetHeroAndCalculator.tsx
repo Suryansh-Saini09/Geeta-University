@@ -91,7 +91,18 @@ const CUET_SLABS = [
   { label: "60% – 69.9% (10% Tuition Waiver)", percent: 10 },
 ];
 
-export default function CuetHeroAndCalculator() {
+interface CuetHeroAndCalculatorProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    bannerImage?: string;
+  };
+}
+
+export default function CuetHeroAndCalculator({ data }: CuetHeroAndCalculatorProps) {
+  const title = data?.title || "CUET UG 2026 Admissions & Merit Scholarships at GU";
+  const bannerImage = data?.bannerImage || "https://geetauniversity.edu.in/uploads/all/2540/cuet.jpeg";
+
   // Calculator States
   const [selectedArea, setSelectedArea] = useState<string>("Computer Science & Engineering");
   const [selectedProgram, setSelectedProgram] = useState<string>("B.Tech. (Hons.) CSE");
@@ -117,8 +128,8 @@ export default function CuetHeroAndCalculator() {
       <div className="relative w-full overflow-hidden bg-[#0A1F44]">
         <div className="relative h-[220px] sm:h-[340px] md:h-[440px] lg:h-[500px] w-full">
           <Image
-            src="https://geetauniversity.edu.in/uploads/all/2540/cuet.jpeg"
-            alt="CUET UG 2026 Admissions at Geeta University"
+            src={bannerImage}
+            alt={title}
             fill
             priority
             sizes="100vw"
@@ -134,7 +145,7 @@ export default function CuetHeroAndCalculator() {
           <div className="rounded-[24px] bg-gradient-to-br from-[#F0F7FF] to-[#FFF8F4] border border-[#CBD5E1] p-6 sm:p-8 shadow-sm">
             <div className="mb-6 pb-4 border-b border-[#E2E8F0]">
               <h2 className="font-serif text-[22px] sm:text-[26px] font-black text-[#0A1F44] leading-snug">
-                Check Your <span className="text-[#E8871A]">CUET Scholarship</span> Instantly
+                {title}
               </h2>
             </div>
 

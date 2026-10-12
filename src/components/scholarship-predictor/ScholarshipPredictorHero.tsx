@@ -14,7 +14,20 @@ const fadeUp: Variants = {
   },
 };
 
-export default function ScholarshipPredictorHero() {
+interface ScholarshipPredictorHeroProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    bannerImage?: string;
+    introText?: string;
+  };
+}
+
+export default function ScholarshipPredictorHero({ data }: ScholarshipPredictorHeroProps) {
+  const title = data?.title || "Geeta University Scholarship Predictor";
+  const subtitle = data?.introText || data?.subtitle || "Calculate your tuition fee waiver and estimate your scholarship eligibility instantly across all academic programs at Geeta University.";
+  const heroBg = data?.bannerImage || "/scholarship-predictor/hero-bg.webp";
+
   const scrollToCalculator = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const el = document.getElementById("scholarship-calculator-section");
@@ -28,8 +41,8 @@ export default function ScholarshipPredictorHero() {
       {/* Background Image Container */}
       <div className="relative min-h-[460px] w-full lg:min-h-[540px]">
         <Image
-          src="/scholarship-predictor/hero-bg.webp"
-          alt="Geeta University Scholarship Predictor Campus"
+          src={heroBg}
+          alt={title}
           fill
           priority
           sizes="100vw"
@@ -57,7 +70,7 @@ export default function ScholarshipPredictorHero() {
               variants={fadeUp}
               className="font-serif text-[clamp(2.5rem,5vw,4.2rem)] font-black leading-[1.1] text-white"
             >
-              Scholarship <span className="text-[#E8871A]">Predictor</span>
+              {title}
             </motion.h1>
 
             {/* Description */}
@@ -65,7 +78,7 @@ export default function ScholarshipPredictorHero() {
               variants={fadeUp}
               className="mt-6 max-w-[700px] text-[16px] font-normal leading-[1.75] text-white/85 sm:text-[18px] md:text-[20px]"
             >
-              Calculate your tuition fee waiver and estimate your scholarship eligibility instantly across all academic programs at Geeta University.
+              {subtitle}
             </motion.p>
 
             {/* CTA Buttons */}

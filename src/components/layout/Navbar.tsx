@@ -55,8 +55,6 @@ const primaryNavLinks: NavEntry[] = [
     cols: [
       {
         links: [
-          { label: "All Programs", href: "/programs" },
-          { label: "Departments", href: "/departments" },
           { label: "School of CSE", href: "/programs/school-of-computer-science-and-engineering" },
           { label: "School of Sciences", href: "/programs/school-of-forensic-sciences" },
           { label: "School of Agricultural Sciences", href: "/programs/school-of-agricultural-studies" },

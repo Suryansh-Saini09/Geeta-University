@@ -123,54 +123,51 @@ export const HARDCODED_SOCIAL_LINKS: SocialLink[] = [
 export const SOCIAL_API_URL = process.env.NEXT_PUBLIC_SOCIAL_API_URL || "";
 
 export async function fetchSocialData(): Promise<SocialApiResponse> {
-  if (!SOCIAL_API_URL) {
-    return {
-      success: true,
-      data: {
-        profile: HARDCODED_SOCIAL_PROFILE,
-        links: HARDCODED_SOCIAL_LINKS,
-      },
-    };
-  }
-
   try {
-    const response = await fetch(SOCIAL_API_URL, {
-      cache: "no-store",
+    const { prisma } = await import("@/server/db/client");
+    const setting = await prisma.siteSetting.findUnique({
+      where: { key: "social_links" },
+      select: { value: true },
     });
 
-    if (!response.ok) {
+    if (setting?.value) {
+      const val = setting.value as any;
       return {
         success: true,
         data: {
-          profile: HARDCODED_SOCIAL_PROFILE,
-          links: HARDCODED_SOCIAL_LINKS,
+          profile: val.profile || HARDCODED_SOCIAL_PROFILE,
+          links: val.links || HARDCODED_SOCIAL_LINKS,
         },
       };
     }
-
-    const json: SocialApiResponse = await response.json();
-
-    if (!json.success || !json.data) {
-      return {
-        success: true,
-        data: {
-          profile: HARDCODED_SOCIAL_PROFILE,
-          links: HARDCODED_SOCIAL_LINKS,
-        },
-      };
-    }
-
-    return json;
   } catch (err) {
-    console.error("Error fetching social data, using hardcoded fallback:", err);
-    return {
-      success: true,
-      data: {
-        profile: HARDCODED_SOCIAL_PROFILE,
-        links: HARDCODED_SOCIAL_LINKS,
-      },
-    };
+    console.warn("DB read for socialLinks failed, checking external/hardcoded:", err);
   }
+
+  if (SOCIAL_API_URL) {
+    try {
+      const response = await fetch(SOCIAL_API_URL, {
+        cache: "no-store",
+      });
+
+      if (response.ok) {
+        const json: SocialApiResponse = await response.json();
+        if (json.success && json.data) {
+          return json;
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching external social data:", err);
+    }
+  }
+
+  return {
+    success: true,
+    data: {
+      profile: HARDCODED_SOCIAL_PROFILE,
+      links: HARDCODED_SOCIAL_LINKS,
+    },
+  };
 }
 
 export async function getSocialLinks(): Promise<SocialLink[]> {
@@ -186,4 +183,4 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
 }
 
 
-
+

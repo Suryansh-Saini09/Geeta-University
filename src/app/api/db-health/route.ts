@@ -86,7 +86,7 @@ export async function GET() {
   // Step 3: Prisma Initialization & Queries
   try {
     result.prismaInitialized = true;
-    await prisma.$queryRawUnsafe("SELECT 1");
+    await prisma.$queryRaw`SELECT 1`;
     result.prismaSelect1 = true;
 
     const adminCount = await prisma.adminUser.count();

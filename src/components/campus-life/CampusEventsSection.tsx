@@ -6,10 +6,14 @@ import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { campusEvents } from "@/data/campusLife";
 
 interface CampusEventsSectionProps {
+  data?: any;
   onOpenEventsVideo: () => void;
 }
 
-export default function CampusEventsSection({ onOpenEventsVideo }: CampusEventsSectionProps) {
+export default function CampusEventsSection({ data, onOpenEventsVideo }: CampusEventsSectionProps) {
+  const itemsList = data?.events || campusEvents;
+  const sectionTitle = data?.title || "Campus Events & Fests";
+  const spotlight = data?.videoSpotlight || {};
   const [visibleCards, setVisibleCards] = useState(3);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -30,7 +34,7 @@ export default function CampusEventsSection({ onOpenEventsVideo }: CampusEventsS
     return () => window.removeEventListener("resize", updateVisibleCards);
   }, []);
 
-  const totalSlides = Math.max(1, campusEvents.length - visibleCards + 1);
+  const totalSlides = Math.max(1, itemsList.length - visibleCards + 1);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % totalSlides);
@@ -158,7 +162,7 @@ export default function CampusEventsSection({ onOpenEventsVideo }: CampusEventsS
                 transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
               }}
             >
-              {campusEvents.map((event) => (
+              {itemsList.map((event: any) => (
                 <div
                   key={event.id}
                   className="w-full shrink-0 px-3 sm:w-1/2 lg:w-1/3"

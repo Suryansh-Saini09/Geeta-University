@@ -5,6 +5,8 @@ import Image from "next/image";
 import { ContentStatus } from "@prisma/client";
 import { ArrowDown, ArrowUp, Save } from "lucide-react";
 
+import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
+
 type MediaOption = { id: string; fileName: string; url: string; altText: string | null };
 type AlbumDefaults = { id: string; title: string; slug: string; description: string | null; status: ContentStatus; sortOrder: number; imageIds: string[] };
 const inputClass = "w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#E8871A] focus:bg-white";
@@ -44,7 +46,7 @@ export default function GalleryForm({ album, media, canPublish, canArchive, acti
     <section className="h-fit space-y-5 rounded-lg border border-slate-200 bg-white p-5">
       <div><label htmlFor="status" className="mb-2 block text-sm font-semibold">Status</label><select id="status" name="status" defaultValue={album?.status ?? ContentStatus.DRAFT} className={inputClass}><option value={ContentStatus.DRAFT}>Draft</option>{canPublish || album?.status === ContentStatus.PUBLISHED ? <option value={ContentStatus.PUBLISHED}>Published</option> : null}{canArchive || album?.status === ContentStatus.ARCHIVED ? <option value={ContentStatus.ARCHIVED}>Archived</option> : null}</select></div>
       <div><label htmlFor="sortOrder" className="mb-2 block text-sm font-semibold">Sort order</label><input id="sortOrder" name="sortOrder" type="number" min={0} defaultValue={album?.sortOrder ?? 0} className={inputClass} /></div>
-      <button type="submit" className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#E8871A] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#d77610]"><Save className="h-4 w-4" /> {album ? "Save Changes" : "Create Album"}</button>
+      <CmsSubmitButton label={album ? "Save Changes" : "Create Album"} loadingLabel="Saving..." iconType="save" className="w-full py-2.5" />
     </section>
   </form>;
 }

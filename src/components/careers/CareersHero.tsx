@@ -14,7 +14,25 @@ const fadeUp: Variants = {
   },
 };
 
-export default function CareersHero() {
+interface CareersHeroProps {
+  hero?: {
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    heroImage?: string;
+    ctaText?: string;
+  } | null;
+}
+
+export default function CareersHero({ hero }: CareersHeroProps) {
+  const title = hero?.title || "Careers at Geeta University";
+  const desc =
+    hero?.description ||
+    hero?.subtitle ||
+    "Empowering Minds, Inspiring Innovation, and Building Tomorrow's Leaders. Join our team of visionary educators, researchers, and professional staff in a top private university in Haryana.";
+  const heroImg = hero?.heroImage || "/careers/hero-bg.webp";
+  const cta = hero?.ctaText || "Apply Online";
+
   const scrollToForm = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const el = document.getElementById("careers-form-section");
@@ -28,7 +46,7 @@ export default function CareersHero() {
       {/* Background Image Container */}
       <div className="relative min-h-[500px] w-full lg:min-h-[580px]">
         <Image
-          src="/careers/hero-bg.webp"
+          src={heroImg}
           alt="Careers at Geeta University Campus"
           fill
           priority
@@ -57,7 +75,14 @@ export default function CareersHero() {
               variants={fadeUp}
               className="font-serif text-[clamp(2.6rem,5.5vw,4.2rem)] font-black leading-[1.1] text-white"
             >
-              Careers at <span className="text-[#E8871A]">Geeta University</span>
+              {title.includes("Geeta University") ? (
+                <>
+                  {title.replace("Geeta University", "").trim()}{" "}
+                  <span className="text-[#E8871A]">Geeta University</span>
+                </>
+              ) : (
+                title
+              )}
             </motion.h1>
 
             {/* Subtitle Description */}
@@ -65,8 +90,7 @@ export default function CareersHero() {
               variants={fadeUp}
               className="mt-6 max-w-[700px] text-[16px] font-normal leading-[1.75] text-white/85 sm:text-[18px] md:text-[20px]"
             >
-              Empowering Minds, Inspiring Innovation, and Building Tomorrow&apos;s Leaders.
-              Join our team of visionary educators, researchers, and professional staff in a top private university in Haryana.
+              {desc}
             </motion.p>
 
             {/* CTA Buttons */}
@@ -77,7 +101,7 @@ export default function CareersHero() {
                 className="group inline-flex items-center gap-3 rounded-[10px] bg-[#E8871A] px-7 py-4 text-[15px] font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#F5A623] hover:shadow-[0_10px_25px_rgba(232,135,26,0.3)]"
               >
                 <FileText className="h-5 w-5" />
-                <span>Apply Online</span>
+                <span>{cta}</span>
               </a>
             </motion.div>
           </motion.div>

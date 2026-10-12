@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
 import {
   ArrowLeft,
   ExternalLink,
@@ -394,13 +395,13 @@ export function DepartmentContentManager({
               </select>
             </div>
 
-            <button
-              type="submit"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-[#E8871A] hover:text-white transition"
-            >
-              <Save className="h-3.5 w-3.5" />
-              Update Status
-            </button>
+            <CmsSubmitButton
+              label="Update Status"
+              loadingLabel="Updating..."
+              iconType="save"
+              className="px-3 py-1.5 text-xs"
+              variant="secondary"
+            />
           </form>
 
           {updated && (

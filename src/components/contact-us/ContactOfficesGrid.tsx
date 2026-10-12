@@ -1,23 +1,36 @@
 import React from "react";
 import { Building2, MapPin } from "lucide-react";
-import { admissionOfficesList } from "@/data/contactUsData";
+import { admissionOfficesList as fallbackOffices } from "@/data/contactUsData";
 
-export default function ContactOfficesGrid() {
+interface ContactOfficesGridProps {
+  title?: string;
+  offices?: Array<{
+    id: string;
+    city: string;
+    address: string;
+    landmark?: string;
+  }> | null;
+}
+
+export default function ContactOfficesGrid({ title, offices }: ContactOfficesGridProps) {
+  const sectionTitle = title || "Our Regional Admission Offices";
+  const list = offices && offices.length > 0 ? offices : fallbackOffices;
+
   return (
     <section className="w-full bg-white py-10 md:py-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mx-auto max-w-3xl text-center mb-12 md:mb-16">
           <h2 className="mt-3 font-serif text-3xl font-bold tracking-tight text-[#0A1F44] sm:text-4xl">
-            Our Regional Admission Offices
+            {sectionTitle}
           </h2>
         </div>
 
         {/* Offices Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {admissionOfficesList.map((office) => (
+          {list.map((office) => (
             <div
-              key={office.id}
+              key={office.id || office.city}
               className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-[#F7F9FC] p-6 transition-all duration-300 hover:border-[#E8871A]/50 hover:bg-white hover:shadow-xl"
             >
               <div>

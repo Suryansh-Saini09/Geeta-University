@@ -1,6 +1,8 @@
 import { ContentStatus, type NewsArticle, type SeoMetadata } from "@prisma/client";
 import { Save } from "lucide-react";
 
+import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
+
 const inputClass = "w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#E8871A] focus:bg-white";
 
 export default function NewsForm({ article, canPublish, canArchive, action }: {
@@ -28,7 +30,7 @@ export default function NewsForm({ article, canPublish, canArchive, action }: {
     <section className="h-fit space-y-5 rounded-lg border border-slate-200 bg-white p-5">
       <div><label htmlFor="status" className="mb-2 block text-sm font-semibold text-[#0A1F44]">Status</label><select id="status" name="status" defaultValue={article?.status ?? ContentStatus.DRAFT} className={inputClass}><option value={ContentStatus.DRAFT}>Draft</option>{canPublish || article?.status === ContentStatus.PUBLISHED ? <option value={ContentStatus.PUBLISHED}>Published</option> : null}{canArchive || article?.status === ContentStatus.ARCHIVED ? <option value={ContentStatus.ARCHIVED}>Archived</option> : null}</select></div>
       {article?.publishedAt ? <p className="text-xs text-slate-500">First published {article.publishedAt.toLocaleDateString("en-IN")}</p> : null}
-      <button type="submit" className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#E8871A] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#d77610]"><Save className="h-4 w-4" /> {article ? "Save Changes" : "Create Article"}</button>
+      <CmsSubmitButton label={article ? "Save Changes" : "Create Article"} loadingLabel="Saving..." iconType="save" className="w-full py-2.5" />
     </section>
   </form>;
 }

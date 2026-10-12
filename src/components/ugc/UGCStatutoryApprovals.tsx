@@ -1,8 +1,16 @@
 import React from "react";
 import { Award, Landmark, ShieldCheck, Scale, CheckCircle2 } from "lucide-react";
-import { ugcApprovalsList } from "@/data/ugcData";
+import { ugcApprovalsList as fallbackApprovals, UGCApproval } from "@/data/ugcData";
 
-export default function UGCStatutoryApprovals() {
+interface UGCStatutoryApprovalsProps {
+  title?: string;
+  approvals?: UGCApproval[] | null;
+}
+
+export default function UGCStatutoryApprovals({ title, approvals }: UGCStatutoryApprovalsProps) {
+  const sectionTitle = title || "Statutory Bodies & Council Approvals";
+  const list = approvals && approvals.length > 0 ? approvals : fallbackApprovals;
+
   const getIcon = (name: string) => {
     switch (name) {
       case "Award":
@@ -27,7 +35,7 @@ export default function UGCStatutoryApprovals() {
             Government Recognitions
           </span>
           <h2 className="mt-3 font-serif text-3xl font-bold tracking-tight text-[#0A1F44] sm:text-4xl">
-            Statutory Bodies & Council Approvals
+            {sectionTitle}
           </h2>
           <p className="mt-3 text-base text-slate-600 sm:text-lg font-sans">
             Geeta University operates under full statutory compliance with national educational councils and the Government of Haryana.
@@ -36,9 +44,9 @@ export default function UGCStatutoryApprovals() {
 
         {/* Approvals Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {ugcApprovalsList.map((app) => (
+          {list.map((app) => (
             <div
-              key={app.id}
+              key={app.id || app.title}
               className="group relative flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#E8871A]/40 hover:shadow-xl"
             >
               <div>
@@ -59,7 +67,7 @@ export default function UGCStatutoryApprovals() {
                   {app.actOrSection} • {app.body}
                 </span>
 
-                <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-sans">
+                <p className="text-sm text-slate-600 leading-relaxed font-sans">
                   {app.description}
                 </p>
               </div>

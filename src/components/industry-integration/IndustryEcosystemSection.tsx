@@ -3,8 +3,24 @@
 import React from "react";
 import { legacyEcosystemData } from "@/data/industryIntegration";
 
-export default function IndustryEcosystemSection() {
-  const getCardStyles = (accent: "saffron" | "blue" | "navy") => {
+interface IndustryEcosystemSectionProps {
+  data?: {
+    title?: string;
+    intro?: string;
+    items?: Array<{ id?: any; title?: string; subtitle?: string; accent?: string }>;
+    closing?: string;
+    image?: string;
+  } | null;
+}
+
+export default function IndustryEcosystemSection({ data }: IndustryEcosystemSectionProps) {
+  const title = data?.title || legacyEcosystemData.title;
+  const intro = data?.intro || legacyEcosystemData.intro;
+  const items = data?.items && data.items.length > 0 ? data.items : legacyEcosystemData.items;
+  const closing = data?.closing || legacyEcosystemData.closing;
+  const image = data?.image || legacyEcosystemData.image;
+
+  const getCardStyles = (accent?: string) => {
     switch (accent) {
       case "saffron":
         return {
@@ -39,7 +55,7 @@ export default function IndustryEcosystemSection() {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="font-serif text-3xl font-extrabold text-[#0A1F44] sm:text-4xl md:text-5xl">
-            {legacyEcosystemData.title}
+            {title}
           </h2>
         </div>
 
@@ -48,15 +64,15 @@ export default function IndustryEcosystemSection() {
           {/* Left Column - Ecosystem Cards */}
           <div className="lg:col-span-7 space-y-6">
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-sans">
-              {legacyEcosystemData.intro}
+              {intro}
             </p>
 
             <div className="space-y-4 pt-2">
-              {legacyEcosystemData.items.map((item) => {
+              {items.map((item, idx) => {
                 const styles = getCardStyles(item.accent);
                 return (
                   <div
-                    key={item.id}
+                    key={item.id || idx}
                     className="group flex items-stretch gap-3 transition-transform duration-300 hover:-translate-y-1"
                   >
                     <div
@@ -78,7 +94,7 @@ export default function IndustryEcosystemSection() {
             </div>
 
             <p className="pt-4 text-base sm:text-lg font-semibold text-slate-700 font-sans border-t border-slate-100">
-              {legacyEcosystemData.closing}
+              {closing}
             </p>
           </div>
 
@@ -87,7 +103,7 @@ export default function IndustryEcosystemSection() {
             <div className="relative overflow-hidden rounded-2xl border border-slate-200 shadow-2xl transition-all duration-300 hover:shadow-amber-500/10">
               <div className="aspect-square w-full">
                 <img
-                  src={legacyEcosystemData.image}
+                  src={image}
                   alt="Geeta Group Campus"
                   className="h-full w-full object-cover"
                 />

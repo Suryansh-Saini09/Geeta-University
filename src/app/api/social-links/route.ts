@@ -1,34 +1,33 @@
 import { NextResponse } from "next/server";
-
-const SOCIAL_API_URL = process.env.NEXT_PUBLIC_SOCIAL_API_URL || "";
+import { prisma } from "@/server/db/client";
+import { HARDCODED_SOCIAL_LINKS, HARDCODED_SOCIAL_PROFILE } from "@/lib/socialLinks";
 
 export async function GET() {
   try {
-    if (!SOCIAL_API_URL) {
-      return NextResponse.json(
-        { success: false, error: "NEXT_PUBLIC_SOCIAL_API_URL is not defined" },
-        { status: 500 }
-      );
-    }
-
-    const response = await fetch(SOCIAL_API_URL, {
-      cache: "no-store",
+    const setting = await prisma.siteSetting.findUnique({
+      where: { key: "social_links" },
+      select: { value: true },
     });
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { success: false, error: `Upstream error: ${response.status}` },
-        { status: response.status }
-      );
+    if (setting?.value) {
+      const val = setting.value as any;
+      return NextResponse.json({
+        success: true,
+        data: {
+          profile: val.profile || HARDCODED_SOCIAL_PROFILE,
+          links: val.links || HARDCODED_SOCIAL_LINKS,
+        },
+      });
     }
-
-    const data = await response.json();
-    return NextResponse.json(data);
   } catch (error) {
-    console.error("Error proxies to Google Apps Script:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch social data" },
-      { status: 500 }
-    );
+    console.error("Error fetching social data from DB:", error);
   }
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      profile: HARDCODED_SOCIAL_PROFILE,
+      links: HARDCODED_SOCIAL_LINKS,
+    },
+  });
 }

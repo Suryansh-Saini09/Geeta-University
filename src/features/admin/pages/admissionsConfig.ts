@@ -1,0 +1,155 @@
+export interface AdmissionsPageOption {
+  slug: string;
+  title: string;
+  publicRoute: string;
+  iconName: "GraduationCap" | "BookOpen" | "HelpCircle" | "Award" | "Globe" | "FileText";
+  sectionsList: { key: string; label: string }[];
+}
+
+export const ADMISSIONS_PAGES_OPTIONS: AdmissionsPageOption[] = [
+  {
+    slug: "programs-after-12th",
+    title: "Programs After 12th",
+    publicRoute: "/programs-after-12th",
+    iconName: "GraduationCap",
+    sectionsList: [
+      { key: "hero", label: "1. Hero Banner & Overview" },
+      { key: "ug_schools", label: "2. Schools & Programs Catalog" },
+      { key: "stats_cards", label: "3. Placement Achievement Cards" },
+      { key: "faqs", label: "4. Frequently Asked Questions" },
+      { key: "legacy_ecosystem", label: "5. Legacy & Ecosystem" },
+    ],
+  },
+  {
+    slug: "post-graduate-programs",
+    title: "Postgraduate Programs",
+    publicRoute: "/post-graduate-programs",
+    iconName: "BookOpen",
+    sectionsList: [
+      { key: "hero", label: "1. Hero Banner & Overview" },
+      { key: "pg_schools", label: "2. Schools & Master's Catalog" },
+      { key: "stats_cards", label: "3. Placement Achievement Cards" },
+      { key: "faqs", label: "4. Frequently Asked Questions" },
+      { key: "legacy_ecosystem", label: "5. Legacy & Ecosystem" },
+    ],
+  },
+  {
+    slug: "phd",
+    title: "Doctoral Programs (Ph.D.)",
+    publicRoute: "/phd",
+    iconName: "GraduationCap",
+    sectionsList: [
+      { key: "hero", label: "1. Hero Banner" },
+      { key: "about_disciplines", label: "2. About & Research Disciplines" },
+      { key: "important_dates", label: "3. Important Admission Dates" },
+      { key: "coursework_framework", label: "4. Coursework & Fellowships" },
+      { key: "virtual_tour", label: "5. Virtual Campus Tour" },
+      { key: "eligibility", label: "6. Eligibility & Selection" },
+      { key: "syllabus", label: "7. Subject Entrance Syllabus PDFs" },
+      { key: "notice_contact", label: "8. Notice & Ph.D. Cell Contact" },
+      { key: "faqs", label: "9. Frequently Asked Questions" },
+      { key: "legacy_ecosystem", label: "10. Legacy & Ecosystem" },
+    ],
+  },
+  {
+    slug: "confused-about-courses",
+    title: "Confused About Courses?",
+    publicRoute: "/confused-about-courses",
+    iconName: "HelpCircle",
+    sectionsList: [
+      { key: "hero", label: "1. Hero Banner & Quote" },
+      { key: "statistics_reality", label: "2. Reality of Career Decisions" },
+      { key: "decision_framework", label: "3. Four-Step Decision Framework" },
+      { key: "first_decision_course", label: "4. 1st Decision: Right Course & 2 Pillars" },
+      { key: "second_decision_institution", label: "5. 2nd Decision: Right Institution Checklist" },
+    ],
+  },
+  {
+    slug: "fee-and-scholarship",
+    title: "Fee Structure & Scholarships",
+    publicRoute: "/fee-and-scholarship",
+    iconName: "Award",
+    sectionsList: [
+      { key: "hero", label: "1. Fee Hero & Overview" },
+      { key: "scholarship_predictor", label: "2. Scholarship Policy Details" },
+      { key: "transport_hostel", label: "3. Hostel & Transport Fees" },
+      { key: "faqs_cta", label: "4. FAQ & Contact Support" },
+      { key: "legacy_ecosystem", label: "5. Legacy & Ecosystem" },
+    ],
+  },
+  {
+    slug: "scholarship-predictor",
+    title: "Scholarship Predictor",
+    publicRoute: "/scholarship-predictor",
+    iconName: "Award",
+    sectionsList: [
+      { key: "hero", label: "1. Hero Banner" },
+      { key: "calculator_overview", label: "2. Calculator Instructions" },
+      { key: "types_overview", label: "3. Scholarship Categories Overview" },
+      { key: "faqs", label: "4. Predictor FAQs" },
+      { key: "legacy_ecosystem", label: "5. Legacy & Ecosystem" },
+    ],
+  },
+  {
+    slug: "international-admissions",
+    title: "International Admissions",
+    publicRoute: "/international-admissions",
+    iconName: "Globe",
+    sectionsList: [
+      { key: "hero", label: "1. Global Hero Banner & Stats" },
+      { key: "partner_marquee", label: "2. Global Partner Marquee" },
+      { key: "universe_of_gu", label: "3. Universe of GU & MoUs" },
+      { key: "leadership_spotlight", label: "4. International Leadership Spotlight" },
+      { key: "testimonials", label: "5. International Testimonials" },
+      { key: "video_showcase", label: "6. Video Showcase & Virtual Tour" },
+      { key: "program_accordion", label: "7. Programs Catalog Accordion" },
+      { key: "legacy_ecosystem", label: "8. Legacy & Ecosystem" },
+    ],
+  },
+  {
+    slug: "guts",
+    title: "GUTS Entrance Exam",
+    publicRoute: "/guts",
+    iconName: "Award",
+    sectionsList: [
+      { key: "hero", label: "1. GUTS Hero Banner" },
+      { key: "scholarship_slabs", label: "2. Scholarship Slabs & Exam Pattern" },
+      { key: "syllabus", label: "3. Subject Syllabus PDFs" },
+      { key: "admission_process", label: "4. Admission Steps" },
+      { key: "applicable_programs", label: "5. Applicable Programs" },
+      { key: "video_banner", label: "6. Video Walkthrough" },
+      { key: "faqs", label: "7. Frequently Asked Questions" },
+      { key: "virtual_campus", label: "8. Virtual Campus Tour" },
+      { key: "legacy_ecosystem", label: "9. Legacy & Ecosystem" },
+    ],
+  },
+  {
+    slug: "cuet",
+    title: "CUET Admissions",
+    publicRoute: "/cuet",
+    iconName: "FileText",
+    sectionsList: [
+      { key: "hero", label: "1. CUET Hero & Calculator" },
+      { key: "admission_process", label: "2. Fast-Track Flow" },
+      { key: "programs_offered", label: "3. Programs Catalog" },
+      { key: "why_and_stats", label: "4. Why CUET & Stats" },
+      { key: "testimonials", label: "5. Placement Testimonials" },
+      { key: "star_performers", label: "6. Star Performers" },
+      { key: "faqs", label: "7. Frequently Asked Questions" },
+      { key: "legacy_ecosystem", label: "8. Legacy & Ecosystem" },
+    ],
+  },
+  {
+    slug: "faq",
+    title: "Frequently Asked Questions",
+    publicRoute: "/faq",
+    iconName: "HelpCircle",
+    sectionsList: [
+      { key: "hero", label: "1. FAQ Hero & Breadcrumbs" },
+      { key: "categories", label: "2. Categories Grid" },
+      { key: "faqs_list", label: "3. All FAQs Collection" },
+      { key: "contact_banner", label: "4. Support Banner" },
+      { key: "industry_ecosystem", label: "5. Industry Ecosystem" },
+    ],
+  },
+];

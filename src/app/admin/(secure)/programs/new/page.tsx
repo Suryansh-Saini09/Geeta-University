@@ -4,6 +4,7 @@ import { ContentStatus } from "@prisma/client";
 
 import { createProgramAction } from "@/features/admin/programs/actions";
 import { getProgramDepartmentOptions } from "@/server/services/programs";
+import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
 
 interface NewProgramPageProps {
   searchParams: Promise<{
@@ -209,7 +210,6 @@ function ProgramFields({
     </div>
   );
 }
-
 function ProgramPublishingPanel({
   defaultStatus,
   defaultSortOrder,
@@ -263,13 +263,12 @@ function ProgramPublishingPanel({
             />
           </div>
 
-          <button
-            type="submit"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#E8871A] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
-          >
-            <Save className="h-4 w-4" />
-            {buttonLabel}
-          </button>
+          <CmsSubmitButton
+            label={buttonLabel}
+            loadingLabel="Saving..."
+            iconType="save"
+            className="w-full py-3"
+          />
         </div>
       </section>
     </aside>

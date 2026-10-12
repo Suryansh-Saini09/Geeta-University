@@ -132,7 +132,22 @@ export async function updatePageSectionAction(
       after: validatedBody,
     });
 
-    revalidatePath(pageSlug === "home" ? "/" : `/${pageSlug}`);
+    if (["dyod", "gfs", "gth", "vocational-skills"].includes(pageSlug)) {
+      revalidatePath(`/edge/${pageSlug}`);
+      revalidatePath(`/${pageSlug}`);
+      revalidatePath("/edge/[slug]", "page");
+    } else if (pageSlug === "gu-global-edge") {
+      revalidatePath("/gu-global-edge");
+    } else if (pageSlug === "nep") {
+      revalidatePath("/nep");
+    } else if (pageSlug === "xedge") {
+      revalidatePath("/xedge");
+    } else if (pageSlug === "library") {
+      revalidatePath("/library");
+      revalidatePath("/knowledge-resource-centre-library");
+    } else {
+      revalidatePath(pageSlug === "home" ? "/" : `/${pageSlug}`);
+    }
     return { success: true, message: `Updated ${sectionKey} section successfully` };
   } catch (err: any) {
     console.error(`Error updating ${pageSlug} section ${sectionKey}:`, err);
@@ -193,7 +208,19 @@ export async function updatePageSeoAction(pageSlug: string, rawData: any) {
       after: validated,
     });
 
-    revalidatePath(pageSlug === "home" ? "/" : `/${pageSlug}`);
+    if (["dyod", "gfs", "gth", "vocational-skills"].includes(pageSlug)) {
+      revalidatePath(`/edge/${pageSlug}`);
+      revalidatePath(`/${pageSlug}`);
+      revalidatePath("/edge/[slug]", "page");
+    } else if (pageSlug === "gu-global-edge") {
+      revalidatePath("/gu-global-edge");
+    } else if (pageSlug === "nep") {
+      revalidatePath("/nep");
+    } else if (pageSlug === "xedge") {
+      revalidatePath("/xedge");
+    } else {
+      revalidatePath(pageSlug === "home" ? "/" : `/${pageSlug}`);
+    }
     return { success: true, message: "SEO Metadata saved successfully" };
   } catch (err: any) {
     console.error(`Error updating SEO for ${pageSlug}:`, err);

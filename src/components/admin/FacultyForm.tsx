@@ -3,6 +3,8 @@ import { Save } from "lucide-react";
 
 import type { getAdminFacultyById, getFacultyOptions } from "@/server/services/faculty";
 
+import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
+
 type Options = Awaited<ReturnType<typeof getFacultyOptions>>;
 type Faculty = NonNullable<Awaited<ReturnType<typeof getAdminFacultyById>>>;
 
@@ -54,9 +56,7 @@ export default function FacultyForm({ options, faculty, action }: { options: Opt
           </select>
         </div>
         <Field label="Sort order" name="sortOrder" type="number" defaultValue={faculty?.sortOrder ?? 0} min={0} />
-        <button type="submit" className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#E8871A] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#d77610]">
-          <Save className="h-4 w-4" /> {faculty ? "Save Changes" : "Create Faculty Member"}
-        </button>
+        <CmsSubmitButton label={faculty ? "Save Changes" : "Create Faculty Member"} loadingLabel="Saving..." iconType="save" className="w-full py-2.5" />
       </section>
     </form>
   );

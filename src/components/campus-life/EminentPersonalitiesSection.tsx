@@ -5,7 +5,9 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { eminentPersonalities } from "@/data/campusLife";
 
-export default function EminentPersonalitiesSection() {
+export default function EminentPersonalitiesSection({ data }: { data?: any }) {
+  const itemsList = data?.personalities || eminentPersonalities;
+  const sectionTitle = data?.title || "Eminent Personalities at GU";
   const [visibleCards, setVisibleCards] = useState(2);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -24,7 +26,7 @@ export default function EminentPersonalitiesSection() {
     return () => window.removeEventListener("resize", updateVisibleCards);
   }, []);
 
-  const totalSlides = Math.max(1, eminentPersonalities.length - visibleCards + 1);
+  const totalSlides = Math.max(1, itemsList.length - visibleCards + 1);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % totalSlides);
@@ -118,7 +120,7 @@ export default function EminentPersonalitiesSection() {
                 transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
               }}
             >
-              {eminentPersonalities.map((item) => (
+              {itemsList.map((item: any) => (
                 <div
                   key={item.id}
                   className="w-full shrink-0 px-3 md:w-1/2"

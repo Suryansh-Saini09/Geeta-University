@@ -1,6 +1,8 @@
 import { ContentStatus, type Notice } from "@prisma/client";
 import { Save } from "lucide-react";
 
+import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
+
 const inputClass = "w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#E8871A] focus:bg-white";
 
 export default function NoticeForm({ notice, canPublish, canArchive, action }: {
@@ -42,7 +44,7 @@ export default function NoticeForm({ notice, canPublish, canArchive, action }: {
         <label htmlFor="expiresAt" className="mb-2 block text-sm font-semibold text-[#0A1F44]">Expiry date</label>
         <input id="expiresAt" name="expiresAt" type="date" defaultValue={notice?.expiresAt?.toISOString().slice(0, 10) ?? ""} className={inputClass} />
       </div>
-      <button type="submit" className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#E8871A] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#d77610]"><Save className="h-4 w-4" /> {notice ? "Save Changes" : "Create Notice"}</button>
+      <CmsSubmitButton label={notice ? "Save Changes" : "Create Notice"} loadingLabel="Saving..." iconType="save" className="w-full py-2.5" />
     </section>
   </form>;
 }

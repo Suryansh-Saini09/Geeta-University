@@ -1,15 +1,28 @@
 import React from "react";
 import Link from "next/link";
-import { ChevronRight, BookOpen, Clock, ShieldCheck } from "lucide-react";
-import { libraryHeroData } from "@/data/libraryData";
+import { ChevronRight } from "lucide-react";
+import { libraryHeroData as fallbackHeroData } from "@/data/libraryData";
 
-export default function LibraryHero() {
+interface LibraryHeroProps {
+  hero?: {
+    title?: string;
+    subtitle?: string;
+    heroImage?: string;
+    breadcrumbs?: { label: string; href: string }[];
+  } | null;
+}
+
+export default function LibraryHero({ hero }: LibraryHeroProps) {
+  const data = hero || fallbackHeroData;
+  const breadcrumbs = data.breadcrumbs || fallbackHeroData.breadcrumbs;
+  const heroImage = data.heroImage || fallbackHeroData.heroImage;
+  const subtitle = data.subtitle || fallbackHeroData.subtitle;
   return (
     <section className="relative w-full overflow-hidden bg-[#0A1F44] text-white">
       {/* Background Overlay Image */}
       <div className="absolute inset-0 z-0">
         <img
-          src={libraryHeroData.heroImage}
+          src={heroImage}
           alt="Geeta University Central Library"
           className="h-full w-full object-cover object-center opacity-35"
         />
@@ -21,10 +34,10 @@ export default function LibraryHero() {
           aria-label="Breadcrumb"
           className="mb-6 flex items-center gap-2 text-xs font-medium text-slate-300 sm:text-sm"
         >
-          {libraryHeroData.breadcrumbs.map((crumb, idx) => (
+          {breadcrumbs.map((crumb: any, idx: number) => (
             <React.Fragment key={crumb.label}>
               {idx > 0 && <ChevronRight className="h-3.5 w-3.5 text-slate-400" />}
-              {idx === libraryHeroData.breadcrumbs.length - 1 ? (
+              {idx === breadcrumbs.length - 1 ? (
                 <span className="text-[#E8871A] font-semibold">{crumb.label}</span>
               ) : (
                 <Link
@@ -46,7 +59,7 @@ export default function LibraryHero() {
           </h1>
 
           <p className="mb-6 text-lg font-medium text-amber-200/90 sm:text-xl font-serif">
-            {libraryHeroData.subtitle}
+            {subtitle}
           </p>
         </div>
       </div>
