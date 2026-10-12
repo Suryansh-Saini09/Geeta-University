@@ -95,13 +95,13 @@ export const humanitiesSchool: ProgramPageData = {
 
   visionMission: {
     vision:
-      "To be a premier centre of excellence in the humanities and social sciences, empowering students to become visionary scholars, educators, leaders, and changemakers dedicated to ethical values, critical inquiry, social justice, and nation-building.",
+      "To be a place for learning in the areas of humanities and social sciences helping people become scholars, teachers, leaders, researchers and people who make a difference focusing on improving values, thinking deeply about fairness and building the country.",
     mission: [
-      "To offer student-centric, outcome-based education that equips learners to think critically, communicate effectively, make reasoned decisions, appreciate cultural diversity, and understand the intricate connections within human societies.",
-      "To train knowledgeable, socially aware, and compassionate professionals equipped with the analytical skills, ethical grounding, and global perspectives necessary to address complex contemporary challenges.",
-      "To foster impactful research and innovative scholarship in the humanities and social sciences that inform public policy, nurture community development, and advance human well-being.",
-      "To strengthen partnerships with academic, governmental, community, and industry stakeholders in the fields of practice-oriented education, community service, consultancy, and policy research.",
-      "To develop leadership potential and lifelong learning competencies to promote human development, diversity, social inclusion, and active citizenship.",
+      "To train knowledgeable, socially aware and compassionate professionals who possess the skills, attitudes and world outlook necessary to understand and solve modern social, cultural and global problems.",
+      "To offer education that focuses on students and the results they achieve helping them think clearly, communicate effectively, make logical choices, understand different cultures and see how people and societies connect.",
+      "To encourage research and novel ideas in the areas of humanities and social sciences that contribute to public policy helping communities grow, and making life better for everyone.",
+      "To strengthen the partnership with academic, governmental, community, industry and other stakeholders in the field of practice-oriented education, community service, consultancy, research activities and human resource development.",
+      "To develop leadership potential and life-long learning competencies to promote human development, diversity, social inclusion and active citizenship, as well as national and regional economic growth.",
     ],
   },
 
@@ -183,15 +183,15 @@ export const humanitiesSchool: ProgramPageData = {
           specialisations: [
             {
               name: "B.A. (Hons.) Psychology",
-              href: "https://geetauniversity.edu.in/programs/school-of-humanities-and-social-science/ba-psychology",
+              href: "/programs/school-of-humanities-and-social-science/ba-psychology",
             },
             {
               name: "B.A. (Hons.) Political Science",
-              href: "https://geetauniversity.edu.in/programs/school-of-humanities-and-social-science/ba-political-science",
+              href: "/programs/school-of-humanities-and-social-science/ba-political-science",
             },
             {
               name: "B.A. (Hons.) Economics",
-              href: "https://geetauniversity.edu.in/programs/school-of-humanities-and-social-science/ba-economics",
+              href: "/programs/school-of-humanities-and-social-science/ba-economics",
             },
             {
               name: "B.A. (Hons.) English",
@@ -202,7 +202,7 @@ export const humanitiesSchool: ProgramPageData = {
         {
           name: "B.Sc. (Hons.) Psychology",
           program: "B.Sc. (Hons.) Psychology",
-          href: "https://geetauniversity.edu.in/bsc-psychology",
+          href: "/programs/school-of-humanities-and-social-science/bsc-psychology",
           duration: "3 / 4 years",
           eligibility: "Passed 10+2 examination with at least 50% marks from a recognized board.",
         },
@@ -244,7 +244,7 @@ export const humanitiesSchool: ProgramPageData = {
         {
           name: "Ph.D. (Psychology)",
           program: "Ph.D. (Psychology)",
-          href: "https://geetauniversity.edu.in/phd-psychology",
+          href: "/programs/school-of-humanities-and-social-science/phd-psychology",
           duration: "Minimum 3 years",
           eligibility:
             "Master's degree in Psychology or a relevant field with a minimum of 55% aggregate marks (50% for reserved categories).",
@@ -252,7 +252,7 @@ export const humanitiesSchool: ProgramPageData = {
         {
           name: "Ph.D. (Political Science)",
           program: "Ph.D. (Political Science)",
-          href: "https://geetauniversity.edu.in/phd-political-science",
+          href: "/programs/school-of-humanities-and-social-science/phd-political-science",
           duration: "Minimum 3 years",
           eligibility:
             "Master's degree in Political Science or a relevant field with a minimum of 55% aggregate marks (50% for reserved categories).",
@@ -280,7 +280,7 @@ export const humanitiesSchool: ProgramPageData = {
   ],
 
   specialisations: {
-    title: "We Don't Just Educate, We Transform Futures!",
+    title: "WE DON'T JUST EDUCATE WE TRANSFORM FUTURES !",
     items: [
       {
         title: "Political Science",
@@ -288,15 +288,15 @@ export const humanitiesSchool: ProgramPageData = {
       },
       {
         title: "Psychology",
-        desc: "Study human behaviour, cognition, and mental health with practical exposure in counseling, research, and clinical settings.",
+        desc: "Study human behavior, cognition, and mental health with practical exposure in counseling, research, and clinical settings.",
       },
       {
         title: "Economics",
         desc: "Understand economic theories, market trends, and policy-making to solve real-world financial and developmental challenges.",
       },
       {
-        title: "English",
-        desc: "Master literary analysis, linguistics, and creative communication to open dynamic career pathways in publishing, media, academia, and global corporate communications.",
+        title: "Social Work",
+        desc: "Develop skills to empower communities, support vulnerable populations, and advocate for social justice and change.",
       },
     ],
   },

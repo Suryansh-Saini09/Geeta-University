@@ -48,6 +48,12 @@ import { mtechCse } from "@/data/programs/courses/computer-science-and-engineeri
 import { mca } from "@/data/programs/courses/computer-science-and-engineering/mca";
 import { phdComputerApplication } from "@/data/programs/courses/computer-science-and-engineering/phd-computer-application";
 import { phdComputerScience } from "@/data/programs/courses/computer-science-and-engineering/phd-computer-science";
+import { baPsychology } from "@/data/programs/courses/humanities/ba-psychology";
+import { baPoliticalScience } from "@/data/programs/courses/humanities/ba-political-science";
+import { baEconomics } from "@/data/programs/courses/humanities/ba-economics";
+import { bscPsychology } from "@/data/programs/courses/humanities/bsc-psychology";
+import { phdPsychology } from "@/data/programs/courses/humanities/phd-psychology";
+import { phdPoliticalScience } from "@/data/programs/courses/humanities/phd-political-science";
 
 const courses: CoursePageData[] = [
   bscAgriculture,
@@ -99,6 +105,12 @@ const courses: CoursePageData[] = [
   mca,
   phdComputerApplication,
   phdComputerScience,
+  baPsychology,
+  baPoliticalScience,
+  baEconomics,
+  bscPsychology,
+  phdPsychology,
+  phdPoliticalScience,
 ];
 
 // Helper to normalize school slug for comparison (handling aliases)
@@ -117,6 +129,12 @@ function normalizeSchoolSlug(slug: string): string {
 
 function normalizeCourseSlug(slug: string): string {
   const s = slug.toLowerCase();
+  if (s === "ba-hons-psychology" || s === "ba-psychology-hons" || s === "bachelor-of-arts-psychology") return "ba-psychology";
+  if (s === "ba-hons-political-science" || s === "ba-political-science-hons" || s === "bachelor-of-arts-political-science") return "ba-political-science";
+  if (s === "ba-hons-economics" || s === "ba-economics-hons" || s === "bachelor-of-arts-economics") return "ba-economics";
+  if (s === "bsc-hons-psychology" || s === "bsc-psychology-hons" || s === "b-sc-psychology" || s === "bachelor-in-science-psychology" || s === "bachelor-of-science-psychology") return "bsc-psychology";
+  if (s === "phd-in-psychology" || s === "ph-d-psychology" || s === "ph-d-in-psychology" || s === "phd-psych" || s === "phd-psycho") return "phd-psychology";
+  if (s === "phd-in-political-science" || s === "ph-d-political-science" || s === "ph-d-in-political-science" || s === "phd-pol-science" || s === "phd-pol-sci" || s === "phd-polscience" || s === "phd-pol") return "phd-political-science";
   if (s === "d-pharm" || s === "d-pharma" || s === "diploma-in-pharmacy") return "d-pharmacy";
   if (s === "b-pharm" || s === "b-pharma" || s === "bachelor-in-pharmacy" || s === "bachelor-of-pharmacy") return "b-pharmacy";
   if (s === "m-pharm" || s === "m-pharma" || s === "m-pharmacy-in-pharmaceutics" || s === "m-pharm-pharmaceutics" || s === "master-of-pharmacy") return "m-pharmacy";

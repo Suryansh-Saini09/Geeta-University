@@ -176,12 +176,17 @@ export async function getProgramBySlug(
 ): Promise<ProgramPageData | undefined> {
   const normalizedSlug = slug.toLowerCase();
   const canonicalSlug = ALIAS_TO_CANONICAL[normalizedSlug] || normalizedSlug;
-  const staticFallback = getProgramBySlugSync(normalizedSlug);
+  const staticFallback = getProgramBySlugSync(normalizedSlug) || getProgramBySlugSync(canonicalSlug);
+
+  const rawUrl = process.env.DATABASE_URL;
+  if (!rawUrl || rawUrl.includes("MYSQL_HOST") || rawUrl.includes("MYSQL_USER")) {
+    return staticFallback;
+  }
 
   try {
     const { prisma } = await import("@/server/db/client");
     const { getLocalizedBody, getLocalizedField } = await import("@/lib/i18n/localization");
-    const dept = await prisma.department.findFirst({
+    const deptPromise = prisma.department.findFirst({
       where: {
         OR: [
           { slug: normalizedSlug },
@@ -194,6 +199,12 @@ export async function getProgramBySlug(
         seo: true,
       },
     });
+
+    const timeoutPromise = new Promise<null>((_, reject) =>
+      setTimeout(() => reject(new Error("DB query timed out")), 1500)
+    );
+
+    const dept = await Promise.race([deptPromise, timeoutPromise]);
 
     if (dept && dept.body && typeof dept.body === "object") {
       const resolvedBody = getLocalizedBody(dept.body, (dept as any).translations, locale);
