@@ -158,7 +158,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                   type="button"
                   onClick={() => handleSaveSection("hero")}
                   disabled={savingKey === "hero"}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   {savingKey === "hero" ? "Saving..." : "Save Changes"}
@@ -251,7 +251,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                     type="button"
                     onClick={() => handleSaveSection("metrics")}
                     disabled={savingKey === "metrics"}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                   >
                     <Save className="h-4 w-4" />
                     {savingKey === "metrics" ? "Saving..." : "Save Changes"}
@@ -336,7 +336,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                   type="button"
                   onClick={() => handleSaveSection("overview")}
                   disabled={savingKey === "overview"}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   {savingKey === "overview" ? "Saving..." : "Save Changes"}
@@ -437,7 +437,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                   type="button"
                   onClick={() => handleSaveSection("portals")}
                   disabled={savingKey === "portals"}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   {savingKey === "portals" ? "Saving..." : "Save Changes"}
@@ -511,7 +511,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                   type="button"
                   onClick={() => handleSaveSection("hours_policy")}
                   disabled={savingKey === "hours_policy"}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   {savingKey === "hours_policy" ? "Saving..." : "Save Changes"}
@@ -634,7 +634,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                     type="button"
                     onClick={() => handleSaveSection("loan_rules")}
                     disabled={savingKey === "loan_rules"}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                   >
                     <Save className="h-4 w-4" />
                     {savingKey === "loan_rules" ? "Saving..." : "Save Changes"}
@@ -734,7 +734,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
                   type="button"
                   onClick={() => handleSaveSection("contact")}
                   disabled={savingKey === "contact"}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   {savingKey === "contact" ? "Saving..." : "Save Changes"}

@@ -153,7 +153,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
                 type="button"
                 onClick={handleSaveMembers}
                 disabled={saving}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
               >
                 <Save className="h-4 w-4" />
                 {saving ? "Saving..." : "Save Changes"}
@@ -164,7 +164,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
               type="button"
               onClick={handleSaveHero}
               disabled={saving}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
             >
               <Save className="h-4 w-4" />
               {saving ? "Saving..." : "Save Changes"}
@@ -240,7 +240,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
             >
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A1F44] text-xs font-bold text-[#E8871A]">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A1F44] text-xs font-bold text-slate-700">
                     {idx + 1}
                   </span>
                   <span className="font-serif text-base font-bold text-[#0A1F44]">

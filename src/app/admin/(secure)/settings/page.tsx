@@ -79,7 +79,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
             href={`/admin/settings?tab=${tab.id}`}
             className={`px-4 py-2.5 text-sm font-bold border-b-2 transition-colors ${
               currentTab === tab.id
-                ? "border-[#E8871A] text-[#0A1F44]"
+                ? "border-slate-300 text-[#0A1F44]"
                 : "border-transparent text-slate-500 hover:text-slate-800"
             }`}
           >
@@ -100,7 +100,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="text"
                 required
                 defaultValue={contact.universityName}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -111,7 +111,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="tel"
                 required
                 defaultValue={contact.phonePrimary}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -122,7 +122,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="tel"
                 required
                 defaultValue={contact.phoneSecondary}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -133,7 +133,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="email"
                 required
                 defaultValue={contact.emailPrimary}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -144,7 +144,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="email"
                 required
                 defaultValue={contact.emailAdmissions}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -155,7 +155,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="text"
                 required
                 defaultValue={contact.location}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -166,7 +166,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="text"
                 required
                 defaultValue={contact.locationDetails}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -177,7 +177,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="text"
                 required
                 defaultValue={contact.workingHours}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -187,14 +187,14 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 name="mapUrl"
                 type="text"
                 defaultValue={contact.mapUrl}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
           </div>
 
           <button
             type="submit"
-            className="rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#E8871A] transition-colors"
+            className="rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#0A1F44] transition-colors"
           >
             Save Contact Details
           </button>
@@ -224,7 +224,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
               maxLength={300}
               placeholder="e.g. Admissions Open 2026-27 — Apply Today for GUTS Scholarship Exam!"
               defaultValue={announcement.text}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
             />
           </label>
 
@@ -236,7 +236,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="text"
                 placeholder="e.g. /admissions or https://geetauniversity.edu.in"
                 defaultValue={announcement.href}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -245,7 +245,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
               <select
                 name="target"
                 defaultValue={announcement.target}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               >
                 <option value="_self">Same Window (_self)</option>
                 <option value="_blank">New Tab (_blank)</option>
@@ -255,7 +255,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
 
           <button
             type="submit"
-            className="rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#E8871A] transition-colors"
+            className="rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#0A1F44] transition-colors"
           >
             Save Announcement Settings
           </button>
@@ -286,7 +286,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 required
                 maxLength={100}
                 defaultValue={cta.label}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -297,7 +297,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="text"
                 required
                 defaultValue={cta.href}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -306,7 +306,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
               <select
                 name="target"
                 defaultValue={cta.target}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               >
                 <option value="_self">Same Window (_self)</option>
                 <option value="_blank">New Tab (_blank)</option>
@@ -316,7 +316,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
 
           <button
             type="submit"
-            className="rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#E8871A] transition-colors"
+            className="rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#0A1F44] transition-colors"
           >
             Save Admission CTA
           </button>
@@ -337,13 +337,13 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
               name="linksJson"
               rows={12}
               defaultValue={JSON.stringify(social.links, null, 2)}
-              className="w-full rounded-lg border border-slate-300 p-3 font-mono text-xs text-slate-900 focus:border-[#E8871A] focus:outline-none"
+              className="w-full rounded-lg border border-slate-300 p-3 font-mono text-xs text-slate-900 focus:border-slate-300 focus:outline-none"
             />
           </label>
 
           <button
             type="submit"
-            className="rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#E8871A] transition-colors"
+            className="rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#0A1F44] transition-colors"
           >
             Save Social Links
           </button>
@@ -363,7 +363,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="text"
                 required
                 defaultValue={metadata.siteName}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -374,7 +374,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 type="text"
                 required
                 defaultValue={metadata.shortName}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -384,7 +384,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 name="tagline"
                 type="text"
                 defaultValue={metadata.tagline}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -394,7 +394,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 name="siteDescription"
                 rows={3}
                 defaultValue={metadata.siteDescription}
-                className="w-full rounded-lg border border-slate-300 p-3 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 p-3 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -404,7 +404,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 name="defaultLanguage"
                 type="text"
                 defaultValue={metadata.defaultLanguage}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -414,7 +414,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 name="copyrightText"
                 type="text"
                 defaultValue={metadata.copyrightText}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -424,7 +424,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 name="logoUrl"
                 type="text"
                 defaultValue={metadata.logoUrl}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
 
@@ -434,14 +434,14 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
                 name="faviconUrl"
                 type="text"
                 defaultValue={metadata.faviconUrl}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 font-normal text-slate-900 focus:border-slate-300 focus:outline-none"
               />
             </label>
           </div>
 
           <button
             type="submit"
-            className="rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#E8871A] transition-colors"
+            className="rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#0A1F44] transition-colors"
           >
             Save General Metadata
           </button>

@@ -113,7 +113,7 @@ export default async function ActivityPage({
               name="q"
               defaultValue={query}
               placeholder="Search by user, module, or record ID..."
-              className="w-full rounded-lg border border-slate-200 bg-white py-1.5 pl-8 pr-3 text-xs text-slate-900 placeholder:text-slate-400 focus:border-[#E8871A] focus:outline-none"
+              className="w-full rounded-lg border border-slate-200 bg-white py-1.5 pl-8 pr-3 text-xs text-slate-900 placeholder:text-slate-400 focus:border-slate-300 focus:outline-none"
             />
           </div>
 
@@ -122,7 +122,7 @@ export default async function ActivityPage({
             name="action"
             defaultValue={action}
             aria-label="Filter by action"
-            className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 focus:border-[#E8871A] focus:outline-none cursor-pointer"
+            className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 focus:border-slate-300 focus:outline-none cursor-pointer"
           >
             <option value="ALL">All Actions</option>
             {Object.values(AuditAction).map((val) => (
@@ -137,7 +137,7 @@ export default async function ActivityPage({
             name="entityType"
             defaultValue={entityType ?? "ALL"}
             aria-label="Filter by module"
-            className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 focus:border-[#E8871A] focus:outline-none cursor-pointer"
+            className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 focus:border-slate-300 focus:outline-none cursor-pointer"
           >
             <option value="ALL">All Modules</option>
             {entityTypes.map((item) => (

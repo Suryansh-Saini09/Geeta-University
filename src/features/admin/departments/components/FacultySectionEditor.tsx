@@ -220,7 +220,7 @@ export function FacultySectionEditor({
                 value={eyebrow}
                 onChange={(e) => setEyebrow(e.target.value)}
                 placeholder="EXPERT FACULTY"
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 outline-none transition focus:border-[#E8871A]"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 outline-none transition focus:border-slate-300"
               />
             </div>
 
@@ -233,7 +233,7 @@ export function FacultySectionEditor({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Faculty & Mentors"
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 outline-none transition focus:border-[#E8871A]"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 outline-none transition focus:border-slate-300"
               />
             </div>
           </div>
@@ -373,7 +373,7 @@ export function FacultySectionEditor({
                               handleFacultyChange(idx, "name", e.target.value)
                             }
                             placeholder="Dr. John Doe"
-                            className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-[#E8871A] focus:bg-white"
+                            className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-slate-300 focus:bg-white"
                           />
                         </div>
 
@@ -388,7 +388,7 @@ export function FacultySectionEditor({
                               handleFacultyChange(idx, "role", e.target.value)
                             }
                             placeholder="Assistant Professor"
-                            className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-[#E8871A] focus:bg-white"
+                            className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-slate-300 focus:bg-white"
                           />
                         </div>
 
@@ -407,7 +407,7 @@ export function FacultySectionEditor({
                               )
                             }
                             placeholder="Ph.D., M.Tech (IIT Delhi)"
-                            className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-[#E8871A] focus:bg-white"
+                            className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-slate-300 focus:bg-white"
                           />
                         </div>
 
@@ -424,7 +424,7 @@ export function FacultySectionEditor({
                                 handleFacultyChange(idx, "image", e.target.value)
                               }
                               placeholder="/programs/computer-science/faculty/prof.webp"
-                              className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-[#E8871A] focus:bg-white"
+                              className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-slate-300 focus:bg-white"
                             />
                           </div>
                           <button
@@ -452,7 +452,7 @@ export function FacultySectionEditor({
                               )
                             }
                             placeholder="center 50% or center 25%"
-                            className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-[#E8871A] focus:bg-white"
+                            className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-slate-300 focus:bg-white"
                           />
                         </div>
 
@@ -467,7 +467,7 @@ export function FacultySectionEditor({
                             }
                             rows={2}
                             placeholder="Biography, research publications, awards, and areas of specialization..."
-                            className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs leading-relaxed text-slate-900 outline-none focus:border-[#E8871A] focus:bg-white"
+                            className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs leading-relaxed text-slate-900 outline-none focus:border-slate-300 focus:bg-white"
                           />
                         </div>
                       </div>

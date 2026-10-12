@@ -3,7 +3,7 @@ import { Save } from "lucide-react";
 
 import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
 
-const inputClass = "w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#E8871A] focus:bg-white";
+const inputClass = "w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-slate-300 focus:bg-white";
 
 export default function NoticeForm({ notice, canPublish, canArchive, action }: {
   notice?: Notice;

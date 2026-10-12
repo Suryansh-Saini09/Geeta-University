@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
@@ -27,6 +28,8 @@ import {
   CheckCircle,
   Code,
   Save,
+  Search,
+  X,
 } from "lucide-react";
 import { ContentStatus } from "@/server/db/client";
 
@@ -90,6 +93,7 @@ export function DepartmentContentManager({
   const updated = currentSearchParams.get("updated") === "1" || searchParams.updated === "1";
 
   const body = (department.body && typeof department.body === "object" ? department.body : {}) as Record<string, any>;
+  const [sectionQuery, setSectionQuery] = useState("");
 
   // Helper to compute section completeness status
   const getSectionStatus = (
@@ -311,6 +315,16 @@ export function DepartmentContentManager({
     },
   ];
 
+  const filteredSectionCards = sectionCards.filter((card) => {
+    if (!sectionQuery.trim()) return true;
+    const q = sectionQuery.toLowerCase();
+    return (
+      card.title.toLowerCase().includes(q) ||
+      card.desc.toLowerCase().includes(q) ||
+      card.id.toLowerCase().includes(q)
+    );
+  });
+
   const formattedUpdatedAt = new Date(department.updatedAt).toLocaleDateString("en-US", {
     day: "numeric",
     month: "short",
@@ -331,13 +345,13 @@ export function DepartmentContentManager({
           <div>
             <Link
               href="/admin/departments"
-              className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 transition hover:text-[#E8871A]"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 transition hover:text-slate-800"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-3.5 w-3.5" />
               Back to Departments
             </Link>
-            <div className="mt-3 flex items-center gap-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#E8871A]">
+            <div className="mt-2.5 flex items-center gap-2.5">
+              <span className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-600">
                 School CMS Manager
               </span>
               <span
@@ -352,7 +366,7 @@ export function DepartmentContentManager({
                 {department.status}
               </span>
             </div>
-            <h2 className="mt-1 font-serif text-2xl sm:text-3xl font-bold text-[#0A1F44]">
+            <h2 className="mt-1.5 font-serif text-2xl sm:text-3xl font-bold text-slate-900">
               {department.name}
             </h2>
             <p className="mt-1 text-xs text-slate-400">
@@ -364,9 +378,9 @@ export function DepartmentContentManager({
             <Link
               href={`/programs/${department.slug}`}
               target="_blank"
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 shadow-sm transition hover:border-[#E8871A] hover:text-[#E8871A]"
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-2xs transition hover:bg-slate-50 hover:text-slate-900"
             >
-              <ExternalLink className="h-4 w-4" />
+              <ExternalLink className="h-3.5 w-3.5" />
               View Live Page
             </Link>
           </div>
@@ -381,14 +395,14 @@ export function DepartmentContentManager({
             <input type="hidden" name="section" value={activeSection} />
 
             <div className="flex items-center gap-2">
-              <label htmlFor="status" className="text-xs font-bold text-[#0A1F44]">
+              <label htmlFor="status" className="text-xs font-bold text-slate-800">
                 Publishing Status:
               </label>
               <select
                 id="status"
                 name="status"
                 defaultValue={department.status}
-                className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-800 outline-none focus:border-[#E8871A]"
+                className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-800 outline-none focus:border-slate-400"
               >
                 <option value={ContentStatus.DRAFT}>Draft</option>
                 <option value={ContentStatus.PUBLISHED}>Published</option>
@@ -451,55 +465,94 @@ export function DepartmentContentManager({
       {/* Active Editor Pane or Overview Grid */}
       {activeSection === "overview" ? (
         <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
-              Editable Content Sections ({sectionCards.length})
-            </h3>
-            <p className="text-xs text-slate-400">
-              Select a section below to edit its content independently without touching JSON.
-            </p>
-          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 className="font-serif text-xl font-bold text-slate-900">
+                Editable Content Sections ({filteredSectionCards.length} of {sectionCards.length})
+              </h3>
+              <p className="text-xs text-slate-500">
+                Select a section below to edit its content independently.
+              </p>
+            </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {sectionCards.map((card) => {
-              const Icon = card.icon;
-              return (
+            {/* Quick Section Search/Filter */}
+            <div className="relative w-full sm:w-72">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                value={sectionQuery}
+                onChange={(e) => setSectionQuery(e.target.value)}
+                placeholder="Search sections (e.g. Faculty, Hero, Dean)..."
+                className="w-full rounded-lg border border-slate-200 bg-white pl-8.5 pr-8 py-1.5 text-xs text-slate-800 placeholder-slate-400 outline-none transition focus:border-slate-400 focus:ring-1 focus:ring-slate-400"
+              />
+              {sectionQuery && (
                 <button
-                  key={card.id}
                   type="button"
-                  onClick={() => navigateToSection(card.id)}
-                  className="group flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:border-[#E8871A] hover:shadow-md"
+                  onClick={() => setSectionQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  aria-label="Clear section search"
                 >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-[#0A1F44] transition group-hover:bg-[#E8871A]/10 group-hover:text-[#E8871A]">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <span
-                        className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${card.status.color}`}
-                      >
-                        {card.status.label}
-                      </span>
-                    </div>
-
-                    <div>
-                      <h4 className="font-serif text-base font-bold text-[#0A1F44] group-hover:text-[#E8871A] transition">
-                        {card.title}
-                      </h4>
-                      <p className="mt-1 text-xs text-slate-500 leading-relaxed line-clamp-2">
-                        {card.desc}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 flex items-center gap-1 text-xs font-bold text-[#E8871A]">
-                    <span>Edit Section</span>
-                    <span className="transition group-hover:translate-x-1">→</span>
-                  </div>
+                  <X className="h-3.5 w-3.5" />
                 </button>
-              );
-            })}
+              )}
+            </div>
           </div>
+
+          {filteredSectionCards.length === 0 ? (
+            <div className="rounded-xl border border-slate-200 bg-white p-8 text-center">
+              <p className="text-sm font-medium text-slate-600">
+                No sections found matching &ldquo;{sectionQuery}&rdquo;
+              </p>
+              <button
+                type="button"
+                onClick={() => setSectionQuery("")}
+                className="mt-2 text-xs font-semibold text-slate-900 underline hover:text-slate-700"
+              >
+                Clear search
+              </button>
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {filteredSectionCards.map((card) => {
+                const Icon = card.icon;
+                return (
+                  <button
+                    key={card.id}
+                    type="button"
+                    onClick={() => navigateToSection(card.id)}
+                    className="group flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 text-left shadow-2xs transition hover:border-slate-400 hover:shadow-md"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition group-hover:bg-slate-200 group-hover:text-slate-900">
+                          <Icon className="h-4.5 w-4.5" />
+                        </div>
+                        <span
+                          className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${card.status.color}`}
+                        >
+                          {card.status.label}
+                        </span>
+                      </div>
+
+                      <div>
+                        <h4 className="font-serif text-base font-bold text-slate-900 group-hover:text-slate-700 transition">
+                          {card.title}
+                        </h4>
+                        <p className="mt-1 text-xs text-slate-500 leading-relaxed line-clamp-2">
+                          {card.desc}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-slate-700 group-hover:text-slate-900">
+                      <span>Edit Section</span>
+                      <span className="transition group-hover:translate-x-1">→</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </section>
       ) : activeSection === "hero" ? (
         <HeroSectionEditor

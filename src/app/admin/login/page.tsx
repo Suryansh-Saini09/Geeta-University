@@ -32,7 +32,7 @@ export default async function AdminLoginPage({
             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#0A1F44] text-white">
               <LockKeyhole className="h-6 w-6" />
             </div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#E8871A]">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-700">
               Staff access
             </p>
             <h1 className="mt-2 font-serif text-3xl font-bold text-[#0A1F44]">

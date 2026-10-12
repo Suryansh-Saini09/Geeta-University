@@ -224,7 +224,7 @@ export function GuEdgeCmsDashboard({
         <Link
           href={currentPageOption.publicRoute}
           target="_blank"
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-[#0A1F44] shadow-xs hover:border-[#E8871A] hover:text-[#E8871A]"
+          className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-[#0A1F44] shadow-xs hover:border-slate-300 hover:text-slate-700"
         >
           <span>View Public Page</span>
           <ExternalLink className="h-4 w-4" />
@@ -280,7 +280,7 @@ export function GuEdgeCmsDashboard({
                 }`}
               >
                 <div className="flex items-center justify-between w-full mb-2">
-                  <Icon className={`h-5 w-5 ${isSelected ? "text-[#E8871A]" : "text-slate-400"}`} />
+                  <Icon className={`h-5 w-5 ${isSelected ? "text-slate-700" : "text-slate-400"}`} />
                 </div>
                 <div>
                   <p className="text-xs font-bold leading-snug">{pageOpt.title}</p>
@@ -318,7 +318,7 @@ export function GuEdgeCmsDashboard({
                     onClick={() => handleSectionSelect(secOpt.key)}
                     className={`flex items-center justify-between w-full rounded-lg p-3 text-left text-sm font-semibold transition-all border ${
                       isActive
-                        ? "border-[#E8871A] bg-[#E8871A] text-white shadow-sm"
+                        ? "border-slate-300 bg-[#0A1F44] text-white shadow-sm"
                         : "border-slate-100 bg-slate-50 text-slate-700 hover:bg-slate-100"
                     }`}
                   >
@@ -346,7 +346,7 @@ export function GuEdgeCmsDashboard({
                 onClick={() => handleSectionSelect("seo")}
                 className={`flex items-center justify-between w-full rounded-lg p-3 text-left text-sm font-semibold transition-all border ${
                   activeSectionKey === "seo"
-                    ? "border-[#E8871A] bg-[#E8871A] text-white shadow-sm"
+                    ? "border-slate-300 bg-[#0A1F44] text-white shadow-sm"
                     : "border-slate-100 bg-slate-50 text-slate-700 hover:bg-slate-100"
                 }`}
               >
@@ -398,7 +398,7 @@ export function GuEdgeCmsDashboard({
                     type="text"
                     value={seoState.title}
                     onChange={(e) => setSeoState({ ...seoState, title: e.target.value })}
-                    className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm focus:border-[#E8871A] focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm focus:border-slate-300 focus:outline-none"
                     placeholder="e.g. Design Your Own Degree | Geeta University"
                   />
                 </div>
@@ -421,7 +421,7 @@ export function GuEdgeCmsDashboard({
                     type="text"
                     value={seoState.keywords}
                     onChange={(e) => setSeoState({ ...seoState, keywords: e.target.value })}
-                    className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm focus:border-[#E8871A] focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm focus:border-slate-300 focus:outline-none"
                     placeholder="dyod, geeta university, flexible learning"
                   />
                 </div>
@@ -435,7 +435,7 @@ export function GuEdgeCmsDashboard({
                       type="text"
                       value={seoState.canonical}
                       onChange={(e) => setSeoState({ ...seoState, canonical: e.target.value })}
-                      className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm focus:border-[#E8871A] focus:outline-none"
+                      className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm focus:border-slate-300 focus:outline-none"
                       placeholder="https://geetauniversity.edu.in/edge/dyod"
                     />
                   </div>
@@ -571,7 +571,7 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
         <button
           type="button"
           onClick={addGridCard}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Grid Block</span>
@@ -815,7 +815,7 @@ function AccordionSectionEditor({ state, onChange }: { state: any; onChange: (va
                   const newItem = { id: `item-${Date.now()}`, title: "New Academic Course Program", duration: "3-4 Years", eligibility: "10+2", description: "" };
                   updateAcc(accIdx, { ...acc, items: [...currentItems, newItem] });
                 }}
-                className="inline-flex items-center gap-1 rounded bg-[#E8871A] px-2.5 py-1 text-xs font-bold text-white hover:bg-[#d67a15]"
+                className="inline-flex items-center gap-1 rounded bg-[#0A1F44] px-2.5 py-1 text-xs font-bold text-white hover:bg-[#1A3A6B]"
               >
                 <Plus className="h-3 w-3" />
                 <span>Add Accordion Item</span>
@@ -930,7 +930,7 @@ function TimelineSectionEditor({ state, onChange }: { state: any; onChange: (val
             const newStep = { stepNumber: steps.length + 1, title: "New Step Title", category: "Core", description: "", points: [], expandedDetails: "" };
             onChange({ ...state, steps: [...steps, newStep] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Step</span>
@@ -1061,7 +1061,7 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
             const newStage = { stageNumber: stages.length + 1, stageName: `Stage ${stages.length + 1}`, title: "New Training Stage", description: "", focusAreas: [] };
             onChange({ ...state, stages: [...stages, newStage] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Stage</span>
@@ -1203,7 +1203,7 @@ function VideoSectionEditor({ state, onChange }: { state: any; onChange: (val: a
               const newVid = { title: "New Video Story", videoUrl: "", thumbnail: "" };
               onChange({ ...state, playlist: [...playlist, newVid] });
             }}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Add Video</span>
@@ -1298,7 +1298,7 @@ function MentorsSectionEditor({ state, onChange }: { state: any; onChange: (val:
             const newMentor = { name: "Mentor Name", designation: "Designation / Title", role: "Industry Expert", description: "", image: "" };
             onChange({ ...state, mentors: [...mentors, newMentor] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Mentor</span>
@@ -1418,7 +1418,7 @@ function TestimonialsSectionEditor({ state, onChange }: { state: any; onChange: 
             const newItem = { name: "Student Name", programOrRole: "B.Tech CSE", quote: "Geeta University empowered me...", image: "" };
             onChange({ ...state, testimonials: [...items, newItem] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Testimonial</span>
@@ -1525,7 +1525,7 @@ function GallerySectionEditor({ state, onChange }: { state: any; onChange: (val:
             const newItem = { src: "", title: "", caption: "" };
             onChange({ ...state, items: [...items, newItem] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Photo</span>
@@ -1602,7 +1602,7 @@ function StatsSectionEditor({ state, onChange }: { state: any; onChange: (val: a
             const newStat = { label: "New Metric", value: "100%", sublabel: "" };
             onChange({ ...state, stats: [...stats, newStat] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Stat</span>
@@ -1635,7 +1635,7 @@ function StatsSectionEditor({ state, onChange }: { state: any; onChange: (val: a
                     copy[idx] = { ...copy[idx], value: e.target.value };
                     onChange({ ...state, stats: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold text-[#E8871A]"
+                  className="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold text-slate-700"
                 />
               </div>
               <div>
@@ -1724,7 +1724,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
             type="text"
             value={state.title || ""}
             onChange={(e) => onChange({ ...state, title: e.target.value })}
-            className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-semibold text-[#0A1F44] focus:border-[#E8871A] focus:outline-none"
+            className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-semibold text-[#0A1F44] focus:border-slate-300 focus:outline-none"
           />
         </div>
       )}
@@ -1871,7 +1871,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
                     const newItem = typeof val[0] === "object" ? { title: "New Item" } : "New Item";
                     onChange({ ...state, [propKey]: [...val, newItem] });
                   }}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   <span>Add Item</span>

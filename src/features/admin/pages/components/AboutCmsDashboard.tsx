@@ -269,7 +269,7 @@ export function AboutCmsDashboard({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#E8871A]">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
             <Sparkles className="h-4 w-4" />
             About Page CMS
           </div>
@@ -443,7 +443,7 @@ export function AboutCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("hero", heroForm)}
             disabled={savingSection === "hero"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "hero" ? "Saving..." : "Save About Hero"}
@@ -599,7 +599,7 @@ export function AboutCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("visionMission", visionMissionForm)}
             disabled={savingSection === "visionMission"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "visionMission" ? "Saving..." : "Save Vision & Mission"}
@@ -731,7 +731,7 @@ export function AboutCmsDashboard({
                 }}
                 className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-[#0A1F44] hover:bg-slate-50 shadow-2xs"
               >
-                <Plus className="h-4 w-4 text-[#E8871A]" />
+                <Plus className="h-4 w-4 text-slate-700" />
                 Add Milestone Year
               </button>
             </div>
@@ -810,7 +810,7 @@ export function AboutCmsDashboard({
                   </div>
 
                   {/* Institutions inside milestone */}
-                  <div className="space-y-3 pl-2 sm:pl-4 border-l-2 border-[#E8871A]/30">
+                  <div className="space-y-3 pl-2 sm:pl-4 border-l-2 border-slate-300/30">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                         Institutions / Initiatives ({m.institutions?.length || 0})
@@ -826,7 +826,7 @@ export function AboutCmsDashboard({
                           ];
                           setLegacyForm({ ...legacyForm, milestones: updatedMilestones });
                         }}
-                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0A1F44] hover:text-[#E8871A]"
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0A1F44] hover:text-slate-700"
                       >
                         <Plus className="h-3 w-3" />
                         Add Institution
@@ -904,7 +904,7 @@ export function AboutCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("legacy", legacyForm)}
             disabled={savingSection === "legacy"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "legacy" ? "Saving..." : "Save Legacy Section"}
@@ -1074,7 +1074,7 @@ export function AboutCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("legacyEcosystem", legacyEcosystemForm)}
             disabled={savingSection === "legacyEcosystem"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "legacyEcosystem" ? "Saving..." : "Save Ecosystem Section"}
@@ -1134,7 +1134,7 @@ export function AboutCmsDashboard({
             type="button"
             onClick={handleSaveSeo}
             disabled={savingSection === "seo"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "seo" ? "Saving..." : "Save SEO Metadata"}
@@ -1198,7 +1198,7 @@ export function AboutCmsDashboard({
                     alert(res.error);
                   }
                 }}
-                className="rounded-lg bg-[#E8871A] px-4 py-2 text-xs font-bold text-white"
+                className="rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white"
               >
                 Save
               </button>
@@ -1263,7 +1263,7 @@ export function AboutCmsDashboard({
                     alert(res.error);
                   }
                 }}
-                className="rounded-lg bg-[#E8871A] px-4 py-2 text-xs font-bold text-white"
+                className="rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white"
               >
                 Save
               </button>
@@ -1324,7 +1324,7 @@ export function AboutCmsDashboard({
                     alert(res.error);
                   }
                 }}
-                className="rounded-lg bg-[#E8871A] px-4 py-2 text-xs font-bold text-white"
+                className="rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white"
               >
                 Save
               </button>
@@ -1386,7 +1386,7 @@ export function AboutCmsDashboard({
                     alert(res.error);
                   }
                 }}
-                className="rounded-lg bg-[#E8871A] px-4 py-2 text-xs font-bold text-white"
+                className="rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white"
               >
                 Save
               </button>

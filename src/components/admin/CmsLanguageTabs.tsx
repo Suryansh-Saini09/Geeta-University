@@ -77,7 +77,7 @@ export function CmsLanguageTabs({
               {isTranslating ? (
                 <RefreshCw className="h-3 w-3 animate-spin text-slate-500" />
               ) : (
-                <Sparkles className="h-3 w-3 text-[#E8871A]" />
+                <Sparkles className="h-3 w-3 text-slate-700" />
               )}
               <span>{isTranslating ? "Translating..." : `Auto-translate from English`}</span>
             </button>

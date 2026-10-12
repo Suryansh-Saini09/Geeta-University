@@ -8,7 +8,7 @@ import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
 type Options = Awaited<ReturnType<typeof getFacultyOptions>>;
 type Faculty = NonNullable<Awaited<ReturnType<typeof getAdminFacultyById>>>;
 
-const inputClass = "w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#E8871A] focus:bg-white";
+const inputClass = "w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-slate-300 focus:bg-white";
 
 export default function FacultyForm({ options, faculty, action }: { options: Options; faculty?: Faculty; action: (formData: FormData) => void | Promise<void> }) {
   const selected = new Set(faculty?.programs.map((item) => item.programId) ?? []);

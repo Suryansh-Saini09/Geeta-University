@@ -92,7 +92,7 @@ export function FaqSectionEditor({
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
             <div>
               <div className="flex items-center gap-2">
-                <HelpCircle className="h-5 w-5 text-[#E8871A]" />
+                <HelpCircle className="h-5 w-5 text-slate-700" />
                 <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
                   Frequently Asked Questions (FAQs)
                 </h3>
@@ -105,7 +105,7 @@ export function FaqSectionEditor({
             <button
               type="button"
               onClick={handleAddFaq}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
             >
               <Plus className="h-4 w-4" />
               Add FAQ Question
@@ -162,7 +162,7 @@ export function FaqSectionEditor({
                   className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-3"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#E8871A]">
+                    <span className="text-xs font-bold text-slate-700">
                       FAQ #{originalIndex + 1}
                     </span>
                     <button
@@ -187,7 +187,7 @@ export function FaqSectionEditor({
                           handleFaqChange(originalIndex, "question", e.target.value)
                         }
                         placeholder="e.g. What are the eligibility criteria for B.Tech CSE?"
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -202,7 +202,7 @@ export function FaqSectionEditor({
                           handleFaqChange(originalIndex, "category", e.target.value)
                         }
                         placeholder="Admissions, Eligibility, Fees..."
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -217,7 +217,7 @@ export function FaqSectionEditor({
                         }
                         rows={3}
                         placeholder="Detailed answer provided to students..."
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm leading-6 outline-none focus:border-[#E8871A]"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm leading-6 outline-none focus:border-slate-300"
                       />
                     </div>
                   </div>
@@ -231,7 +231,7 @@ export function FaqSectionEditor({
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
           >
             <Save className="h-4 w-4" />
             Save FAQs ({payload.faqs.length})

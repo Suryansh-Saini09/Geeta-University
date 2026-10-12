@@ -160,7 +160,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   type="button"
                   onClick={() => handleSaveSection("academic_medals")}
                   disabled={savingKey === "academic_medals"}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   {savingKey === "academic_medals" ? "Saving..." : "Save Changes"}
@@ -239,7 +239,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   type="button"
                   onClick={() => handleSaveSection("thresholds")}
                   disabled={savingKey === "thresholds"}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   {savingKey === "thresholds" ? "Saving..." : "Save Changes"}
@@ -308,7 +308,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   type="button"
                   onClick={() => handleSaveSection("chancellor")}
                   disabled={savingKey === "chancellor"}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   {savingKey === "chancellor" ? "Saving..." : "Save Changes"}
@@ -373,7 +373,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   type="button"
                   onClick={() => handleSaveSection("chancellor_weightage")}
                   disabled={savingKey === "chancellor_weightage"}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   {savingKey === "chancellor_weightage" ? "Saving..." : "Save Changes"}
@@ -440,7 +440,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   type="button"
                   onClick={() => handleSaveSection("rankers_document")}
                   disabled={savingKey === "rankers_document"}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   {savingKey === "rankers_document" ? "Saving..." : "Save Changes"}
@@ -516,7 +516,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                   type="button"
                   onClick={() => handleSaveSection("hero")}
                   disabled={savingKey === "hero"}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   {savingKey === "hero" ? "Saving..." : "Save Changes"}

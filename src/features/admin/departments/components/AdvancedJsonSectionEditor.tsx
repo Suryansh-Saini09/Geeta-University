@@ -102,7 +102,7 @@ export function AdvancedJsonSectionEditor({
               id="confirmJson"
               checked={confirmed}
               onChange={(e) => setConfirmed(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-[#E8871A] focus:ring-[#E8871A]"
+              className="h-4 w-4 rounded border-slate-300 text-slate-700 focus:ring-[#E8871A]"
             />
             <label htmlFor="confirmJson" className="text-xs font-semibold text-slate-700">
               I understand the risk of modifying raw JSON payload directly.
@@ -117,7 +117,7 @@ export function AdvancedJsonSectionEditor({
             disabled={!confirmed || parseError !== null}
             className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900 disabled:opacity-50"
           >
-            <Save className="h-4 w-4 text-[#E8871A]" />
+            <Save className="h-4 w-4 text-slate-700" />
             Save Advanced JSON
           </button>
         </div>

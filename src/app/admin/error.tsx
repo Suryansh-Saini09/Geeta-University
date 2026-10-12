@@ -22,7 +22,7 @@ export default function AdminError({
           <AlertTriangle className="h-7 w-7" />
         </div>
 
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#E8871A]">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-700">
           Admin Portal Alert
         </p>
 
@@ -45,7 +45,7 @@ export default function AdminError({
           <button
             type="button"
             onClick={() => reset()}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-orange-200 transition hover:bg-[#F5A623]"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-orange-200 transition hover:bg-[#F5A623]"
           >
             <RotateCcw className="h-4 w-4" />
             Try again

@@ -16,6 +16,7 @@ import type { AdminSessionUser } from "@/server/auth/session";
 import { hasPermission } from "@/server/auth/permissions";
 import { logoutAction } from "@/features/admin/auth/actions";
 import { AdminSidebarNav } from "./AdminSidebarNav";
+import { AdminUserProfile } from "./AdminUserProfile";
 
 interface AdminShellProps {
   user: AdminSessionUser;
@@ -74,14 +75,14 @@ export default function AdminShell({ user, children }: AdminShellProps) {
       {/* Main Admin Grid Layout */}
       <div
         className={`min-h-screen grid transition-all duration-200 ${
-          isCollapsed ? "lg:grid-cols-[72px_1fr]" : "lg:grid-cols-[260px_1fr]"
+          isCollapsed ? "lg:grid-cols-[72px_1fr]" : "lg:grid-cols-[276px_1fr]"
         }`}
       >
         {/* ===================== SIDEBAR ===================== */}
         <aside
           className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-white border-r border-slate-200/80 transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 ${
             isMobileOpen ? "translate-x-0 w-72 shadow-xl" : "-translate-x-full lg:w-auto"
-          } ${isCollapsed ? "lg:w-[72px]" : "lg:w-[260px]"}`}
+          } ${isCollapsed ? "lg:w-[72px]" : "lg:w-[276px]"}`}
         >
           {/* Brand Header */}
           <div className="flex h-16 items-center justify-between border-b border-slate-100 px-4">
@@ -190,23 +191,8 @@ export default function AdminShell({ user, children }: AdminShellProps) {
               </div>
             </div>
 
-            {/* User Profile & Actions */}
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="hidden sm:flex flex-col text-right">
-                <span className="text-xs font-semibold text-slate-900">{user.name}</span>
-                <span className="text-[11px] text-slate-500">{formattedRole}</span>
-              </div>
-
-              <form action={logoutAction}>
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 shadow-2xs"
-                >
-                  <LogOut className="h-3.5 w-3.5 text-slate-400" />
-                  <span>Logout</span>
-                </button>
-              </form>
-            </div>
+            {/* Standardized Administrator Profile & Account Menu */}
+            <AdminUserProfile user={user} userPermissions={userPermissions} />
           </header>
 
           {/* Main Route Content */}

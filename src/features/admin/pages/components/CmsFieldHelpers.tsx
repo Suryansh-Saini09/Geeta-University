@@ -71,7 +71,7 @@ export function CmsImagePreviewInput({
             value={value || ""}
             placeholder={placeholder}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-[#0A1F44] focus:border-[#E8871A] focus:outline-none"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-[#0A1F44] focus:border-slate-300 focus:outline-none"
           />
 
           {onAltChange !== undefined && (
@@ -80,7 +80,7 @@ export function CmsImagePreviewInput({
               value={altValue || ""}
               placeholder="Alt Text (Accessible image description)"
               onChange={(e) => onAltChange(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-600 focus:border-[#E8871A] focus:outline-none"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-600 focus:border-slate-300 focus:outline-none"
             />
           )}
 
@@ -136,7 +136,7 @@ export function CmsAutoTextarea({
           onChange(e.target.value);
           adjustHeight();
         }}
-        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-[#0A1F44] focus:border-[#E8871A] focus:outline-none transition-all"
+        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-[#0A1F44] focus:border-slate-300 focus:outline-none transition-all"
       />
       {helpText && <p className="mt-1 text-[11px] text-slate-500">{helpText}</p>}
     </div>
@@ -207,7 +207,7 @@ export function CmsStringRepeater({
               value={item}
               placeholder={placeholder}
               onChange={(e) => handleItemChange(idx, e.target.value)}
-              className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44] focus:border-[#E8871A] focus:outline-none"
+              className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44] focus:border-slate-300 focus:outline-none"
             />
             <button
               type="button"
