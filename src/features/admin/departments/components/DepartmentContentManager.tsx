@@ -31,7 +31,7 @@ import {
   Search,
   X,
 } from "lucide-react";
-import { ContentStatus } from "@/server/db/client";
+import { ContentStatus } from "@prisma/client";
 
 import { MediaAssetItem } from "./MediaPickerModal";
 import { HeroSectionEditor } from "./HeroSectionEditor";
