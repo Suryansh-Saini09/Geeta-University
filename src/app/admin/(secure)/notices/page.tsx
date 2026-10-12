@@ -26,7 +26,7 @@ export default async function NoticesPage({ searchParams }: { searchParams: Prom
   return <div className="space-y-6">
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div><h2 className="font-serif text-3xl font-bold text-[#0A1F44]">Notices</h2><p className="mt-1 text-sm text-slate-600">{result.totalCount} matching notice{result.totalCount === 1 ? "" : "s"}</p></div>
-      <Link href="/admin/notices/new" className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-4 py-2.5 text-sm font-bold text-white"><Plus className="h-4 w-4" /> Create Notice</Link>
+      <Link href="/admin/notices/new" className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-4 py-2.5 text-sm font-bold text-white"><Plus className="h-4 w-4" /> Create Notice</Link>
     </div>
     {params.created || params.updated || params.archived ? <p role="status" className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">Notice {params.created ? "created" : params.updated ? "updated" : "archived"} successfully.</p> : null}
     {params.error ? <p role="alert" className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">Notice could not be found.</p> : null}

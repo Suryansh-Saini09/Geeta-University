@@ -86,7 +86,7 @@ export function CareerPathwaysSectionEditor({
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
           <div className="border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-[#E8871A]" />
+              <MapPin className="h-5 w-5 text-slate-700" />
               <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
                 Career Pathways & Recruiter Logos
               </h3>
@@ -106,7 +106,7 @@ export function CareerPathwaysSectionEditor({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Pathway After Computer Science & Engineering"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white font-serif"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white font-serif"
               />
             </div>
 
@@ -119,7 +119,7 @@ export function CareerPathwaysSectionEditor({
                 value={rolesTitle}
                 onChange={(e) => setRolesTitle(e.target.value)}
                 placeholder="Top Recruiters"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -132,7 +132,7 @@ export function CareerPathwaysSectionEditor({
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
                 placeholder="Detailed description of career prospects..."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
           </div>
@@ -146,7 +146,7 @@ export function CareerPathwaysSectionEditor({
               <button
                 type="button"
                 onClick={handleAddRole}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#E8871A] hover:text-white transition"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#0A1F44] hover:text-white transition"
               >
                 <Plus className="h-3.5 w-3.5" />
                 Add Recruiter Logo
@@ -165,7 +165,7 @@ export function CareerPathwaysSectionEditor({
                     className="rounded-lg border border-slate-200 bg-slate-50 p-3 space-y-2"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#E8871A]">Recruiter #{idx + 1}</span>
+                      <span className="text-xs font-bold text-slate-700">Recruiter #{idx + 1}</span>
                       <button
                         type="button"
                         onClick={() => handleRemoveRole(idx)}
@@ -180,7 +180,7 @@ export function CareerPathwaysSectionEditor({
                       value={role.name}
                       onChange={(e) => handleRoleChange(idx, "name", e.target.value)}
                       placeholder="Company Name (e.g. Capgemini)"
-                      className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                      className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                     />
 
                     <div className="flex items-center gap-2">
@@ -189,12 +189,12 @@ export function CareerPathwaysSectionEditor({
                         value={role.logo || ""}
                         onChange={(e) => handleRoleChange(idx, "logo", e.target.value)}
                         placeholder="Logo URL (/recruiters/capgemini.png)"
-                        className="flex-1 rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                        className="flex-1 rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                       />
                       <button
                         type="button"
                         onClick={() => setActiveMediaIndex(idx)}
-                        className="rounded border border-slate-300 bg-white p-1.5 text-slate-700 hover:text-[#E8871A]"
+                        className="rounded border border-slate-300 bg-white p-1.5 text-slate-700 hover:text-slate-700"
                       >
                         <ImageIcon className="h-3.5 w-3.5" />
                       </button>
@@ -210,7 +210,7 @@ export function CareerPathwaysSectionEditor({
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
           >
             <Save className="h-4 w-4" />
             Save Career Pathways

@@ -606,3 +606,129 @@ export async function archiveDepartmentAction(formData: FormData) {
   revalidatePath("/admin/departments");
   redirect("/admin/departments?archived=1");
 }
+
+export async function reorderDepartmentFacultyAction(formData: FormData) {
+  const session = await requireAdminSession();
+  assertPermission(session.user.role, "manageContent");
+
+  const departmentId = String(formData.get("departmentId") ?? "");
+  const index = Number(formData.get("index"));
+  const direction = String(formData.get("direction") ?? "");
+
+  if (!departmentId || !Number.isInteger(index) || (direction !== "up" && direction !== "down")) {
+    redirect("/admin/departments?error=invalid-request");
+  }
+
+  const existing = await prisma.department.findUnique({
+    where: { id: departmentId },
+  });
+
+  if (!existing) {
+    redirect("/admin/departments?error=not-found");
+  }
+
+  const currentBody =
+    existing.body && typeof existing.body === "object"
+      ? JSON.parse(JSON.stringify(existing.body))
+      : {};
+
+  let facultyList: any[] = [];
+  if (Array.isArray(currentBody.faculty) && currentBody.faculty.length > 0) {
+    facultyList = [...currentBody.faculty];
+  } else if (
+    currentBody.mentorsSection?.faculty &&
+    Array.isArray(currentBody.mentorsSection.faculty)
+  ) {
+    facultyList = [...currentBody.mentorsSection.faculty];
+  }
+
+  if (facultyList.length === 0 || index < 0 || index >= facultyList.length) {
+    redirect(
+      `/admin/departments/${departmentId}/edit?section=faculty&error=${encodeURIComponent(
+        "Faculty member not found"
+      )}`
+    );
+  }
+
+  const targetIndex = direction === "up" ? index - 1 : index + 1;
+  if (targetIndex < 0 || targetIndex >= facultyList.length) {
+    // Already at the boundary
+    redirect(`/admin/departments/${departmentId}/edit?section=faculty`);
+  }
+
+  const movedPerson = facultyList[index];
+  const swappedPerson = facultyList[targetIndex];
+
+  // Perform array swap
+  facultyList[index] = swappedPerson;
+  facultyList[targetIndex] = movedPerson;
+
+  currentBody.faculty = facultyList;
+  if (currentBody.mentorsSection && typeof currentBody.mentorsSection === "object") {
+    currentBody.mentorsSection.faculty = facultyList;
+  }
+
+  // Synchronize FacultyMember records in MySQL if any belong to this department
+  const dbFacultyMembers = await prisma.facultyMember.findMany({
+    where: { departmentId: existing.id, status: { not: ContentStatus.ARCHIVED } },
+    select: { id: true, name: true, slug: true, sortOrder: true },
+  });
+
+  await prisma.$transaction(async (tx) => {
+    // 1. Update department body with new array ordering
+    await tx.department.update({
+      where: { id: departmentId },
+      data: {
+        body: currentBody,
+      },
+    });
+
+    // 2. Synchronize sortOrder on FacultyMember table
+    if (dbFacultyMembers.length > 0) {
+      for (let i = 0; i < facultyList.length; i++) {
+        const item = facultyList[i];
+        const match = dbFacultyMembers.find(
+          (m) => m.name.toLowerCase() === (item.name || "").toLowerCase()
+        );
+        if (match) {
+          await tx.facultyMember.update({
+            where: { id: match.id },
+            data: { sortOrder: i },
+          });
+        }
+      }
+    }
+
+    // 3. Record AuditLog in MySQL
+    await tx.auditLog.create({
+      data: {
+        actorId: session.user.id,
+        action: AuditAction.UPDATE,
+        entityType: "DepartmentFaculty",
+        entityId: `${departmentId}:${movedPerson.name || index}`,
+        before: {
+          departmentName: existing.name,
+          facultyName: movedPerson.name,
+          previousPosition: index + 1,
+        },
+        after: {
+          departmentName: existing.name,
+          facultyName: movedPerson.name,
+          newPosition: targetIndex + 1,
+          direction,
+        },
+      },
+    });
+  });
+
+  const affectedSlugs = getAliasesForSlug(existing.slug);
+  revalidatePath("/admin");
+  revalidatePath("/admin/departments");
+  revalidatePath(`/admin/departments/${departmentId}/edit`);
+  revalidatePath("/programs");
+  for (const slugToRevalidate of Array.from(new Set(affectedSlugs))) {
+    revalidatePath(`/programs/${slugToRevalidate}`);
+  }
+
+  redirect(`/admin/departments/${departmentId}/edit?section=faculty&reordered=1`);
+}

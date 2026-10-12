@@ -82,7 +82,7 @@ export function CtaSectionEditor({
                 value={heading}
                 onChange={(e) => setHeading(e.target.value)}
                 placeholder="Ready to Start Your Educational Journey?"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white font-serif"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white font-serif"
               />
             </div>
 
@@ -95,7 +95,7 @@ export function CtaSectionEditor({
                 value={quote}
                 onChange={(e) => setQuote(e.target.value)}
                 placeholder="Join India's fastest growing innovation university..."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -108,7 +108,7 @@ export function CtaSectionEditor({
                 value={applyLink}
                 onChange={(e) => setApplyLink(e.target.value)}
                 placeholder="#apply or https://admissions.geeta.edu.in"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -121,7 +121,7 @@ export function CtaSectionEditor({
                 value={helpline}
                 onChange={(e) => setHelpline(e.target.value)}
                 placeholder="1800-123-4567"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -134,7 +134,7 @@ export function CtaSectionEditor({
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
                 placeholder="www.geetauniversity.edu.in"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -147,7 +147,7 @@ export function CtaSectionEditor({
                 value={campusAddress}
                 onChange={(e) => setCampusAddress(e.target.value)}
                 placeholder="NH-44, Delhi-NCR, Panipat"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
           </div>
@@ -157,7 +157,7 @@ export function CtaSectionEditor({
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
           >
             <Save className="h-4 w-4" />
             Save Final CTA

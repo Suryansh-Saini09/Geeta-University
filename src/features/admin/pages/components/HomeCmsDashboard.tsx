@@ -36,6 +36,8 @@ import {
   Sparkles,
   ArrowUp,
   ArrowDown,
+  Search,
+  X,
 } from "lucide-react";
 
 interface HomeCmsDashboardProps {
@@ -63,6 +65,7 @@ export function HomeCmsDashboard({
   const [isTranslating, setIsTranslating] = useState(false);
   const [savingSection, setSavingSection] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [tabSearchQuery, setTabSearchQuery] = useState("");
 
   // Helper to load section content for selected locale
   const getSectionContent = (key: string, loc: Locale) => {
@@ -367,15 +370,11 @@ export function HomeCmsDashboard({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#E8871A]">
-            <Sparkles className="h-4 w-4" />
-            Home Page CMS
-          </div>
-          <h1 className="font-serif text-3xl font-bold text-[#0A1F44]">
-            Manage Homepage Content
+          <h1 className="font-serif text-2xl font-bold text-slate-900">
+            Homepage Content
           </h1>
-          <p className="text-sm text-slate-500">
-            Edit text, headings, statistics, recruiters, rankings, media, and repeaters without code edits.
+          <p className="text-xs text-slate-500 mt-0.5">
+            Manage homepage sections, text content, statistics, recruiters, and media.
           </p>
         </div>
 
@@ -423,41 +422,91 @@ export function HomeCmsDashboard({
         onStatusChange={(status) => setActiveStatus(status)}
       />
 
-      {/* Dashboard Tabs */}
-      <div className="flex overflow-x-auto gap-2 border-b border-slate-200 pb-2 [scrollbar-width:none]">
-        {[
-          { id: "hero", label: "Home Hero" },
-          { id: "smartCampus", label: "Smart Campus" },
-          { id: "stats", label: "Statistics" },
-          { id: "programsOffered", label: "Programs Offered" },
-          { id: "recruiters", label: "Top Recruiters" },
-          { id: "awards", label: "Awards & Rankings" },
-          { id: "testimonials", label: "Testimonials" },
-          { id: "globalEducation", label: "Global Education" },
-          { id: "universe", label: "Universe" },
-          { id: "updates", label: "Updates" },
-          { id: "whyJoinGeeta", label: "Why Join Geeta" },
-          { id: "scholarships", label: "Scholarships" },
-          { id: "industryPartners", label: "Industry Partners" },
-          { id: "virtualTour", label: "Virtual Tour" },
-          { id: "starPerformances", label: "Star Performers" },
-          { id: "seo", label: "SEO Metadata" },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => {
-              setActiveTab(tab.id);
-              setFeedback(null);
-            }}
-            className={`whitespace-nowrap rounded-lg px-4 py-2 text-xs font-bold transition-all ${
-              activeTab === tab.id
-                ? "bg-[#0A1F44] text-white shadow-sm"
-                : "bg-white text-slate-600 hover:bg-slate-100 hover:text-[#0A1F44] border border-slate-200"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      {/* Dashboard Tabs & Section Search */}
+      <div className="space-y-2.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            Home Sections Filter ({
+              [
+                { id: "hero", label: "Home Hero" },
+                { id: "smartCampus", label: "Smart Campus" },
+                { id: "stats", label: "Statistics" },
+                { id: "programsOffered", label: "Programs Offered" },
+                { id: "recruiters", label: "Top Recruiters" },
+                { id: "awards", label: "Awards & Rankings" },
+                { id: "testimonials", label: "Testimonials" },
+                { id: "globalEducation", label: "Global Education" },
+                { id: "universe", label: "Universe" },
+                { id: "updates", label: "Updates" },
+                { id: "whyJoinGeeta", label: "Why Join Geeta" },
+                { id: "scholarships", label: "Scholarships" },
+                { id: "industryPartners", label: "Industry Partners" },
+                { id: "virtualTour", label: "Virtual Tour" },
+                { id: "starPerformances", label: "Star Performers" },
+                { id: "seo", label: "SEO Metadata" },
+              ].filter((t) => !tabSearchQuery.trim() || t.label.toLowerCase().includes(tabSearchQuery.toLowerCase())).length
+            })
+          </span>
+
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+            <input
+              type="text"
+              value={tabSearchQuery}
+              onChange={(e) => setTabSearchQuery(e.target.value)}
+              placeholder="Find section (e.g. Hero, Stats, SEO)..."
+              className="w-full rounded-lg border border-slate-200 bg-white pl-8 pr-7 py-1 text-xs text-slate-800 placeholder-slate-400 outline-none focus:border-slate-400"
+            />
+            {tabSearchQuery && (
+              <button
+                type="button"
+                onClick={() => setTabSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                aria-label="Clear tab search"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="flex overflow-x-auto gap-2 border-b border-slate-200 pb-2 [scrollbar-width:none]">
+          {[
+            { id: "hero", label: "Home Hero" },
+            { id: "smartCampus", label: "Smart Campus" },
+            { id: "stats", label: "Statistics" },
+            { id: "programsOffered", label: "Programs Offered" },
+            { id: "recruiters", label: "Top Recruiters" },
+            { id: "awards", label: "Awards & Rankings" },
+            { id: "testimonials", label: "Testimonials" },
+            { id: "globalEducation", label: "Global Education" },
+            { id: "universe", label: "Universe" },
+            { id: "updates", label: "Updates" },
+            { id: "whyJoinGeeta", label: "Why Join Geeta" },
+            { id: "scholarships", label: "Scholarships" },
+            { id: "industryPartners", label: "Industry Partners" },
+            { id: "virtualTour", label: "Virtual Tour" },
+            { id: "starPerformances", label: "Star Performers" },
+            { id: "seo", label: "SEO Metadata" },
+          ]
+            .filter((t) => !tabSearchQuery.trim() || t.label.toLowerCase().includes(tabSearchQuery.toLowerCase()))
+            .map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setFeedback(null);
+                }}
+                className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${
+                  activeTab === tab.id
+                    ? "bg-slate-900 text-white shadow-2xs"
+                    : "bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-slate-200"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+        </div>
       </div>
 
       {/* TAB 1: HERO */}
@@ -594,7 +643,7 @@ export function HomeCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("hero", heroForm)}
             disabled={savingSection === "hero"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "hero" ? "Saving..." : "Save Hero Section"}
@@ -667,7 +716,7 @@ export function HomeCmsDashboard({
               {(smartCampusForm.features || []).map((feat: any, idx: number) => (
                 <div key={idx} className="rounded-lg border border-slate-200 bg-white p-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#E8871A]">Feature #{idx + 1}</span>
+                    <span className="text-xs font-bold text-slate-700">Feature #{idx + 1}</span>
                     <button
                       type="button"
                       onClick={() => {
@@ -729,7 +778,7 @@ export function HomeCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("smartCampus", smartCampusForm)}
             disabled={savingSection === "smartCampus"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "smartCampus" ? "Saving..." : "Save Smart Campus Section"}
@@ -835,7 +884,7 @@ export function HomeCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("stats", statsForm)}
             disabled={savingSection === "stats"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "stats" ? "Saving..." : "Save Statistics"}
@@ -905,7 +954,7 @@ export function HomeCmsDashboard({
               {(programsOfferedForm.categories || []).map((cat: any, catIdx: number) => (
                 <div key={catIdx} className="rounded-xl border border-slate-200 bg-white p-4 space-y-4">
                   <div className="flex items-center justify-between border-b pb-2">
-                    <span className="text-xs font-bold text-[#E8871A]">
+                    <span className="text-xs font-bold text-slate-700">
                       #{cat.number || catIdx + 1} — {cat.shortTitle || cat.title || "Category"}
                     </span>
                     <button
@@ -1004,7 +1053,7 @@ export function HomeCmsDashboard({
                           ];
                           setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
                         }}
-                        className="text-xs text-[#E8871A] font-bold hover:underline"
+                        className="text-xs text-slate-700 font-bold hover:underline"
                       >
                         + Add Program
                       </button>
@@ -1061,7 +1110,7 @@ export function HomeCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("programsOffered", programsOfferedForm)}
             disabled={savingSection === "programsOffered"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "programsOffered" ? "Saving..." : "Save Programs Offered Section"}
@@ -1225,7 +1274,7 @@ export function HomeCmsDashboard({
                     )}
                     <div>
                       <span className="text-sm font-bold text-[#0A1F44]">{t.name}</span>
-                      <span className="block text-xs font-semibold text-[#E8871A]">{t.package}</span>
+                      <span className="block text-xs font-semibold text-slate-700">{t.package}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
@@ -1289,7 +1338,7 @@ export function HomeCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("globalEducation", globalEduForm)}
             disabled={savingSection === "globalEducation"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "globalEducation" ? "Saving..." : "Save Global Education Section"}
@@ -1421,7 +1470,7 @@ export function HomeCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("universe", universeForm)}
             disabled={savingSection === "universe"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "universe" ? "Saving..." : "Save Universe Section"}
@@ -1574,7 +1623,7 @@ export function HomeCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("updates", updatesForm)}
             disabled={savingSection === "updates"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "updates" ? "Saving..." : "Save Updates Section"}
@@ -1628,7 +1677,7 @@ export function HomeCmsDashboard({
               {(whyJoinForm.items || []).map((item: any, idx: number) => (
                 <div key={idx} className="rounded-lg border border-slate-200 bg-white p-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#E8871A]">USP #{idx + 1}</span>
+                    <span className="text-xs font-bold text-slate-700">USP #{idx + 1}</span>
                     <button
                       type="button"
                       onClick={() => {
@@ -1675,7 +1724,7 @@ export function HomeCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("whyJoinGeeta", whyJoinForm)}
             disabled={savingSection === "whyJoinGeeta"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "whyJoinGeeta" ? "Saving..." : "Save Section"}
@@ -1727,7 +1776,7 @@ export function HomeCmsDashboard({
 
           {/* GUTS Specific fields */}
           <div className="rounded-xl border border-slate-200 p-4 bg-slate-50/70 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#E8871A]">GUTS Exam Banner Card</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">GUTS Exam Banner Card</h4>
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
                 <label className="block text-[11px] font-bold text-slate-500 mb-1">GUTS Label</label>
@@ -1781,7 +1830,7 @@ export function HomeCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("scholarships", scholarshipsForm)}
             disabled={savingSection === "scholarships"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "scholarships" ? "Saving..." : "Save Scholarships Section"}
@@ -1905,7 +1954,7 @@ export function HomeCmsDashboard({
             type="button"
             onClick={() => handleSaveSection("virtualTour", virtualTourForm)}
             disabled={savingSection === "virtualTour"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "virtualTour" ? "Saving..." : "Save Virtual Tour Section"}
@@ -2086,7 +2135,7 @@ export function HomeCmsDashboard({
             type="button"
             onClick={handleSaveSeo}
             disabled={savingSection === "seo"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#d47814] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {savingSection === "seo" ? "Saving..." : "Save SEO Metadata"}
@@ -2136,7 +2185,7 @@ export function HomeCmsDashboard({
                     alert(res.error);
                   }
                 }}
-                className="rounded-lg bg-[#E8871A] px-4 py-2 text-xs font-bold text-white"
+                className="rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white"
               >
                 Save
               </button>
@@ -2205,7 +2254,7 @@ export function HomeCmsDashboard({
                     alert(res.error);
                   }
                 }}
-                className="rounded-lg bg-[#E8871A] px-4 py-2 text-xs font-bold text-white"
+                className="rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white"
               >
                 Save
               </button>
@@ -2270,7 +2319,7 @@ export function HomeCmsDashboard({
                     alert(res.error);
                   }
                 }}
-                className="rounded-lg bg-[#E8871A] px-4 py-2 text-xs font-bold text-white"
+                className="rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white"
               >
                 Save
               </button>
@@ -2321,7 +2370,7 @@ export function HomeCmsDashboard({
                     alert(res.error);
                   }
                 }}
-                className="rounded-lg bg-[#E8871A] px-4 py-2 text-xs font-bold text-white"
+                className="rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white"
               >
                 Save
               </button>
@@ -2372,7 +2421,7 @@ export function HomeCmsDashboard({
                     alert(res.error);
                   }
                 }}
-                className="rounded-lg bg-[#E8871A] px-4 py-2 text-xs font-bold text-white"
+                className="rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white"
               >
                 Save
               </button>

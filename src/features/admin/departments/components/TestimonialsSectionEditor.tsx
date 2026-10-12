@@ -105,7 +105,7 @@ export function TestimonialsSectionEditor({
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
             <div>
               <div className="flex items-center gap-2">
-                <MessageSquare className="h-5 w-5 text-[#E8871A]" />
+                <MessageSquare className="h-5 w-5 text-slate-700" />
                 <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
                   Alumni Testimonials & Student Success Stories
                 </h3>
@@ -118,7 +118,7 @@ export function TestimonialsSectionEditor({
             <button
               type="button"
               onClick={handleAddTestimonial}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#E8871A] hover:text-white transition"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#0A1F44] hover:text-white transition"
             >
               <Plus className="h-3.5 w-3.5" />
               Add Testimonial
@@ -137,7 +137,7 @@ export function TestimonialsSectionEditor({
                   className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-4"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#E8871A]">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                       Testimonial #{idx + 1}
                     </span>
                     <button
@@ -159,7 +159,7 @@ export function TestimonialsSectionEditor({
                         value={t.name}
                         onChange={(e) => handleTestimonialChange(idx, "name", e.target.value)}
                         placeholder="e.g. Vikas Bareja"
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -172,7 +172,7 @@ export function TestimonialsSectionEditor({
                         value={t.role || ""}
                         onChange={(e) => handleTestimonialChange(idx, "role", e.target.value)}
                         placeholder="e.g. B.Tech CSE Alumni"
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -185,7 +185,7 @@ export function TestimonialsSectionEditor({
                         value={t.company || ""}
                         onChange={(e) => handleTestimonialChange(idx, "company", e.target.value)}
                         placeholder="e.g. Tech Mahindra"
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -198,7 +198,7 @@ export function TestimonialsSectionEditor({
                         value={t.pkg || t.package || ""}
                         onChange={(e) => handleTestimonialChange(idx, "pkg", e.target.value)}
                         placeholder="e.g. ₹34 LPA"
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -212,13 +212,13 @@ export function TestimonialsSectionEditor({
                           value={t.image || ""}
                           onChange={(e) => handleTestimonialChange(idx, "image", e.target.value)}
                           placeholder="/vikas.webp"
-                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => setActiveMediaIndex(idx)}
-                        className="mt-5 inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-[#E8871A] hover:text-[#E8871A]"
+                        className="mt-5 inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-700"
                       >
                         <ImageIcon className="h-3.5 w-3.5" />
                         Pick Photo
@@ -234,7 +234,7 @@ export function TestimonialsSectionEditor({
                         onChange={(e) => handleTestimonialChange(idx, "quote", e.target.value)}
                         rows={3}
                         placeholder="Detailed quote from the alumni..."
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm leading-6 outline-none focus:border-[#E8871A]"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm leading-6 outline-none focus:border-slate-300"
                       />
                     </div>
                   </div>
@@ -248,7 +248,7 @@ export function TestimonialsSectionEditor({
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
           >
             <Save className="h-4 w-4" />
             Save Testimonials ({testimonials.length})

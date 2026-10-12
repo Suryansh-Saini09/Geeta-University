@@ -53,7 +53,7 @@ export default async function PagesPage({
         </div>
         <Link
           href="/admin/pages/new"
-          className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#d67a15]"
+          className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#1A3A6B]"
         >
           <Plus className="h-4 w-4" /> Create Generic Page
         </Link>
@@ -187,56 +187,56 @@ export default async function PagesPage({
                         {isHome ? (
                           <Link
                             href="/admin/home"
-                            className="inline-flex items-center gap-1 font-bold text-[#E8871A] hover:underline"
+                            className="inline-flex items-center gap-1 font-bold text-slate-700 hover:underline"
                           >
                             Home CMS <ArrowRight className="h-3 w-3" />
                           </Link>
                         ) : isAbout ? (
                           <Link
                             href="/admin/about"
-                            className="inline-flex items-center gap-1 font-bold text-[#E8871A] hover:underline"
+                            className="inline-flex items-center gap-1 font-bold text-slate-700 hover:underline"
                           >
                             About CMS <ArrowRight className="h-3 w-3" />
                           </Link>
                         ) : isAdmissions ? (
                           <Link
                             href={`/admin/admissions?page=${page.slug}`}
-                            className="inline-flex items-center gap-1 font-bold text-[#E8871A] hover:underline"
+                            className="inline-flex items-center gap-1 font-bold text-slate-700 hover:underline"
                           >
                             Admissions CMS <ArrowRight className="h-3 w-3" />
                           </Link>
                         ) : isGuEdge ? (
                           <Link
                             href={`/admin/gu-edge?page=${page.slug}`}
-                            className="inline-flex items-center gap-1 font-bold text-[#E8871A] hover:underline"
+                            className="inline-flex items-center gap-1 font-bold text-slate-700 hover:underline"
                           >
                             GU Edge CMS <ArrowRight className="h-3 w-3" />
                           </Link>
                         ) : isLibrary ? (
                           <Link
                             href="/admin/library"
-                            className="inline-flex items-center gap-1 font-bold text-[#E8871A] hover:underline"
+                            className="inline-flex items-center gap-1 font-bold text-slate-700 hover:underline"
                           >
                             Central Library CMS <ArrowRight className="h-3 w-3" />
                           </Link>
                         ) : isAdvisory ? (
                           <Link
                             href="/admin/advisory-board"
-                            className="inline-flex items-center gap-1 font-bold text-[#E8871A] hover:underline"
+                            className="inline-flex items-center gap-1 font-bold text-slate-700 hover:underline"
                           >
                             Advisory Board CMS <ArrowRight className="h-3 w-3" />
                           </Link>
                         ) : isMedalPolicy ? (
                           <Link
                             href="/admin/medal-policy"
-                            className="inline-flex items-center gap-1 font-bold text-[#E8871A] hover:underline"
+                            className="inline-flex items-center gap-1 font-bold text-slate-700 hover:underline"
                           >
                             Medal Policy CMS <ArrowRight className="h-3 w-3" />
                           </Link>
                         ) : isInstitutional ? (
                           <Link
                             href={`/admin/pages/institutional?page=${page.slug}`}
-                            className="inline-flex items-center gap-1 font-bold text-[#E8871A] hover:underline"
+                            className="inline-flex items-center gap-1 font-bold text-slate-700 hover:underline"
                           >
                             Institutional CMS <ArrowRight className="h-3 w-3" />
                           </Link>

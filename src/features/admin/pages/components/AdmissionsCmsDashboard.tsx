@@ -163,19 +163,16 @@ export function AdmissionsCmsDashboard({
       {/* Header Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <div className="flex items-center gap-2">
-            <GraduationCap className="h-7 w-7 text-[#E8871A]" />
-            <h2 className="font-serif text-3xl font-bold text-[#0A1F44]">Admissions CMS Center</h2>
-          </div>
-          <p className="mt-1 text-sm text-slate-600">
-            Production-grade content management for all 10 Admissions pages of Geeta University.
+          <h1 className="font-serif text-2xl font-bold text-slate-900">Admissions Content</h1>
+          <p className="mt-0.5 text-xs text-slate-500">
+            Manage admissions pathways, eligibility guidelines, fee schedules, and requirements.
           </p>
         </div>
 
         <Link
           href={currentPageOption.publicRoute}
           target="_blank"
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-[#0A1F44] shadow-xs hover:border-[#E8871A] hover:text-[#E8871A]"
+          className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-[#0A1F44] shadow-xs hover:border-slate-300 hover:text-slate-700"
         >
           <span>View Public Page</span>
           <ExternalLink className="h-4 w-4" />
@@ -226,11 +223,11 @@ export function AdmissionsCmsDashboard({
                 onClick={() => handlePageSelect(opt.slug)}
                 className={`flex flex-col items-start gap-1.5 rounded-xl border p-3.5 text-left transition-all ${
                   isSelected
-                    ? "border-[#E8871A] bg-[#0A1F44] text-white shadow-md"
+                    ? "border-slate-300 bg-[#0A1F44] text-white shadow-md"
                     : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
                 }`}
               >
-                <Icon className={`h-5 w-5 ${isSelected ? "text-[#E8871A]" : "text-slate-400"}`} />
+                <Icon className={`h-5 w-5 ${isSelected ? "text-slate-700" : "text-slate-400"}`} />
                 <span className="text-xs font-bold leading-tight">{opt.title}</span>
                 <span className={`text-[10px] ${isSelected ? "text-slate-300" : "text-slate-400"}`}>
                   {opt.publicRoute}
@@ -247,7 +244,7 @@ export function AdmissionsCmsDashboard({
         <div className="lg:col-span-4 space-y-4">
           <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
             <h3 className="text-xs font-bold uppercase tracking-wider text-[#0A1F44] mb-3 flex items-center gap-2">
-              <Layers className="h-4 w-4 text-[#E8871A]" />
+              <Layers className="h-4 w-4 text-slate-700" />
               {currentPageOption.title} Sections
             </h3>
 
@@ -263,7 +260,7 @@ export function AdmissionsCmsDashboard({
                     onClick={() => handleSectionSelect(sec.key)}
                     className={`w-full flex items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-bold text-left transition-all ${
                       isActive
-                        ? "bg-[#E8871A] text-white shadow-sm"
+                        ? "bg-[#0A1F44] text-white shadow-sm"
                         : "bg-slate-50 text-slate-700 hover:bg-slate-100"
                     }`}
                   >
@@ -302,7 +299,7 @@ export function AdmissionsCmsDashboard({
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#E8871A]">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700">
                   Editing Section
                 </span>
                 <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
@@ -345,7 +342,7 @@ export function AdmissionsCmsDashboard({
                     type="text"
                     value={seoState.title}
                     onChange={(e) => setSeoState({ ...seoState, title: e.target.value })}
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44] focus:border-[#E8871A] focus:outline-none"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44] focus:border-slate-300 focus:outline-none"
                     placeholder="Page Meta Title"
                   />
                 </div>
@@ -366,7 +363,7 @@ export function AdmissionsCmsDashboard({
                     type="text"
                     value={seoState.keywords}
                     onChange={(e) => setSeoState({ ...seoState, keywords: e.target.value })}
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44] focus:border-[#E8871A] focus:outline-none"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44] focus:border-slate-300 focus:outline-none"
                     placeholder="Admissions, Scholarships, Geeta University..."
                   />
                 </div>
@@ -379,7 +376,7 @@ export function AdmissionsCmsDashboard({
                     type="text"
                     value={seoState.canonical}
                     onChange={(e) => setSeoState({ ...seoState, canonical: e.target.value })}
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44] focus:border-[#E8871A] focus:outline-none"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44] focus:border-slate-300 focus:outline-none"
                     placeholder={`https://geetauniversity.edu.in${currentPageOption.publicRoute}`}
                   />
                 </div>
@@ -525,7 +522,7 @@ function GenericSectionObjectEditor({
                   id={key}
                   checked={value}
                   onChange={(e) => updateField(key, e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-[#E8871A] focus:ring-[#E8871A]"
+                  className="h-4 w-4 rounded border-slate-300 text-slate-700 focus:ring-[#E8871A]"
                 />
                 <label htmlFor={key} className="text-xs font-bold uppercase tracking-wider text-[#0A1F44]">
                   {formatLabel(key)}
@@ -548,7 +545,7 @@ function GenericSectionObjectEditor({
                     typeof value === "number" ? parseFloat(e.target.value) || 0 : e.target.value
                   )
                 }
-                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44] focus:border-[#E8871A] focus:outline-none"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44] focus:border-slate-300 focus:outline-none"
               />
             </div>
           );
@@ -653,7 +650,7 @@ function GenericArrayRepeater({
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
-                  className="flex items-center gap-2 text-xs font-bold text-[#0A1F44] hover:text-[#E8871A] text-left flex-1"
+                  className="flex items-center gap-2 text-xs font-bold text-[#0A1F44] hover:text-slate-700 text-left flex-1"
                 >
                   <span className="text-slate-400">#{idx + 1}</span>
                   <span>{String(displayHeader).slice(0, 60)}</span>

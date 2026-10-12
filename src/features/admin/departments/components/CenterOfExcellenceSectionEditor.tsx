@@ -55,7 +55,7 @@ export function CenterOfExcellenceSectionEditor({
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
           <div className="border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2">
-              <Award className="h-5 w-5 text-[#E8871A]" />
+              <Award className="h-5 w-5 text-slate-700" />
               <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
                 Centre of Excellence
               </h3>
@@ -75,7 +75,7 @@ export function CenterOfExcellenceSectionEditor({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Centre of Excellence in Computing"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white font-serif"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white font-serif"
               />
             </div>
 
@@ -88,7 +88,7 @@ export function CenterOfExcellenceSectionEditor({
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
                 placeholder="State-of-the-art facilities for robotics, intelligent systems, data sciences, and enterprise cloud solutions..."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
           </div>
@@ -98,7 +98,7 @@ export function CenterOfExcellenceSectionEditor({
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
           >
             <Save className="h-4 w-4" />
             Save Centre of Excellence

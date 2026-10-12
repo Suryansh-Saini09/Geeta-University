@@ -80,7 +80,7 @@ export function DepartmentHighlightsSectionEditor({
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
           <div className="border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-[#E8871A]" />
+              <Sparkles className="h-5 w-5 text-slate-700" />
               <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
                 Department Highlights & Feature Cards
               </h3>
@@ -100,7 +100,7 @@ export function DepartmentHighlightsSectionEditor({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Department Highlights"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white font-serif"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white font-serif"
               />
             </div>
 
@@ -113,7 +113,7 @@ export function DepartmentHighlightsSectionEditor({
                 value={subtitle}
                 onChange={(e) => setSubtitle(e.target.value)}
                 placeholder="Key infrastructure and academic milestones..."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
           </div>
@@ -126,7 +126,7 @@ export function DepartmentHighlightsSectionEditor({
               <button
                 type="button"
                 onClick={handleAddItem}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#E8871A] hover:text-white transition"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#0A1F44] hover:text-white transition"
               >
                 <Plus className="h-3.5 w-3.5" />
                 Add Highlight
@@ -144,7 +144,7 @@ export function DepartmentHighlightsSectionEditor({
                   className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-4"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#E8871A]">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                       Highlight #{idx + 1}
                     </span>
                     <button
@@ -166,7 +166,7 @@ export function DepartmentHighlightsSectionEditor({
                         value={item.title || ""}
                         onChange={(e) => handleItemChange(idx, "title", e.target.value)}
                         placeholder="e.g. Advanced Computing Laboratories"
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -180,13 +180,13 @@ export function DepartmentHighlightsSectionEditor({
                           value={item.image || ""}
                           onChange={(e) => handleItemChange(idx, "image", e.target.value)}
                           placeholder="https://geetauniversity.edu.in/.../cr-1.webp"
-                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => setActiveMediaIndex(idx)}
-                        className="mt-5 inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-[#E8871A] hover:text-[#E8871A]"
+                        className="mt-5 inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-700"
                       >
                         <ImageIcon className="h-3.5 w-3.5" />
                         Pick
@@ -202,7 +202,7 @@ export function DepartmentHighlightsSectionEditor({
                         onChange={(e) => handleItemChange(idx, "desc", e.target.value)}
                         rows={2}
                         placeholder="High-performance computing workstations, AI tools..."
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                       />
                     </div>
                   </div>
@@ -216,7 +216,7 @@ export function DepartmentHighlightsSectionEditor({
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
           >
             <Save className="h-4 w-4" />
             Save Department Highlights

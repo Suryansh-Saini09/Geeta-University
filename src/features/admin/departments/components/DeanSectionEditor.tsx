@@ -83,7 +83,7 @@ export function DeanSectionEditor({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Dr. Full Name"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -96,7 +96,7 @@ export function DeanSectionEditor({
                 value={designation}
                 onChange={(e) => setDesignation(e.target.value)}
                 placeholder="Dean & Professor, Ph.D."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -109,7 +109,7 @@ export function DeanSectionEditor({
                 value={schoolName}
                 onChange={(e) => setSchoolName(e.target.value)}
                 placeholder="School of Computer Science & Engineering"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -135,12 +135,12 @@ export function DeanSectionEditor({
                   value={image}
                   onChange={(e) => setImage(e.target.value)}
                   placeholder="/images/faculty/dean.jpg or image URL"
-                  className="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                  className="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
                 />
                 <button
                   type="button"
                   onClick={() => setIsMediaPickerOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#E8871A] hover:text-[#E8871A]"
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-700"
                 >
                   <ImageIcon className="h-4 w-4" />
                   Media Library
@@ -157,7 +157,7 @@ export function DeanSectionEditor({
                 onChange={(e) => setMessage(e.target.value)}
                 rows={6}
                 placeholder="Enter the Dean's message to prospective students..."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
           </div>
@@ -167,7 +167,7 @@ export function DeanSectionEditor({
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
           >
             <Save className="h-4 w-4" />
             Save Dean's Message

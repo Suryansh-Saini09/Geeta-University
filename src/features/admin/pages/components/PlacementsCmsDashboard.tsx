@@ -112,12 +112,7 @@ export function PlacementsCmsDashboard({ initialData }: PlacementsCmsDashboardPr
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl bg-white p-6 shadow-xs border border-slate-200">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-serif font-bold text-[#0A1F44]">Placements CMS Editor</h1>
-            <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">
-              Database Backed
-            </span>
-          </div>
+          <h1 className="text-2xl font-serif font-bold text-[#0A1F44]">Placements CMS Editor</h1>
           <p className="mt-1 text-sm text-slate-500">
             Manage all 9 public sections and SEO metadata for the <code className="font-semibold text-slate-800">/placements</code> page.
           </p>
@@ -127,7 +122,7 @@ export function PlacementsCmsDashboard({ initialData }: PlacementsCmsDashboardPr
           type="button"
           disabled={savingKey !== null}
           onClick={() => handleSaveSection(activeSection)}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-sm font-bold text-white shadow-md hover:bg-[#d67a15] disabled:opacity-50 transition-all cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white shadow-md hover:bg-[#1A3A6B] disabled:opacity-50 transition-all cursor-pointer"
         >
           <Save className="h-4 w-4" />
           <span>{savingKey === activeSection ? "Saving Section..." : `Save ${activeSection.toUpperCase()}`}</span>
@@ -176,7 +171,7 @@ export function PlacementsCmsDashboard({ initialData }: PlacementsCmsDashboardPr
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Icon className={`h-4 w-4 ${isActive ? "text-[#E8871A]" : "text-slate-400"}`} />
+                  <Icon className={`h-4 w-4 ${isActive ? "text-slate-700" : "text-slate-400"}`} />
                   <span>{item.label}</span>
                 </div>
                 <span
@@ -327,7 +322,7 @@ function PlacementHeroEditor({ state, onChange }: { state: any; onChange: (val: 
               const newStat = { label: "Highest Package", value: "₹1.4 Cr", description: "International Offer", icon: "trophy" };
               onChange({ ...state, stats: [...stats, newStat] });
             }}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Add Stat</span>
@@ -359,7 +354,7 @@ function PlacementHeroEditor({ state, onChange }: { state: any; onChange: (val: 
                       copy[idx] = { ...copy[idx], value: e.target.value };
                       onChange({ ...state, stats: copy });
                     }}
-                    className="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold text-[#E8871A]"
+                    className="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold text-slate-700"
                   />
                 </div>
                 <div>
@@ -487,7 +482,7 @@ function CdcEditor({ state, onChange }: { state: any; onChange: (val: any) => vo
               const newPillar = { title: "New Pillar", description: "Pillar subtitle..." };
               onChange({ ...state, pillars: [...pillars, newPillar] });
             }}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Add Pillar Card</span>
@@ -615,7 +610,7 @@ function CdcEditor({ state, onChange }: { state: any; onChange: (val: any) => vo
               const newFeat = { title: "New Training Module", description: "Module details...", icon: "shield" };
               onChange({ ...state, features: [...features, newFeat] });
             }}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Add Initiative</span>
@@ -713,7 +708,7 @@ function SnapshotEditor({ state, onChange }: { state: any; onChange: (val: any) 
             };
             onChange({ ...state, packages: [...packages, newTier] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Package Tier</span>
@@ -761,7 +756,7 @@ function SnapshotEditor({ state, onChange }: { state: any; onChange: (val: any) 
                     copy[idx] = { ...copy[idx], range: e.target.value };
                     onChange({ ...state, packages: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-bold text-[#E8871A]"
+                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-bold text-slate-700"
                 />
               </div>
               <div>
@@ -842,7 +837,7 @@ function StudentStoriesEditor({ state, onChange }: { state: any; onChange: (val:
             };
             onChange({ ...state, stories: [...stories, newStory] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Story</span>
@@ -890,7 +885,7 @@ function StudentStoriesEditor({ state, onChange }: { state: any; onChange: (val:
                     copy[idx] = { ...copy[idx], package: e.target.value };
                     onChange({ ...state, stories: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-bold text-[#E8871A]"
+                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-bold text-slate-700"
                 />
               </div>
               <div>
@@ -978,7 +973,7 @@ function DrivesEditor({ state, onChange }: { state: any; onChange: (val: any) =>
             };
             onChange({ ...state, drives: [...drives, newDrive] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Drive</span>
@@ -1101,7 +1096,7 @@ function HrVoicesEditor({ state, onChange }: { state: any; onChange: (val: any) 
             };
             onChange({ ...state, voices: [...voices, newVoice] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add HR Voice</span>
@@ -1237,7 +1232,7 @@ function PlacementGalleryEditor({ state, onChange }: { state: any; onChange: (va
             };
             onChange({ ...state, items: [...items, newItem] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Photo</span>
@@ -1342,7 +1337,7 @@ function PlacementFaqsEditor({ state, onChange }: { state: any; onChange: (val: 
             };
             onChange({ ...state, faqs: [...faqs, newFaq] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8871A] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add FAQ</span>

@@ -4,7 +4,7 @@ import { Save } from "lucide-react";
 import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
 
 type AdminUserDefaults = { id: string; name: string; email: string; role: AdminRole; status: AdminUserStatus };
-const inputClass = "w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-[#E8871A] focus:bg-white";
+const inputClass = "w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-slate-300 focus:bg-white";
 
 export default function AdminUserForm({ user, action }: { user?: AdminUserDefaults; action: (formData: FormData) => void | Promise<void> }) {
   return <form action={action} className="max-w-3xl space-y-5 rounded-lg border border-slate-200 bg-white p-5">

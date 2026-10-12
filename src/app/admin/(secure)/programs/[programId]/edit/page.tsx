@@ -41,12 +41,12 @@ export default async function EditProgramPage({
       <section>
         <Link
           href="/admin/programs"
-          className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 transition hover:text-[#E8871A]"
+          className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 transition hover:text-slate-700"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to programs
         </Link>
-        <p className="mt-5 text-sm font-bold uppercase tracking-[0.18em] text-[#E8871A]">
+        <p className="mt-5 text-xs font-bold uppercase tracking-wider text-slate-500">
           Edit
         </p>
         <h2 className="mt-2 font-serif text-4xl font-bold text-[#0A1F44]">

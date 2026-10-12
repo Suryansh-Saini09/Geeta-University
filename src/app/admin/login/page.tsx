@@ -1,4 +1,7 @@
-import { LockKeyhole } from "lucide-react";
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { AlertCircle } from "lucide-react";
 
 import LoginForm from "./LoginForm";
 
@@ -25,32 +28,77 @@ export default async function AdminLoginPage({
   const message = error ? errorMessages[error] : null;
 
   return (
-    <main className="min-h-screen bg-[#F7F9FC] px-4 py-10">
-      <div className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-md items-center">
-        <div className="w-full rounded-2xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/70">
-          <div className="mb-8">
-            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#0A1F44] text-white">
-              <LockKeyhole className="h-6 w-6" />
+    <main className="relative flex min-h-screen items-center justify-center bg-[#F8FAFC] px-4 py-8 sm:px-6 lg:px-12 overflow-hidden">
+      {/* Subtle Ambient Background Accents */}
+      <div
+        className="pointer-events-none absolute -top-40 -left-40 h-96 w-96 rounded-full bg-blue-100/40 blur-3xl"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-slate-200/40 blur-3xl"
+        aria-hidden="true"
+      />
+
+      <div className="relative mx-auto flex w-full max-w-5xl items-center justify-center gap-10 lg:gap-16 xl:gap-24">
+        {/* Left Column: Login Card & Copyright */}
+        <div className="flex w-full max-w-[380px] shrink-0 flex-col items-center">
+          <div className="w-full rounded-2xl border border-slate-200/90 bg-white p-7 sm:p-9 shadow-xl shadow-slate-200/60 transition-shadow">
+            {/* University Logo */}
+            <div className="mb-5 flex justify-center">
+              <Link
+                href="/"
+                title="Geeta University"
+                className="group flex flex-col items-center focus:outline-none"
+              >
+                <div className="relative h-12 w-36">
+                  <Image
+                    src="/GU-Logo.webp"
+                    alt="Geeta University"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+              </Link>
             </div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#E8871A]">
-              Staff access
-            </p>
-            <h1 className="mt-2 font-serif text-3xl font-bold text-[#0A1F44]">
-              Sign in to CMS
+
+            {/* Heading */}
+            <h1 className="mb-6 text-center text-xl font-bold tracking-tight text-slate-800">
+              Log in
             </h1>
-            <p className="mt-2 text-sm leading-6 text-slate-600">
-              Manage university pages, programs, media, submissions, and SEO
-              from a protected dashboard.
-            </p>
+
+            {/* Error Message */}
+            {message ? (
+              <div
+                role="alert"
+                className="mb-4 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50/90 px-3.5 py-2.5 text-xs font-semibold text-red-700"
+              >
+                <AlertCircle className="h-4 w-4 shrink-0 text-red-500" aria-hidden="true" />
+                <span>{message}</span>
+              </div>
+            ) : null}
+
+            {/* Form */}
+            <LoginForm />
           </div>
 
-          {message ? (
-            <div role="alert" className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
-              {message}
-            </div>
-          ) : null}
+          {/* Footer Copyright */}
+          <p className="mt-5 text-center text-xs text-slate-500 select-none">
+            &copy; All rights reserved, Geeta University, 2025-26
+          </p>
+        </div>
 
-          <LoginForm />
+        {/* Right Column: Hero SVG Illustration */}
+        <div className="hidden lg:flex flex-1 items-center justify-center max-w-lg xl:max-w-xl">
+          <div className="relative w-full aspect-[680/500]">
+            <Image
+              src="/admin-login-illustration.svg"
+              alt="Geeta University CMS Administration Illustration"
+              fill
+              className="object-contain drop-shadow-xs select-none pointer-events-none"
+              priority
+            />
+          </div>
         </div>
       </div>
     </main>

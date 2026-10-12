@@ -215,7 +215,7 @@ export function ProgramsOfferedSectionEditor({
           <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
             Total Specialisations
           </span>
-          <p className="mt-1 text-2xl font-serif font-bold text-[#E8871A]">
+          <p className="mt-1 text-2xl font-serif font-bold text-slate-700">
             {totalSpecialisations} Specialisations
           </p>
         </div>
@@ -237,7 +237,7 @@ export function ProgramsOfferedSectionEditor({
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
           <div className="border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2">
-              <GraduationCap className="h-5 w-5 text-[#E8871A]" />
+              <GraduationCap className="h-5 w-5 text-slate-700" />
               <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
                 Programs Offered & Academic Offerings
               </h3>
@@ -255,7 +255,7 @@ export function ProgramsOfferedSectionEditor({
                 <div key={catIdx} className="rounded-xl border border-slate-200 bg-slate-50 p-5 space-y-4">
                   <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#E8871A]">
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                         Level 0{catIdx + 1}
                       </span>
                       <h4 className="font-serif text-lg font-bold text-[#0A1F44]">
@@ -265,7 +265,7 @@ export function ProgramsOfferedSectionEditor({
                     <button
                       type="button"
                       onClick={() => handleAddProgram(catIdx)}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-[#E8871A] hover:text-[#E8871A] transition shadow-sm"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-slate-300 hover:text-slate-700 transition shadow-sm"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       Add Program
@@ -342,7 +342,7 @@ export function ProgramsOfferedSectionEditor({
                                         handleProgramFieldChange(catIdx, itemIdx, "program", e.target.value)
                                       }
                                       placeholder="e.g. B.Tech. CSE — Computer Science & Engineering"
-                                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A] font-serif"
+                                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300 font-serif"
                                     />
                                   </div>
 
@@ -357,7 +357,7 @@ export function ProgramsOfferedSectionEditor({
                                         handleProgramFieldChange(catIdx, itemIdx, "duration", e.target.value)
                                       }
                                       placeholder="e.g. 4 years or 3/4 years"
-                                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                                     />
                                   </div>
 
@@ -374,7 +374,7 @@ export function ProgramsOfferedSectionEditor({
                                           handleProgramFieldChange(catIdx, itemIdx, "href", e.target.value)
                                         }
                                         placeholder="/programs/school-of-computer-science-and-engineering/btech-cse"
-                                        className="w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 py-2 text-xs font-mono outline-none focus:border-[#E8871A]"
+                                        className="w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 py-2 text-xs font-mono outline-none focus:border-slate-300"
                                       />
                                     </div>
                                   </div>
@@ -390,7 +390,7 @@ export function ProgramsOfferedSectionEditor({
                                       }
                                       rows={3}
                                       placeholder="Passed 10+2 examination with Physics and Mathematics as compulsory subjects..."
-                                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm leading-6 outline-none focus:border-[#E8871A]"
+                                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm leading-6 outline-none focus:border-slate-300"
                                     />
                                   </div>
                                 </div>
@@ -404,7 +404,7 @@ export function ProgramsOfferedSectionEditor({
                                     <button
                                       type="button"
                                       onClick={() => handleAddSpecialisation(catIdx, itemIdx)}
-                                      className="text-xs font-semibold text-[#E8871A] hover:underline"
+                                      className="text-xs font-semibold text-slate-700 hover:underline"
                                     >
                                       + Add Specialisation
                                     </button>
@@ -443,7 +443,7 @@ export function ProgramsOfferedSectionEditor({
                                                 )
                                               }
                                               placeholder="Specialisation Name (e.g. AI & Machine Learning)"
-                                              className="flex-1 min-w-[200px] rounded border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs outline-none focus:border-[#E8871A]"
+                                              className="flex-1 min-w-[200px] rounded border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs outline-none focus:border-slate-300"
                                             />
                                             <input
                                               type="text"
@@ -458,7 +458,7 @@ export function ProgramsOfferedSectionEditor({
                                                 )
                                               }
                                               placeholder="URL / Route (optional)"
-                                              className="w-48 rounded border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-mono outline-none focus:border-[#E8871A]"
+                                              className="w-48 rounded border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-mono outline-none focus:border-slate-300"
                                             />
                                             <button
                                               type="button"
@@ -492,7 +492,7 @@ export function ProgramsOfferedSectionEditor({
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
           >
             <Save className="h-4 w-4" />
             Save Programs Offered ({totalPrograms})
