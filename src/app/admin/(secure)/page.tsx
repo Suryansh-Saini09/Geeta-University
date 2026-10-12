@@ -1,24 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import {
-  BookOpen,
-  CalendarDays,
-  FileText,
-  GalleryHorizontalEnd,
-  GraduationCap,
-  Image as ImageIcon,
-  Inbox,
-  Megaphone,
-  Newspaper,
-  Users,
-  CheckCircle2,
-  Clock,
-  Archive,
   ArrowRight,
   Activity,
-  Sparkles,
   ExternalLink,
-  Shield,
 } from "lucide-react";
 
 import { getAdminDashboardStats } from "@/server/services/adminDashboard";
@@ -26,17 +11,17 @@ import { getAdminDashboardStats } from "@/server/services/adminDashboard";
 export const dynamic = "force-dynamic";
 
 const inventoryConfig = [
-  { key: "pages", label: "Managed Pages", href: "/admin/pages", icon: FileText, desc: "Custom institutional & dynamic pages" },
-  { key: "departments", label: "Academic Departments", href: "/admin/departments", icon: GraduationCap, desc: "Faculties, schools & institutes" },
-  { key: "programs", label: "Academic Programs", href: "/admin/programs", icon: BookOpen, desc: "UG, PG & Doctoral courses" },
-  { key: "faculty", label: "Faculty Directory", href: "/admin/departments", icon: Users, desc: "Professors & mentors roster" },
-  { key: "notices", label: "Official Notices", href: "/admin/notices", icon: Megaphone, desc: "Bulletins & circulars" },
-  { key: "news", label: "University News", href: "/admin/news", icon: Newspaper, desc: "Campus press & announcements" },
-  { key: "events", label: "Campus Events", href: "/admin/events", icon: CalendarDays, desc: "Conferences, seminars & festivals" },
-  { key: "galleryAlbums", label: "Media Albums", href: "/admin/gallery", icon: GalleryHorizontalEnd, desc: "Campus photo collections" },
-  { key: "submissions", label: "Form Submissions", href: "/admin/submissions", icon: Inbox, desc: "Inquiries & applications" },
-  { key: "mediaAssets", label: "Media Assets", href: "/admin/media", icon: ImageIcon, desc: "Images, documents & branding" },
-  { key: "adminUsers", label: "CMS Administrators", href: "/admin/users", icon: Shield, desc: "Authorized staff accounts" },
+  { key: "pages", label: "Managed Pages", href: "/admin/pages", desc: "Custom institutional & dynamic pages" },
+  { key: "departments", label: "Academic Departments", href: "/admin/departments", desc: "Faculties, schools & institutes" },
+  { key: "programs", label: "Academic Programs", href: "/admin/programs", desc: "UG, PG & Doctoral courses" },
+  { key: "faculty", label: "Faculty Directory", href: "/admin/departments", desc: "Professors & mentors roster" },
+  { key: "notices", label: "Official Notices", href: "/admin/notices", desc: "Bulletins & circulars" },
+  { key: "news", label: "University News", href: "/admin/news", desc: "Campus press & announcements" },
+  { key: "events", label: "Campus Events", href: "/admin/events", desc: "Conferences, seminars & festivals" },
+  { key: "galleryAlbums", label: "Media Albums", href: "/admin/gallery", desc: "Campus photo collections" },
+  { key: "submissions", label: "Form Submissions", href: "/admin/submissions", desc: "Inquiries & applications" },
+  { key: "mediaAssets", label: "Media Assets", href: "/admin/media", desc: "Images, documents & branding" },
+  { key: "adminUsers", label: "CMS Administrators", href: "/admin/users", desc: "Authorized staff accounts" },
 ] as const;
 
 const quickShortcuts = [
@@ -56,15 +41,6 @@ export default async function AdminDashboardPage() {
       {/* Top Header */}
       <section className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl bg-white p-6 shadow-xs border border-slate-200">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="rounded bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-600">
-              Institutional CMS Portal
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 border border-emerald-200">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              Live Database Connected
-            </span>
-          </div>
           <h1 className="mt-2 font-serif text-2xl sm:text-3xl font-bold text-slate-900">
             CMS Operational Overview
           </h1>
@@ -79,15 +55,13 @@ export default async function AdminDashboardPage() {
             target="_blank"
             className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition"
           >
-            <ExternalLink className="h-3.5 w-3.5 text-slate-400" />
-            <span>Public Website</span>
+            <span className="text-slate-700">Public Website</span>
           </Link>
           <Link
             href="/admin/activity"
-            className="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-semibold text-white shadow-2xs hover:bg-slate-800 transition"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-100 px-4 py-2.5 text-xs font-semibold text-slate-700 shadow-2xs hover:bg-slate-200 hover:text-slate-900 transition"
           >
-            <Activity className="h-3.5 w-3.5" />
-            <span>Audit Trail</span>
+            <span className="text-slate-700">Audit Trail</span>
           </Link>
         </div>
       </section>
@@ -101,14 +75,6 @@ export default async function AdminDashboardPage() {
         <div className="grid gap-4 sm:grid-cols-3">
           {/* Published */}
           <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-            <div className="flex items-center justify-between">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100">
-                <CheckCircle2 className="h-4.5 w-4.5" />
-              </div>
-              <span className="rounded bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200">
-                Live Public
-              </span>
-            </div>
             <div className="mt-4">
               <p className="text-2xl sm:text-3xl font-bold text-slate-900">
                 {stats.publishing.totalPublished}
@@ -126,14 +92,6 @@ export default async function AdminDashboardPage() {
 
           {/* Draft */}
           <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-            <div className="flex items-center justify-between">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-100">
-                <Clock className="h-4.5 w-4.5" />
-              </div>
-              <span className="rounded bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-800 border border-amber-200">
-                Requires Review
-              </span>
-            </div>
             <div className="mt-4">
               <p className="text-2xl sm:text-3xl font-bold text-slate-900">
                 {stats.publishing.totalDraft}
@@ -151,14 +109,6 @@ export default async function AdminDashboardPage() {
 
           {/* Archived */}
           <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-            <div className="flex items-center justify-between">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-600 border border-slate-200">
-                <Archive className="h-4.5 w-4.5" />
-              </div>
-              <span className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-700 border border-slate-200">
-                Preserved
-              </span>
-            </div>
             <div className="mt-4">
               <p className="text-2xl sm:text-3xl font-bold text-slate-900">
                 {stats.publishing.totalArchived}
@@ -184,7 +134,6 @@ export default async function AdminDashboardPage() {
 
         <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {inventoryConfig.map((item) => {
-            const Icon = item.icon;
             const count = stats.counts[item.key as keyof typeof stats.counts];
 
             return (
@@ -195,19 +144,16 @@ export default async function AdminDashboardPage() {
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition group-hover:bg-slate-200 group-hover:text-slate-900">
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <span className="text-xs font-bold text-slate-400 group-hover:text-slate-900 transition flex items-center gap-0.5">
+                    <p className="text-2xl font-bold text-slate-900 tracking-tight">
+                      {count}
+                    </p>
+                    <span className="text-xs font-semibold text-slate-400 group-hover:text-slate-900 transition flex items-center gap-0.5">
                       Manage <ArrowRight className="h-3 w-3 transition group-hover:translate-x-0.5" />
                     </span>
                   </div>
 
-                  <div className="mt-3">
-                    <p className="text-2xl font-bold text-slate-900 tracking-tight">
-                      {count}
-                    </p>
-                    <p className="text-xs font-semibold text-slate-700 mt-0.5">
+                  <div className="mt-2.5">
+                    <p className="text-xs font-bold text-slate-800">
                       {item.label}
                     </p>
                     <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
@@ -228,7 +174,6 @@ export default async function AdminDashboardPage() {
           <div>
             <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
               <div className="flex items-center gap-2">
-                <Activity className="h-4 w-4 text-slate-500" />
                 <h3 className="text-sm font-bold text-slate-900">
                   Recent Audit Activity
                 </h3>
@@ -304,7 +249,6 @@ export default async function AdminDashboardPage() {
         <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2 border-b border-slate-100 pb-3.5">
-              <Sparkles className="h-4 w-4 text-slate-500" />
               <h3 className="text-sm font-bold text-slate-900">
                 Frequently Managed Portals
               </h3>
@@ -333,7 +277,6 @@ export default async function AdminDashboardPage() {
 
           <div className="mt-4 border-t border-slate-100 pt-3 text-[11px] text-slate-400 flex items-center justify-between">
             <span>Geeta University Institutional CMS</span>
-            <span>Aiven MySQL v8.0 Active</span>
           </div>
         </section>
       </div>

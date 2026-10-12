@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { ReactLenis } from "lenis/react";
 import "lenis/dist/lenis.css";
 
@@ -9,6 +10,7 @@ interface LenisProviderProps {
 }
 
 export default function LenisProvider({ children }: LenisProviderProps) {
+  const pathname = usePathname();
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -26,6 +28,14 @@ export default function LenisProvider({ children }: LenisProviderProps) {
       mediaQuery.removeEventListener("change", listener);
     };
   }, []);
+
+  // Do not run Lenis smooth scroll on admin or standalone routes
+  const isStandaloneRoute =
+    pathname?.startsWith("/admin") || pathname?.startsWith("/social-links");
+
+  if (isStandaloneRoute) {
+    return <>{children}</>;
+  }
 
   const lenisOptions = {
     duration: reducedMotion ? 0 : 1.6,
