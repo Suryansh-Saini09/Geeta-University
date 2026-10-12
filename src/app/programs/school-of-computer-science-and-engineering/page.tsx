@@ -38,11 +38,47 @@ export default async function SchoolOfComputerSciencePage() {
       '"': "&quot;",
       "'": "&#39;",
     })[character] ?? character);
+    const deptBody =
+      department.body && typeof department.body === "object"
+        ? (department.body as Record<string, any>)
+        : {};
+
+    const rawFaculty = deptBody.faculty || deptBody.mentorsSection?.faculty;
+    const facultyList =
+      Array.isArray(rawFaculty) && rawFaculty.length > 0
+        ? rawFaculty
+        : department.faculty && department.faculty.length > 0
+        ? department.faculty.map((f) => ({
+            name: f.name,
+            role: f.designation || "",
+            designation: f.designation || "",
+            qualification: f.qualification || "",
+            image: (f as any).portrait?.url || "",
+            desc: f.bio || "",
+            description: f.bio || "",
+          }))
+        : [];
+
+    const mentorsSection = deptBody.mentorsSection || {
+      title: "Faculty & Mentors",
+      eyebrow: "EXPERT FACULTY",
+      faculty: facultyList,
+    };
+
     const data = {
       ...computerScienceSchool,
       name: department.name,
       shortName: department.shortName ?? computerScienceSchool.shortName,
-      hero: { ...computerScienceSchool.hero, title: department.name, description: summary ?? computerScienceSchool.hero.description },
+      faculty: facultyList,
+      mentorsSection: {
+        ...mentorsSection,
+        faculty: facultyList,
+      },
+      hero: {
+        ...computerScienceSchool.hero,
+        title: department.name,
+        description: summary ?? computerScienceSchool.hero.description,
+      },
       about: {
         ...computerScienceSchool.about!,
         title: department.name,

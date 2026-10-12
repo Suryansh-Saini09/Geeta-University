@@ -367,15 +367,11 @@ export function HomeCmsDashboard({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#E8871A]">
-            <Sparkles className="h-4 w-4" />
-            Home Page CMS
-          </div>
-          <h1 className="font-serif text-3xl font-bold text-[#0A1F44]">
-            Manage Homepage Content
+          <h1 className="font-serif text-2xl font-bold text-slate-900">
+            Homepage Content
           </h1>
-          <p className="text-sm text-slate-500">
-            Edit text, headings, statistics, recruiters, rankings, media, and repeaters without code edits.
+          <p className="text-xs text-slate-500 mt-0.5">
+            Manage homepage sections, text content, statistics, recruiters, and media.
           </p>
         </div>
 
@@ -449,10 +445,10 @@ export function HomeCmsDashboard({
               setActiveTab(tab.id);
               setFeedback(null);
             }}
-            className={`whitespace-nowrap rounded-lg px-4 py-2 text-xs font-bold transition-all ${
+            className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${
               activeTab === tab.id
-                ? "bg-[#0A1F44] text-white shadow-sm"
-                : "bg-white text-slate-600 hover:bg-slate-100 hover:text-[#0A1F44] border border-slate-200"
+                ? "bg-slate-900 text-white shadow-2xs"
+                : "bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-slate-200"
             }`}
           >
             {tab.label}

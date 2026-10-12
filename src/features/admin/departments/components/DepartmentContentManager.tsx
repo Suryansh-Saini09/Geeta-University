@@ -71,7 +71,7 @@ interface DepartmentContentManagerProps {
   department: DepartmentDataProps;
   mediaAssets?: MediaAssetItem[];
   userRole?: string;
-  searchParams?: { section?: string; saved?: string; error?: string; updated?: string };
+  searchParams?: { section?: string; saved?: string; error?: string; updated?: string; reordered?: string };
 }
 
 export function DepartmentContentManager({
@@ -85,6 +85,7 @@ export function DepartmentContentManager({
 
   const activeSection = currentSearchParams.get("section") || searchParams.section || "overview";
   const saved = currentSearchParams.get("saved") === "1" || searchParams.saved === "1";
+  const reordered = currentSearchParams.get("reordered") === "1" || searchParams.reordered === "1";
   const error = currentSearchParams.get("error") || searchParams.error;
   const updated = currentSearchParams.get("updated") === "1" || searchParams.updated === "1";
 
@@ -413,14 +414,14 @@ export function DepartmentContentManager({
       </section>
 
       {/* Section Navigation Tabs */}
-      <nav className="flex items-center gap-2 overflow-x-auto rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
+      <nav className="flex items-center gap-1.5 overflow-x-auto rounded-xl border border-slate-200 bg-white p-1.5 shadow-2xs">
         <button
           type="button"
           onClick={() => navigateToSection("overview")}
-          className={`flex items-center gap-2 rounded-lg px-4 py-2.5 text-xs font-bold transition whitespace-nowrap ${
+          className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold transition whitespace-nowrap ${
             activeSection === "overview"
-              ? "bg-[#0A1F44] text-white shadow-sm"
-              : "text-slate-600 hover:bg-slate-100 hover:text-[#0A1F44]"
+              ? "bg-slate-900 text-white shadow-2xs"
+              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
           }`}
         >
           All Content Sections Overview
@@ -434,10 +435,10 @@ export function DepartmentContentManager({
               key={sec.id}
               type="button"
               onClick={() => navigateToSection(sec.id)}
-              className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-bold transition whitespace-nowrap ${
+              className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold transition whitespace-nowrap ${
                 isActive
-                  ? "bg-[#E8871A] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-[#0A1F44]"
+                  ? "bg-slate-900 text-white shadow-2xs"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
               }`}
             >
               <IconComponent className="h-3.5 w-3.5" />
@@ -554,6 +555,7 @@ export function DepartmentContentManager({
           mentorsEyebrow={body.mentorsSection?.eyebrow}
           mediaAssets={mediaAssets}
           saved={saved}
+          reordered={reordered}
           error={error}
         />
       ) : activeSection === "transformativeTracks" ? (

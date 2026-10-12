@@ -215,12 +215,9 @@ export function GuEdgeCmsDashboard({
       {/* Header Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-7 w-7 text-[#E8871A]" />
-            <h2 className="font-serif text-3xl font-bold text-[#0A1F44]">GU Edge CMS Center</h2>
-          </div>
-          <p className="mt-1 text-sm text-slate-600">
-            Production-grade content management for all 7 GU Edge pages of Geeta University.
+          <h1 className="font-serif text-2xl font-bold text-slate-900">GU Edge Content</h1>
+          <p className="mt-0.5 text-xs text-slate-500">
+            Manage GU Edge initiative pages, mentors, curriculum tracks, and media.
           </p>
         </div>
 
