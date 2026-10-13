@@ -61,6 +61,7 @@ export default function AdminShell({ user, children }: AdminShellProps) {
     viewAuditLogs: hasPermission(user.role, "viewAuditLogs"),
     viewSubmissions: hasPermission(user.role, "viewSubmissions"),
     manageSettings: hasPermission(user.role, "manageSettings"),
+    manageContent: hasPermission(user.role, "manageContent"),
   };
 
   const formattedRole = user.role

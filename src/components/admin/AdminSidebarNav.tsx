@@ -19,7 +19,8 @@ type PermissionKey =
   | "manageUsers"
   | "viewAuditLogs"
   | "viewSubmissions"
-  | "manageSettings";
+  | "manageSettings"
+  | "manageContent";
 
 export interface NavChildItem {
   label: string;
@@ -111,6 +112,8 @@ export const navigationGroups: NavGroup[] = [
       },
       { label: "Users", href: "/admin/users", permission: "manageUsers" },
       { label: "Activity", href: "/admin/activity", permission: "viewAuditLogs" },
+      { label: "Footer CMS", href: "/admin/footer", permission: "manageContent" },
+      { label: "Settings", href: "/admin/settings", permission: "manageSettings" },
     ],
   },
 ];
@@ -409,29 +412,6 @@ export function AdminSidebarNav({
             );
           })}
         </div>
-
-        {/* Settings directly after Operations */}
-        {userPermissions.manageSettings && (
-          <div className="pt-2 mt-2 border-t border-slate-100">
-            <Link
-              href="/admin/settings"
-              onClick={navigate}
-              title={isCollapsed ? "Settings" : undefined}
-              aria-label={isCollapsed ? "Settings" : undefined}
-              aria-current={isRouteActive("/admin/settings") ? "page" : undefined}
-              className={[
-                "flex items-center rounded-xl text-sm font-semibold transition-colors",
-                isCollapsed ? "h-10 w-10 justify-center" : "gap-3 px-3 py-2.5",
-                isRouteActive("/admin/settings")
-                  ? "bg-slate-100 text-slate-950"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-950",
-              ].join(" ")}
-            >
-              <Settings className="h-[18px] w-[18px] shrink-0" aria-hidden="true" />
-              {!isCollapsed && <span>Settings</span>}
-            </Link>
-          </div>
-        )}
       </div>
     </nav>
   );
