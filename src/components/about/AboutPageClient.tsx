@@ -212,29 +212,6 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
               </motion.div>
             </motion.div>
           </div>
-
-          <motion.a
-            href="#recognitions"
-            onClick={(e) => scrollToSection(e, "recognitions")}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.6 }}
-            className="absolute bottom-7 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2 text-white/70"
-          >
-            <span className="text-[10px] font-bold uppercase tracking-[2px]">
-              Discover
-            </span>
-
-            <motion.div
-              animate={{ y: [0, 6, 0] }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-              }}
-            >
-              <ArrowDown size={18} />
-            </motion.div>
-          </motion.a>
         </div>
       </section>
 
