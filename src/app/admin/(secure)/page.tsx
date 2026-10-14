@@ -14,6 +14,7 @@ const inventoryConfig = [
   { key: "pages", label: "Managed Pages", href: "/admin/pages", desc: "Custom institutional & dynamic pages" },
   { key: "departments", label: "Academic Departments", href: "/admin/departments", desc: "Faculties, schools & institutes" },
   { key: "programs", label: "Academic Programs", href: "/admin/programs", desc: "UG, PG & Doctoral courses" },
+  { key: "courseDetailPages", label: "Course Detail Pages", href: "/admin/programs?courseContent=CONFIGURED", desc: "Aiven MySQL managed course pages" },
   { key: "faculty", label: "Faculty Directory", href: "/admin/departments", desc: "Professors & mentors roster" },
   { key: "notices", label: "Official Notices", href: "/admin/notices", desc: "Bulletins & circulars" },
   { key: "news", label: "University News", href: "/admin/news", desc: "Campus press & announcements" },
@@ -28,7 +29,7 @@ const quickShortcuts = [
   { title: "Homepage CMS", href: "/admin/home", desc: "Manage hero banner, USPs, recruitment partners & testimonials" },
   { title: "About University CMS", href: "/admin/about", desc: "Core leadership, mission, vision & institutional history" },
   { title: "Academic Departments", href: "/admin/departments", desc: "Manage 12 schools, faculty ordering, brochures & curriculum" },
-  { title: "Degree Programs", href: "/admin/programs", desc: "Manage 50 UG, PG & PhD offerings and eligibility criteria" },
+  { title: "Degree & Course Pages CMS", href: "/admin/programs", desc: "Manage academic offerings, course detail pages, and curriculum in Aiven MySQL" },
   { title: "Media Asset Library", href: "/admin/media", desc: "Upload and organize university images, PDFs and documents" },
   { title: "Inquiries & Submissions", href: "/admin/submissions", desc: "Review student applications and admission inquiries" },
 ];
