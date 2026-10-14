@@ -32,7 +32,7 @@ export async function generateMetadata({
   const { slug, courseSlug } = await params;
   const locale = await getLocale();
 
-  const course = getCourseBySlug(slug, courseSlug);
+  const course = await getCourseBySlug(slug, courseSlug);
 
   if (!course) {
     return {};
@@ -67,7 +67,7 @@ export default async function CourseRoute({ params }: PageProps) {
   const { slug, courseSlug } = await params;
   const locale = await getLocale();
 
-  const course = getCourseBySlug(slug, courseSlug);
+  const course = await getCourseBySlug(slug, courseSlug);
 
   if (!course) {
     notFound();

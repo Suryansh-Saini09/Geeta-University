@@ -1,10 +1,12 @@
 import { prisma, ContentStatus } from "@/server/db/client";
+import { Prisma } from "@prisma/client";
 
 export interface DashboardStats {
   counts: {
     pages: number;
     departments: number;
     programs: number;
+    courseDetailPages: number;
     faculty: number;
     notices: number;
     news: number;
@@ -59,6 +61,7 @@ async function queryStatsBatch() {
     progPublished,
     progDraft,
     progArchived,
+    progWithOverview,
     faculty,
     notices,
     news,
@@ -82,6 +85,7 @@ async function queryStatsBatch() {
     prisma.program.count({ where: { status: ContentStatus.PUBLISHED } }),
     prisma.program.count({ where: { status: ContentStatus.DRAFT } }),
     prisma.program.count({ where: { status: ContentStatus.ARCHIVED } }),
+    prisma.program.count({ where: { overview: { not: Prisma.JsonNull } } }),
 
     prisma.facultyMember.count(),
     prisma.notice.count(),
@@ -125,6 +129,7 @@ async function queryStatsBatch() {
       pages: pagesTotal,
       departments: deptTotal,
       programs: progTotal,
+      courseDetailPages: progWithOverview,
       faculty,
       notices,
       news,
@@ -174,6 +179,7 @@ export async function getAdminDashboardStats(): Promise<DashboardStats> {
         pages: 0,
         departments: 0,
         programs: 0,
+        courseDetailPages: 0,
         faculty: 0,
         notices: 0,
         news: 0,

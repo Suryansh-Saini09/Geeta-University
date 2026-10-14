@@ -113,8 +113,10 @@ const courses: CoursePageData[] = [
   phdPoliticalScience,
 ];
 
+import { prisma, ContentStatus } from "@/server/db/client";
+
 // Helper to normalize school slug for comparison (handling aliases)
-function normalizeSchoolSlug(slug: string): string {
+export function normalizeSchoolSlug(slug: string): string {
   const s = slug.toLowerCase();
   if (s === "school-of-agricultural-sciences" || s === "school-of-agriculture") return "school-of-agricultural-studies";
   if (s === "school-of-humanities-and-social-sciences" || s === "school-of-humanities") return "school-of-humanities-and-social-science";
@@ -124,10 +126,11 @@ function normalizeSchoolSlug(slug: string): string {
   if (s === "spbsb") return "sp-bansal-school-of-business";
   if (s === "pharmacy" || s === "school-of-pharmacy") return "geeta-institute-of-pharmacy";
   if (s === "school-of-hotel-management" || s === "school-of-hospitality") return "school-of-hospitality-and-hotel-management";
+  if (s === "school-of-health-sciences") return "school-of-health-and-allied-sciences";
   return s;
 }
 
-function normalizeCourseSlug(slug: string): string {
+export function normalizeCourseSlug(slug: string): string {
   const s = slug.toLowerCase();
   if (s === "ba-hons-psychology" || s === "ba-psychology-hons" || s === "bachelor-of-arts-psychology") return "ba-psychology";
   if (s === "ba-hons-political-science" || s === "ba-political-science-hons" || s === "bachelor-of-arts-political-science") return "ba-political-science";
@@ -232,7 +235,79 @@ function normalizeCourseSlug(slug: string): string {
   return s;
 }
 
-export function getCourseBySlug(
+export function transformProgramToCoursePageData(
+  program: any,
+  requestedSchoolSlug?: string,
+  requestedCourseSlug?: string
+): CoursePageData {
+  const overviewData = (program.overview && typeof program.overview === "object"
+    ? program.overview
+    : {}) as Record<string, any>;
+
+  const schoolSlug = program.department?.slug || requestedSchoolSlug || "school-of-computer-science-and-engineering";
+  const slug = program.slug || requestedCourseSlug || "";
+
+  const defaultHero = {
+    title: program.name,
+    image: program.heroImage?.url || "/programs/default-banner.jpg",
+  };
+
+  const defaultQuickInfo = {
+    program: program.name,
+    duration: program.duration || "",
+    eligibility: program.eligibility || "",
+    level: program.level || undefined,
+  };
+
+  const seoData = program.seo ? {
+    title: program.seo.title,
+    description: program.seo.description,
+    keywords: Array.isArray(program.seo.keywords) ? program.seo.keywords : undefined,
+    canonical: program.seo.canonical || undefined,
+    ogImage: program.seo.ogImage || undefined,
+  } : (overviewData.seo || {
+    title: program.name,
+    description: program.eligibility || program.name,
+  });
+
+  return {
+    id: program.id,
+    schoolSlug,
+    slug,
+    seo: seoData,
+    hero: { ...defaultHero, ...(overviewData.hero || {}) },
+    quickInfo: { ...defaultQuickInfo, ...(overviewData.quickInfo || {}) },
+    overview: overviewData.overview || { title: program.name, paragraphs: [program.eligibility || ""] },
+    takeaways: Array.isArray(overviewData.takeaways) ? overviewData.takeaways : [],
+    subjects: Array.isArray(overviewData.subjects) ? overviewData.subjects : [],
+    subjectsTitle: overviewData.subjectsTitle,
+    subjectsParagraphs: overviewData.subjectsParagraphs,
+    learningOutcomes: Array.isArray(overviewData.learningOutcomes) ? overviewData.learningOutcomes : [],
+    admission: overviewData.admission || {
+      eligibility: program.eligibility || "",
+      whyChooseHeading: overviewData.admission?.whyChooseHeading,
+      whyChooseParagraphs: overviewData.admission?.whyChooseParagraphs,
+    },
+    career: overviewData.career || undefined,
+    whyGeeta: overviewData.whyGeeta || undefined,
+    learningSpaces: overviewData.learningSpaces || undefined,
+    scholarships: overviewData.scholarships || undefined,
+    faculty: Array.isArray(overviewData.faculty) ? overviewData.faculty : undefined,
+    testimonials: Array.isArray(overviewData.testimonials) ? overviewData.testimonials : undefined,
+    faqs: Array.isArray(overviewData.faqs) ? overviewData.faqs : undefined,
+    relatedCourses: Array.isArray(overviewData.relatedCourses) ? overviewData.relatedCourses : undefined,
+    cta: overviewData.cta || {
+      title: "Apply Now",
+      description: "Join Geeta University",
+      applyUrl: "https://admissions.geetauniversity.edu.in",
+    },
+    curriculum: overviewData.curriculum,
+    research: overviewData.research,
+    collaborations: overviewData.collaborations,
+  };
+}
+
+export function getCourseBySlugSync(
   schoolSlug: string,
   courseSlug: string
 ): CoursePageData | undefined {
@@ -246,7 +321,42 @@ export function getCourseBySlug(
   );
 }
 
-export function getCourseByDirectSlug(
+export async function getCourseBySlug(
+  schoolSlug: string,
+  courseSlug: string
+): Promise<CoursePageData | undefined> {
+  const normSchool = normalizeSchoolSlug(schoolSlug);
+  const normCourse = normalizeCourseSlug(courseSlug);
+
+  try {
+    const program = await prisma.program.findFirst({
+      where: {
+        OR: [
+          { slug: normCourse },
+          { slug: courseSlug.toLowerCase() },
+          { aliases: { some: { slug: normCourse } } },
+          { aliases: { some: { slug: courseSlug.toLowerCase() } } },
+        ],
+        status: ContentStatus.PUBLISHED,
+      },
+      include: {
+        department: true,
+        seo: true,
+        heroImage: true,
+      },
+    });
+
+    if (program && program.overview && typeof program.overview === "object") {
+      return transformProgramToCoursePageData(program, normSchool, normCourse);
+    }
+  } catch (error) {
+    console.warn(`[courseRepository] Failed to fetch program from database for ${courseSlug}, falling back to static files:`, error);
+  }
+
+  return getCourseBySlugSync(schoolSlug, courseSlug);
+}
+
+export function getCourseByDirectSlugSync(
   courseSlug: string
 ): CoursePageData | undefined {
   const normCourse = normalizeCourseSlug(courseSlug);
@@ -258,12 +368,99 @@ export function getCourseByDirectSlug(
   );
 }
 
-export function getCoursesBySchool(schoolSlug: string): CoursePageData[] {
+export async function getCourseByDirectSlug(
+  courseSlug: string
+): Promise<CoursePageData | undefined> {
+  const normCourse = normalizeCourseSlug(courseSlug);
+
+  try {
+    const program = await prisma.program.findFirst({
+      where: {
+        OR: [
+          { slug: normCourse },
+          { slug: courseSlug.toLowerCase() },
+          { aliases: { some: { slug: normCourse } } },
+          { aliases: { some: { slug: courseSlug.toLowerCase() } } },
+        ],
+        status: ContentStatus.PUBLISHED,
+      },
+      include: {
+        department: true,
+        seo: true,
+        heroImage: true,
+      },
+    });
+
+    if (program && program.overview && typeof program.overview === "object") {
+      return transformProgramToCoursePageData(program);
+    }
+  } catch (error) {
+    console.warn(`[courseRepository] Failed to fetch program directly from database for ${courseSlug}:`, error);
+  }
+
+  return getCourseByDirectSlugSync(courseSlug);
+}
+
+export async function getCoursesBySchool(schoolSlug: string): Promise<CoursePageData[]> {
   const normSchool = normalizeSchoolSlug(schoolSlug);
+
+  try {
+    const programs = await prisma.program.findMany({
+      where: {
+        department: {
+          OR: [
+            { slug: normSchool },
+            { slug: schoolSlug.toLowerCase() },
+          ],
+        },
+        status: ContentStatus.PUBLISHED,
+      },
+      include: {
+        department: true,
+        seo: true,
+        heroImage: true,
+      },
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    });
+
+    if (programs.length > 0) {
+      return programs
+        .filter((p) => p.overview && typeof p.overview === "object")
+        .map((p) => transformProgramToCoursePageData(p, normSchool));
+    }
+  } catch (error) {
+    console.warn(`[courseRepository] Failed to fetch school programs from database:`, error);
+  }
+
   return courses.filter((c) => normalizeSchoolSlug(c.schoolSlug) === normSchool);
 }
 
-export function getAllCourses(): CoursePageData[] {
+export async function getAllCourses(): Promise<CoursePageData[]> {
+  try {
+    const programs = await prisma.program.findMany({
+      where: { status: ContentStatus.PUBLISHED },
+      include: {
+        department: true,
+        seo: true,
+        heroImage: true,
+      },
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    });
+
+    if (programs.length > 0) {
+      return programs
+        .filter(
+          (p) =>
+            p.overview &&
+            typeof p.overview === "object" &&
+            ((p.overview as any).hero || (p.overview as any).subjects)
+        )
+        .map((p) => transformProgramToCoursePageData(p));
+    }
+  } catch (error) {
+    console.warn(`[courseRepository] Failed to fetch all programs from database:`, error);
+  }
+
   return courses;
 }
 
