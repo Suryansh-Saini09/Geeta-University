@@ -238,9 +238,11 @@ export const RecognitionSchema = z.object({
 
 export const GovernanceDocumentSchema = z.object({
   title: z.string().min(1, "Document title is required"),
-  description: z.string().optional(),
-  documentUrl: z.string().min(1, "Document URL is required"),
+  description: z.string().optional().nullable(),
+  documentUrl: z.string().optional().default(""),
   category: z.enum(["governance", "policy"]),
+  tableData: z.any().optional().nullable(),
+  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional().default("PUBLISHED"),
   sortOrder: z.number().optional().default(0),
 });
 

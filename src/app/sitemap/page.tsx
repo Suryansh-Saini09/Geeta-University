@@ -291,7 +291,7 @@ const sitemapData: SitemapCategory[] = [
     items: [
       {
         title: "About Geeta University",
-        href: "/about",
+        href: "/about-us",
         description: "Vision, mission, leadership, and institutional heritage.",
       },
       {

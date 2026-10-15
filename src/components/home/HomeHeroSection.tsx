@@ -76,7 +76,7 @@ export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
   const applyText = data?.applyPillText || "Admissions Open";
   const applyUrl = data?.applyPillUrl || "https://admissions.geetauniversity.edu.in/";
   const primaryLabel = data?.primaryCtaLabel || "About University";
-  const primaryUrl = data?.primaryCtaUrl || "/about";
+  const primaryUrl = data?.primaryCtaUrl === "/about" ? "/about-us" : (data?.primaryCtaUrl || "/about-us");
   const secondaryLabel = data?.secondaryCtaLabel || "Campus Tour";
   const secondaryUrl = data?.secondaryCtaUrl || "https://www.youtube.com/embed/arnFS6rf454";
 

@@ -611,8 +611,9 @@ model GovernanceDocument {
   id          String        @id @default(cuid())
   title       String
   description String?       @db.Text
-  documentUrl String
+  documentUrl String        @default("")
   category    String        @default("governance")
+  tableData   Json?
   status      ContentStatus @default(PUBLISHED)
   sortOrder   Int           @default(0)
   translations Json?
