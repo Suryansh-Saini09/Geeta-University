@@ -23,6 +23,7 @@ import {
   CmsAutoTextarea,
   CmsStringRepeater,
 } from "./CmsFieldHelpers";
+import { GovernanceCommitteeModal } from "./GovernanceCommitteeModal";
 import {
   CheckCircle,
   AlertCircle,
@@ -184,6 +185,41 @@ export function AboutCmsDashboard({
   const [docModalOpen, setDocModalOpen] = useState(false);
   const [editingDoc, setEditingDoc] = useState<any>(null);
 
+  const [committeeModalOpen, setCommitteeModalOpen] = useState(false);
+  const [editingCommittee, setEditingCommittee] = useState<any>(null);
+  const [governanceList, setGovernanceList] = useState<any[]>(governance || []);
+  const [policiesList, setPoliciesList] = useState<any[]>(policies || []);
+
+  const handleMoveCommittee = async (index: number, direction: "up" | "down") => {
+    const targetIdx = direction === "up" ? index - 1 : index + 1;
+    if (targetIdx < 0 || targetIdx >= governanceList.length) return;
+
+    const updated = [...governanceList];
+    const temp = updated[index];
+    updated[index] = updated[targetIdx];
+    updated[targetIdx] = temp;
+
+    const reordered = updated.map((item, idx) => ({ ...item, sortOrder: idx }));
+    setGovernanceList(reordered);
+
+    try {
+      for (const item of reordered) {
+        await saveGovernanceDocumentAction(item.id, {
+          title: item.title,
+          description: item.description,
+          documentUrl: item.documentUrl || "",
+          category: "governance",
+          tableData: item.tableData,
+          status: item.status || "PUBLISHED",
+          sortOrder: item.sortOrder,
+        });
+      }
+      setFeedback({ type: "success", text: "Committee order saved successfully!" });
+    } catch {
+      setFeedback({ type: "error", text: "Failed to persist committee reordering" });
+    }
+  };
+
   const getCurrentFormPayload = (sectionKey: string) => {
     switch (sectionKey) {
       case "hero": return heroForm;
@@ -283,7 +319,7 @@ export function AboutCmsDashboard({
 
         <div className="flex items-center gap-3">
           <Link
-            href="/about"
+            href="/about-us"
             target="_blank"
             className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-[#0A1F44] hover:bg-slate-50 shadow-sm"
           >
@@ -973,51 +1009,220 @@ export function AboutCmsDashboard({
 
       {/* TAB 7: GOVERNANCE & POLICIES */}
       {activeTab === "governance" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-bold text-[#0A1F44]">Governance & Policy Documents ({governance.length + policies.length})</h3>
-              <p className="text-xs text-slate-500">Statutory disclosures, committees, and policy documents.</p>
+        <div className="space-y-8">
+          {/* 7A: GOVERNANCE STRUCTURE COMMITTEES */}
+          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-4">
+              <div>
+                <h3 className="text-lg font-bold text-[#0A1F44]">
+                  Governance Structure Committees ({governanceList.length})
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Expandable committee tables on the About Us page with configurable columns and member rows.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingCommittee({
+                    title: "",
+                    description: "",
+                    documentUrl: "",
+                    category: "governance",
+                    status: "PUBLISHED",
+                    sortOrder: governanceList.length,
+                    tableData: {
+                      version: 1,
+                      columns: [
+                        { key: "col_1", label: "Reference" },
+                        { key: "col_2", label: "Position" },
+                        { key: "col_3", label: "Role" },
+                        { key: "col_4", label: "Member Details" },
+                      ],
+                      rows: [],
+                    },
+                  });
+                  setCommitteeModalOpen(true);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white hover:bg-[#153468] shadow-sm"
+              >
+                <Plus className="h-4 w-4" />
+                Add Committee
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                setEditingDoc({ title: "", category: "governance", documentUrl: "", description: "", sortOrder: governance.length + policies.length });
-                setDocModalOpen(true);
-              }}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white hover:bg-[#153468]"
-            >
-              <Plus className="h-4 w-4" />
-              Add Document
-            </button>
+
+            <div className="space-y-3">
+              {governanceList.map((committee, idx) => {
+                const table = committee.tableData;
+                const rowsCount = table?.rows?.length || 0;
+                const colsCount = table?.columns?.length || 0;
+                const isDraft = committee.status === "DRAFT";
+
+                return (
+                  <div
+                    key={committee.id || idx}
+                    className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50/80 p-4 transition-all hover:border-[#E8871A]/50 sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-xs font-bold text-slate-400">#{idx + 1}</span>
+                        <h4 className="text-sm font-bold text-[#0A1F44]">{committee.title}</h4>
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                            isDraft
+                              ? "bg-amber-100 text-amber-800"
+                              : "bg-emerald-100 text-emerald-800"
+                          }`}
+                        >
+                          {committee.status || "PUBLISHED"}
+                        </span>
+                        <span className="rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[11px] font-medium text-slate-600">
+                          {rowsCount} {rowsCount === 1 ? "Row" : "Rows"} · {colsCount} Cols
+                        </span>
+                      </div>
+                      {committee.description && (
+                        <p className="mt-1 text-xs text-slate-500 line-clamp-1">
+                          {committee.description}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-1.5 self-end sm:self-center">
+                      <button
+                        type="button"
+                        onClick={() => handleMoveCommittee(idx, "up")}
+                        disabled={idx === 0}
+                        title="Move Up"
+                        className="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 hover:bg-slate-100 disabled:opacity-30"
+                      >
+                        <ArrowUp className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleMoveCommittee(idx, "down")}
+                        disabled={idx === governanceList.length - 1}
+                        title="Move Down"
+                        className="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 hover:bg-slate-100 disabled:opacity-30"
+                      >
+                        <ArrowDown className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingCommittee(committee);
+                          setCommitteeModalOpen(true);
+                        }}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-[#0A1F44] bg-white px-3 py-2 text-xs font-bold text-[#0A1F44] hover:bg-[#0A1F44] hover:text-white transition-colors"
+                      >
+                        <Edit className="h-3.5 w-3.5" />
+                        Edit Table
+                      </button>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (confirm(`Delete committee "${committee.title}"?`)) {
+                            await deleteGovernanceDocumentAction(committee.id);
+                            window.location.reload();
+                          }
+                        }}
+                        className="rounded-lg border border-rose-200 bg-white p-2 text-rose-600 hover:bg-rose-50"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="space-y-3">
-            {[...governance, ...policies].map((doc) => (
-              <div key={doc.id} className="flex items-center justify-between rounded-lg border border-slate-200 p-3 bg-slate-50">
-                <div>
-                  <h4 className="text-sm font-bold text-[#0A1F44]">{doc.title}</h4>
-                  <p className="text-xs text-slate-500 uppercase font-semibold">{doc.category}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button type="button" onClick={() => { setEditingDoc(doc); setDocModalOpen(true); }} className="p-2 text-slate-600 hover:text-[#0A1F44]">
-                    <Edit className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      if (confirm(`Delete document ${doc.title}?`)) {
-                        await deleteGovernanceDocumentAction(doc.id);
-                        window.location.reload();
-                      }
-                    }}
-                    className="p-2 text-rose-600 hover:bg-rose-50 rounded"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
+          {/* 7B: UNIVERSITY POLICIES */}
+          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-4">
+              <div>
+                <h3 className="text-lg font-bold text-[#0A1F44]">
+                  University Policy Documents ({policiesList.length})
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Published statutory and institutional policy documents and download links.
+                </p>
               </div>
-            ))}
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingDoc({
+                    title: "",
+                    category: "policy",
+                    documentUrl: "",
+                    description: "",
+                    status: "PUBLISHED",
+                    sortOrder: policiesList.length,
+                  });
+                  setDocModalOpen(true);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white hover:bg-[#153468] shadow-sm"
+              >
+                <Plus className="h-4 w-4" />
+                Add Policy Document
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {policiesList.map((doc) => (
+                <div
+                  key={doc.id}
+                  className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50/80 p-4 transition-all hover:border-[#E8871A]/50 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-sm font-bold text-[#0A1F44]">{doc.title}</h4>
+                      <span className="rounded-full bg-slate-200/80 px-2 py-0.5 text-[10px] font-bold uppercase text-slate-700">
+                        Policy
+                      </span>
+                    </div>
+                    {doc.documentUrl && (
+                      <p className="mt-1 text-xs text-slate-500 truncate font-mono">
+                        {doc.documentUrl}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 self-end sm:self-center">
+                    {doc.documentUrl && (
+                      <a
+                        href={doc.documentUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 hover:text-[#0A1F44]"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingDoc(doc);
+                        setDocModalOpen(true);
+                      }}
+                      className="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 hover:text-[#0A1F44]"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        if (confirm(`Delete policy "${doc.title}"?`)) {
+                          await deleteGovernanceDocumentAction(doc.id);
+                          window.location.reload();
+                        }
+                      }}
+                      className="rounded-lg border border-rose-200 bg-white p-2 text-rose-600 hover:bg-rose-50"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -1351,24 +1556,36 @@ export function AboutCmsDashboard({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-500 mb-1">Category</label>
-                <select
-                  value={editingDoc.category || "governance"}
-                  onChange={(e) => setEditingDoc({ ...editingDoc, category: e.target.value })}
-                  className="w-full rounded-lg border p-2 text-sm bg-white"
-                >
-                  <option value="governance">Governance</option>
-                  <option value="policy">Policy</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-500 mb-1">Document URL / File Path</label>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Document URL / PDF File Path <span className="text-rose-500">*</span></label>
                 <input
                   type="text"
                   value={editingDoc.documentUrl || ""}
                   onChange={(e) => setEditingDoc({ ...editingDoc, documentUrl: e.target.value })}
+                  placeholder="https://geetauniversity.edu.in/uploads/.../policy.pdf"
                   className="w-full rounded-lg border p-2 text-sm"
                 />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Optional Description</label>
+                <input
+                  type="text"
+                  value={editingDoc.description || ""}
+                  onChange={(e) => setEditingDoc({ ...editingDoc, description: e.target.value })}
+                  placeholder="Brief description of the policy"
+                  className="w-full rounded-lg border p-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Status</label>
+                <select
+                  value={editingDoc.status || "PUBLISHED"}
+                  onChange={(e) => setEditingDoc({ ...editingDoc, status: e.target.value })}
+                  className="w-full rounded-lg border p-2 text-sm bg-white"
+                >
+                  <option value="PUBLISHED">Published</option>
+                  <option value="DRAFT">Draft</option>
+                  <option value="ARCHIVED">Archived</option>
+                </select>
               </div>
             </div>
             <div className="flex justify-end gap-3 pt-2">
@@ -1378,7 +1595,10 @@ export function AboutCmsDashboard({
               <button
                 type="button"
                 onClick={async () => {
-                  const res = await saveGovernanceDocumentAction(editingDoc.id || null, editingDoc);
+                  const res = await saveGovernanceDocumentAction(editingDoc.id || null, {
+                    ...editingDoc,
+                    category: "policy",
+                  });
                   if (res.success) {
                     setDocModalOpen(false);
                     window.location.reload();
@@ -1388,12 +1608,33 @@ export function AboutCmsDashboard({
                 }}
                 className="rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white"
               >
-                Save
+                Save Policy
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* GOVERNANCE COMMITTEE TABLE MODAL */}
+      <GovernanceCommitteeModal
+        committee={editingCommittee}
+        isOpen={committeeModalOpen}
+        onClose={() => {
+          setCommitteeModalOpen(false);
+          setEditingCommittee(null);
+        }}
+        onSave={async (payload: any) => {
+          const res = await saveGovernanceDocumentAction(payload.id, payload);
+          if (res.success) {
+            setFeedback({
+              type: "success",
+              text: `Committee "${payload.title}" saved successfully!`,
+            });
+            window.location.reload();
+          }
+          return res;
+        }}
+      />
     </div>
   );
 }

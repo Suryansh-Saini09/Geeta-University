@@ -1,8 +1,26 @@
+export interface GovernanceTableColumn {
+  key: string;
+  label: string;
+}
+
+export interface GovernanceTableRow {
+  id: string;
+  cells: string[];
+  sortOrder: number;
+}
+
+export interface GovernanceTableData {
+  version: 1;
+  columns: GovernanceTableColumn[];
+  rows: GovernanceTableRow[];
+}
+
 export interface GovernanceDocument {
-  id: number;
+  id: number | string;
   title: string;
   description: string;
   documentUrl: string;
+  tableData?: GovernanceTableData | null;
 }
 
 export const governanceDocuments: GovernanceDocument[] = [

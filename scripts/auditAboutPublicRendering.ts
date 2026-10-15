@@ -43,9 +43,12 @@ async function runAudit() {
 
   const govDocsOnly = dbGovDocs.filter(d => d.category?.toLowerCase() === "governance");
   const policyDocsOnly = dbGovDocs.filter(d => d.category?.toLowerCase() === "policy");
-  console.log(`\nGovernance Documents: ${govDocsOnly.length} records (${govDocsOnly.filter(g => g.status === "PUBLISHED").length} published)`);
+  console.log(`\nGovernance Structure Committees: ${govDocsOnly.length} records (${govDocsOnly.filter(g => g.status === "PUBLISHED").length} published)`);
   govDocsOnly.forEach(g => {
-    console.log(`  * [${g.status}] "${g.title}" | URL: ${g.documentUrl}`);
+    const td: any = (g as any).tableData;
+    const rCount = td?.rows?.length || 0;
+    const cCount = td?.columns?.length || 0;
+    console.log(`  * [${g.status}] "${g.title}" | Columns: ${cCount} | Rows: ${rCount} | URL: ${g.documentUrl}`);
   });
 
   console.log(`\nPolicy Documents: ${policyDocsOnly.length} records (${policyDocsOnly.filter(p => p.status === "PUBLISHED").length} published)`);
@@ -108,10 +111,16 @@ async function runAudit() {
     },
     {
       name: "Governance",
-      db: `${govDocsOnly.length} governance documents`,
-      repo: `${repoData.governance?.length} docs returned`,
-      comp: "Rendered via Governance grid",
-      status: repoData.governance?.length === 5 ? "VERIFIED (PARITY)" : "MISMATCH",
+      db: `${govDocsOnly.length} governance committees`,
+      repo: `${repoData.governance?.length} committees returned`,
+      comp: "Rendered via Governance accordion tables",
+      status:
+        repoData.governance?.length === 5 &&
+        repoData.governance.every(
+          (g: any) => g.tableData && g.tableData.rows?.length > 0
+        )
+          ? "VERIFIED (PARITY)"
+          : "MISMATCH",
     },
     {
       name: "Policies",

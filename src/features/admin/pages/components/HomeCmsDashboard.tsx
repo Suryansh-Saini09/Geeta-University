@@ -91,7 +91,7 @@ export function HomeCmsDashboard({
       applyPillText: "Admissions Open",
       applyPillUrl: "https://admissions.geetauniversity.edu.in/",
       primaryCtaLabel: "About University",
-      primaryCtaUrl: "/about",
+      primaryCtaUrl: "/about-us",
       secondaryCtaLabel: "Campus Tour",
       secondaryCtaUrl: "https://www.youtube.com/embed/arnFS6rf454",
       heroDroneShots: [
