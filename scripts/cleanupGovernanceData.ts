@@ -60,7 +60,7 @@ async function runCleanup() {
   // 2. Count current rows
   let totalRows = 0;
   governanceCommittees.forEach((c) => {
-    const td = c.tableData as any;
+    const td = (c as any).tableData as any;
     const rCount = td?.rows?.length || 0;
     totalRows += rCount;
   });
@@ -92,7 +92,7 @@ async function runCleanup() {
   }> = [];
 
   for (const c of governanceCommittees) {
-    const td = (c.tableData as any) || { columns: [], rows: [] };
+    const td = ((c as any).tableData as any) || { columns: [], rows: [] };
     const numCols = td.columns?.length || 4;
     const newColumns = Array.from({ length: numCols }, (_, idx) => ({
       key: `col_${idx + 1}`,
@@ -139,7 +139,7 @@ async function runCleanup() {
   // 6. Apply live mutation
   console.log("\n[APPLYING MUTATIONS TO AIVEN MYSQL]...");
   for (const update of plannedUpdates) {
-    await prisma.governanceDocument.update({
+    await (prisma.governanceDocument as any).update({
       where: { id: update.id },
       data: {
         description: null,
@@ -159,7 +159,7 @@ async function runCleanup() {
 
   let postTotalRows = 0;
   for (const c of postCommittees) {
-    const td = c.tableData as any;
+    const td = (c as any).tableData as any;
     const rCount = td?.rows?.length || 0;
     postTotalRows += rCount;
 
