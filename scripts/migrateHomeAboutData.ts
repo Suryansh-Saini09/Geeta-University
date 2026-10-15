@@ -216,7 +216,7 @@ async function main() {
       update: {
         title: item.title,
         description: item.description,
-        documentUrl: item.documentUrl,
+        documentUrl: item.documentUrl || "",
         category: "governance",
         sortOrder: i,
       },
@@ -224,7 +224,7 @@ async function main() {
         id: `gov-${item.id}`,
         title: item.title,
         description: item.description,
-        documentUrl: item.documentUrl,
+        documentUrl: item.documentUrl || "",
         category: "governance",
         sortOrder: i,
         status: "PUBLISHED",

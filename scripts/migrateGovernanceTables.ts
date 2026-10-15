@@ -22,7 +22,7 @@ export interface GovernanceTableData {
 export interface CommitteeSeedData {
   id: string;
   title: string;
-  description: string;
+  description: string | null;
   documentUrl: string;
   category: "governance";
   sortOrder: number;
@@ -34,17 +34,17 @@ export const canonicalGovernanceTables: CommitteeSeedData[] = [
   {
     id: "gov-1",
     title: "Board of Management",
-    description: "Reconstitution and institutional composition of the Board of Management.",
-    documentUrl: "https://geetauniversity.edu.in/uploads/all/2076/Board-of-Management-(Reconstitution).pdf",
+    description: null,
+    documentUrl: "",
     category: "governance",
     sortOrder: 0,
     tableData: {
       version: 1,
       columns: [
-        { key: "reference", label: "Reference" },
-        { key: "position", label: "Position" },
-        { key: "role", label: "Role" },
-        { key: "memberDetails", label: "Member Details" },
+        { key: "col_1", label: "Column 1" },
+        { key: "col_2", label: "Column 2" },
+        { key: "col_3", label: "Column 3" },
+        { key: "col_4", label: "Column 4" },
       ],
       rows: [
         {
@@ -115,17 +115,17 @@ export const canonicalGovernanceTables: CommitteeSeedData[] = [
   {
     id: "gov-2",
     title: "Academic Council",
-    description: "Constitution and composition of the University's Academic Council.",
-    documentUrl: "https://geetauniversity.edu.in/uploads/all/2075/Academic-Council-(Reconstituted).pdf",
+    description: null,
+    documentUrl: "",
     category: "governance",
     sortOrder: 1,
     tableData: {
       version: 1,
       columns: [
-        { key: "sNo", label: "S. No." },
-        { key: "position", label: "Position" },
-        { key: "role", label: "Role" },
-        { key: "memberDetails", label: "Member Details" },
+        { key: "col_1", label: "Column 1" },
+        { key: "col_2", label: "Column 2" },
+        { key: "col_3", label: "Column 3" },
+        { key: "col_4", label: "Column 4" },
       ],
       rows: [
         {
@@ -206,17 +206,17 @@ export const canonicalGovernanceTables: CommitteeSeedData[] = [
   {
     id: "gov-3",
     title: "Governing Body",
-    description: "Reconstitution and institutional structure of the Governing Body.",
-    documentUrl: "https://geetauniversity.edu.in/uploads/all/2077/Governing-Body-(Reconstitution).pdf",
+    description: null,
+    documentUrl: "",
     category: "governance",
     sortOrder: 2,
     tableData: {
       version: 1,
       columns: [
-        { key: "reference", label: "Reference" },
-        { key: "designation", label: "Designation" },
-        { key: "role", label: "Role" },
-        { key: "memberDetails", label: "Member Details" },
+        { key: "col_1", label: "Column 1" },
+        { key: "col_2", label: "Column 2" },
+        { key: "col_3", label: "Column 3" },
+        { key: "col_4", label: "Column 4" },
       ],
       rows: [
         {
@@ -292,18 +292,18 @@ export const canonicalGovernanceTables: CommitteeSeedData[] = [
   {
     id: "gov-4",
     title: "Internal Complaints Committee",
-    description: "Notification and constitution of the Internal Complaints Committee.",
-    documentUrl: "https://geetauniversity.edu.in/uploads/all/2071/4.-Notification-Internal-Complaints-Committee.pdf",
+    description: null,
+    documentUrl: "",
     category: "governance",
     sortOrder: 3,
     tableData: {
       version: 1,
       columns: [
-        { key: "sNo", label: "S. N." },
-        { key: "nameDesignation", label: "Name & Designation" },
-        { key: "role", label: "Role" },
-        { key: "contactNo", label: "Contact No." },
-        { key: "email", label: "Email" },
+        { key: "col_1", label: "Column 1" },
+        { key: "col_2", label: "Column 2" },
+        { key: "col_3", label: "Column 3" },
+        { key: "col_4", label: "Column 4" },
+        { key: "col_5", label: "Column 5" },
       ],
       rows: [
         {
@@ -375,17 +375,17 @@ export const canonicalGovernanceTables: CommitteeSeedData[] = [
   {
     id: "gov-5",
     title: "Finance Committee",
-    description: "Reconstitution and composition of the University Finance Committee.",
-    documentUrl: "https://geetauniversity.edu.in/uploads/all/1378/Reconstiution-of-University-Finance-Committee.pdf",
+    description: null,
+    documentUrl: "",
     category: "governance",
     sortOrder: 4,
     tableData: {
       version: 1,
       columns: [
-        { key: "sNo", label: "S. No." },
-        { key: "position", label: "Position" },
-        { key: "memberDetails", label: "Member Details" },
-        { key: "role", label: "Role" },
+        { key: "col_1", label: "Column 1" },
+        { key: "col_2", label: "Column 2" },
+        { key: "col_3", label: "Column 3" },
+        { key: "col_4", label: "Column 4" },
       ],
       rows: [
         {

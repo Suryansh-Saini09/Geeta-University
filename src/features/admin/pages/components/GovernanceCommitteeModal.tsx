@@ -35,30 +35,33 @@ export function GovernanceCommitteeModal({
 }: GovernanceCommitteeModalProps) {
   if (!isOpen || !committee) return null;
 
-  // Initialize columns and rows from existing tableData or sensible defaults
+  // Initialize columns and rows from existing tableData or default 4 columns
   const initialTableData: GovernanceTableData = committee.tableData || {
     version: 1,
     columns: [
-      { key: "col_1", label: "Reference" },
-      { key: "col_2", label: "Position" },
-      { key: "col_3", label: "Role" },
-      { key: "col_4", label: "Member Details" },
+      { key: "col_1", label: "Column 1" },
+      { key: "col_2", label: "Column 2" },
+      { key: "col_3", label: "Column 3" },
+      { key: "col_4", label: "Column 4" },
     ],
     rows: [],
   };
 
   const [title, setTitle] = useState<string>(committee.title || "");
-  const [description, setDescription] = useState<string>(committee.description || "");
-  const [documentUrl, setDocumentUrl] = useState<string>(committee.documentUrl || "");
   const [status, setStatus] = useState<"DRAFT" | "PUBLISHED" | "ARCHIVED">(
     committee.status || "PUBLISHED"
   );
   const [columns, setColumns] = useState<GovernanceTableColumn[]>(
     initialTableData.columns && initialTableData.columns.length > 0
-      ? initialTableData.columns
+      ? initialTableData.columns.map((c, idx) => ({
+          key: c.key || `col_${idx + 1}`,
+          label: `Column ${idx + 1}`,
+        }))
       : [
-          { key: "col_1", label: "Col 1" },
-          { key: "col_2", label: "Col 2" },
+          { key: "col_1", label: "Column 1" },
+          { key: "col_2", label: "Column 2" },
+          { key: "col_3", label: "Column 3" },
+          { key: "col_4", label: "Column 4" },
         ]
   );
   const [rows, setRows] = useState<GovernanceTableRow[]>(
@@ -71,9 +74,8 @@ export function GovernanceCommitteeModal({
   // Column Actions
   const handleAddColumn = () => {
     const newIndex = columns.length + 1;
-    const newKey = `col_${Date.now()}`;
     const newCol: GovernanceTableColumn = {
-      key: newKey,
+      key: `col_${newIndex}`,
       label: `Column ${newIndex}`,
     };
     setColumns([...columns, newCol]);
@@ -87,12 +89,6 @@ export function GovernanceCommitteeModal({
     );
   };
 
-  const handleUpdateColumnLabel = (index: number, newLabel: string) => {
-    const updated = [...columns];
-    updated[index] = { ...updated[index], label: newLabel };
-    setColumns(updated);
-  };
-
   const handleRemoveColumn = (index: number) => {
     if (columns.length <= 1) {
       alert("A committee table must have at least one column.");
@@ -100,13 +96,18 @@ export function GovernanceCommitteeModal({
     }
     if (
       !confirm(
-        `Remove column "${columns[index].label}"? All cell values under this column will be removed.`
+        `Remove Column ${index + 1}? All cell values under this column will be removed from all member rows.`
       )
     ) {
       return;
     }
 
-    const updatedCols = columns.filter((_, idx) => idx !== index);
+    const updatedCols = columns
+      .filter((_, idx) => idx !== index)
+      .map((_, idx) => ({
+        key: `col_${idx + 1}`,
+        label: `Column ${idx + 1}`,
+      }));
     setColumns(updatedCols);
 
     // Remove the corresponding cell from each row
@@ -170,11 +171,6 @@ export function GovernanceCommitteeModal({
     if (columns.length === 0) {
       errors.push("At least one column must be defined.");
     }
-    for (let i = 0; i < columns.length; i++) {
-      if (!columns[i].label.trim()) {
-        errors.push(`Column #${i + 1} header label cannot be blank.`);
-      }
-    }
 
     // Validate cell counts
     for (let rIdx = 0; rIdx < rows.length; rIdx++) {
@@ -196,9 +192,9 @@ export function GovernanceCommitteeModal({
 
     const tableData: GovernanceTableData = {
       version: 1,
-      columns: columns.map((c, i) => ({
-        key: c.key || `col_${i}`,
-        label: c.label.trim(),
+      columns: columns.map((_, i) => ({
+        key: `col_${i + 1}`,
+        label: `Column ${i + 1}`,
       })),
       rows: rows.map((r, idx) => ({
         id: r.id || `row-${idx}`,
@@ -210,8 +206,8 @@ export function GovernanceCommitteeModal({
     const payload = {
       id: committee.id || null,
       title: title.trim(),
-      description: description.trim() || null,
-      documentUrl: documentUrl.trim(),
+      description: null,
+      documentUrl: "",
       category: "governance",
       status: targetStatus,
       sortOrder: committee.sortOrder ?? 0,
@@ -242,7 +238,7 @@ export function GovernanceCommitteeModal({
                 {committee.id ? `Edit Committee: ${title || "Untitled"}` : "New Governance Committee"}
               </h2>
               <p className="text-xs text-slate-300">
-                Configure committee details, column definitions, and member entries.
+                Configure committee title, columns, and member rows.
               </p>
             </div>
           </div>
@@ -291,7 +287,7 @@ export function GovernanceCommitteeModal({
             </h3>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="sm:col-span-2">
+              <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
                   Committee Title <span className="text-rose-500">*</span>
                 </label>
@@ -300,32 +296,6 @@ export function GovernanceCommitteeModal({
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Board of Management"
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-[#E8871A] focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Introductory Description (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="e.g. Reconstitution and composition of the committee."
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-[#E8871A] focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Supporting Document URL / PDF (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={documentUrl}
-                  onChange={(e) => setDocumentUrl(e.target.value)}
-                  placeholder="https://geetauniversity.edu.in/uploads/.../doc.pdf"
                   className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-[#E8871A] focus:outline-none"
                 />
               </div>
@@ -355,7 +325,7 @@ export function GovernanceCommitteeModal({
                   2. Table Columns ({columns.length})
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Configure the header labels for this committee's table.
+                  This committee table uses {columns.length} columns.
                 </p>
               </div>
               <button
@@ -368,30 +338,21 @@ export function GovernanceCommitteeModal({
               </button>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
+            <div className="flex flex-wrap gap-2.5">
               {columns.map((col, cIdx) => (
                 <div
                   key={col.key || cIdx}
-                  className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white p-2.5 shadow-sm"
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 shadow-xs"
                 >
-                  <div className="min-w-0 flex-1">
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                      Col {cIdx + 1}
-                    </span>
-                    <input
-                      type="text"
-                      value={col.label}
-                      onChange={(e) => handleUpdateColumnLabel(cIdx, e.target.value)}
-                      placeholder="Header Label"
-                      className="w-full border-b border-transparent text-xs font-bold text-[#0A1F44] focus:border-[#E8871A] focus:outline-none"
-                    />
-                  </div>
+                  <span className="text-xs font-bold text-[#0A1F44]">
+                    Column {cIdx + 1}
+                  </span>
                   {columns.length > 1 && (
                     <button
                       type="button"
                       onClick={() => handleRemoveColumn(cIdx)}
-                      title="Remove Column"
-                      className="text-slate-400 hover:text-rose-500 p-1"
+                      title={`Remove Column ${cIdx + 1}`}
+                      className="text-slate-400 hover:text-rose-500 p-0.5"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -436,12 +397,12 @@ export function GovernanceCommitteeModal({
                   <thead>
                     <tr className="bg-slate-100 text-[#0A1F44] border-b border-slate-200">
                       <th className="w-12 px-3 py-2.5 text-center text-xs font-bold">#</th>
-                      {columns.map((col, cIdx) => (
+                      {columns.map((_, cIdx) => (
                         <th
-                          key={col.key || cIdx}
+                          key={cIdx}
                           className="px-3 py-2.5 text-xs font-bold text-slate-700"
                         >
-                          {col.label}
+                          Column {cIdx + 1}
                         </th>
                       ))}
                       <th className="w-24 px-3 py-2.5 text-right text-xs font-bold">Actions</th>
@@ -453,13 +414,13 @@ export function GovernanceCommitteeModal({
                         <td className="px-3 py-2.5 text-center text-xs font-bold text-slate-400">
                           {rIdx + 1}
                         </td>
-                        {columns.map((col, cIdx) => (
-                          <td key={`${row.id}-${col.key || cIdx}`} className="px-3 py-2.5 align-top">
+                        {columns.map((_, cIdx) => (
+                          <td key={`${row.id}-col_${cIdx}`} className="px-3 py-2.5 align-top">
                             <textarea
                               rows={2}
                               value={row.cells[cIdx] || ""}
                               onChange={(e) => handleCellChange(rIdx, cIdx, e.target.value)}
-                              placeholder={`Enter ${col.label}...`}
+                              placeholder={`Enter Column ${cIdx + 1}...`}
                               className="w-full rounded-md border border-slate-200 p-2 text-xs text-[#0A1F44] focus:border-[#E8871A] focus:outline-none resize-y min-h-[44px]"
                             />
                           </td>

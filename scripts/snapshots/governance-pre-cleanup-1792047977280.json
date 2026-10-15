@@ -1,0 +1,827 @@
+[
+  {
+    "id": "gov-1",
+    "title": "Board of Management",
+    "description": "Reconstitution and institutional composition of the Board of Management.",
+    "documentUrl": "https://geetauniversity.edu.in/uploads/all/2076/Board-of-Management-(Reconstitution).pdf",
+    "category": "governance",
+    "tableData": {
+      "rows": [
+        {
+          "id": "bom-1",
+          "cells": [
+            "2.02.1(a)",
+            "Vice Chancellor",
+            "Chairperson",
+            "Prof. Manoj Manuja"
+          ],
+          "sortOrder": 0
+        },
+        {
+          "id": "bom-2",
+          "cells": [
+            "2.02.1(b)",
+            "Nominee of Secretary to Higher Education",
+            "Member",
+            "Dr. Vishal Sharma\nJoint Director- DGHE"
+          ],
+          "sortOrder": 1
+        },
+        {
+          "id": "bom-3",
+          "cells": [
+            "2.02.1(c)",
+            "Two members of the Governing Body, nominated by the Education Society;",
+            "Member (s)",
+            "1. Prof. Paramjit Singh Jaswal\nPrincipal Advisor to Chairman, SRM University, Sonipat,\n2. Dr. Neha Bansal"
+          ],
+          "sortOrder": 2
+        },
+        {
+          "id": "bom-4",
+          "cells": [
+            "2.02.1(d)",
+            "Pro Vice Chancellor",
+            "Member",
+            "Prof. Gulshan Chauhan"
+          ],
+          "sortOrder": 3
+        },
+        {
+          "id": "bom-5",
+          "cells": [
+            "2.02.1(e)",
+            "Three persons who are not members of the Governing Body, nominated by the K.R. Education Society",
+            "Member (s)",
+            "1. Prof. V.K.Aggrawal\nFormer-V.C., Jagnnath University\n2. Prof. Atish Chattopadhyay\nDirector, IMT Ghaziabad\n3. Prof. Nitesh Bansal\nDean, O.P. Jindal University"
+          ],
+          "sortOrder": 4
+        },
+        {
+          "id": "bom-6",
+          "cells": [
+            "2.02.1(f)",
+            "Three Professors from amongst teachers, nominated by the K.R. Education Society",
+            "Member (s)",
+            "1. Dr. Jaskaran Singh\nProfessor, School of Science\n2. Dr. Meenu Gupta\nProfessor, School of Computer Science & Engineering\n3. Dr. Sarita Khatkar\nProfessor, Geeta Institue of Pharmacy"
+          ],
+          "sortOrder": 5
+        },
+        {
+          "id": "bom-7",
+          "cells": [
+            "2.02.1(g).",
+            "Two Professors/ Associate Professors among the teachers, nominated by the Vice Chancellor",
+            "Members",
+            "1. Dr. Neeraj Rana\nAssociate Professor – School of Commerce & Business Management\n2. Dr. Pooja Gupta\nAssociate Professor, School of Commerce & Business Management"
+          ],
+          "sortOrder": 6
+        },
+        {
+          "id": "bom-8",
+          "cells": [
+            "2.02.2",
+            "Registrar",
+            "Member Secretary",
+            "Prof. Amit Gupta"
+          ],
+          "sortOrder": 7
+        }
+      ],
+      "columns": [
+        {
+          "key": "reference",
+          "label": "Reference"
+        },
+        {
+          "key": "position",
+          "label": "Position"
+        },
+        {
+          "key": "role",
+          "label": "Role"
+        },
+        {
+          "key": "memberDetails",
+          "label": "Member Details"
+        }
+      ],
+      "version": 1
+    },
+    "status": "PUBLISHED",
+    "sortOrder": 0,
+    "translations": {
+      "fr": {
+        "title": "Conseil d'administration",
+        "status": "PUBLISHED",
+        "updatedAt": "2026-10-06T04:05:37.715Z",
+        "description": "Reconstitution et composition institutionnelle du Directoire."
+      },
+      "hi": {
+        "title": "प्रबंधन बोर्ड",
+        "status": "PUBLISHED",
+        "updatedAt": "2026-10-06T04:05:36.542Z",
+        "description": "प्रबंधन बोर्ड का पुनर्गठन और संस्थागत संरचना।"
+      }
+    },
+    "createdAt": "2026-10-03T06:46:32.768Z",
+    "updatedAt": "2026-10-15T06:38:48.271Z"
+  },
+  {
+    "id": "gov-2",
+    "title": "Academic Council",
+    "description": "Constitution and composition of the University's Academic Council.",
+    "documentUrl": "https://geetauniversity.edu.in/uploads/all/2075/Academic-Council-(Reconstituted).pdf",
+    "category": "governance",
+    "tableData": {
+      "rows": [
+        {
+          "id": "ac-1",
+          "cells": [
+            "1.",
+            "Hon’ble Vice-Chancellor",
+            "Chairperson",
+            "1. Prof. Manoj Manuja"
+          ],
+          "sortOrder": 0
+        },
+        {
+          "id": "ac-2",
+          "cells": [
+            "2.",
+            "Hon’ble Pro Vice-Chancellor",
+            "Member",
+            "1. Prof. Gulshan Chauhan"
+          ],
+          "sortOrder": 1
+        },
+        {
+          "id": "ac-3",
+          "cells": [
+            "3.",
+            "Deans of All Faculties",
+            "Members",
+            "1. Dr. Bala Saraswathi\nSchool of Commerce & Business Management\n2. Prof. Jaskaran Singh\nSchool of Sciences\n3. Prof. Poornima Bali\nSchool of Humanities & Social Sciences"
+          ],
+          "sortOrder": 2
+        },
+        {
+          "id": "ac-4",
+          "cells": [
+            "4.",
+            "Heads of Schools",
+            "Members",
+            "1. Prof. Sunil Jawla\nGeeta Institute of Pharmacy\n2. Prof. Sushil Mishra\nSchool of Hospitality & Hotel Management\n3. Prof. Meenu Gupta\nSchool of Computer Science & Engineering\n4. Dr. Yuvraj Singh\nSchool of Agricultural Sciences\n5. Dr. Nidhi Dangi\nSchool of Health & Allied Sciences\n6. Dr. Kapil Saini\nAssistant Director, IQAC\n7. Mr. Pankaj Bajaj\nChief Operating Officer, GTH"
+          ],
+          "sortOrder": 3
+        },
+        {
+          "id": "ac-5",
+          "cells": [
+            "5.",
+            "Controller of Examination",
+            "Member",
+            "1. Prof. Amit Gupta"
+          ],
+          "sortOrder": 4
+        },
+        {
+          "id": "ac-6",
+          "cells": [
+            "6.",
+            "Two Professors\n(by rotation from the faculties nominated by the Vice-Chancellor)",
+            "Members",
+            "1. Prof. Sarita Khatkar\nGeeta Institute of Pharmacy\n2. Prof. Rekha Narang\nSchool of Commerce & Business Management"
+          ],
+          "sortOrder": 5
+        },
+        {
+          "id": "ac-7",
+          "cells": [
+            "7.",
+            "Two Associate Professors\n(by rotation from the faculties nominated by the Vice-Chancellor)",
+            "Members",
+            "1. Dr. Sangeeta\nSchool of Commerce & Business Management\n2. Dr. Anupama\nSchool of Commerce & Business Management"
+          ],
+          "sortOrder": 6
+        },
+        {
+          "id": "ac-8",
+          "cells": [
+            "8.",
+            "External Experts",
+            "Members",
+            "1. Prof. (Dr.) Abhinav Bansal\nDean, CSE, Bennett University, Greater Noida\n2. Prof. (Dr.) Rajat Agarwal\nIIT Roorkee\n3. Prof. (Dr.) Deependra Singh\nChairman, Education Regulation Committee, PCI"
+          ],
+          "sortOrder": 7
+        },
+        {
+          "id": "ac-9",
+          "cells": [
+            "9.",
+            "Registrar",
+            "Member Secretary",
+            "1. Dr. Amit Gupta"
+          ],
+          "sortOrder": 8
+        }
+      ],
+      "columns": [
+        {
+          "key": "sNo",
+          "label": "S. No."
+        },
+        {
+          "key": "position",
+          "label": "Position"
+        },
+        {
+          "key": "role",
+          "label": "Role"
+        },
+        {
+          "key": "memberDetails",
+          "label": "Member Details"
+        }
+      ],
+      "version": 1
+    },
+    "status": "PUBLISHED",
+    "sortOrder": 1,
+    "translations": {
+      "fr": {
+        "title": "Conseil académique",
+        "status": "PUBLISHED",
+        "updatedAt": "2026-10-06T04:05:41.657Z",
+        "description": "Constitution et composition du Conseil académique de l'Université."
+      },
+      "hi": {
+        "title": "एकेडमिक काउंसिल",
+        "status": "PUBLISHED",
+        "updatedAt": "2026-10-06T04:05:40.019Z",
+        "description": "विश्वविद्यालय की अकादमिक परिषद का गठन और संरचना।"
+      }
+    },
+    "createdAt": "2026-10-03T06:46:32.820Z",
+    "updatedAt": "2026-10-15T05:50:18.382Z"
+  },
+  {
+    "id": "gov-3",
+    "title": "Governing Body",
+    "description": "Reconstitution and institutional structure of the Governing Body.",
+    "documentUrl": "https://geetauniversity.edu.in/uploads/all/2077/Governing-Body-(Reconstitution).pdf",
+    "category": "governance",
+    "tableData": {
+      "rows": [
+        {
+          "id": "gb-1",
+          "cells": [
+            "2.01 (a)",
+            "The Chancellor",
+            "Chairperson",
+            "1. Shri S. P. Bansal"
+          ],
+          "sortOrder": 0
+        },
+        {
+          "id": "gb-2",
+          "cells": [
+            "2.01 (b)",
+            "The Pro Chancellor",
+            "Member",
+            "1. Shri Nishant Bansal"
+          ],
+          "sortOrder": 1
+        },
+        {
+          "id": "gb-3",
+          "cells": [
+            "2.01 (b)",
+            "The Pro Chancellor",
+            "Member",
+            "1. Shri Ankush Bansal"
+          ],
+          "sortOrder": 2
+        },
+        {
+          "id": "gb-4",
+          "cells": [
+            "2.01 (c)",
+            "The Vice Chancellor",
+            "Member",
+            "1. Prof. Manoj Manuja"
+          ],
+          "sortOrder": 3
+        },
+        {
+          "id": "gb-5",
+          "cells": [
+            "2.01 (d)",
+            "Nominee of Secretary to Higher Education",
+            "Member",
+            "1. Dr. Vishal Sharma\nJoint Director- DGHE"
+          ],
+          "sortOrder": 4
+        },
+        {
+          "id": "gb-6",
+          "cells": [
+            "2.01 (e)",
+            "Five Members nominated by K.R. Education Society\n(whom two shall be eminent educationists for a term of two years and shall be eligible for reappointment)",
+            "Member (s)",
+            "1. Dr. Krishna Kumar Pande\n(Former Dean Academics - TMU &\nStrategic Planner-KAD International)\n2. Prof. Dr. Paramjit Singh Jaswal\n(Principal Advisor to Chairman, SRM University, Sonipat)\n3. Mrs. Geeta Bansal\n(Chairperson- Geeta Group of Institutions)\n4. Mrs. Rita Garg\n5. Dr. Neha Bansal"
+          ],
+          "sortOrder": 5
+        },
+        {
+          "id": "gb-7",
+          "cells": [
+            "2.01",
+            "Pro Vice Chancellor",
+            "Member",
+            "1. Prof. Gulshan Chauhan"
+          ],
+          "sortOrder": 6
+        },
+        {
+          "id": "gb-8",
+          "cells": [
+            "2.01 (f)",
+            "One expert of management or technology from outside the University, nominated by the Chancellor",
+            "Member",
+            "1. Mr. Sushil Kumar Aggarwal\n(Chairman - AVRO Furniture)"
+          ],
+          "sortOrder": 7
+        },
+        {
+          "id": "gb-9",
+          "cells": [
+            "2.01 (g)",
+            "One expert of finance, nominated by the Chancellor",
+            "Member",
+            "1. CA Mr. Rahul Khurana\nCharted Accountant"
+          ],
+          "sortOrder": 8
+        },
+        {
+          "id": "gb-10",
+          "cells": [
+            "2.01",
+            "Registrar",
+            "Member Secretary",
+            "1. Prof. Amit Gupta"
+          ],
+          "sortOrder": 9
+        }
+      ],
+      "columns": [
+        {
+          "key": "reference",
+          "label": "Reference"
+        },
+        {
+          "key": "designation",
+          "label": "Designation"
+        },
+        {
+          "key": "role",
+          "label": "Role"
+        },
+        {
+          "key": "memberDetails",
+          "label": "Member Details"
+        }
+      ],
+      "version": 1
+    },
+    "status": "PUBLISHED",
+    "sortOrder": 2,
+    "translations": {
+      "fr": {
+        "title": "Organe directeur",
+        "status": "PUBLISHED",
+        "updatedAt": "2026-10-06T04:05:45.194Z",
+        "description": "Reconstitution et structure institutionnelle du Conseil d'administration."
+      },
+      "hi": {
+        "title": "शासी निकाय",
+        "status": "PUBLISHED",
+        "updatedAt": "2026-10-06T04:05:44.114Z",
+        "description": "शासी निकाय का पुनर्गठन और संस्थागत संरचना।"
+      }
+    },
+    "createdAt": "2026-10-03T06:46:32.846Z",
+    "updatedAt": "2026-10-15T05:50:18.708Z"
+  },
+  {
+    "id": "gov-4",
+    "title": "Internal Complaints Committee",
+    "description": "Notification and constitution of the Internal Complaints Committee.",
+    "documentUrl": "https://geetauniversity.edu.in/uploads/all/2071/4.-Notification-Internal-Complaints-Committee.pdf",
+    "category": "governance",
+    "tableData": {
+      "rows": [
+        {
+          "id": "icc-1",
+          "cells": [
+            "1",
+            "Prof. Sarita\nProfessor - Geeta Institute of Pharmacy",
+            "Presiding Officer",
+            "9996204880",
+            "pharma.p1@geetauniversity.edu.in"
+          ],
+          "sortOrder": 0
+        },
+        {
+          "id": "icc-2",
+          "cells": [
+            "2",
+            "Prof. Farhat Mohsin\nProfessor - School of Leadership and Management, Manav Rachna International Institute of Research and Studies, Faridabad",
+            "Member",
+            "9871144250",
+            "farhat.fms@mriu.edu.in"
+          ],
+          "sortOrder": 1
+        },
+        {
+          "id": "icc-3",
+          "cells": [
+            "3",
+            "Prof. Rekha Narang\nProfessor – School of Commerce & Business Management",
+            "Member",
+            "8685099555",
+            "rekha.narang@geetauniversity.edu.in"
+          ],
+          "sortOrder": 2
+        },
+        {
+          "id": "icc-4",
+          "cells": [
+            "4.",
+            "Dr. Sangeeta\nAssociate Professor – School of Commerce & Business Management, Head-Ph.D. Cell",
+            "Member",
+            "9996748478",
+            "drsangeeta.mgmt@geetauniversity.edu.in"
+          ],
+          "sortOrder": 3
+        },
+        {
+          "id": "icc-5",
+          "cells": [
+            "5.",
+            "Mr. Vinod Kumar\nDeputy Registrar",
+            "Member",
+            "9023602621",
+            "dy.registrar@geetauniversity.edu.in"
+          ],
+          "sortOrder": 4
+        },
+        {
+          "id": "icc-6",
+          "cells": [
+            "6",
+            "Mr. Ashish\nAssistant Registrar (VC Office)",
+            "Member",
+            "8053650811",
+            "ar.vcoffice@geetauniversity.edu.in"
+          ],
+          "sortOrder": 5
+        },
+        {
+          "id": "icc-7",
+          "cells": [
+            "7",
+            "Mr. Manan Singal\nFounder & Chairman at Help age Orphans",
+            "Member",
+            "9991055093",
+            "Manansingla19@gmail.com"
+          ],
+          "sortOrder": 6
+        },
+        {
+          "id": "icc-8",
+          "cells": [
+            "8",
+            "Ms. Kanika\nStudent - B.Tech CSE (3rd year)\nRoll No. 2301301069",
+            "Member",
+            "7988646375",
+            "2301301069.Kanika@geetauniversity.edu.in"
+          ],
+          "sortOrder": 7
+        },
+        {
+          "id": "icc-9",
+          "cells": [
+            "9",
+            "Ms. Manisha\nStudent – MA (1st year)\nRoll No. 2511401002",
+            "Member",
+            "9306005610",
+            "2511401002@geetauniversity.edu.in"
+          ],
+          "sortOrder": 8
+        },
+        {
+          "id": "icc-10",
+          "cells": [
+            "10",
+            "Ms. Parul\nStudent – Research Scholar\nRoll No. 2205701007",
+            "Member",
+            "9996863322",
+            "parul.2205701007@geetauniversity.edu.in"
+          ],
+          "sortOrder": 9
+        },
+        {
+          "id": "icc-11",
+          "cells": [
+            "11",
+            "Dr. Priyanka Rathee\nAssociate Professor – Geeta Institute of Pharmacy",
+            "Member Secretary",
+            "9812782341",
+            "priyanka.rathee@geetauniversity.edu.in"
+          ],
+          "sortOrder": 10
+        }
+      ],
+      "columns": [
+        {
+          "key": "sNo",
+          "label": "S. N."
+        },
+        {
+          "key": "nameDesignation",
+          "label": "Name & Designation"
+        },
+        {
+          "key": "role",
+          "label": "Role"
+        },
+        {
+          "key": "contactNo",
+          "label": "Contact No."
+        },
+        {
+          "key": "email",
+          "label": "Email"
+        }
+      ],
+      "version": 1
+    },
+    "status": "PUBLISHED",
+    "sortOrder": 3,
+    "translations": {
+      "fr": {
+        "title": "Comité interne des plaintes",
+        "status": "PUBLISHED",
+        "updatedAt": "2026-10-06T04:05:48.088Z",
+        "description": "Notification et constitution du Comité interne des plaintes."
+      },
+      "hi": {
+        "title": "आंतरिक शिकायत समिति (आईसीसी)",
+        "status": "PUBLISHED",
+        "updatedAt": "2026-10-06T04:05:47.254Z",
+        "description": "आंतरिक शिकायत समिति की अधिसूचना और गठन।"
+      }
+    },
+    "createdAt": "2026-10-03T06:46:32.868Z",
+    "updatedAt": "2026-10-15T05:50:18.949Z"
+  },
+  {
+    "id": "gov-5",
+    "title": "Finance Committee",
+    "description": "Reconstitution and composition of the University Finance Committee.",
+    "documentUrl": "https://geetauniversity.edu.in/uploads/all/1378/Reconstiution-of-University-Finance-Committee.pdf",
+    "category": "governance",
+    "tableData": {
+      "rows": [
+        {
+          "id": "fc-1",
+          "cells": [
+            "1",
+            "Vice-Chancellor",
+            "Dr. Manoj Manuja",
+            "Chairperson"
+          ],
+          "sortOrder": 0
+        },
+        {
+          "id": "fc-2",
+          "cells": [
+            "2",
+            "Pro Vice-Chancellor",
+            "Dr. Gulshan Chauhan",
+            "Member"
+          ],
+          "sortOrder": 1
+        },
+        {
+          "id": "fc-3",
+          "cells": [
+            "4",
+            "Registrar",
+            "Dr. Amit Gupta",
+            "Member"
+          ],
+          "sortOrder": 2
+        },
+        {
+          "id": "fc-4",
+          "cells": [
+            "5",
+            "Controller of Examination",
+            "Dr. Amit Gupta",
+            "Member"
+          ],
+          "sortOrder": 3
+        },
+        {
+          "id": "fc-5",
+          "cells": [
+            "6",
+            "Dean/ Heads of School’s",
+            "Dr. Bala Saraswathi\nProfessor & Dean\nSchool of Commerce & Business Management",
+            "Member"
+          ],
+          "sortOrder": 4
+        },
+        {
+          "id": "fc-6",
+          "cells": [
+            "6",
+            "Dean/ Heads of School’s",
+            "Dr. Jaskaran Singh\nProfessor & Dean - School of Sciences",
+            "Member"
+          ],
+          "sortOrder": 5
+        },
+        {
+          "id": "fc-7",
+          "cells": [
+            "6",
+            "Dean/ Heads of School’s",
+            "Dr. Purnima Bali\nProfessor & Dean- School of Humanities & Social Sciences.",
+            "Member"
+          ],
+          "sortOrder": 6
+        },
+        {
+          "id": "fc-8",
+          "cells": [
+            "6",
+            "Dean/ Heads of School’s",
+            "Dr. Sunil Jawla\nProfessor & Principal\nGeeta Institute of Pharmacy",
+            "Member"
+          ],
+          "sortOrder": 7
+        },
+        {
+          "id": "fc-9",
+          "cells": [
+            "6",
+            "Dean/ Heads of School’s",
+            "Dr. Meenu Gupta\nProfessor & Head\nSchool of Computer Science & Engineering",
+            "Member"
+          ],
+          "sortOrder": 8
+        },
+        {
+          "id": "fc-10",
+          "cells": [
+            "6",
+            "Dean/ Heads of School’s",
+            "Dr. Sushil Kumar\nProfessor & Head\nSchool of Hospitality & Hotel Management",
+            "Member"
+          ],
+          "sortOrder": 9
+        },
+        {
+          "id": "fc-11",
+          "cells": [
+            "6",
+            "Dean/ Heads of School’s",
+            "Dr. Yuvraj Yadav\nAssociate Professor & Head\nSchool of Agricultural Sciences",
+            "Member"
+          ],
+          "sortOrder": 10
+        },
+        {
+          "id": "fc-12",
+          "cells": [
+            "6",
+            "Dean/ Heads of School’s",
+            "Dr. Nidhi Dangi\nAssistant Professor & Head\nSchool of Health & Allied Sciences",
+            "Member"
+          ],
+          "sortOrder": 11
+        },
+        {
+          "id": "fc-13",
+          "cells": [
+            "6",
+            "Dean/ Heads of School’s",
+            "Dr. Ayaz Ahmad\nHead – Geeta Global Law School",
+            "Member"
+          ],
+          "sortOrder": 12
+        },
+        {
+          "id": "fc-14",
+          "cells": [
+            "7",
+            "Dean Student’s welfare",
+            "Dr. Rekha Narang\nProfessor- School of Commerce & Business Management",
+            "Member"
+          ],
+          "sortOrder": 13
+        },
+        {
+          "id": "fc-15",
+          "cells": [
+            "8",
+            "IQAC",
+            "Dr. Kapil Saini\nAssistant Director- IQAC",
+            "Member"
+          ],
+          "sortOrder": 14
+        },
+        {
+          "id": "fc-16",
+          "cells": [
+            "9",
+            "Training & Placement",
+            "Mr. Amit Kumar Verma\nSenior Director Placement",
+            "Member"
+          ],
+          "sortOrder": 15
+        },
+        {
+          "id": "fc-17",
+          "cells": [
+            "10",
+            "GTH",
+            "Mr. Pankaj Bajaj\nChief Operating Officer",
+            "Member"
+          ],
+          "sortOrder": 16
+        },
+        {
+          "id": "fc-18",
+          "cells": [
+            "11",
+            "GFS",
+            "Ms. Swati Ambasta\nAssistant. Director",
+            "Member"
+          ],
+          "sortOrder": 17
+        },
+        {
+          "id": "fc-19",
+          "cells": [
+            "12",
+            "Finance Officer",
+            "Mr. Neeraj Ruhal\nChief Finance Officer",
+            "Member Secretary"
+          ],
+          "sortOrder": 18
+        }
+      ],
+      "columns": [
+        {
+          "key": "sNo",
+          "label": "S. No."
+        },
+        {
+          "key": "position",
+          "label": "Position"
+        },
+        {
+          "key": "memberDetails",
+          "label": "Member Details"
+        },
+        {
+          "key": "role",
+          "label": "Role"
+        }
+      ],
+      "version": 1
+    },
+    "status": "PUBLISHED",
+    "sortOrder": 4,
+    "translations": {
+      "fr": {
+        "title": "Comité financier",
+        "status": "PUBLISHED",
+        "updatedAt": "2026-10-06T04:05:51.552Z",
+        "description": "Reconstitution et composition du Comité Financier Universitaire."
+      },
+      "hi": {
+        "title": "वित्त समिति",
+        "status": "PUBLISHED",
+        "updatedAt": "2026-10-06T04:05:49.833Z",
+        "description": "विश्वविद्यालय वित्त समिति का पुनर्गठन और संरचना।"
+      }
+    },
+    "createdAt": "2026-10-03T06:46:32.880Z",
+    "updatedAt": "2026-10-15T05:50:19.215Z"
+  }
+]

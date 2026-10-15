@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { FileText, ChevronDown, ExternalLink, Users, Download } from "lucide-react";
+import { ChevronDown, FileText } from "lucide-react";
 
 export interface GovernanceTableColumn {
   key: string;
@@ -56,6 +56,21 @@ const fadeUp: Variants = {
       ease: "easeOut",
     },
   },
+};
+
+const getColWidthClass = (totalCols: number, colIndex: number) => {
+  if (totalCols === 5) {
+    if (colIndex === 0) return "w-[8%] min-w-[50px]";
+    if (colIndex === 1) return "w-[28%] min-w-[160px]";
+    if (colIndex === 2) return "w-[16%] min-w-[100px]";
+    if (colIndex === 3) return "w-[20%] min-w-[120px]";
+    return "w-[28%] min-w-[160px]";
+  }
+  // 4 columns (default)
+  if (colIndex === 0) return "w-[12%] min-w-[70px]";
+  if (colIndex === 1) return "w-[28%] min-w-[150px]";
+  if (colIndex === 2) return "w-[20%] min-w-[120px]";
+  return "w-[40%] min-w-[200px]";
 };
 
 export default function GovernancePoliciesSection({
@@ -129,16 +144,9 @@ export default function GovernancePoliciesSection({
             variants={fadeUp}
             className="mb-6 border-b border-[#E2E8F0] pb-4"
           >
-            <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <h2 className="font-serif text-[26px] font-black tracking-tight text-[#0A1F44] sm:text-[32px]">
-                  Governance <span className="text-[#E8871A]">Structure</span>
-                </h2>
-                <p className="mt-1 text-sm text-[#4A5568]">
-                  Statutory university councils, administrative boards, and executive governance committees.
-                </p>
-              </div>
-            </div>
+            <h2 className="font-serif text-[26px] font-black tracking-tight text-[#0A1F44] sm:text-[32px]">
+              Governance <span className="text-[#E8871A]">Structure</span>
+            </h2>
           </motion.div>
 
           {/* Committee Accordion List */}
@@ -148,7 +156,6 @@ export default function GovernancePoliciesSection({
               const table = committee.tableData;
               const hasColumns = table && Array.isArray(table.columns) && table.columns.length > 0;
               const hasRows = table && Array.isArray(table.rows) && table.rows.length > 0;
-              const memberCount = hasRows ? table.rows.length : 0;
 
               return (
                 <motion.div
@@ -205,127 +212,41 @@ export default function GovernancePoliciesSection({
                       ${isOpen ? "bg-[#F8FAFC]" : "hover:bg-[#F8FAFC]/60"}
                     `}
                   >
-                    <div className="flex min-w-0 items-center gap-3.5 sm:gap-4">
-                      <div
-                        className={`
-                          flex
-                          h-11
-                          w-11
-                          shrink-0
-                          items-center
-                          justify-center
-                          rounded-xl
-                          transition-all
-                          duration-300
-                          ${
-                            isOpen
-                              ? "bg-[#E8871A] text-white shadow-md shadow-[#E8871A]/20"
-                              : "bg-[#0A1F44]/[0.05] text-[#0A1F44] group-hover:bg-[#E8871A] group-hover:text-white"
-                          }
-                        `}
-                      >
-                        <Users size={20} strokeWidth={2} />
-                      </div>
+                    <h3
+                      className="
+                        font-serif
+                        text-[16px]
+                        sm:text-[18px]
+                        font-bold
+                        leading-snug
+                        text-[#0A1F44]
+                        transition-colors
+                        group-hover:text-[#E8871A]
+                      "
+                    >
+                      {committee.title}
+                    </h3>
 
-                      <div className="min-w-0">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h3
-                            className="
-                              font-serif
-                              text-[16px]
-                              sm:text-[18px]
-                              font-bold
-                              leading-snug
-                              text-[#0A1F44]
-                              transition-colors
-                              group-hover:text-[#E8871A]
-                            "
-                          >
-                            {committee.title}
-                          </h3>
-                          {memberCount > 0 && (
-                            <span
-                              className="
-                                inline-flex
-                                items-center
-                                rounded-full
-                                bg-[#0A1F44]/[0.06]
-                                px-2.5
-                                py-0.5
-                                text-[11px]
-                                font-bold
-                                uppercase
-                                tracking-wider
-                                text-[#0A1F44]
-                              "
-                            >
-                              {memberCount} {memberCount === 1 ? "Member" : "Members"}
-                            </span>
-                          )}
-                        </div>
-                        {committee.description && !isOpen && (
-                          <p className="mt-0.5 line-clamp-1 text-xs text-[#64748B]">
-                            {committee.description}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex shrink-0 items-center gap-2.5">
-                      {committee.documentUrl && committee.documentUrl.trim() !== "" && (
-                        <a
-                          href={committee.documentUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          title="View Official Notification / Document (PDF)"
-                          className="
-                            hidden
-                            items-center
-                            gap-1.5
-                            rounded-lg
-                            border
-                            border-[#E2E8F0]
-                            bg-white
-                            px-3
-                            py-1.5
-                            text-xs
-                            font-bold
-                            text-[#0A1F44]
-                            shadow-sm
-                            transition-all
-                            hover:border-[#E8871A]
-                            hover:bg-[#E8871A]
-                            hover:text-white
-                            sm:inline-flex
-                          "
-                        >
-                          <FileText size={14} />
-                          <span>PDF</span>
-                          <ExternalLink size={12} />
-                        </a>
-                      )}
-
-                      <div
-                        className={`
-                          flex
-                          h-9
-                          w-9
-                          items-center
-                          justify-center
-                          rounded-full
-                          border
-                          border-[#E2E8F0]
-                          bg-white
-                          text-[#0A1F44]
-                          shadow-sm
-                          transition-transform
-                          duration-300
-                          ${isOpen ? "rotate-180 bg-[#0A1F44] text-white border-[#0A1F44]" : ""}
-                        `}
-                      >
-                        <ChevronDown size={17} strokeWidth={2.2} />
-                      </div>
+                    <div
+                      className={`
+                        flex
+                        h-9
+                        w-9
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-full
+                        border
+                        border-[#E2E8F0]
+                        bg-white
+                        text-[#0A1F44]
+                        shadow-sm
+                        transition-transform
+                        duration-300
+                        ${isOpen ? "rotate-180 bg-[#0A1F44] text-white border-[#0A1F44]" : ""}
+                      `}
+                    >
+                      <ChevronDown size={17} strokeWidth={2.2} />
                     </div>
                   </div>
 
@@ -342,75 +263,12 @@ export default function GovernancePoliciesSection({
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="border-t border-[#E2E8F0] bg-white"
                       >
-                        <div className="p-4 sm:p-6 space-y-4">
-                          {/* Contextual description & mobile document link */}
-                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                            {committee.description ? (
-                              <p className="text-xs sm:text-sm text-[#4A5568]">
-                                {committee.description}
-                              </p>
-                            ) : (
-                              <span />
-                            )}
-
-                            {committee.documentUrl && committee.documentUrl.trim() !== "" && (
-                              <a
-                                href={committee.documentUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="
-                                  inline-flex
-                                  w-fit
-                                  items-center
-                                  gap-1.5
-                                  rounded-lg
-                                  bg-[#0A1F44]
-                                  px-3.5
-                                  py-2
-                                  text-xs
-                                  font-bold
-                                  text-white
-                                  shadow-sm
-                                  transition-all
-                                  hover:bg-[#E8871A]
-                                "
-                              >
-                                <Download size={13} />
-                                <span>Official Notification PDF</span>
-                                <ExternalLink size={11} />
-                              </a>
-                            )}
-                          </div>
-
-                          {/* Responsive Table Container */}
+                        <div className="p-4 sm:p-6">
+                          {/* Responsive Table Container (No visible dark-blue header row) */}
                           {hasColumns && hasRows ? (
                             <div className="overflow-hidden rounded-xl border border-[#E2E8F0] shadow-sm">
                               <div className="overflow-x-auto">
                                 <table className="w-full min-w-[620px] text-left text-sm border-collapse">
-                                  <thead>
-                                    <tr className="bg-[#0A1F44] text-white border-b border-[#0A1F44]">
-                                      {table.columns.map((col, cIdx) => (
-                                        <th
-                                          key={col.key || cIdx}
-                                          scope="col"
-                                          className={`
-                                            px-4
-                                            py-3.5
-                                            font-serif
-                                            text-[13px]
-                                            sm:text-[14px]
-                                            font-bold
-                                            tracking-wide
-                                            ${cIdx === 0 ? "w-[12%] min-w-[70px]" : ""}
-                                            ${cIdx === 1 ? "w-[28%] min-w-[160px]" : ""}
-                                            ${cIdx === 2 ? "w-[22%] min-w-[130px]" : ""}
-                                          `}
-                                        >
-                                          {col.label}
-                                        </th>
-                                      ))}
-                                    </tr>
-                                  </thead>
                                   <tbody className="divide-y divide-[#E2E8F0] bg-white">
                                     {table.rows.map((row, rIdx) => {
                                       const isEven = rIdx % 2 === 0;
@@ -441,6 +299,7 @@ export default function GovernancePoliciesSection({
                                                   leading-relaxed
                                                   text-[#1A202C]
                                                   whitespace-pre-line
+                                                  ${getColWidthClass(table.columns.length, cIdx)}
                                                   ${isRefOrSno ? "font-bold text-[#0A1F44]" : ""}
                                                   ${isPositionOrRole ? "font-medium" : ""}
                                                 `}
@@ -495,9 +354,6 @@ export default function GovernancePoliciesSection({
             <h2 className="font-serif text-[26px] font-black tracking-tight text-[#0A1F44] sm:text-[32px]">
               University <span className="text-[#E8871A]">Policies</span>
             </h2>
-            <p className="mt-1 text-sm text-[#4A5568]">
-              Official institutional policies governing academics, research, integrity, and campus conduct.
-            </p>
           </motion.div>
 
           {/* Policy Cards Grid */}

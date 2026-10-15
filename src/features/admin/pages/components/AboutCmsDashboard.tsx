@@ -206,8 +206,8 @@ export function AboutCmsDashboard({
       for (const item of reordered) {
         await saveGovernanceDocumentAction(item.id, {
           title: item.title,
-          description: item.description,
-          documentUrl: item.documentUrl || "",
+          description: null,
+          documentUrl: "",
           category: "governance",
           tableData: item.tableData,
           status: item.status || "PUBLISHED",
@@ -1026,7 +1026,7 @@ export function AboutCmsDashboard({
                 onClick={() => {
                   setEditingCommittee({
                     title: "",
-                    description: "",
+                    description: null,
                     documentUrl: "",
                     category: "governance",
                     status: "PUBLISHED",
@@ -1034,10 +1034,10 @@ export function AboutCmsDashboard({
                     tableData: {
                       version: 1,
                       columns: [
-                        { key: "col_1", label: "Reference" },
-                        { key: "col_2", label: "Position" },
-                        { key: "col_3", label: "Role" },
-                        { key: "col_4", label: "Member Details" },
+                        { key: "col_1", label: "Column 1" },
+                        { key: "col_2", label: "Column 2" },
+                        { key: "col_3", label: "Column 3" },
+                        { key: "col_4", label: "Column 4" },
                       ],
                       rows: [],
                     },
@@ -1080,11 +1080,6 @@ export function AboutCmsDashboard({
                           {rowsCount} {rowsCount === 1 ? "Row" : "Rows"} · {colsCount} Cols
                         </span>
                       </div>
-                      {committee.description && (
-                        <p className="mt-1 text-xs text-slate-500 line-clamp-1">
-                          {committee.description}
-                        </p>
-                      )}
                     </div>
 
                     <div className="flex items-center gap-1.5 self-end sm:self-center">

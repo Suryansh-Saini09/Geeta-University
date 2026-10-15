@@ -46,7 +46,15 @@ async function runE2ETests() {
       throw new Error(`${c.title}: Expected ${expected.rows} rows, got ${rowCount}`);
     }
 
-    console.log(`  ✓ [PASS] ${c.title.padEnd(30)}: ${colCount} cols, ${rowCount} rows (ID: ${c.id})`);
+    // Verify obsolete fields are cleared
+    if (c.description !== null && c.description !== "") {
+      throw new Error(`${c.title}: Expected description to be null/empty, got: ${c.description}`);
+    }
+    if (c.documentUrl !== "") {
+      throw new Error(`${c.title}: Expected documentUrl to be empty, got: ${c.documentUrl}`);
+    }
+
+    console.log(`  ✓ [PASS] ${c.title.padEnd(30)}: ${colCount} cols, ${rowCount} rows | desc=null, docUrl="" (ID: ${c.id})`);
   }
 
   // 2. Verify Policy documents are intact and unmodified
