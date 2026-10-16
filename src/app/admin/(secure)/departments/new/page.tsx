@@ -23,12 +23,12 @@ export default async function NewDepartmentPage({
         <div>
           <Link
             href="/admin/departments"
-            className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 transition hover:text-[#E8871A]"
+            className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 transition hover:text-slate-700"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to departments
           </Link>
-          <p className="mt-5 text-sm font-bold uppercase tracking-[0.18em] text-[#E8871A]">
+          <p className="mt-5 text-xs font-bold uppercase tracking-wider text-slate-500">
             Create
           </p>
           <h2 className="mt-2 font-serif text-4xl font-bold text-[#0A1F44]">
@@ -65,7 +65,7 @@ export default async function NewDepartmentPage({
                 name="name"
                 required
                 placeholder="School of Computer Science and Engineering"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
               />
             </div>
 
@@ -80,7 +80,7 @@ export default async function NewDepartmentPage({
                 id="shortName"
                 name="shortName"
                 placeholder="CSE"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
               />
             </div>
 
@@ -96,7 +96,7 @@ export default async function NewDepartmentPage({
                 name="slug"
                 required
                 placeholder="school-of-computer-science-and-engineering"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
               />
               <p className="mt-1.5 text-xs text-slate-500">
                 Lowercase letters, numbers, and hyphens only.
@@ -115,7 +115,7 @@ export default async function NewDepartmentPage({
                 name="summary"
                 rows={5}
                 placeholder="Brief department intro for admin lists and public previews."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
               />
             </div>
           </div>
@@ -139,7 +139,7 @@ export default async function NewDepartmentPage({
                   id="status"
                   name="status"
                   defaultValue={ContentStatus.DRAFT}
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
                 >
                   <option value={ContentStatus.DRAFT}>Draft</option>
                   <option value={ContentStatus.PUBLISHED}>Published</option>
@@ -160,13 +160,13 @@ export default async function NewDepartmentPage({
                   type="number"
                   min={0}
                   defaultValue={0}
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
                 />
               </div>
 
               <button
                 type="submit"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#E8871A] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#0A1F44] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
               >
                 <Save className="h-4 w-4" />
                 Create Department

@@ -138,7 +138,7 @@ export function PlacementSectionEditor({
                 value={eyebrow}
                 onChange={(e) => setEyebrow(e.target.value)}
                 placeholder="PLACEMENT HIGHLIGHTS"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -151,7 +151,7 @@ export function PlacementSectionEditor({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Placement & Career Highlights"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white font-serif"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white font-serif"
               />
             </div>
 
@@ -164,7 +164,7 @@ export function PlacementSectionEditor({
                 value={highestPackage}
                 onChange={(e) => setHighestPackage(e.target.value)}
                 placeholder="e.g. 40 LPA"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -177,7 +177,7 @@ export function PlacementSectionEditor({
                 value={avgPackage}
                 onChange={(e) => setAvgPackage(e.target.value)}
                 placeholder="e.g. 6.5 LPA"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -190,7 +190,7 @@ export function PlacementSectionEditor({
                 value={heroNoteText}
                 onChange={(e) => setHeroNoteText(e.target.value)}
                 placeholder="Consistent track record of placements across Fortune 500 companies..."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
           </div>
@@ -204,7 +204,7 @@ export function PlacementSectionEditor({
               <button
                 type="button"
                 onClick={handleAddStat}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#E8871A] hover:text-white transition"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#0A1F44] hover:text-white transition"
               >
                 <Plus className="h-3.5 w-3.5" />
                 Add Stat
@@ -229,14 +229,14 @@ export function PlacementSectionEditor({
                     value={stat.value}
                     onChange={(e) => handleStatChange(idx, "value", e.target.value)}
                     placeholder="Value (e.g. 500+)"
-                    className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold outline-none focus:border-[#E8871A]"
+                    className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold outline-none focus:border-slate-300"
                   />
                   <input
                     type="text"
                     value={stat.label}
                     onChange={(e) => handleStatChange(idx, "label", e.target.value)}
                     placeholder="Label (e.g. Corporate Partners)"
-                    className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                    className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                   />
                 </div>
               ))}
@@ -252,7 +252,7 @@ export function PlacementSectionEditor({
               <button
                 type="button"
                 onClick={handleAddRecruiter}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#E8871A] hover:text-white transition"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#0A1F44] hover:text-white transition"
               >
                 <Plus className="h-3.5 w-3.5" />
                 Add Recruiter
@@ -286,7 +286,7 @@ export function PlacementSectionEditor({
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
           >
             <Save className="h-4 w-4" />
             Save Placement Data

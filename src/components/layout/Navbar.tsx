@@ -46,7 +46,7 @@ interface NavEntry {
 const primaryNavLinks: NavEntry[] = [
   {
     label: "About Us",
-    href: "/about",
+    href: "/about-us",
     key: "about",
   },
   {
@@ -167,6 +167,7 @@ function isNavEntryActive(entry: NavEntry, pathname: string): boolean {
   if (!pathname) return false;
   if (entry.href) {
     if (entry.href === "/") return pathname === "/";
+    if (entry.href === "/about-us" && (pathname === "/about-us" || pathname === "/about")) return true;
     return pathname === entry.href || pathname.startsWith(entry.href + "/");
   }
   if (entry.cols) {

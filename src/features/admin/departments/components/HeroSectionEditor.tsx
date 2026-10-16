@@ -147,7 +147,7 @@ export function HeroSectionEditor({
                 value={eyebrow}
                 onChange={(e) => setEyebrow(e.target.value)}
                 placeholder="e.g. GEETA UNIVERSITY"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -160,7 +160,7 @@ export function HeroSectionEditor({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder={departmentName}
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white font-serif"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white font-serif"
               />
             </div>
 
@@ -173,7 +173,7 @@ export function HeroSectionEditor({
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
                 placeholder="Comprehensive description displayed prominently on the hero banner..."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -202,12 +202,12 @@ export function HeroSectionEditor({
                   value={image}
                   onChange={(e) => setImage(e.target.value)}
                   placeholder="/images/schools/hero-banner.webp or image URL"
-                  className="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                  className="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
                 />
                 <button
                   type="button"
                   onClick={() => setActiveMediaPickerTarget({ type: "main" })}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#E8871A] hover:text-[#E8871A]"
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-700"
                 >
                   <ImageIcon className="h-4 w-4" />
                   Media Library
@@ -224,7 +224,7 @@ export function HeroSectionEditor({
                 value={ctaText}
                 onChange={(e) => setCtaText(e.target.value)}
                 placeholder="Apply Now"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
 
@@ -237,7 +237,7 @@ export function HeroSectionEditor({
                 value={ctaLink}
                 onChange={(e) => setCtaLink(e.target.value)}
                 placeholder="#apply or /admissions"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
               />
             </div>
           </div>
@@ -256,7 +256,7 @@ export function HeroSectionEditor({
               <button
                 type="button"
                 onClick={handleAddSlide}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#E8871A] hover:text-white transition"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#0A1F44] hover:text-white transition"
               >
                 <Plus className="h-3.5 w-3.5" />
                 Add Hero Slide
@@ -274,7 +274,7 @@ export function HeroSectionEditor({
                   className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-4"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#E8871A]">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                       Hero Slide #{idx + 1}
                     </span>
                     <button
@@ -296,7 +296,7 @@ export function HeroSectionEditor({
                         value={slide.studentName || ""}
                         onChange={(e) => handleSlideChange(idx, "studentName", e.target.value)}
                         placeholder="e.g. Saransh"
-                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -309,7 +309,7 @@ export function HeroSectionEditor({
                         value={slide.pkg || ""}
                         onChange={(e) => handleSlideChange(idx, "pkg", e.target.value)}
                         placeholder="e.g. 30 Lakh PA"
-                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -322,7 +322,7 @@ export function HeroSectionEditor({
                         value={slide.company || ""}
                         onChange={(e) => handleSlideChange(idx, "company", e.target.value)}
                         placeholder="e.g. Wabtec Corp"
-                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -335,7 +335,7 @@ export function HeroSectionEditor({
                         value={slide.program || ""}
                         onChange={(e) => handleSlideChange(idx, "program", e.target.value)}
                         placeholder="B.Tech CSE Alumni"
-                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -348,7 +348,7 @@ export function HeroSectionEditor({
                         value={slide.titleBoldLine1 || ""}
                         onChange={(e) => handleSlideChange(idx, "titleBoldLine1", e.target.value)}
                         placeholder="Shape the Future of"
-                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -361,7 +361,7 @@ export function HeroSectionEditor({
                         value={slide.titleBoldLine2 || ""}
                         onChange={(e) => handleSlideChange(idx, "titleBoldLine2", e.target.value)}
                         placeholder="Computing at GU"
-                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -375,7 +375,7 @@ export function HeroSectionEditor({
                           value={slide.image || ""}
                           onChange={(e) => handleSlideChange(idx, "image", e.target.value)}
                           placeholder="/saransh.webp"
-                          className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                          className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                         />
                       </div>
                       <button
@@ -399,7 +399,7 @@ export function HeroSectionEditor({
                         onChange={(e) => handleSlideChange(idx, "description", e.target.value)}
                         rows={2}
                         placeholder="Slide description text..."
-                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                        className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                       />
                     </div>
                   </div>
@@ -413,7 +413,7 @@ export function HeroSectionEditor({
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
           >
             <Save className="h-4 w-4" />
             Save Hero Banner & Slides

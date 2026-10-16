@@ -26,12 +26,12 @@ export default async function NewProgramPage({
         <div>
           <Link
             href="/admin/programs"
-            className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 transition hover:text-[#E8871A]"
+            className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 transition hover:text-slate-700"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to programs
           </Link>
-          <p className="mt-5 text-sm font-bold uppercase tracking-[0.18em] text-[#E8871A]">
+          <p className="mt-5 text-xs font-bold uppercase tracking-wider text-slate-500">
             Create
           </p>
           <h2 className="mt-2 font-serif text-4xl font-bold text-[#0A1F44]">
@@ -110,7 +110,7 @@ function ProgramFields({
           name="departmentId"
           required
           defaultValue={defaults?.departmentId ?? ""}
-          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
         >
           <option value="" disabled>
             Select department
@@ -138,7 +138,7 @@ function ProgramFields({
           required
           defaultValue={defaults?.name ?? ""}
           placeholder="B.Tech Computer Science and Engineering"
-          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
         />
       </div>
 
@@ -155,7 +155,7 @@ function ProgramFields({
           required
           defaultValue={defaults?.slug ?? ""}
           placeholder="btech-computer-science-engineering"
-          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
         />
       </div>
 
@@ -171,7 +171,7 @@ function ProgramFields({
           name="level"
           defaultValue={defaults?.level ?? ""}
           placeholder="UG / PG / Ph.D."
-          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
         />
       </div>
 
@@ -187,7 +187,7 @@ function ProgramFields({
           name="duration"
           defaultValue={defaults?.duration ?? ""}
           placeholder="4 Years"
-          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
         />
       </div>
 
@@ -204,7 +204,7 @@ function ProgramFields({
           rows={5}
           defaultValue={defaults?.eligibility ?? ""}
           placeholder="Eligibility criteria for the program."
-          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
         />
       </div>
     </div>
@@ -238,7 +238,7 @@ function ProgramPublishingPanel({
               id="status"
               name="status"
               defaultValue={defaultStatus}
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
             >
               <option value={ContentStatus.DRAFT}>Draft</option>
               <option value={ContentStatus.PUBLISHED}>Published</option>
@@ -259,7 +259,7 @@ function ProgramPublishingPanel({
               type="number"
               min={0}
               defaultValue={defaultSortOrder}
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
             />
           </div>
 

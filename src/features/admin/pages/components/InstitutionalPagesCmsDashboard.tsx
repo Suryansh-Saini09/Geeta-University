@@ -165,7 +165,7 @@ export function InstitutionalPagesCmsDashboard({
           onClick={() => setActiveTab("seo")}
           className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all ${
             activeTab === "seo"
-              ? "bg-[#E8871A] text-white shadow-md shadow-amber-900/10"
+              ? "bg-[#0A1F44] text-white shadow-md shadow-amber-900/10"
               : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
           }`}
         >
@@ -188,7 +188,7 @@ export function InstitutionalPagesCmsDashboard({
               type="button"
               onClick={handleSaveSeo}
               disabled={savingKey === "seo"}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
             >
               {savingKey === "seo" ? (
                 <>
@@ -284,7 +284,7 @@ export function InstitutionalPagesCmsDashboard({
               type="button"
               onClick={() => handleSaveSection(activeTab)}
               disabled={savingKey === activeTab}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#E8871A] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#d4760e] disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#1A3A6B] disabled:opacity-50"
             >
               {savingKey === activeTab ? (
                 <>
@@ -346,7 +346,7 @@ export function InstitutionalPagesCmsDashboard({
                               });
                               updateBody(activeTab, (b) => ({ ...b, [k]: [...val, template] }));
                             }}
-                            className="inline-flex items-center gap-1 text-xs font-bold text-[#0A1F44] hover:text-[#E8871A]"
+                            className="inline-flex items-center gap-1 text-xs font-bold text-[#0A1F44] hover:text-slate-700"
                           >
                             <Plus className="h-3.5 w-3.5" /> Add Row
                           </button>

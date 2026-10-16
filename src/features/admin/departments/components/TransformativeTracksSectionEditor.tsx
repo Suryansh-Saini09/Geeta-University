@@ -95,7 +95,7 @@ export function TransformativeTracksSectionEditor({
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
           <div className="border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2">
-              <Layers className="h-5 w-5 text-[#E8871A]" />
+              <Layers className="h-5 w-5 text-slate-700" />
               <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
                 Transformative Tracks
               </h3>
@@ -114,7 +114,7 @@ export function TransformativeTracksSectionEditor({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="We Don't Just Educate, We Transform Futures!"
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white font-serif"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white font-serif"
             />
           </div>
 
@@ -126,7 +126,7 @@ export function TransformativeTracksSectionEditor({
               <button
                 type="button"
                 onClick={handleAddCard}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#E8871A] hover:text-white transition"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#0A1F44] hover:text-white transition"
               >
                 <Plus className="h-3.5 w-3.5" />
                 Add Track Card
@@ -144,7 +144,7 @@ export function TransformativeTracksSectionEditor({
                   className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-4"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#E8871A]">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                       Track #{idx + 1}
                     </span>
                     <button
@@ -166,7 +166,7 @@ export function TransformativeTracksSectionEditor({
                         value={card.title}
                         onChange={(e) => handleCardChange(idx, "title", e.target.value)}
                         placeholder="e.g. Certification Tracks or Drive-Ready Tracks"
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8871A]"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-slate-300"
                       />
                     </div>
 
@@ -178,7 +178,7 @@ export function TransformativeTracksSectionEditor({
                         <button
                           type="button"
                           onClick={() => handleAddPoint(idx)}
-                          className="text-xs font-semibold text-[#E8871A] hover:underline"
+                          className="text-xs font-semibold text-slate-700 hover:underline"
                         >
                           + Add Point
                         </button>
@@ -191,7 +191,7 @@ export function TransformativeTracksSectionEditor({
                             value={pt}
                             onChange={(e) => handlePointChange(idx, pIdx, e.target.value)}
                             placeholder={`Technology / Skill ${pIdx + 1}`}
-                            className="flex-1 rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-[#E8871A]"
+                            className="flex-1 rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
                           />
                           <button
                             type="button"
@@ -214,7 +214,7 @@ export function TransformativeTracksSectionEditor({
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#E8871A] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
           >
             <Save className="h-4 w-4" />
             Save Transformative Tracks

@@ -1,4 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import {
+  PrismaClient,
+  ContentStatus,
+  AuditAction,
+  AdminRole,
+  AdminUserStatus,
+  SubmissionStatus,
+  type Prisma,
+} from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
@@ -15,6 +23,12 @@ export const prisma =
 
 globalForPrisma.prisma = prisma;
 
-export * from "@prisma/client";
-
-
+export {
+  PrismaClient,
+  ContentStatus,
+  AuditAction,
+  AdminRole,
+  AdminUserStatus,
+  SubmissionStatus,
+  type Prisma,
+};

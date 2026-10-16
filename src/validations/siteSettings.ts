@@ -77,3 +77,5 @@ export const siteMetadataSettingsSchema = z.object({
 
 export type SiteMetadataSettings = z.infer<typeof siteMetadataSettingsSchema>;
 
+export * from "./footer";
+

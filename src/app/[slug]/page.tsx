@@ -24,7 +24,7 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const allCourses = getAllCourses();
+  const allCourses = await getAllCourses();
   const allProgramSlugs = getAllProgramSlugs();
 
   return [
@@ -39,7 +39,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const locale = await getLocale();
 
-  const course = getCourseByDirectSlug(slug);
+  const course = await getCourseByDirectSlug(slug);
   if (course) {
     const canonical =
       locale === "en"
@@ -116,7 +116,7 @@ export default async function DirectSlugPage({ params }: PageProps) {
   const locale = await getLocale();
 
   // 1. Check if slug matches a course directly (e.g., phd-computer-application, phd-cse, mca, etc.)
-  const course = getCourseByDirectSlug(slug);
+  const course = await getCourseByDirectSlug(slug);
   if (course) {
     const school = await getProgramBySlug(course.schoolSlug, locale);
     return <CoursePage course={course} school={school} />;

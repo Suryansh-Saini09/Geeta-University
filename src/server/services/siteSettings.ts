@@ -170,3 +170,5 @@ export async function getNavigationSettings(menuKey = "main_nav", locale: string
   }
 }
 
+export * from "./footer";
+

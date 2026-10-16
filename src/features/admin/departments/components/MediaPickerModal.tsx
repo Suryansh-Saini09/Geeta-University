@@ -50,7 +50,7 @@ export function MediaPickerModal({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
           <div className="flex items-center gap-2">
-            <ImageIcon className="h-5 w-5 text-[#E8871A]" />
+            <ImageIcon className="h-5 w-5 text-slate-700" />
             <h3 className="font-serif text-lg font-bold text-[#0A1F44]">
               Select from Media Library
             </h3>
@@ -73,7 +73,7 @@ export function MediaPickerModal({
               placeholder="Search images by filename or alt text..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-4 py-2 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-4 py-2 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
             />
           </div>
         </div>
@@ -102,7 +102,7 @@ export function MediaPickerModal({
                     }}
                     className={`group relative flex flex-col overflow-hidden rounded-lg border text-left transition ${
                       isSelected
-                        ? "border-[#E8871A] ring-2 ring-[#E8871A]/20 bg-[#E8871A]/5"
+                        ? "border-slate-300 ring-2 ring-[#E8871A]/20 bg-[#0A1F44]/5"
                         : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                     }`}
                   >
@@ -114,7 +114,7 @@ export function MediaPickerModal({
                         className="h-full w-full object-cover transition group-hover:scale-105"
                       />
                       {isSelected && (
-                        <div className="absolute top-2 right-2 rounded-full bg-[#E8871A] p-1 text-white shadow">
+                        <div className="absolute top-2 right-2 rounded-full bg-[#0A1F44] p-1 text-white shadow">
                           <Check className="h-3.5 w-3.5" />
                         </div>
                       )}
@@ -148,7 +148,7 @@ export function MediaPickerModal({
               type="button"
               onClick={handleConfirm}
               disabled={!selectedUrl}
-              className="rounded-lg bg-[#E8871A] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#F5A623] disabled:opacity-50"
+              className="rounded-lg bg-[#0A1F44] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#F5A623] disabled:opacity-50"
             >
               Select Image
             </button>

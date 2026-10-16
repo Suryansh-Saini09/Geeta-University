@@ -51,9 +51,6 @@ export default async function AdminDepartmentsPage({
     <div className="space-y-6">
       <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#E8871A]">
-            CMS Module
-          </p>
           <h2 className="mt-2 font-serif text-4xl font-bold text-[#0A1F44]">
             Departments
           </h2>
@@ -65,7 +62,7 @@ export default async function AdminDepartmentsPage({
 
         <Link
           href="/admin/departments/new"
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#E8871A] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A1F44] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
         >
           <Plus className="h-4 w-4" />
           Create Department
@@ -115,14 +112,14 @@ export default async function AdminDepartmentsPage({
                 name="q"
                 defaultValue={query}
                 placeholder="Search departments"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15 sm:w-64"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15 sm:w-64"
               />
             </div>
 
             <select
               name="status"
               defaultValue={selectedStatus}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none transition focus:border-[#E8871A] focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
+              className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15"
             >
               <option value="ALL">All statuses</option>
               <option value={ContentStatus.DRAFT}>Draft</option>
@@ -141,7 +138,7 @@ export default async function AdminDepartmentsPage({
             {(query || selectedStatus !== "ALL") ? (
               <Link
                 href="/admin/departments"
-                className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition hover:border-[#E8871A] hover:text-[#E8871A]"
+                className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition hover:border-slate-300 hover:text-slate-700"
               >
                 Reset
               </Link>
@@ -222,7 +219,7 @@ export default async function AdminDepartmentsPage({
                       <div className="flex flex-wrap gap-2">
                         <Link
                           href={`/admin/departments/${department.id}/edit`}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-[#0A1F44] transition hover:border-[#E8871A] hover:text-[#E8871A]"
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-[#0A1F44] transition hover:border-slate-300 hover:text-slate-700"
                         >
                           <Pencil className="h-3.5 w-3.5" />
                           Edit
@@ -308,7 +305,7 @@ function PaginationLink({
   return (
     <Link
       href={href}
-      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-bold text-[#0A1F44] transition hover:border-[#E8871A] hover:text-[#E8871A]"
+      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-bold text-[#0A1F44] transition hover:border-slate-300 hover:text-slate-700"
     >
       {content}
     </Link>

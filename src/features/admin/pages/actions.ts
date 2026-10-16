@@ -330,6 +330,7 @@ export async function saveAwardRankingAction(id: string | null, rawData: any) {
 
     revalidatePath("/");
     revalidatePath("/about");
+    revalidatePath("/about-us");
     return { success: true, awardRanking: result };
   } catch (err: any) {
     return { success: false, error: err.message || "Failed to save award" };
@@ -352,6 +353,7 @@ export async function deleteAwardRankingAction(id: string) {
 
     revalidatePath("/");
     revalidatePath("/about");
+    revalidatePath("/about-us");
     return { success: true };
   } catch (err: any) {
     return { success: false, error: err.message || "Failed to delete award" };
@@ -459,6 +461,7 @@ export async function saveLeadershipMemberAction(id: string | null, rawData: any
     }
 
     revalidatePath("/about");
+    revalidatePath("/about-us");
     return { success: true, leader: result };
   } catch (err: any) {
     return { success: false, error: err.message || "Failed to save leader" };
@@ -480,6 +483,7 @@ export async function deleteLeadershipMemberAction(id: string) {
     });
 
     revalidatePath("/about");
+    revalidatePath("/about-us");
     return { success: true };
   } catch (err: any) {
     return { success: false, error: err.message || "Failed to delete leader" };
@@ -651,6 +655,7 @@ export async function saveRecognitionAction(id: string | null, rawData: any) {
     }
 
     revalidatePath("/about");
+    revalidatePath("/about-us");
     return { success: true, recognition: result };
   } catch (err: any) {
     return { success: false, error: err.message || "Failed to save recognition" };
@@ -672,6 +677,7 @@ export async function deleteRecognitionAction(id: string) {
     });
 
     revalidatePath("/about");
+    revalidatePath("/about-us");
     return { success: true };
   } catch (err: any) {
     return { success: false, error: err.message || "Failed to delete recognition" };
@@ -715,6 +721,7 @@ export async function saveGovernanceDocumentAction(id: string | null, rawData: a
     }
 
     revalidatePath("/about");
+    revalidatePath("/about-us");
     return { success: true, document: result };
   } catch (err: any) {
     return { success: false, error: err.message || "Failed to save document" };
@@ -736,6 +743,7 @@ export async function deleteGovernanceDocumentAction(id: string) {
     });
 
     revalidatePath("/about");
+    revalidatePath("/about-us");
     return { success: true };
   } catch (err: any) {
     return { success: false, error: err.message || "Failed to delete document" };

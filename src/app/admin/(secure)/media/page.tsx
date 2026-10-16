@@ -34,7 +34,7 @@ export default async function AdminMediaPage({ searchParams }: { searchParams: P
         <div><label htmlFor="file" className="mb-1.5 block text-sm font-semibold">File</label><input id="file" name="file" type="file" accept="image/jpeg,image/png,image/gif,image/webp,application/pdf" required className="block w-full rounded-lg border border-slate-200 bg-white p-2 text-sm" /><p className="mt-1 text-xs text-slate-500">JPEG, PNG, GIF, WebP, or PDF · 10 MB maximum</p></div>
         <div><label htmlFor="altText" className="mb-1.5 block text-sm font-semibold">Image alt text</label><input id="altText" name="altText" maxLength={300} className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm" /></div>
         <div><label htmlFor="caption" className="mb-1.5 block text-sm font-semibold">Caption</label><input id="caption" name="caption" maxLength={500} className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm" /></div>
-        <button type="submit" className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-[#E8871A] px-4 text-sm font-bold text-white"><Upload className="h-4 w-4" /> Upload</button>
+        <button type="submit" className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-[#0A1F44] px-4 text-sm font-bold text-white"><Upload className="h-4 w-4" /> Upload</button>
       </form>
     </section>
     <section className="overflow-hidden rounded-lg border border-slate-200 bg-white">

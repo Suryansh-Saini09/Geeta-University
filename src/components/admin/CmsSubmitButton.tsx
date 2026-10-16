@@ -25,11 +25,11 @@ export function CmsSubmitButton({
 }: CmsSubmitButtonProps) {
   const { pending } = useFormStatus();
 
-  const baseStyles = "inline-flex items-center justify-center gap-2 font-bold transition-all disabled:cursor-not-allowed disabled:opacity-60";
+  const baseStyles = "inline-flex items-center justify-center gap-2 font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-60";
   const variantStyles = {
-    primary: "bg-[#E8871A] hover:bg-[#d67a15] text-white shadow-sm",
-    secondary: "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50",
-    danger: "bg-red-600 hover:bg-red-700 text-white",
+    primary: "bg-[#0A1F44] hover:bg-[#1A3A6B] text-white shadow-2xs",
+    secondary: "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 shadow-2xs",
+    danger: "bg-rose-600 hover:bg-rose-700 text-white shadow-2xs",
   };
 
   const isPending = pending || disabled;

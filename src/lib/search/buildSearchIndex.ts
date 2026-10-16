@@ -1,6 +1,6 @@
 import type { SearchDocument } from "./types";
 import { getProgramBySlugSync } from "@/lib/programs/programRepository";
-import { getAllCourseParams, getCourseBySlug } from "@/lib/programs/courseRepository";
+import { getAllCourseParams, getCourseBySlugSync } from "@/lib/programs/courseRepository";
 import { getAllEdgePages } from "@/lib/edge/edgeRepository";
 
 import { recognitions, vision, mission } from "@/data/about";
@@ -82,7 +82,7 @@ export function buildSearchIndex(): SearchDocument[] {
   /* ── 2. INDIVIDUAL COURSE PAGES ── */
   const courseParams = getAllCourseParams();
   for (const { schoolSlug, courseSlug } of courseParams) {
-    const course = getCourseBySlug(schoolSlug, courseSlug);
+    const course = getCourseBySlugSync(schoolSlug, courseSlug);
     if (course) {
       const href = `/programs/${schoolSlug}/${courseSlug}`;
       const title = course.hero?.title || course.seo.title;
@@ -233,7 +233,7 @@ export function buildSearchIndex(): SearchDocument[] {
     title: "About Geeta University | Vision, Mission & Excellence",
     description: "Learn about Geeta University, our 30+ year legacy, visionary leadership, top rankings, and state-of-the-art academic ecosystem in Delhi NCR Panipat.",
     content: `${vision} ${mission.join(" ")} ${recognitions.map((r) => r.alt).join(" ")} top university in haryana delhi ncr panipat.`,
-    href: "/about",
+    href: "/about-us",
     category: "About",
     subcategory: "University Overview",
     keywords: ["about us", "geeta university", "vision", "mission", "recognitions", "panipat", "haryana"],
