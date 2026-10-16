@@ -9,175 +9,85 @@ export const phdForensicScience: CoursePageData = {
     title: "PhD in Forensic Science in Delhi NCR & Haryana | Get Admissions",
     description:
       "Pursue PhD in Forensic Science at Geeta University, leading university in Haryana & Delhi NCR. Advanced labs & research support. Admissions open!",
-    keywords: [
-      "Ph.D. Forensic Science",
-      "PhD in Forensic Science",
-      "PhD Forensic Science Delhi NCR",
-      "Geeta University PhD Forensic",
-    ],
+    keywords: ["Ph.D. Forensic Science"],
     canonical:
-      "https://geetauniversity.edu.in/programs/school-of-forensic-sciences/phd-forensic-science",
+      "https://geetauniversity.edu.in/phd-forensic-science/",
+    ogImage: "https://geetauniversity.edu.in/",
   },
   hero: {
     title: "PhD in Forensic Science",
     description: "",
     image:
       "/programs/forensic-sciences/phd-forensic-science/phd-forensic-hero.jpeg",
+    mobileImage:
+      "/programs/forensic-sciences/phd-forensic-science/phd-forensic-hero.jpeg",
   },
   quickInfo: {
-    program: "Ph.D. in Forensic Science",
-    duration: "Minimum 3 Years",
-    eligibility: "Master's degree with a minimum of 55% aggregate marks (50% for SC/ST/OBC/PwD candidates)",
+    program: "PhD in Forensic Science",
+    duration: "Minimum 3 years",
+    eligibility: "Master's degree with a minimum of 55% aggregate",
   },
   overview: {
-    title: "Ph.D. in Forensic Science",
+    title: "PhD in Forensic Science",
     paragraphs: [
-      "The Ph.D. in Forensic Science at Geeta University prepares scholars for distinguished careers in research, academia, law enforcement, and legal consultancy. This doctoral program provides in-depth domain knowledge and specialized research capabilities across criminalistics, molecular forensics, and analytical instrumentation. It aims to develop subject-matter experts who contribute original research, develop novel analytical methodologies, and advance the application of forensic science in the judicial system.",
-      "The doctoral program is mentored by recognized research guides across specialized disciplines including Digital & Cyber Forensics, Forensic Biology & Serology, Forensic Chemistry & Toxicology, Questioned Documents, and Analytical Instrumentation.",
+      "PhD in Forensic Science at Geeta University that prepares students for careers in research, academia, law enforcement, or legal sectors. This program provides in-depth knowledge and specialized skills related to the application of science in criminal investigations, legal matters, and crime scene analysis. This programme aims to produce experts in the field who can contribute to Forensic research, advancements in criminal investigation techniques, and the application of scientific knowledge in legal settings.",
+      "Ph.D. in Forensic Science programme at Geeta University is designed under the guidance of highly qualified, experienced and recognized faculty in their respective fields such as Digital & Cyber Forensics, Forensic Biology & Serology, Forensic Chemistry & Toxicology, Forensic Documents, Instrumentation and completely based on the research carried out by the scholars under the guidance of Supervisor/Co-Supervisor(s). Ph.D. programme caters to the following categories of students.",
     ],
   },
+  takeawaysTitle: "Important Takeaways:",
   takeaways: [
-    "Minimum 3-year research-oriented doctoral degree program",
-    "Advanced training in research methodologies, publication ethics, and laboratory diagnostics",
-    "Collaborative research opportunities with national forensic institutions and law enforcement agencies",
-    "Focus on developing original scientific problem-solving and critical investigative capabilities",
-    "Mentorship from experienced research supervisors with indexed publications and patents",
-    "Scholarship options available based on National Level Exams (such as NET/GATE/GPAT)",
+    "A PhD in Forensic Science degree shall be for a minimum duration of three years.",
+    "Familiarize learners with the field of forensic science, which involves investigating crimes by applying principles of forensic science.",
+    "Provide students with the knowledge, skills, and abilities to prepare them for successful careers in forensic science.",
+    "Develop students’ critical thinking ability, problem-solving skills, and advanced discipline-specific knowledge.",
+    "Produce high-quality graduates capable of advancement into leadership positions.",
+    "Engage in collaborative research that demonstrates industrial relevance and wider scientific awareness.",
+    "Scholarship based on National Level Exams (CUCET, GPAT, and more)",
+  ],
+  subjectsTitle: "PhD in Forensic Science – Subjects",
+  subjectsParagraphs: [
+    "The university is widely recognized as one of the top colleges in India, as it offers a curriculum that is centered on the industry, superior facilities, and practical training.",
+    "The PhD Forensic Science program contains core and elective courses:",
   ],
   subjects: [
     "Research Methodology",
     "Research and Publication Ethics",
-    "IT Skills in Research",
+    "IT Skills",
     "Literature Survey",
-    "Domain Specific Advanced Courses",
-  ],
-  learningOutcomes: [
-    "Advanced Discipline-Specific Knowledge",
-    "Independent & Collaborative Forensic Research",
-    "Critical Thinking & Complex Evidence Problem-Solving",
-    "Advanced Analytical Instrumentation & IT Expertise",
-    "Research Ethics & Publication Competence",
+    "Domain Knowledge Course",
   ],
   admission: {
-    eligibility:
-      "Candidates must hold a Master's degree with at least 55% aggregate marks in Forensic Science, Physics, Chemistry, Biochemistry, Life Sciences, or allied disciplines from a recognized university. A 5% relaxation is provided for reserved categories (SC/ST/OBC/EWS/PwD).",
-    whyChooseHeading: "Scope & Admission Process for Ph.D. in Forensic Science",
+    whyChooseHeading:
+      "Geeta University PhD in Forensic Science Admission Process:",
     whyChooseParagraphs: [
-      "Admissions are based on postgraduate academic merit, research proposal evaluation, and performance in the University entrance examination and interview.",
-      "Scholarships are available for qualifying national-level test holders (such as UGC-NET / CSIR-NET / GATE / GPAT).",
+      "The minimum eligibility for admission to a Doctorate degree in Forensic Science Science at Geeta University Panipat is Post Graduation with 55% in Forensic Science, or related fields such as Physics, Chemistry, Biochemistry, or Life Sciences, from a recognized university.",
+      "A 5% relaxation for reserved categories like SC/ST/OBC/EW.",
     ],
   },
-  whyGeeta: {
-    title: "Reasons to Choose Geeta University for Ph.D. in Forensic Science",
-    intro:
-      "Geeta University offers a vibrant doctoral research environment supported by modern analytical laboratories, experienced faculty supervisors, and interdisciplinary collaboration opportunities.",
-    reasons: [
-      {
-        title: "Multidisciplinary Research Environment",
-        description:
-          "Engage in cutting-edge doctoral research across Digital & Cyber Forensics, Forensic Biology, Serology, Chemistry, Toxicology, and Questioned Document Analysis.",
-      },
-      {
-        title: "Advanced Laboratory Infrastructure",
-        description:
-          "Equipped with modern analytical instrumentation, chromatography, spectrophotometry, and simulation facilities to support high-impact doctoral research.",
-      },
-      {
-        title: "Expert Guidance & Mentorship",
-        description:
-          "Supervised by recognized faculty guides with established records of patents, government grants, and high-impact journal publications.",
-      },
-      {
-        title: "Industry & Legal Collaborations",
-        description:
-          "Institutional linkages with Central & State FSLs and law enforcement agencies provide authentic research exposure and collaborative avenues.",
-      },
-    ],
+  scholarships: {
+    scholarships: {
+      title: "SCHOLARSHIPS AT GEETA UNIVERSITY",
+      description:
+        "We believe that financial constraints should not limit access to quality education. At Geeta University, we offer scholarships based on:",
+      criteria: [
+        "Merit/Percentage in Qualifying Exams",
+        "National Level Entrance Exams (JEE, CUET, NEET, CLAT, and more)",
+        "Social Responsibility",
+        "Sports Performance",
+      ],
+      linkText: "Know More",
+      linkUrl: "https://geetauniversity.edu.in/scholarship",
+    },
+    guts: {
+      title: "GUTS",
+      subtitle: "Geeta University Test of Scholarship",
+      description:
+        "Geeta University (GU) strongly believes that monetary constraints should not be an obstacle for a student to have access to quality education. Geeta University Test of Scholarship (GUTS) provides students with an opportunity to reduce the financial burden and get up to 100% off on tuition fees based on their performance.",
+      linkText: "Apply Now",
+      linkUrl: "https://geetauniversity.edu.in/guts",
+    },
   },
-  career: {
-    title: "Career Opportunities After Ph.D. in Forensic Science",
-    intro:
-      "A doctorate in Forensic Science opens diverse high-level career pathways across academia, government scientific bureaus, and corporate consulting:",
-    govtRoles: [
-      {
-        title: "University Professor / Research Scientist",
-        description:
-          "Teach undergraduate and postgraduate courses and lead funded scientific research projects at universities.",
-      },
-      {
-        title: "Senior Government Forensic Scientist",
-        description:
-          "Conduct high-level forensic investigations and research in Central and State Forensic Science Laboratories.",
-      },
-      {
-        title: "Forensic Toxicologist & DNA Expert",
-        description:
-          "Lead specialized forensic diagnostic units examining complex toxicological, chemical, and biological evidence.",
-      },
-    ],
-    privateRoles: [
-      {
-        title: "Postdoctoral Researcher & Lead Investigator",
-        description:
-          "Direct advanced research projects in corporate risk consultancies, analytical laboratories, and international research institutes.",
-      },
-      {
-        title: "Forensic Laboratory Director & Consultant",
-        description:
-          "Manage private analytical laboratories, corporate fraud investigation practices, and legal expert witness consultancies.",
-      },
-    ],
-  },
-  faculty: [
-    {
-      name: "Dr. Parmjeet Kaur",
-      designation: "Assistant Professor",
-      qualification: "Ph.D.",
-      image: "/programs/forensic-sciences/parmjeet-kaur.webp",
-      description:
-        "Specialized in Atomic Physics and Spectroscopy. Qualified CSIR-NET in Physical Sciences with All India Rank (AIR) 19.",
-    },
-    {
-      name: "Mr. Sahil Sharma",
-      designation: "Assistant Professor",
-      qualification: "M.Sc. (Forensic Science), UGC-NET",
-      image: "/programs/forensic-sciences/sahil-sharma.webp",
-      description:
-        "Published 2 research papers and authored 2 textbooks. Active contributor to forensic science education and mock crime scene training.",
-    },
-    {
-      name: "Dr. Aditi Sharma",
-      designation: "Assistant Professor",
-      qualification: "Ph.D.",
-      image: "/programs/forensic-sciences/aditi-sharma.webp",
-      description:
-        "Published research and review articles in Forensic Nanotechnology. Holds 3 registered copyrights and 2 patents. Active contributor to emerging domains in forensic research.",
-    },
-    {
-      name: "Dr. Yukti Mahajan",
-      designation: "Assistant Professor",
-      qualification: "Ph.D.",
-      image: "/programs/forensic-sciences/yukti-mahajan.webp",
-      description:
-        "Specialized in fractional calculus, special functions, and integral transforms. Published 4 research papers with active contributions to mathematical modeling.",
-    },
-    {
-      name: "Ms. Deepmala Dalal",
-      designation: "Assistant Professor",
-      qualification: "M.Sc., Ph.D. Scholar",
-      image: "/programs/forensic-sciences/deepmala-dalal.webp",
-      description:
-        "Expertise in electrochemical sensing, nanomaterials, water quality assessment, and environmental remediation techniques.",
-    },
-  ],
   testimonials: [
-    {
-      name: "Chodisetti Anapurna",
-      role: "Ph.D. Forensic Science Scholar",
-      image:
-        "/programs/forensic-sciences/phd-forensic-science/anapurna_testimonial.webp",
-      text: "Geeta University provided me with excellent research opportunities and practical exposure during my Ph.D. in Forensic Science. The advanced learning environment and guidance from experienced faculty helped me strengthen my scientific knowledge and prepare for future career opportunities.",
-    },
     {
       name: "Saurav Kumar",
       role: "Ph.D. Forensic Science Scholar",
@@ -185,7 +95,40 @@ export const phdForensicScience: CoursePageData = {
         "/programs/forensic-sciences/phd-forensic-science/saurav_testimonial.webp",
       text: "Pursuing my Ph.D. in Forensic Science at Geeta University enhanced my research capabilities, analytical thinking, and expertise in forensic investigation techniques. The university’s research-oriented environment and academic support played a vital role in my professional and intellectual development.",
     },
+    {
+      name: "Chodisetti Anapurna",
+      role: "Ph.D. Forensic Science Scholar",
+      image:
+        "/programs/forensic-sciences/phd-forensic-science/anapurna_testimonial.webp",
+      text: "Geeta University provided me with excellent research opportunities and practical exposure during my Ph.D. in Forensic Science. The advanced learning environment and guidance from experienced faculty helped me strengthen my scientific knowledge and prepare for future career opportunities.",
+    },
   ],
+  career: {
+    title: "Career Opportunities After PhD in Forensic Science:",
+    intro:
+      "A Doctorate degree in Forensic Science opens up multiple career options in both the public and private industries. Below are a few ideal career path:",
+    roles: [
+      "University Professor/Lecturer: Teach forensic science courses at colleges and universities.",
+      "Research Scientist: Conduct forensic research in universities, government agencies, or private institutions.",
+      "Postdoctoral Researcher: Engage in advanced forensic science research projects.",
+      "Forensic Scientist: Work in crime labs analyzing evidence for law enforcement agencies.",
+      "Forensic Toxicologist: Specialize in detecting toxins, drugs, and chemicals in biological samples.",
+      "Forensic Pathologist: Conduct postpartum and determine reasons of death.",
+    ],
+    whoShouldPursue: {
+      title: "Who Should Pursue?",
+      description:
+        "A PhD in Forensic Science is suitable for those who are passionate about scientific inquiry, criminal justice, and research. This program is well-designed for graduates in forensic science, biology, chemistry, and medical fields seeking specialization in toxicology, DNA analysis, or forensic anthropology. Law enforcement personnel, crime scene analysts, and legal practitioners with an interest in forensic evidence also gain from this advanced degree. Scholars and research enthusiasts aspiring to coach or create modern forensic procedures encounter significant prospects in this domain.",
+    },
+  },
+  whyGeeta: {
+    title: "Reasons to Choose Geeta University for PhD in Forensic science",
+    paragraphs: [
+      "Geeta University distinguishes itself in offering a Doctorate in Forensic Science via its multidisciplinary research environment, advanced facilities, and committed professors with knowledge in advanced forensic techniques. The curriculum prioritizes practical case analysis, sophisticated analytical methods, and precise scientific training, equipping learners for leadership roles in academia, investigative agencies, and forensic labs.",
+      "Geeta University promotes innovation and professional excellence in forensic science via robust industry collaborations, a commitment to ethical research, and chances for publication and worldwide engagement.",
+    ],
+  },
+  faculty: [],
   learningSpaces: {
     title: "Highlights of Our Learning Spaces",
     spaces: [
@@ -215,7 +158,7 @@ export const phdForensicScience: CoursePageData = {
   cta: {
     title: "Ready to pursue PhD in Forensic Science?",
     description:
-      "Apply now at Geeta University and advance your research journey in forensic science and scientific investigation.",
+      "Join the School of Sciences at Geeta University. Apply now for the upcoming academic session to secure your place in industry-ready Forensic Science programs.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
       "/programs/forensic-sciences/ForensicScienceBrochure.pdf",

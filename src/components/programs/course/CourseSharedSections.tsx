@@ -42,7 +42,7 @@ export default function CourseSharedSections({
 
   // 1. Meet Our Mentors: Directly imported and shared from the main program page
   const faculty =
-    course.faculty && course.faculty.length > 0
+    course.faculty !== undefined
       ? course.faculty
       : resolvedSchool?.faculty && resolvedSchool.faculty.length > 0
       ? resolvedSchool.faculty
@@ -60,7 +60,7 @@ export default function CourseSharedSections({
 
   // 3. Testimonials: Shared student graduate stories normalized to CourseTestimonial format
   const rawTestimonials =
-    course.testimonials && course.testimonials.length > 0
+    course.testimonials !== undefined
       ? course.testimonials
       : resolvedSchool?.testimonials ||
         computerScienceSchool.testimonials ||

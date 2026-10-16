@@ -36,12 +36,15 @@ export default function CoursePage({ course, school }: CoursePageProps) {
       <CourseMainSection
         overview={course.overview}
         takeaways={course.takeaways}
+        takeawaysTitle={course.takeawaysTitle}
         subjects={course.subjects}
         subjectsTitle={course.subjectsTitle}
         subjectsParagraphs={course.subjectsParagraphs}
         learningOutcomes={course.learningOutcomes}
         admission={course.admission}
         programName={course.hero?.title || course.quickInfo?.program}
+        discipline={schoolName}
+        whatIs={course.whatIs}
       />
 
       {/* 4. Modular Shared Program Sections Template
