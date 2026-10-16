@@ -1,4 +1,4 @@
-import { prisma } from "@/server/db/client";
+import { prisma, ContentStatus, type Prisma } from "@/server/db/client";
 import { getLocalizedBody, getLocalizedField, DEFAULT_LOCALE } from "@/lib/i18n/localization";
 
 export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
@@ -244,17 +244,54 @@ export async function getPageSectionsAdmin(pageSlug: string) {
   };
 }
 
-export async function getAdminPages(filters: any = {}) {
-  const pages = await prisma.page.findMany({
-    orderBy: { updatedAt: "desc" },
-    include: {
-      seo: true,
-      createdBy: { select: { name: true } },
-      updatedBy: { select: { name: true } },
-      _count: { select: { revisions: true } },
-    },
-  });
-  return { pages, totalCount: pages.length, page: 1, totalPages: 1 };
+export interface AdminPageFilters {
+  query?: string;
+  status?: ContentStatus | "ALL";
+  page?: number;
+  pageSize?: number;
+}
+
+export async function getAdminPages(filters: AdminPageFilters = {}) {
+  const where: Prisma.PageWhereInput = {};
+  const query = filters.query?.trim();
+  const page = Math.max(filters.page ?? 1, 1);
+  const pageSize = Math.min(Math.max(filters.pageSize ?? 15, 1), 100);
+  const skip = (page - 1) * pageSize;
+
+  if (query) {
+    where.OR = [
+      { title: { contains: query } },
+      { slug: { contains: query } },
+    ];
+  }
+
+  if (filters.status && filters.status !== "ALL") {
+    where.status = filters.status;
+  }
+
+  const [pages, totalCount] = await Promise.all([
+    prisma.page.findMany({
+      where,
+      skip,
+      take: pageSize,
+      orderBy: { updatedAt: "desc" },
+      include: {
+        seo: true,
+        createdBy: { select: { name: true } },
+        updatedBy: { select: { name: true } },
+        _count: { select: { revisions: true } },
+      },
+    }),
+    prisma.page.count({ where }),
+  ]);
+
+  return {
+    pages,
+    totalCount,
+    page,
+    pageSize,
+    totalPages: Math.max(Math.ceil(totalCount / pageSize), 1),
+  };
 }
 
 export async function getAdminPageById(id: string) {

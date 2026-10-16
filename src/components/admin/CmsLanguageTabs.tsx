@@ -112,15 +112,6 @@ export function CmsLanguageTabs({
             </span>
           )}
         </div>
-
-        <div className="flex items-center gap-3 text-[11px] font-medium text-slate-500">
-          <span className="inline-flex items-center gap-1 text-emerald-700">
-            <CheckCircle2 className="h-3 w-3 text-emerald-600" /> Published
-          </span>
-          <span className="inline-flex items-center gap-1 text-amber-700">
-            <AlertCircle className="h-3 w-3 text-amber-500" /> Draft
-          </span>
-        </div>
       </div>
     </div>
   );

@@ -17,27 +17,12 @@ import {
   Trash2,
   Edit,
   Save,
-  GraduationCap,
   FileText,
-  HelpCircle,
-  Award,
-  Globe,
-  BookOpen,
   ArrowUp,
   ArrowDown,
-  Layers,
 } from "lucide-react";
 
 import { ADMISSIONS_PAGES_OPTIONS } from "../admissionsConfig";
-
-const ICON_MAP: Record<string, any> = {
-  GraduationCap,
-  BookOpen,
-  HelpCircle,
-  Award,
-  Globe,
-  FileText,
-};
 
 interface AdmissionsCmsDashboardProps {
   initialPageSlug?: string;
@@ -213,7 +198,6 @@ export function AdmissionsCmsDashboard({
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
           {ADMISSIONS_PAGES_OPTIONS.map((opt) => {
-            const Icon = ICON_MAP[opt.iconName] || GraduationCap;
             const isSelected = opt.slug === selectedPageSlug;
 
             return (
@@ -227,7 +211,6 @@ export function AdmissionsCmsDashboard({
                     : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
                 }`}
               >
-                <Icon className={`h-5 w-5 ${isSelected ? "text-slate-700" : "text-slate-400"}`} />
                 <span className="text-xs font-bold leading-tight">{opt.title}</span>
                 <span className={`text-[10px] ${isSelected ? "text-slate-300" : "text-slate-400"}`}>
                   {opt.publicRoute}
@@ -244,7 +227,6 @@ export function AdmissionsCmsDashboard({
         <div className="lg:col-span-4 space-y-4">
           <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
             <h3 className="text-xs font-bold uppercase tracking-wider text-[#0A1F44] mb-3 flex items-center gap-2">
-              <Layers className="h-4 w-4 text-slate-700" />
               {currentPageOption.title} Sections
             </h3>
 

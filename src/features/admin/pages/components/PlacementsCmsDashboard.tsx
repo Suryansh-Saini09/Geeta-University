@@ -7,15 +7,6 @@ import {
   AlertCircle,
   Plus,
   Trash2,
-  Trophy,
-  Building2,
-  GraduationCap,
-  TrendingUp,
-  UserCheck,
-  Video,
-  MessageSquareQuote,
-  Image as ImageIcon,
-  HelpCircle,
 } from "lucide-react";
 import { updatePageSectionAction, updatePageSeoAction } from "@/features/admin/pages/actions";
 import {
@@ -32,16 +23,16 @@ interface PlacementsCmsDashboardProps {
 }
 
 const SECTION_KEYS = [
-  { key: "hero", label: "Hero & Key Metrics", icon: Trophy },
-  { key: "recruiters", label: "Top Recruiters", icon: Building2 },
-  { key: "cdc", label: "Career Development Cell (CDC)", icon: GraduationCap },
-  { key: "placement_snapshot", label: "Salary & Package Breakdown", icon: TrendingUp },
-  { key: "student_stories", label: "Student Success Stories", icon: UserCheck },
-  { key: "drives", label: "Placement Drives", icon: Video },
-  { key: "hr_voices", label: "Recruiter Voices (HR)", icon: MessageSquareQuote },
-  { key: "placement_gallery", label: "Placement Day Gallery", icon: ImageIcon },
-  { key: "faqs", label: "Placement FAQs", icon: HelpCircle },
-  { key: "seo", label: "SEO Metadata", icon: ImageIcon },
+  { key: "hero", label: "Hero & Key Metrics" },
+  { key: "recruiters", label: "Top Recruiters" },
+  { key: "cdc", label: "Career Development Cell (CDC)" },
+  { key: "placement_snapshot", label: "Salary & Package Breakdown" },
+  { key: "student_stories", label: "Student Success Stories" },
+  { key: "drives", label: "Placement Drives" },
+  { key: "hr_voices", label: "Recruiter Voices (HR)" },
+  { key: "placement_gallery", label: "Placement Day Gallery" },
+  { key: "faqs", label: "Placement FAQs" },
+  { key: "seo", label: "SEO Metadata" },
 ];
 
 export function PlacementsCmsDashboard({ initialData }: PlacementsCmsDashboardProps) {
@@ -112,7 +103,7 @@ export function PlacementsCmsDashboard({ initialData }: PlacementsCmsDashboardPr
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl bg-white p-6 shadow-xs border border-slate-200">
         <div>
-          <h1 className="text-2xl font-serif font-bold text-[#0A1F44]">Placements CMS Editor</h1>
+          <h1 className="text-2xl font-serif font-bold text-[#0A1F44]">Placements</h1>
           <p className="mt-1 text-sm text-slate-500">
             Manage all 9 public sections and SEO metadata for the <code className="font-semibold text-slate-800">/placements</code> page.
           </p>
@@ -155,7 +146,6 @@ export function PlacementsCmsDashboard({ initialData }: PlacementsCmsDashboardPr
             Placements Sections
           </div>
           {SECTION_KEYS.map((item) => {
-            const Icon = item.icon;
             const status = getSectionStatus(item.key);
             const isActive = activeSection === item.key;
 
@@ -171,7 +161,6 @@ export function PlacementsCmsDashboard({ initialData }: PlacementsCmsDashboardPr
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Icon className={`h-4 w-4 ${isActive ? "text-slate-700" : "text-slate-400"}`} />
                   <span>{item.label}</span>
                 </div>
                 <span
