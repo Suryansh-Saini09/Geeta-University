@@ -7,13 +7,6 @@ import {
   AlertCircle,
   Plus,
   Trash2,
-  Sparkles,
-  HelpCircle,
-  Building2,
-  Trophy,
-  Calendar,
-  Users,
-  Image as ImageIcon,
 } from "lucide-react";
 import { updatePageSectionAction, updatePageSeoAction } from "@/features/admin/pages/actions";
 import {
@@ -30,13 +23,13 @@ interface CampusLifeCmsDashboardProps {
 }
 
 const SECTION_KEYS = [
-  { key: "hero", label: "Hero & Overview", icon: Sparkles },
-  { key: "facilities", label: "Campus Infrastructure", icon: Building2 },
-  { key: "sports", label: "Sports Facilities", icon: Trophy },
-  { key: "events", label: "Campus Events & Fests", icon: Calendar },
-  { key: "personalities", label: "Eminent Personalities", icon: Users },
-  { key: "faqs", label: "Campus FAQs", icon: HelpCircle },
-  { key: "seo", label: "SEO Metadata", icon: ImageIcon },
+  { key: "hero", label: "Hero & Overview" },
+  { key: "facilities", label: "Campus Infrastructure" },
+  { key: "sports", label: "Sports Facilities" },
+  { key: "events", label: "Campus Events & Fests" },
+  { key: "personalities", label: "Eminent Personalities" },
+  { key: "faqs", label: "Campus FAQs" },
+  { key: "seo", label: "SEO Metadata" },
 ];
 
 export function CampusLifeCmsDashboard({ initialData }: CampusLifeCmsDashboardProps) {
@@ -107,7 +100,7 @@ export function CampusLifeCmsDashboard({ initialData }: CampusLifeCmsDashboardPr
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl bg-white p-6 shadow-xs border border-slate-200">
         <div>
-          <h1 className="text-2xl font-serif font-bold text-[#0A1F44]">Campus Life CMS Editor</h1>
+          <h1 className="text-2xl font-serif font-bold text-[#0A1F44]">Campus Life</h1>
           <p className="mt-1 text-sm text-slate-500">
             Manage all 6 public sections and SEO metadata for the <code className="font-semibold text-slate-800">/campus-life</code> page.
           </p>
@@ -150,7 +143,6 @@ export function CampusLifeCmsDashboard({ initialData }: CampusLifeCmsDashboardPr
             Campus Life Sections
           </div>
           {SECTION_KEYS.map((item) => {
-            const Icon = item.icon;
             const status = getSectionStatus(item.key);
             const isActive = activeSection === item.key;
 
@@ -166,7 +158,6 @@ export function CampusLifeCmsDashboard({ initialData }: CampusLifeCmsDashboardPr
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Icon className={`h-4 w-4 ${isActive ? "text-slate-700" : "text-slate-400"}`} />
                   <span>{item.label}</span>
                 </div>
                 <span

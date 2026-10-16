@@ -7,15 +7,8 @@ import {
   AlertCircle,
   Plus,
   Trash2,
-  BookOpen,
-  Library,
-  Clock,
-  UserCheck,
-  Globe,
-  FileSpreadsheet,
   ArrowUp,
   ArrowDown,
-  Sparkles,
 } from "lucide-react";
 import { updatePageSectionAction, updatePageSeoAction } from "@/features/admin/pages/actions";
 import {
@@ -32,13 +25,13 @@ interface LibraryCmsDashboardProps {
 }
 
 const SECTION_KEYS = [
-  { key: "hero", label: "Hero Banner", icon: Sparkles },
-  { key: "metrics", label: "Resource Metrics", icon: BookOpen },
-  { key: "overview", label: "Overview & Reference", icon: Library },
-  { key: "portals", label: "Digital Portals", icon: Globe },
-  { key: "hours_policy", label: "Hours & Policy", icon: Clock },
-  { key: "loan_rules", label: "Loan Details Table", icon: FileSpreadsheet },
-  { key: "contact", label: "Librarian Contact", icon: UserCheck },
+  { key: "hero", label: "Hero Banner" },
+  { key: "metrics", label: "Resource Metrics" },
+  { key: "overview", label: "Overview & Reference" },
+  { key: "portals", label: "Digital Portals" },
+  { key: "hours_policy", label: "Hours & Policy" },
+  { key: "loan_rules", label: "Loan Details Table" },
+  { key: "contact", label: "Librarian Contact" },
 ];
 
 export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
@@ -92,7 +85,7 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <h2 className="font-serif text-3xl font-bold text-[#0A1F44]">
-            Central Library CMS
+            Central Library
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             Manage public library resources, metrics, loan circulation policies, and digital resource portals.
@@ -122,20 +115,18 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
       {/* Tabs Navigation */}
       <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-2">
         {SECTION_KEYS.map((sec) => {
-          const Icon = sec.icon;
           const isActive = activeSection === sec.key;
           return (
             <button
               key={sec.key}
               type="button"
               onClick={() => setActiveSection(sec.key)}
-              className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all ${
+              className={`inline-flex items-center rounded-xl px-4 py-2.5 text-xs font-bold transition-all ${
                 isActive
                   ? "bg-[#0A1F44] text-white shadow-md shadow-slate-900/10"
                   : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
               }`}
             >
-              <Icon className="h-4 w-4" />
               <span>{sec.label}</span>
             </button>
           );
