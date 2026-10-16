@@ -50,9 +50,20 @@ export interface CourseLearningOutcome {
 }
 
 export interface CourseAdmissionProcess {
-  eligibility: string;
+  title?: string;
+  eligibility?: string;
   whyChooseHeading?: string;
+  whyChooseIntro?: string;
   whyChooseParagraphs?: string[];
+  whyChooseOutro?: string;
+  whyPreferTitle?: string;
+  whyPreferParagraphs?: string[];
+}
+
+export interface CourseWhatIs {
+  title: string;
+  description: string;
+  points?: string[];
 }
 
 export interface CareerRole {
@@ -73,6 +84,10 @@ export interface CourseCareerPathways {
   govtRoles?: CareerRole[];
   privateRoles?: CareerRole[];
   notes?: string;
+  whoShouldPursue?: {
+    title?: string;
+    description: string;
+  };
   recruitersTitle?: string;
   recruiters?: { name: string; logo?: string }[];
 }
@@ -87,6 +102,7 @@ export interface CourseWhyGeeta {
   intro?: string;
   paragraphs?: string[];
   reasons?: WhyGeetaReason[];
+  outro?: string;
 }
 
 export interface LearningSpaceItem {
@@ -236,11 +252,13 @@ export interface CoursePageData {
   hero: CourseHero;
   quickInfo: CourseQuickInfo;
   overview: CourseOverview;
-  takeaways: string[];
+  whatIs?: CourseWhatIs;
+  takeawaysTitle?: string;
+  takeaways?: string[];
   subjects: string[];
   subjectsTitle?: string;
   subjectsParagraphs?: string[];
-  learningOutcomes: string[];
+  learningOutcomes?: string[];
   admission?: CourseAdmissionProcess;
   career?: CourseCareerPathways;
   whyGeeta?: CourseWhyGeeta;

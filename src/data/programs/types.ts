@@ -87,6 +87,7 @@ export interface ProgramPageData {
   };
 
   courses?: CourseCategory[];
+  coursesSectionTitle?: string;
 
   faculty?: FacultyMember[];
   mentors?: FacultyMember[];

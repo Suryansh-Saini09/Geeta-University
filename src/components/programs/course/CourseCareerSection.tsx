@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Briefcase, Building2, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Briefcase, Building2, ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
 import type {
   CourseCareerPathways,
   CourseWhyGeeta,
@@ -50,6 +50,113 @@ function getRecruiterLogo(recruiter: { name: string; logo?: string }): string | 
     if (key.includes(nameKey)) return path;
   }
   return undefined;
+}
+
+function getRoleIcon(name: string) {
+  const n = name.toLowerCase();
+  if (
+    n.includes("agri") ||
+    n.includes("agronom") ||
+    n.includes("breeder") ||
+    n.includes("soil") ||
+    n.includes("horticultur") ||
+    n.includes("farm") ||
+    n.includes("crop") ||
+    n.includes("seed") ||
+    n.includes("plant")
+  ) {
+    return (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2a9 9 0 0 1 9 9c0 4-3 7-9 11C6 18 3 15 3 11a9 9 0 0 1 9-9z" />
+        <path d="M12 7v10" />
+      </svg>
+    );
+  }
+  if (
+    n.includes("software") ||
+    n.includes("developer") ||
+    n.includes("coder") ||
+    n.includes("engineer") ||
+    n.includes("cyber") ||
+    n.includes("tech")
+  ) {
+    return (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="16 18 22 12 16 6" />
+        <polyline points="8 6 2 12 8 18" />
+      </svg>
+    );
+  }
+  if (
+    n.includes("data") ||
+    n.includes("analyst") ||
+    n.includes("finance") ||
+    n.includes("banker") ||
+    n.includes("audit")
+  ) {
+    return (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10" />
+        <line x1="12" y1="20" x2="12" y2="4" />
+        <line x1="6" y1="20" x2="6" y2="14" />
+      </svg>
+    );
+  }
+  if (
+    n.includes("health") ||
+    n.includes("diet") ||
+    n.includes("pharma") ||
+    n.includes("clinical") ||
+    n.includes("medical") ||
+    n.includes("dna") ||
+    n.includes("biolog") ||
+    n.includes("toxicolog")
+  ) {
+    return (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2v20M2 12h20" />
+      </svg>
+    );
+  }
+  if (
+    n.includes("law") ||
+    n.includes("court") ||
+    n.includes("legal") ||
+    n.includes("judic") ||
+    n.includes("counsel")
+  ) {
+    return (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3v18" />
+        <path d="M3 7l9-4 9 4" />
+        <path d="M6 10l-3 6h6l-3-6z" />
+        <path d="M18 10l-3 6h6l-3-6z" />
+      </svg>
+    );
+  }
+  if (
+    n.includes("forensic") ||
+    n.includes("investigat") ||
+    n.includes("crime") ||
+    n.includes("scene") ||
+    n.includes("agent") ||
+    n.includes("expert") ||
+    n.includes("psychiatr") ||
+    n.includes("handwriting")
+  ) {
+    return (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    );
+  }
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12 2 2 7 12 12 22 7 12 2" />
+      <polyline points="2 17 12 22 22 17" />
+      <polyline points="2 12 12 17 22 12" />
+    </svg>
+  );
 }
 
 interface CarouselItem {
@@ -145,78 +252,57 @@ function RecruitersCarousel({ items }: { items: CarouselItem[] }) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Left Movement Arrow */}
+      {/* Left Arrow */}
       <button
         type="button"
         onClick={handlePrev}
         aria-label="Previous recruiters"
-        className="absolute -left-2 sm:-left-3 top-1/2 z-30 flex h-9 w-9 sm:h-11 sm:w-11 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/95 backdrop-blur-md text-[#0A1F44] shadow-md transition-all duration-300 hover:border-[#E8871A] hover:bg-[#0A1F44] hover:text-[#E8871A] hover:scale-110 active:scale-95 pointer-events-auto cursor-pointer"
+        className="absolute -left-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-[#0A1F44] shadow-md transition-all hover:bg-[#0A1F44] hover:text-white"
       >
-        <ChevronLeft size={20} strokeWidth={2.5} />
+        <ChevronLeft size={18} />
       </button>
 
-      {/* Right Movement Arrow */}
+      {/* Right Arrow */}
       <button
         type="button"
         onClick={handleNext}
         aria-label="Next recruiters"
-        className="absolute -right-2 sm:-right-3 top-1/2 z-30 flex h-9 w-9 sm:h-11 sm:w-11 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/95 backdrop-blur-md text-[#0A1F44] shadow-md transition-all duration-300 hover:border-[#E8871A] hover:bg-[#0A1F44] hover:text-[#E8871A] hover:scale-110 active:scale-95 pointer-events-auto cursor-pointer"
+        className="absolute -right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-[#0A1F44] shadow-md transition-all hover:bg-[#0A1F44] hover:text-white"
       >
-        <ChevronRight size={20} strokeWidth={2.5} />
+        <ChevronRight size={18} />
       </button>
 
-      {/* Carousel Track */}
+      {/* Track */}
       <div
         ref={scrollContainerRef}
         onMouseDown={handleMouseDown}
+        onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="flex w-full gap-3 sm:gap-4 overflow-x-auto pb-4 pt-2 scroll-smooth cursor-grab active:cursor-grabbing select-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        style={{ scrollSnapType: "x mandatory" }}
+        className="flex w-full gap-4 overflow-x-auto pb-2 pt-1 scroll-smooth cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {items.map((recruiter, idx) => (
-          <motion.div
+        {items.map((item, idx) => (
+          <div
             key={idx}
-            whileHover={{ scale: 1.04, y: -4 }}
-            transition={{ type: "spring", stiffness: 450, damping: 15 }}
-            style={{
-              scrollSnapAlign: "start",
-              borderColor: "rgba(232, 135, 26, 0.22)",
-              boxShadow: "0 6px 20px rgba(0, 0, 0, 0.04)",
-              backgroundColor: "#FFFFFF",
-            }}
-            className="flex h-[110px] sm:h-[126px] w-[calc((100%-12px)/2)] sm:w-[calc((100%-24px)/3)] md:w-[calc((100%-36px)/4)] lg:w-[calc((100%-60px)/5)] shrink-0 items-center justify-center rounded-2xl border bg-white px-5 py-3 transition-all duration-300 select-none box-border hover:border-[#E8871A] hover:shadow-lg"
+            className="flex h-[76px] w-[150px] shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white p-3 shadow-xs transition-all hover:shadow-md"
           >
-            {recruiter.logo ? (
+            {item.logo ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={recruiter.logo}
-                alt={recruiter.name}
-                style={{
-                  maxHeight: 70,
-                  maxWidth: "92%",
-                  width: "auto",
-                  height: "auto",
-                  objectFit: "contain",
-                  backgroundColor: "#FFFFFF",
-                }}
-                className="pointer-events-none transition-transform duration-200"
+                src={item.logo}
+                alt={item.name}
+                className="max-h-[46px] max-w-[85%] object-contain pointer-events-none"
                 loading="lazy"
               />
             ) : (
-              <div className="flex items-center gap-2 text-center">
-                <div className="w-8 h-8 rounded-lg bg-[#FFF4E8] flex items-center justify-center shrink-0">
-                  <Building2 size={17} className="text-[#E8871A]" />
-                </div>
-                <span className="text-[14px] font-bold text-[#0A1F44] leading-tight">
-                  {recruiter.name}
-                </span>
-              </div>
+              <span className="text-[13px] font-bold text-[#0A1F44] text-center leading-tight">
+                {item.name}
+              </span>
             )}
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>
@@ -232,23 +318,7 @@ export default function CourseCareerSection({
   const roles = career?.roles || [];
   const recruiters = career?.recruiters || [];
 
-  // Build the list of carousel items with logos
-  // If recruiters are specified in the course data, use ONLY those recruiters.
-  const rawList =
-    recruiters.length > 0
-      ? recruiters
-      : [
-          { name: "Infosys" },
-          { name: "Wipro" },
-          { name: "Accenture" },
-          { name: "IBM" },
-          { name: "TCS" },
-          { name: "Amazon" },
-          { name: "Capgemini" },
-          { name: "HCL" },
-        ];
-
-  const carouselItems = rawList
+  const carouselItems: CarouselItem[] = recruiters
     .map((recruiter) => ({
       name: recruiter.name,
       logo: getRecruiterLogo(recruiter),
@@ -258,88 +328,160 @@ export default function CourseCareerSection({
       return !n.includes("tech mahindra") && !n.includes("genpact");
     });
 
+  const structuredRoles = [
+    ...(career?.govtRoles || []),
+    ...(career?.privateRoles || []),
+  ];
+
   return (
     <section
       id="CareerOpportunities"
       style={{
-        background: "#F8FAFC",
-        borderTop: "1px solid #E2E8F0",
-        borderBottom: "1px solid #E2E8F0",
+        background: "#FDF1D6",
+        borderTop: "1px solid rgba(0, 0, 0, 0.06)",
+        borderBottom: "1px solid rgba(0, 0, 0, 0.06)",
+        position: "relative",
+        overflow: "hidden",
       }}
-      className="w-full py-14 sm:py-18 relative overflow-hidden"
+      className="w-full py-16 sm:py-20"
     >
-      <div className="max-w-[1200px] mx-auto px-5 sm:px-8 lg:px-10">
-        
-        {/* ── 1. Section Header ── */}
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 relative">
         {career && (
           <div>
-            <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+            {/* ── 1. Section Header matching School Pages ── */}
+            <div className="text-center max-w-4xl mx-auto mb-10">
               <h2
                 style={{
                   fontFamily: "var(--font-serif), Georgia, serif",
-                  fontSize: "clamp(28px, 3.2vw, 38px)",
-                  fontWeight: 800,
+                  fontSize: "clamp(28px, 3.8vw, 42px)",
+                  fontWeight: 900,
                   color: "#0A1F44",
-                  lineHeight: 1.22,
-                  letterSpacing: "-0.5px",
+                  lineHeight: 1.18,
+                  letterSpacing: "-1px",
                   margin: 0,
                 }}
               >
                 {career.title}
               </h2>
+
               {career.intro && (
-                <p className="mt-3 text-base sm:text-[16.5px] text-[#4A5568] leading-relaxed">
+                <p
+                  style={{
+                    fontSize: 16,
+                    color: "#334155",
+                    maxWidth: 920,
+                    margin: "16px auto 0",
+                    lineHeight: 1.7,
+                    fontWeight: 450,
+                  }}
+                  className="text-justify sm:text-center"
+                >
                   {career.intro}
                 </p>
               )}
             </div>
 
-            {/* ── 2. Card Container for Roles & Recruiters ── */}
+            {/* ── 2. Frosted Glass Container for Roles & Recruiters ── */}
             <div
               style={{
-                background: "#FFFFFF",
-                border: "1px solid #E2E8F0",
-                borderRadius: "24px",
-                boxShadow: "0 4px 24px rgba(0, 0, 0, 0.03)",
+                marginTop: 32,
+                background: "rgba(255, 255, 255, 0.55)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "1px solid rgba(232, 135, 26, 0.16)",
+                borderRadius: "32px",
+                padding: "44px 32px",
+                boxShadow:
+                  "0 15px 35px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
               }}
-              className="p-6 sm:p-10"
             >
-              {/* Top Job Roles */}
+              {/* Top Job Roles Badges with Contextual Icons */}
               {roles.length > 0 && (
-                <div className="mb-10">
-                  <div className="text-center mb-6">
-                    <div className="inline-flex items-center gap-2 text-[#0A1F44] font-extrabold text-[20px] sm:text-[22px]">
-                      <Briefcase size={20} className="text-[#E8871A]" />
-                      <span>{career.rolesTitle || "Top Job Roles"}</span>
+                <div className="mb-6">
+                  {career.rolesTitle && (
+                    <div className="text-center mb-6">
+                      <h3
+                        style={{
+                          fontSize: 22,
+                          fontWeight: 800,
+                          color: "#0A1F44",
+                          letterSpacing: "-0.5px",
+                          margin: 0,
+                          lineHeight: 1.3,
+                        }}
+                      >
+                        {career.rolesTitle}
+                      </h3>
                     </div>
-                  </div>
+                  )}
 
-                  {/* Centered pill badge cluster */}
-                  <div className="flex flex-wrap gap-2.5 sm:gap-3 justify-center max-w-4xl mx-auto">
+                  <div className="flex flex-wrap gap-3 justify-center max-w-5xl mx-auto">
                     {roles.map((role, idx) => {
                       const cleanRole = role.includes(":") ? role.split(":")[0].trim() : role;
                       return (
-                        <div
+                        <motion.div
                           key={idx}
-                          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-200 text-[#0A1F44] text-[13.5px] sm:text-[14px] font-bold shadow-[0_1px_4px_rgba(0,0,0,0.02)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#E8871A]/60 hover:bg-amber-50/50 cursor-default select-none"
+                          whileHover={{ scale: 1.04, y: -2 }}
+                          transition={{ type: "spring", stiffness: 450, damping: 15 }}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
+                            padding: "12px 22px",
+                            background: "#FFFFFF",
+                            border: "1px solid rgba(232, 135, 26, 0.14)",
+                            borderRadius: "16px",
+                            color: "#0A1F44",
+                            fontSize: "14.5px",
+                            fontWeight: 650,
+                            cursor: "default",
+                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.02)",
+                            transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                          }}
+                          className="career-role-badge select-none"
                         >
-                          <span className="w-2 h-2 rounded-full bg-[#E8871A] shrink-0" />
+                          <span
+                            style={{
+                              color: "#E8871A",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {getRoleIcon(role)}
+                          </span>
                           <span>{cleanRole}</span>
-                        </div>
+                        </motion.div>
                       );
                     })}
                   </div>
                 </div>
               )}
 
-              {/* Divider */}
-              {roles.length > 0 && carouselItems.length > 0 && (
-                <div className="w-full max-w-xl mx-auto border-t border-slate-200 my-8" />
+              {/* Detailed Sector Pathways (Govt & Private Roles) if provided */}
+              {structuredRoles.length > 0 && (
+                <div className="mb-8 pt-6 border-t border-slate-200/60">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 max-w-5xl mx-auto">
+                    {structuredRoles.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="p-4 rounded-xl bg-white/90 border border-amber-900/10 shadow-xs transition-all duration-200 hover:border-[#E8871A]/40 hover:shadow-md"
+                      >
+                        <h4 className="font-bold text-[#0A1F44] text-[14px] mb-1">
+                          {item.title}
+                        </h4>
+                        <p className="text-[13px] text-[#4A5568] leading-relaxed">
+                          {item.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
 
               {/* Top Recruiters Carousel */}
               {carouselItems.length > 0 && (
-                <div>
+                <div className="pt-6 border-t border-slate-200/60">
                   <div className="text-center mb-6">
                     <div className="inline-flex items-center gap-2 text-[#0A1F44] font-extrabold text-[20px] sm:text-[22px]">
                       <Building2 size={20} className="text-[#E8871A]" />
@@ -350,66 +492,128 @@ export default function CourseCareerSection({
                   <RecruitersCarousel items={carouselItems} />
                 </div>
               )}
+
+              {/* Who Should Pursue */}
+              {career.whoShouldPursue && (
+                <div className="pt-6 border-t border-slate-200/60 max-w-5xl mx-auto">
+                  <div className="text-center mb-3">
+                    <h3
+                      style={{
+                        fontFamily: "var(--font-serif), Georgia, serif",
+                        fontSize: 22,
+                        fontWeight: 800,
+                        color: "#0A1F44",
+                        margin: 0,
+                      }}
+                    >
+                      {career.whoShouldPursue.title || "Who Should Pursue?"}
+                    </h3>
+                  </div>
+                  <p
+                    style={{
+                      fontSize: 15,
+                      color: "#334155",
+                      lineHeight: 1.75,
+                      fontWeight: 450,
+                    }}
+                    className="text-justify"
+                  >
+                    {career.whoShouldPursue.description}
+                  </p>
+                </div>
+              )}
             </div>
 
-            {/* ── 3. Milestone Stats Cards (40 LPA, 550+ Recruiters & 3500+ Job Offers) ── */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 max-w-3xl mx-auto my-12">
-              {/* Card 1: 40 LPA */}
+            {/* ── 3. Milestone Stats Cards (550+ Recruiters & 3500+ Job Offers) ── */}
+            <div
+              style={{
+                marginTop: 48,
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                gap: 24,
+                maxWidth: 680,
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
+              {/* Card 1: 550+ Recruiters */}
               <div
                 style={{
-                  background: "#0A1F44",
+                  background: "#0D2738",
                   borderRadius: 20,
-                  padding: "28px 20px",
+                  padding: "36px 28px",
                   textAlign: "center",
-                  boxShadow: "0 10px 30px rgba(10, 31, 68, 0.12)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 10px 30px rgba(10, 31, 68, 0.15)",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 }}
-                className="transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="career-milestone-card hover:-translate-y-1 hover:shadow-2xl"
               >
-                <div className="text-[34px] sm:text-[40px] font-black text-[#E8871A] leading-tight mb-1">
-                  40 LPA
-                </div>
-                <div className="text-[13.5px] sm:text-[14.5px] font-bold text-white uppercase tracking-wider">
-                  Highest Package
-                </div>
-              </div>
-
-              {/* Card 2: 550+ Recruiters */}
-              <div
-                style={{
-                  background: "#0A1F44",
-                  borderRadius: 20,
-                  padding: "28px 20px",
-                  textAlign: "center",
-                  boxShadow: "0 10px 30px rgba(10, 31, 68, 0.12)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                }}
-                className="transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-              >
-                <div className="text-[34px] sm:text-[40px] font-black text-[#E8871A] leading-tight mb-1">
+                <div
+                  style={{
+                    fontSize: "clamp(36px, 4.2vw, 44px)",
+                    fontWeight: 900,
+                    color: "#E8871A",
+                    lineHeight: 1.1,
+                    letterSpacing: "-0.5px",
+                    marginBottom: 10,
+                  }}
+                >
                   550+
                 </div>
-                <div className="text-[13.5px] sm:text-[14.5px] font-bold text-white uppercase tracking-wider">
+                <div
+                  style={{
+                    fontSize: 19,
+                    fontWeight: 800,
+                    color: "#FFFFFF",
+                    letterSpacing: "0.2px",
+                  }}
+                >
                   Recruiters
                 </div>
               </div>
 
-              {/* Card 3: 3500+ Job Offers */}
+              {/* Card 2: 3500+ Job Offers */}
               <div
                 style={{
-                  background: "#0A1F44",
+                  background: "#0D2738",
                   borderRadius: 20,
-                  padding: "28px 20px",
+                  padding: "36px 28px",
                   textAlign: "center",
-                  boxShadow: "0 10px 30px rgba(10, 31, 68, 0.12)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 10px 30px rgba(10, 31, 68, 0.15)",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 }}
-                className="transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="career-milestone-card hover:-translate-y-1 hover:shadow-2xl"
               >
-                <div className="text-[34px] sm:text-[40px] font-black text-[#E8871A] leading-tight mb-1">
+                <div
+                  style={{
+                    fontSize: "clamp(36px, 4.2vw, 44px)",
+                    fontWeight: 900,
+                    color: "#E8871A",
+                    lineHeight: 1.1,
+                    letterSpacing: "-0.5px",
+                    marginBottom: 10,
+                  }}
+                >
                   3500+
                 </div>
-                <div className="text-[13.5px] sm:text-[14.5px] font-bold text-white uppercase tracking-wider">
+                <div
+                  style={{
+                    fontSize: 19,
+                    fontWeight: 800,
+                    color: "#FFFFFF",
+                    letterSpacing: "0.2px",
+                  }}
+                >
                   Job Offers
                 </div>
               </div>
@@ -421,43 +625,49 @@ export default function CourseCareerSection({
         {whyGeeta && (
           <div
             style={{
-              background: "#FFFFFF",
-              border: "1px solid #E2E8F0",
-              borderRadius: "24px",
-              boxShadow: "0 4px 24px rgba(0, 0, 0, 0.03)",
+              marginTop: career ? 40 : 0,
+              background: "rgba(255, 255, 255, 0.60)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: "1px solid rgba(232, 135, 26, 0.18)",
+              borderRadius: "32px",
+              padding: "44px 32px",
+              boxShadow:
+                "0 15px 35px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.7)",
             }}
-            className="p-6 sm:p-10 mt-8"
           >
-            <h3
-              style={{
-                fontFamily: "var(--font-serif), Georgia, serif",
-                fontSize: "clamp(24px, 2.8vw, 32px)",
-                fontWeight: 800,
-                color: "#0A1F44",
-                lineHeight: 1.25,
-                letterSpacing: "-0.5px",
-                marginBottom: 16,
-              }}
-            >
-              {whyGeeta.title}
-            </h3>
+            <div className="text-center mb-8">
+              <h3
+                style={{
+                  fontFamily: "var(--font-serif), Georgia, serif",
+                  fontSize: "clamp(26px, 3.2vw, 36px)",
+                  fontWeight: 900,
+                  color: "#0A1F44",
+                  letterSpacing: "-0.5px",
+                  margin: 0,
+                }}
+              >
+                {whyGeeta.title}
+              </h3>
+            </div>
 
-            {/* Paragraphs */}
-            {whyGeeta.paragraphs && whyGeeta.paragraphs.length > 0 ? (
-              <div className="space-y-4 text-[#4A5568] text-[15.5px] sm:text-[16px] leading-relaxed font-normal">
-                {whyGeeta.paragraphs.map((p, idx) => (
-                  <p key={idx} className="text-justify leading-relaxed">
-                    {p}
-                  </p>
-                ))}
-              </div>
-            ) : whyGeeta.intro ? (
-              <p className="text-[#334155] text-[15.5px] sm:text-[16px] leading-relaxed font-normal mb-6 text-justify">
+            {/* Intro text */}
+            {whyGeeta.intro && (
+              <p
+                style={{
+                  fontSize: 16,
+                  color: "#334155",
+                  maxWidth: 960,
+                  margin: "0 auto 24px",
+                  lineHeight: 1.75,
+                }}
+                className="text-justify sm:text-center"
+              >
                 {whyGeeta.intro}
               </p>
-            ) : null}
+            )}
 
-            {/* Feature reason cards if present */}
+            {/* Feature reason cards */}
             {whyGeeta.reasons && whyGeeta.reasons.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                 {whyGeeta.reasons.map((reason, idx) => (
@@ -466,22 +676,45 @@ export default function CourseCareerSection({
                     className="p-5 rounded-2xl bg-white border border-amber-900/12 shadow-xs transition-all duration-200 hover:border-[#E8871A]/40 hover:shadow-md"
                   >
                     <div className="flex items-center gap-2 mb-2">
-                      <CheckCircle2 size={18} className="text-[#E8871A]" shrink-0 />
+                      <CheckCircle2 size={18} className="text-[#E8871A] shrink-0" />
                       <h4 className="font-bold text-[#0A1F44] text-[15px]">
                         {reason.title}
                       </h4>
                     </div>
-                    <p className="text-slate-600 text-xs leading-relaxed">
+                    <p className="text-slate-600 text-xs sm:text-[13px] leading-relaxed">
                       {reason.description}
                     </p>
                   </div>
                 ))}
               </div>
             )}
+
+            {/* Concluding Paragraphs or Outro */}
+            {whyGeeta.paragraphs && whyGeeta.paragraphs.length > 0 && (
+              <div className="space-y-4 text-[#334155] text-[15.5px] sm:text-[16px] leading-relaxed font-normal mt-6">
+                {whyGeeta.paragraphs.map((p, idx) => (
+                  <p key={idx} className="text-justify leading-relaxed">
+                    {p}
+                  </p>
+                ))}
+              </div>
+            )}
+            {whyGeeta.outro && (
+              <p className="text-[#334155] text-[15.5px] sm:text-[16px] leading-relaxed font-normal mt-6 text-justify">
+                {whyGeeta.outro}
+              </p>
+            )}
           </div>
         )}
-
       </div>
+
+      <style>{`
+        .career-role-badge:hover {
+          transform: translateY(-2px);
+          border-color: rgba(232, 135, 26, 0.4) !important;
+          box-shadow: 0 8px 20px rgba(232, 135, 26, 0.08) !important;
+        }
+      `}</style>
     </section>
   );
 }

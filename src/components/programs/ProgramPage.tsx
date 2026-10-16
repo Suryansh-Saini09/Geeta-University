@@ -103,7 +103,7 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
 
       {/* 4. PROGRAMS / COURSES OFFERED */}
       {pageData.courses && pageData.courses.length > 0 && (
-        <ProgramCourses courses={pageData.courses} />
+        <ProgramCourses courses={pageData.courses} title={pageData.coursesSectionTitle} />
       )}
 
       {/* 5. DEPARTMENT HIGHLIGHTS ("Where Learning Meets Achievement") */}

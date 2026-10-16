@@ -9,12 +9,7 @@ export const mscForensicScience: CoursePageData = {
     title: "M.Sc. Forensic Science Course | Admissions Open at GU",
     description:
       "Master in forensic science at Geeta University with hands-on labs & expert faculty. Apply now and start your career in criminal and forensic studies!",
-    keywords: [
-      "MSc Forensic Science",
-      "MSc Forensic Science Colleges Delhi NCR",
-      "Forensic Science Master Degree Panipat",
-      "Geeta University MSc Forensic",
-    ],
+    keywords: ["MSc Forensic Science"],
     canonical:
       "https://geetauniversity.edu.in/programs/school-of-forensic-sciences/msc-forensic-science",
   },
@@ -28,21 +23,15 @@ export const mscForensicScience: CoursePageData = {
     program: "M.Sc. Forensic Science",
     duration: "2 Years",
     eligibility:
-      "Bachelor's degree in Science / Forensic Science / Medicine / Engineering / Pharmacy / Dentistry / AYUSH with at least 55% aggregate marks for General/OBC (NCL)/EWS candidates and 50% for SC/ST/PwD candidates.",
+      "Bachelor's degree in Science/ Forensic Science/ Medicine/ Engineering/ Pharmacy 1 Dentistry/ Ayush with at least 55% for General/OBC (NCL)/EWS category candidate and 50% or equivalent for SC/ST and PwD category candidates.",
   },
   overview: {
     title: "M.Sc. Forensic Science",
     paragraphs: [
-      "Students pursuing an M.Sc. in Forensic Science from Geeta University receive comprehensive instruction in digital evidence, toxicology, forensic serology, and DNA analysis. The program is designed to develop robust theoretical foundations, practical forensic competencies, and interdisciplinary problem-solving skills. As one of the top institutions for Forensic Science in India, Geeta University offers training in specialized simulation labs and case study analysis, preparing graduates for key roles in national forensic laboratories, investigation bureaus, legal consultancies, and academia.",
+      "Students pursuing an M.Sc. in Forensic Science from Geeta University are taught everything about digital evidence, toxicology, forensic serology, and DNA analysis. The course is designed to develop a robust theoretical background, practical forensic skills, and an interdisciplinary understanding. Geeta School of Sciences is one of the top Forensic Science Colleges in India, and offers training in simulation labs and teaches through case studies. It enables students to evolve into professionals for work in national labs, investigation bureaus, legal consultancy, and academia.",
     ],
   },
-  takeaways: [
-    "2-year full-time Master's degree program in Forensic Science",
-    "Advanced training in digital evidence, toxicology, forensic serology, and DNA analysis",
-    "Practical simulation lab training and case-study based pedagogy",
-    "Interdisciplinary problem-solving and courtroom testimony readiness",
-    "Prepares students for roles in national labs, investigation bureaus, legal consultancy, and academia",
-  ],
+  subjectsTitle: "Program Structure:",
   subjects: [
     "Advanced Forensic Biology",
     "Forensic Serology",
@@ -62,181 +51,121 @@ export const mscForensicScience: CoursePageData = {
     "Interdisciplinary problem-solving",
     "Courtroom testimony readiness",
   ],
-  admission: {
-    eligibility:
-      "Bachelor's degree in Science / Forensic Science / Medicine / Engineering / Pharmacy / Dentistry / AYUSH with at least 55% aggregate marks for General/OBC (NCL)/EWS candidates and 50% for SC/ST/PwD candidates.",
-    whyChooseHeading: "Scope & Advantages of M.Sc. Forensic Science",
-    whyChooseParagraphs: [
-      "M.Sc. Forensic Science provides advanced specialization in forensic molecular biology, digital evidence, toxicology, and crime scene reconstruction.",
-      "Graduates develop research expertise, analytical precision, and courtroom readiness required for senior investigative and scientific roles.",
-    ],
-  },
-  whyGeeta: {
-    title: "Why Choose Geeta University for M.Sc. Forensic Science?",
-    intro:
-      "At Geeta University, education goes beyond textbooks—it's about building research competence, investigative integrity, and advanced scientific analysis capabilities.",
-    reasons: [
-      {
-        title: "Simulation Labs & Practical Exposure",
-        description:
-          "Train in dedicated simulation arenas, instrument labs, and digital investigation cells with write-blockers and analytical tools.",
-      },
-      {
-        title: "Interdisciplinary Pedagogy",
-        description:
-          "Combines biology, chemistry, law, toxicology, and digital forensics to build comprehensive investigation capabilities.",
-      },
-      {
-        title: "Research & Dissertation Focus",
-        description:
-          "Includes rigorous dissertation projects, seminars, and publication mentorship guided by experienced faculty.",
-      },
-      {
-        title: "Placement & Bureau Tie-ups",
-        description:
-          "Strong industry connections with Central & State FSLs, private risk firms, and research organizations.",
-      },
-    ],
-  },
   career: {
     title: "Career Opportunities",
     intro:
-      "M.Sc. graduates can become forensic experts, investigators, academic researchers, or legal consultants. They are preferred in forensic bureaus, research centers, and multinational legal support firms. Top recruiters include:",
-    govtRoles: [
-      {
-        title: "Central & State Forensic Science Labs",
-        description:
-          "Scientific analysis of biological, chemical, and ballistic evidence.",
-      },
-      {
-        title: "Intelligence Bureau (IB) & CFSL (CBI)",
-        description:
-          "National security and criminal investigation support.",
-      },
-      {
-        title: "National Crime Records Bureau & NDRF",
-        description:
-          "Disaster response identification and criminal record analysis.",
-      },
-    ],
-    privateRoles: [
-      {
-        title: "Private Forensic Labs & Startups",
-        description:
-          "Corporate fraud, DNA testing, and independent forensic consultancy.",
-      },
-      {
-        title: "Academic & Research Institutions",
-        description:
-          "Lecturers, assistant professors, and doctoral researchers.",
-      },
+      "M.Sc. graduates can become forensic experts, investigators, academic researchers, or legal consultants. They are preferred in forensic bureaus, research centers, and multinational legal support firms.",
+    rolesTitle: "Top recruiters include:",
+    roles: [
+      "Central Forensic Science Labs",
+      "Intelligence Bureau (IB)",
+      "CFSL (CBI)",
+      "AIIMS Forensic Dept.",
+      "National Crime Records Bureau",
+      "GEQD (Govt. Document Experts)",
+      "Regional Forensic Labs",
+      "Private Labs & Startups",
+      "National Disaster Response Force (NDRF)",
+      "Academic & Research Institutions",
     ],
   },
   faculty: [
     {
       name: "Dr. Parmjeet Kaur",
-      designation: "Assistant Professor",
-      qualification: "Ph.D.",
+      designation: "Assistant Professor, Ph.D.",
+      qualification: "Assistant Professor, Ph.D.",
       image: "/programs/forensic-sciences/parmjeet-kaur.webp",
       description:
-        "Specialized in Atomic Physics and Spectroscopy. Qualified CSIR-NET in Physical Sciences with All India Rank (AIR) 19.",
+        "My specialisation is Atomic physics and spectroscopy Ibalso qualified CSIR NET of physical with all india 19 th rank",
     },
     {
       name: "Mr. Sahil Sharma",
-      designation: "Assistant Professor",
-      qualification: "M.Sc. (Forensic Science), UGC-NET",
+      designation: "Assistant Professor, M.Sc. (Forensic Science), UGC-NET",
+      qualification: "Assistant Professor, M.Sc. (Forensic Science), UGC-NET",
       image: "/programs/forensic-sciences/sahil-sharma.webp",
       description:
-        "Published 2 research papers and authored 2 textbooks. Active contributor to forensic science education and mock crime scene training.",
+        "Published 2 Research Papers; Authored 2 Books; Active contributor to forensic science education and training.",
     },
     {
       name: "Dr. Aditi Sharma",
-      designation: "Assistant Professor",
-      qualification: "Ph.D.",
+      designation: "Assistant Professor, Ph.D.",
+      qualification: "Assistant Professor, Ph.D.",
       image: "/programs/forensic-sciences/aditi-sharma.webp",
       description:
-        "Published research and review articles in Forensic Nanotechnology. Holds 3 registered copyrights and 2 patents. Active contributor to emerging areas of forensic research.",
+        "Published research and review articles on Forensic Nanotechnology. Published 3 copyrights and two idea patents. Contributor to emerging areas of forensic research.",
     },
     {
       name: "Dr. Yukti Mahajan",
-      designation: "Assistant Professor",
-      qualification: "Ph.D.",
+      designation: "Assistant Professor, Ph.D",
+      qualification: "Assistant Professor, Ph.D",
       image: "/programs/forensic-sciences/yukti-mahajan.webp",
       description:
-        "Specialized in fractional calculus, special functions, and integral transforms. Published 4 research papers with active contributions to mathematical modeling.",
+        "Specialized in fractional calculus, special functions, integral transforms. Published 4 research papers. Active contribution in Mathematics Research",
     },
     {
-      name: "Ms. Deepmala Dalal",
+      name: "Deepmala Dalal",
       designation: "Assistant Professor",
-      qualification: "M.Sc., Ph.D. Scholar",
+      qualification: "Assistant Professor",
       image: "/programs/forensic-sciences/deepmala-dalal.webp",
       description:
-        "Expertise in electrochemical sensing, nanomaterials, water quality assessment, and environmental remediation techniques.",
+        "Electrochemical sensing, nanomaterials, water quality assessment, and environmental remediation",
+    },
+    {
+      name: "Mr. Akash Bans",
+      designation: "Assistant Professor",
+      qualification: "Assistant Professor",
+      image: "/programs/forensic-sciences/akash-bans.webp",
+      description:
+        "Mr. Akash Bans is a Research scholar in the Department of Forensic Science at Geeta University, Panipat, Haryana, India. He holds both a B.Sc. and an M.Sc. in forensic science. His academic background combines both the scientific and investigatory aspects of the field. He has accumulated 2.8 years of research experience in the forensic field. He has also contributed to a book named “Advancement in Life, Health and Agricultural Science”, an impressive testament to his pursuit of academics across disciplines. In this lab manual, his objective is to offer students a more practical approach to learning the principles of forensic science by applying them.",
+    },
+    {
+      name: "Ms. Muskan Bindal",
+      designation: "Assistant Professor",
+      qualification: "Assistant Professor",
+      image: "/programs/forensic-sciences/muskan-bindal.webp",
+      description:
+        "Muskan Bindal works as an Assistant Professor of Forensic Science. She completed her Integrated B.Sc.-M.Sc. from the National Forensic Sciences University (NFSU). Her research explores the chemical signals released from our skin and the volatile organic compounds (VOCs) linked to metabolic signs of fear and stress. Additionally, she has worked on how polycyclic aromatic hydrocarbons (PAHs) affect aquatic ecosystems, as an investigative approach in Environmental forensics. She's hands-on with advanced instruments like GC-MS, HPLC, HPTLC, and UV/Vis Spectroscopy, blending complex lab work with real-world forensic cases.",
+    },
+    {
+      name: "Ms. Sakshi Gahlawat",
+      designation: "Assistant Professor",
+      qualification: "Assistant Professor",
+      image: "/programs/forensic-sciences/sakshi-gahlawat.webp",
+      description:
+        "Sakshi Gahlawat specializes in Forensic Science, with expertise in Crime Scene Investigation, Forensic Genetics and Serology, Fingerprint Science, and Digital Forensics. Her professional interests encompass cyber crime analysis, forensic evidence examination, crime scene documentation, and practical laboratory instruction. She is committed to quality education, student mentoring, and fostering research and industry-academia collaboration.",
     },
   ],
-  testimonials: [
-    {
-      name: "Sumera Din",
-      role: "M.Sc. Forensic Science Student",
-      image:
-        "/programs/forensic-sciences/msc-forensic-science/sumaira-testimonial.jpg",
-      text: "The program provided me with strong practical exposure, advanced technical knowledge, and valuable industry insights. The supportive faculty and research-oriented learning environment helped me strengthen my professional capabilities.",
+  testimonials: [],
+  scholarships: {
+    scholarships: {
+      title: "Scholarships at Geeta University",
+      description:
+        "We believe that financial constraints should not limit access to quality education. At Geeta University, we offer scholarships based on:",
+      criteria: [
+        "Merit/Percentage in Qualifying Exams",
+        "National Level Entrance Exams (JEE, CUET, NEET, CLAT, and more)",
+        "Social Responsibility",
+        "Sports Performance",
+      ],
+      linkText: "Know More",
+      linkUrl: "https://geetauniversity.edu.in/scholarship",
     },
-    {
-      name: "Sidhika Gautam",
-      role: "B.Sc. Forensic Science Student",
-      image:
-        "/programs/forensic-sciences/bsc-forensic-science/sidhika_testimonial.webp",
-      text: "My journey in B.Sc. Forensic Science at Geeta University improved my technical skills, observation abilities, and understanding of criminal investigation procedures. The university's academic support played a major role in my professional growth.",
+    guts: {
+      title: "GUTS",
+      subtitle: "Geeta University Test of Scholarship",
+      description:
+        "Geeta University (GU) strongly believes in the fact that monetary constraints should not be an obstacle for a student to have access to quality education. So, the University extends its support to the students and offers scholarships on the basis of their performance in GUTS (Geeta University Test of Scholarship).",
+      linkText: "Apply GUTS",
+      linkUrl: "https://admissions.geetauniversity.edu.in/",
     },
-    {
-      name: "Vaibhav Vashisht",
-      role: "B.Sc. Forensic Science Student",
-      image:
-        "/programs/forensic-sciences/bsc-forensic-science/vaibhav_testimonial.webp",
-      text: "Geeta University's forensic science department helped me strengthen my problem-solving abilities and scientific knowledge through practical training and research exposure. The experience prepared me to face real-world forensic challenges with confidence.",
-    },
-    {
-      name: "Mitali",
-      role: "B.Sc. Forensic Science Student",
-      image:
-        "/programs/forensic-sciences/bsc-forensic-science/mitali_testimonial.webp",
-      text: "The B.Sc. Forensic Science program at Geeta University provided me with valuable hands-on experience and industry-oriented knowledge. The supportive faculty and modern learning environment helped me build confidence for my future career.",
-    },
-  ],
-  learningSpaces: {
-    title: "Highlights of Our Learning Spaces",
-    spaces: [
-      {
-        title: "",
-        image: "/programs/forensic-sciences/fs-thumb.webp",
-      },
-      {
-        title: "",
-        image: "/programs/forensic-sciences/fs1-thumb.webp",
-      },
-      {
-        title: "",
-        image: "/programs/forensic-sciences/fs2-thumb.webp",
-      },
-      {
-        title: "",
-        image: "/programs/forensic-sciences/fs3-thumb.webp",
-      },
-      {
-        title: "",
-        image: "/programs/forensic-sciences/fs4-thumb.webp",
-      },
-    ],
   },
   faqs: forensicSciencesFaqs,
   cta: {
-    title: "Ready to pursue M.Sc. Forensic Science?",
+    title: "Admissions Open for Session 2026-2027",
     description:
-      "Apply now at Geeta University and take your forensic expertise and scientific investigation skills to the next level.",
+      "Apply now at Geeta University and take the first step towards an exciting career in forensic science and crime investigation.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
-    brochureUrl:
-      "/programs/forensic-sciences/ForensicScienceBrochure.pdf",
+    brochureUrl: "/programs/forensic-sciences/ForensicScienceBrochure.pdf",
     helpline: "+91 99963 03799",
   },
 };
