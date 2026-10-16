@@ -82,7 +82,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <h2 className="font-serif text-3xl font-bold text-[#0A1F44]">
-            GU Medal Policy CMS
+            GU Medal Policy
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             Manage academic medals, batch cohort size thresholds, Chancellor's Medal weightages, and convocation ranker PDFs.

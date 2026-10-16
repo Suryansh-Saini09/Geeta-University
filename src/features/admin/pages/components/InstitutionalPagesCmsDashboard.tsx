@@ -105,7 +105,7 @@ export function InstitutionalPagesCmsDashboard({
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <h2 className="font-serif text-3xl font-bold text-[#0A1F44] capitalize">
-            {pageSlug.replace(/-/g, " ")} CMS
+            {pageSlug.replace(/-/g, " ")}
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             Manage live content sections for <code className="bg-slate-100 px-1 py-0.5 rounded font-mono">/{pageSlug}</code>.

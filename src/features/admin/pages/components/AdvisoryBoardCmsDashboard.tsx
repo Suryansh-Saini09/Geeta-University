@@ -133,7 +133,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <h2 className="font-serif text-3xl font-bold text-[#0A1F44]">
-            Advisory Board CMS
+            Advisory Board
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             Manage global academic deans, corporate leaders, portraits, and display order.
@@ -213,7 +213,6 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
               : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
           }`}
         >
-          <Users className="h-4 w-4" />
           <span>Board Members ({members.length})</span>
         </button>
         <button
@@ -225,7 +224,6 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
               : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
           }`}
         >
-          <Sparkles className="h-4 w-4" />
           <span>Hero Header</span>
         </button>
       </div>
@@ -240,7 +238,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
             >
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A1F44] text-xs font-bold text-slate-700">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A1F44] text-xs font-bold text-white">
                     {idx + 1}
                   </span>
                   <span className="font-serif text-base font-bold text-[#0A1F44]">
