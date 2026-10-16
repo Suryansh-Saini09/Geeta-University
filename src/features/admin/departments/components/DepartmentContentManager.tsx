@@ -351,9 +351,6 @@ export function DepartmentContentManager({
               Back to Departments
             </Link>
             <div className="mt-2.5 flex items-center gap-2.5">
-              <span className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                School CMS Manager
-              </span>
               <span
                 className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold ${
                   department.status === ContentStatus.PUBLISHED

@@ -179,10 +179,10 @@ export default async function MedalPolicyPage() {
             <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-md">
               <div className="mb-4">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#E8871A]">
-                  Table 1
+                  {thresholds?.tableLabel || "Table 1"}
                 </span>
                 <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
-                  {thresholds?.title || "Minimum Number of Passing Students Required in Batch"}
+                  {thresholds?.heading || thresholds?.title || "Minimum Number of Passing Students Required in Batch"}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500 mt-1">
                   {thresholds?.description ||
@@ -201,8 +201,8 @@ export default async function MedalPolicyPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
-                    {thresholdList.map((row: any) => (
-                      <tr key={row.medal} className="hover:bg-slate-50/80 transition-colors">
+                    {thresholdList.map((row: any, idx: number) => (
+                      <tr key={row.medal || idx} className="hover:bg-slate-50/80 transition-colors">
                         <td className="p-4 font-bold text-[#0A1F44]">{row.medal}</td>
                         <td className="p-4 text-center font-medium text-slate-700">{row.pg}</td>
                         <td className="p-4 text-center font-medium text-slate-700">{row.ug}</td>
@@ -274,7 +274,7 @@ export default async function MedalPolicyPage() {
             <div className="space-y-4 pt-2">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                 <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
-                  {chancellorWeightage?.title || "Evaluation Weightage Breakdown"}
+                  {chancellorWeightage?.heading || chancellorWeightage?.title || "Evaluation Weightage Breakdown"}
                 </h3>
               </div>
 

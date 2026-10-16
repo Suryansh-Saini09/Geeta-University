@@ -7,7 +7,7 @@ import { AuditAction } from "@prisma/client";
 import { assertPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
 import { prisma } from "@/server/db/client";
-import { detectMediaFormat, MAX_MEDIA_BYTES, saveMedia } from "@/server/media/storage";
+import { detectMediaFormat, MAX_MEDIA_BYTES, removeMedia, saveMedia } from "@/server/media/storage";
 import { FOOTER_SETTINGS_KEY, getFooterSettings } from "@/server/services/footer";
 import {
   footerBannerSchema,
@@ -736,5 +736,155 @@ export async function uploadFooterDocumentAction(formData: FormData): Promise<
   } catch (err: any) {
     console.error("uploadFooterDocumentAction error:", err);
     return { success: false, error: err.message || "Failed to upload document." };
+  }
+}
+
+/**
+ * Deletes an uploaded institutional PDF document from MediaAsset,
+ * removes it from filesystem storage, and unlinks it from any footer columns.
+ */
+export async function deleteFooterDocumentAction(documentId: string): Promise<
+  ActionResponse<{
+    deletedId: string;
+    unlinkedCount: number;
+    updatedSettings?: FooterSettings;
+  }>
+> {
+  try {
+    const session = await requireAdminSession();
+    assertPermission(session.user.role, "manageContent");
+
+    if (!documentId || typeof documentId !== "string") {
+      return { success: false, error: "Invalid document ID." };
+    }
+
+    const asset = await prisma.mediaAsset.findUnique({
+      where: { id: documentId },
+      include: {
+        _count: {
+          select: {
+            galleryImages: true,
+            departmentsAsHero: true,
+            programsAsHero: true,
+            facultyPortraits: true,
+            heroBanners: true,
+            downloads: true,
+          },
+        },
+      },
+    });
+
+    if (!asset) {
+      return { success: false, error: "Document not found or already deleted." };
+    }
+
+    // Check if in use by other core models
+    if (Object.values(asset._count).some((count) => count > 0)) {
+      return {
+        success: false,
+        error: "This document is linked to university downloads, programs, or pages and cannot be deleted.",
+      };
+    }
+
+    // Check if any footer links reference this document (by mediaAssetId or url)
+    const currentSettings = await getFooterSettings();
+    let unlinkedCount = 0;
+    let settingsChanged = false;
+
+    const updatedColumns = currentSettings.columns.map((col) => {
+      const remainingLinks = col.links.filter((l) => {
+        const matches = l.mediaAssetId === documentId || l.href === asset.url;
+        if (matches) {
+          unlinkedCount++;
+        }
+        return !matches;
+      });
+
+      if (remainingLinks.length !== col.links.length) {
+        settingsChanged = true;
+        return {
+          ...col,
+          links: remainingLinks.map((l, idx) => ({ ...l, sortOrder: idx + 1 })),
+        };
+      }
+      return col;
+    });
+
+    const updatedSettings: FooterSettings = {
+      ...currentSettings,
+      columns: updatedColumns,
+    };
+
+    // Execute atomic transaction for deleting MediaAsset, updating FooterSettings (if needed), and logging audit
+    await prisma.$transaction(async (tx) => {
+      await tx.mediaAsset.delete({
+        where: { id: documentId },
+      });
+
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: AuditAction.DELETE,
+          entityType: "MediaAsset",
+          entityId: documentId,
+          before: {
+            fileName: asset.fileName,
+            url: asset.url,
+            storageKey: asset.storageKey,
+            sizeBytes: asset.sizeBytes,
+          },
+        },
+      });
+
+      if (settingsChanged) {
+        const record = await tx.siteSetting.upsert({
+          where: { key: FOOTER_SETTINGS_KEY },
+          create: {
+            key: FOOTER_SETTINGS_KEY,
+            value: updatedSettings,
+          },
+          update: {
+            value: updatedSettings,
+          },
+        });
+
+        await tx.auditLog.create({
+          data: {
+            actorId: session.user.id,
+            action: AuditAction.UPDATE,
+            entityType: "SiteSetting",
+            entityId: record.id,
+            before: { note: `Unlinked deleted document ${asset.fileName} from footer links` },
+            after: { unlinkedCount },
+          },
+        });
+      }
+    });
+
+    // Remove file from disk storage (ignore error if file already removed or missing)
+    await removeMedia(asset.storageKey).catch((error) => {
+      console.error("Failed to remove media file from storage:", error);
+    });
+
+    revalidateSharedFooterRoutes();
+    revalidatePath("/admin/media");
+
+    const message =
+      unlinkedCount > 0
+        ? `Document "${asset.fileName}" deleted and unlinked from ${unlinkedCount} footer link${unlinkedCount > 1 ? "s" : ""}.`
+        : `Document "${asset.fileName}" deleted successfully.`;
+
+    return {
+      success: true,
+      message,
+      data: {
+        deletedId: documentId,
+        unlinkedCount,
+        updatedSettings: settingsChanged ? updatedSettings : undefined,
+      },
+    };
+  } catch (err: any) {
+    console.error("deleteFooterDocumentAction error:", err);
+    return { success: false, error: err.message || "Failed to delete document." };
   }
 }

@@ -11,7 +11,8 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex items-center gap-1 rounded-lg border border-amber-200 px-3 py-1.5 text-xs font-bold text-amber-700 hover:bg-amber-50 disabled:cursor-not-allowed disabled:opacity-60"
+      title="Archive Program"
+      className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50/70 px-2.5 text-xs font-semibold text-amber-800 shadow-2xs transition-colors hover:bg-amber-100 hover:border-amber-300 disabled:cursor-not-allowed disabled:opacity-60 whitespace-nowrap"
     >
       {pending ? (
         <>
@@ -20,7 +21,7 @@ function SubmitButton() {
         </>
       ) : (
         <>
-          <Archive className="h-3.5 w-3.5" />
+          <Archive className="h-3.5 w-3.5 text-amber-700" />
           <span>Archive</span>
         </>
       )}
@@ -40,6 +41,7 @@ export default function ArchiveProgramButton(props: {
   return (
     <form
       action={archiveProgramAction}
+      className="inline-flex m-0 shrink-0"
       onSubmit={(event) => {
         if (!window.confirm(`Archive "${targetName}"?`)) event.preventDefault();
       }}

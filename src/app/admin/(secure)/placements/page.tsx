@@ -1,10 +1,9 @@
-import { getPageSectionsAdmin } from "@/server/services/pages";
-import { PlacementsCmsDashboard } from "@/features/admin/pages/components/PlacementsCmsDashboard";
+import { redirect } from "next/navigation";
+import { requireAdminSession } from "@/server/auth/session";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminPlacementsPage() {
-  const data = await getPageSectionsAdmin("placements");
-
-  return <PlacementsCmsDashboard initialData={data} />;
+export default async function AdminPlacementsLegacyRedirect() {
+  await requireAdminSession();
+  redirect("/admin/pages/institutional?page=placements");
 }

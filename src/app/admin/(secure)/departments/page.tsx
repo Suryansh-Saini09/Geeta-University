@@ -51,9 +51,6 @@ export default async function AdminDepartmentsPage({
     <div className="space-y-6">
       <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
-            CMS Module
-          </p>
           <h2 className="mt-2 font-serif text-4xl font-bold text-[#0A1F44]">
             Departments
           </h2>
