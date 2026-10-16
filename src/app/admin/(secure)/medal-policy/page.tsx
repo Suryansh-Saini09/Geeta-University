@@ -1,12 +1,9 @@
+import { redirect } from "next/navigation";
 import { requireAdminSession } from "@/server/auth/session";
-import { getPageSectionsAdmin } from "@/server/services/pages";
-import { MedalPolicyCmsDashboard } from "@/features/admin/pages/components/MedalPolicyCmsDashboard";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminMedalPolicyPage() {
+export default async function AdminMedalPolicyLegacyRedirect() {
   await requireAdminSession();
-  const initialData = await getPageSectionsAdmin("medal-policy");
-
-  return <MedalPolicyCmsDashboard initialData={initialData} />;
+  redirect("/admin/pages/institutional?page=medal-policy");
 }

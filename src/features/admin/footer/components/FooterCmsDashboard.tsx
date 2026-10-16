@@ -29,6 +29,7 @@ import {
 
 import {
   addFooterLinkAction,
+  deleteFooterDocumentAction,
   deleteFooterLinkAction,
   reorderFooterLinksAction,
   saveAllFooterSettingsAction,
@@ -554,6 +555,39 @@ export default function FooterCmsDashboard({
     });
   };
 
+  // Delete Document State & Handler
+  const [docToDelete, setDocToDelete] = useState<MediaDocItem | null>(null);
+
+  const linkedInfoForDocToDelete = useMemo(() => {
+    if (!docToDelete) return [];
+    const matches: Array<{ columnTitle: string; linkLabel: string }> = [];
+    for (const col of settings.columns) {
+      for (const link of col.links) {
+        if (link.mediaAssetId === docToDelete.id || link.href === docToDelete.url) {
+          matches.push({ columnTitle: col.title, linkLabel: link.label });
+        }
+      }
+    }
+    return matches;
+  }, [docToDelete, settings.columns]);
+
+  const handleDeleteDocument = (docId: string) => {
+    startTransition(async () => {
+      const res = await deleteFooterDocumentAction(docId);
+      if (!res.success) {
+        showNotification("error", res.error);
+        return;
+      }
+
+      setDocuments((prev) => prev.filter((d) => d.id !== docId));
+      if (res.data?.updatedSettings) {
+        setSettings(res.data.updatedSettings);
+      }
+      setDocToDelete(null);
+      showNotification("success", res.message);
+    });
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Top Banner Notice */}
@@ -587,18 +621,9 @@ export default function FooterCmsDashboard({
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide uppercase bg-amber-100 text-amber-800 border border-amber-200">
-              Operations CMS
-            </span>
-            <span className="text-xs text-slate-500">Live Database Synced</span>
-          </div>
           <h1 className="mt-1 text-2xl sm:text-3xl font-extrabold text-[#0A1F44] tracking-tight">
             Footer Management
           </h1>
-          <p className="mt-1 text-sm text-slate-600">
-            Control the site-wide university footer: branding, admissions banner, 4 link columns, institutional PDF documents, and legal bar.
-          </p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -780,7 +805,6 @@ export default function FooterCmsDashboard({
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-3">
               <div>
                 <h2 className="text-base font-bold text-[#0A1F44]">Top Admissions Banner</h2>
-                <p className="text-xs text-slate-500">Displayed at the top of the footer across the website.</p>
               </div>
               <label className="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
                 <input
@@ -860,7 +884,6 @@ export default function FooterCmsDashboard({
           <section className="p-6 rounded-2xl border border-slate-200 bg-white shadow-xs space-y-4">
             <div className="border-b border-slate-100 pb-3">
               <h2 className="text-base font-bold text-[#0A1F44]">University Branding Column</h2>
-              <p className="text-xs text-slate-500">Logo, about snippet, and Apply Now call-to-action.</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -960,7 +983,6 @@ export default function FooterCmsDashboard({
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-3">
               <div>
                 <h2 className="text-base font-bold text-[#0A1F44]">Bottom Legal Bar</h2>
-                <p className="text-xs text-slate-500">Copyright text and mandatory institutional legal policies.</p>
               </div>
               <label className="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
                 <input
@@ -1339,9 +1361,6 @@ export default function FooterCmsDashboard({
           <div className="p-6 rounded-2xl border border-slate-200 bg-white shadow-xs space-y-4">
             <div>
               <h2 className="text-base font-bold text-[#0A1F44]">Upload Institutional PDF Document</h2>
-              <p className="text-xs text-slate-500">
-                Upload official university PDF files (such as policy manuals, guidelines, committee reconstitution notices). Files are permanently stored via Media CMS and served with proper headers.
-              </p>
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-xl border border-dashed border-slate-300 bg-slate-50">
@@ -1386,7 +1405,6 @@ export default function FooterCmsDashboard({
               <h3 className="text-sm font-bold text-[#0A1F44]">
                 Available PDF Documents ({documents.length})
               </h3>
-              <span className="text-xs text-slate-500">Stored in MediaAsset repository</span>
             </div>
 
             {documents.length === 0 ? (
@@ -1445,6 +1463,17 @@ export default function FooterCmsDashboard({
                       >
                         <Plus className="h-3.5 w-3.5" />
                         <span>Add to Footer</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDocToDelete(doc)}
+                        disabled={isPending}
+                        title={`Delete ${doc.fileName}`}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-rose-200 bg-white text-xs font-semibold text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-colors disabled:opacity-50"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        <span>Delete</span>
                       </button>
                     </div>
                   </div>
@@ -1687,6 +1716,94 @@ export default function FooterCmsDashboard({
                 className="px-5 py-2 rounded-xl bg-[#0A1F44] text-white text-xs font-bold hover:bg-[#1A3A6B] disabled:opacity-50"
               >
                 {isPending ? "Adding..." : "Add to Column"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================
+          MODAL 3: DELETE DOCUMENT CONFIRMATION MODAL
+      ==================================================================== */}
+      {docToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2 text-rose-600">
+                <div className="p-1.5 rounded-lg bg-rose-50 border border-rose-100">
+                  <Trash2 className="h-4 w-4 text-rose-600" />
+                </div>
+                <h3 className="font-bold text-base text-[#0A1F44]">Delete PDF Document</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setDocToDelete(null)}
+                disabled={isPending}
+                className="text-slate-400 hover:text-slate-600 p-1"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <p className="text-slate-600">
+                Are you sure you want to permanently delete this document from server storage? This action cannot be undone.
+              </p>
+
+              {/* Document details preview */}
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-amber-600 shrink-0" />
+                  <span className="font-bold text-xs text-[#0A1F44] truncate">{docToDelete.fileName}</span>
+                </div>
+                <p className="font-mono text-[10px] text-slate-500 truncate">{docToDelete.url}</p>
+                <p className="text-[10px] text-slate-400">
+                  Size: {(docToDelete.sizeBytes / 1024).toFixed(1)} KB • Uploaded {new Date(docToDelete.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+
+              {/* Linked footer columns warning */}
+              {linkedInfoForDocToDelete.length > 0 ? (
+                <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-amber-800 font-bold text-xs">
+                    <AlertCircle className="h-4 w-4 shrink-0 text-amber-600" />
+                    <span>Linked in Footer ({linkedInfoForDocToDelete.length})</span>
+                  </div>
+                  <p className="text-[11px] text-amber-700">
+                    This document is currently linked in the footer. Deleting it will automatically remove these link(s) to prevent broken links on the live site:
+                  </p>
+                  <ul className="list-disc list-inside text-[11px] text-amber-800 font-medium pl-1">
+                    {linkedInfoForDocToDelete.map((info, idx) => (
+                      <li key={idx} className="truncate">
+                        <span className="font-bold">{info.columnTitle}</span>: &ldquo;{info.linkLabel}&rdquo;
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <p className="text-[11px] text-slate-500">
+                  This document is not currently linked in any footer column.
+                </p>
+              )}
+            </div>
+
+            <div className="pt-4 flex items-center justify-end gap-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setDocToDelete(null)}
+                disabled={isPending}
+                className="px-4 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDeleteDocument(docToDelete.id)}
+                disabled={isPending}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 transition-colors disabled:opacity-50"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                <span>{isPending ? "Deleting..." : "Delete Document"}</span>
               </button>
             </div>
           </div>

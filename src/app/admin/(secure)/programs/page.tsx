@@ -84,14 +84,11 @@ export default async function AdminProgramsPage({
       {/* Page Title & Action */}
       <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
-            Academic CMS Module
-          </p>
           <h2 className="mt-2 font-serif text-4xl font-bold text-[#0A1F44]">
             Academic Programs & Course Pages
           </h2>
           <p className="mt-2 max-w-2xl text-base leading-6 text-slate-600">
-            Manage comprehensive academic course detail pages, curriculum information, faculty mentors, and admissions stored in Aiven MySQL.
+            Manage comprehensive academic course detail pages, curriculum information, faculty mentors, and admissions.
           </p>
         </div>
 
@@ -113,15 +110,6 @@ export default async function AdminProgramsPage({
           </div>
           <p className="mt-2 text-3xl font-bold text-[#0A1F44]">{totalProgramsCount}</p>
           <p className="mt-1 text-xs text-slate-500">Active degree & sub-program records</p>
-        </div>
-
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-          <div className="flex items-center justify-between text-emerald-600">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Course Detail Pages</span>
-            <BookOpen className="h-4 w-4 text-emerald-600" />
-          </div>
-          <p className="mt-2 text-3xl font-bold text-emerald-700">{populatedCoursesCount}</p>
-          <p className="mt-1 text-xs text-slate-500">Database-backed course pages</p>
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
@@ -271,7 +259,7 @@ export default async function AdminProgramsPage({
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1000px] text-left text-sm">
+            <table className="w-full min-w-[1100px] text-left text-sm">
               <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500">
                 <tr>
                   <th className="px-5 py-3 font-bold">Program & Route</th>
@@ -280,7 +268,7 @@ export default async function AdminProgramsPage({
                   <th className="px-5 py-3 font-bold">Content Completeness</th>
                   <th className="px-5 py-3 font-bold">Status</th>
                   <th className="px-5 py-3 font-bold">Last Updated</th>
-                  <th className="px-5 py-3 font-bold text-right">Actions</th>
+                  <th className="px-5 py-3 font-bold text-right min-w-[220px] whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -342,21 +330,22 @@ export default async function AdminProgramsPage({
                         })}
                       </td>
 
-                      <td className="px-5 py-3.5 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                      <td className="px-5 py-3.5 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5">
                           <Link
                             href={`/admin/programs/${program.id}/edit`}
-                            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-bold text-[#0A1F44] transition hover:bg-slate-50 hover:text-slate-900"
+                            className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-semibold text-[#0A1F44] shadow-2xs transition-colors hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 whitespace-nowrap shrink-0"
                           >
-                            <Pencil className="h-3 w-3" />
-                            Edit Page
+                            <Pencil className="h-3.5 w-3.5 text-slate-500" />
+                            <span>Edit Page</span>
                           </Link>
 
                           <Link
                             href={publicUrl}
                             target="_blank"
+                            rel="noopener noreferrer"
                             title="Preview Public Page"
-                            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white p-1 text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 shadow-2xs transition-colors hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 shrink-0"
                           >
                             <ExternalLink className="h-3.5 w-3.5" />
                           </Link>

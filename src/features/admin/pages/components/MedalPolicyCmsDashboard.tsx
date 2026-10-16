@@ -7,12 +7,8 @@ import {
   AlertCircle,
   Plus,
   Trash2,
-  Medal,
-  Trophy,
-  FileSpreadsheet,
-  Download,
-  Sparkles,
-  PieChart,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { updatePageSectionAction } from "@/features/admin/pages/actions";
 import {
@@ -28,12 +24,12 @@ interface MedalPolicyCmsDashboardProps {
 }
 
 const TABS = [
-  { key: "academic_medals", label: "Academic Medals", icon: Medal },
-  { key: "thresholds", label: "Cohort Thresholds (Table 1)", icon: FileSpreadsheet },
-  { key: "chancellor", label: "Chancellor’s Medal", icon: Trophy },
-  { key: "chancellor_weightage", label: "Evaluation Weightages", icon: PieChart },
-  { key: "rankers_document", label: "Rankers PDF Document", icon: Download },
-  { key: "hero", label: "Hero Banner", icon: Sparkles },
+  { key: "academic_medals", label: "Academic Medals" },
+  { key: "thresholds", label: "Cohort Thresholds (Table 1)" },
+  { key: "chancellor", label: "Chancellor’s Medal" },
+  { key: "chancellor_weightage", label: "Evaluation Weightages" },
+  { key: "rankers_document", label: "Rankers PDF Document" },
+  { key: "hero", label: "Hero Banner" },
 ];
 
 export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboardProps) {
@@ -116,20 +112,18 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
       {/* Tabs */}
       <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-2">
         {TABS.map((tab) => {
-          const Icon = tab.icon;
           const isActive = activeTab === tab.key;
           return (
             <button
               key={tab.key}
               type="button"
               onClick={() => setActiveTab(tab.key)}
-              className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all ${
+              className={`inline-flex items-center rounded-xl px-4 py-2.5 text-xs font-bold transition-all ${
                 isActive
                   ? "bg-[#0A1F44] text-white shadow-md shadow-slate-900/10"
                   : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
               }`}
             >
-              <Icon className="h-4 w-4" />
               <span>{tab.label}</span>
             </button>
           );
@@ -220,12 +214,89 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
         {/* THRESHOLDS TABLE */}
         {activeTab === "thresholds" && (() => {
           const body = getBody("thresholds");
-          const rows: any[] = body.thresholds || [];
+          const rows: any[] = body.rows || body.thresholds || [];
+          const tableLabel = body.tableLabel || "Table 1";
+          const heading = body.heading || body.title || "Minimum Number of Passing Students Required in Batch";
+          const description =
+            body.description ||
+            "For the award of respective academic medals, the minimum number of students successfully passing in the batch must satisfy the following thresholds:";
+
+          const handleUpdateMeta = (field: string, val: string) => {
+            updateBody("thresholds", (b) => {
+              const currentRows = b.rows || b.thresholds || rows;
+              const updated: Record<string, any> = {
+                ...b,
+                [field]: val,
+                rows: currentRows,
+                thresholds: currentRows,
+              };
+              if (field === "heading") updated.title = val;
+              if (field === "title") updated.heading = val;
+              return updated;
+            });
+          };
 
           const handleUpdateRow = (idx: number, field: string, val: any) => {
             const next = [...rows];
             next[idx] = { ...next[idx], [field]: val };
-            updateBody("thresholds", (b) => ({ ...b, thresholds: next }));
+            updateBody("thresholds", (b) => ({
+              ...b,
+              tableLabel: b.tableLabel || tableLabel,
+              heading: b.heading || b.title || heading,
+              title: b.title || b.heading || heading,
+              description: b.description || description,
+              rows: next,
+              thresholds: next,
+            }));
+          };
+
+          const handleAddRow = () => {
+            const newRow = {
+              medal: "New Medal Category",
+              pg: "10 students",
+              ug: "20 students",
+              diploma: "20 students",
+            };
+            const next = [...rows, newRow];
+            updateBody("thresholds", (b) => ({
+              ...b,
+              tableLabel: b.tableLabel || tableLabel,
+              heading: b.heading || b.title || heading,
+              title: b.title || b.heading || heading,
+              description: b.description || description,
+              rows: next,
+              thresholds: next,
+            }));
+          };
+
+          const handleDeleteRow = (idx: number) => {
+            const next = rows.filter((_, i) => i !== idx);
+            updateBody("thresholds", (b) => ({
+              ...b,
+              tableLabel: b.tableLabel || tableLabel,
+              heading: b.heading || b.title || heading,
+              title: b.title || b.heading || heading,
+              description: b.description || description,
+              rows: next,
+              thresholds: next,
+            }));
+          };
+
+          const handleMoveRow = (idx: number, direction: "up" | "down") => {
+            const targetIdx = direction === "up" ? idx - 1 : idx + 1;
+            if (targetIdx < 0 || targetIdx >= rows.length) return;
+            const next = [...rows];
+            const [moved] = next.splice(idx, 1);
+            next.splice(targetIdx, 0, moved);
+            updateBody("thresholds", (b) => ({
+              ...b,
+              tableLabel: b.tableLabel || tableLabel,
+              heading: b.heading || b.title || heading,
+              title: b.title || b.heading || heading,
+              description: b.description || description,
+              rows: next,
+              thresholds: next,
+            }));
           };
 
           return (
@@ -246,48 +317,181 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                 </button>
               </div>
 
-              <div className="overflow-x-auto rounded-xl border border-slate-200">
-                <table className="w-full text-left text-xs text-slate-700">
-                  <thead className="bg-[#0A1F44] uppercase tracking-wider text-white">
-                    <tr>
-                      <th className="p-3">Medal Category</th>
-                      <th className="p-3 text-center">Postgraduate (PG)</th>
-                      <th className="p-3 text-center">Undergraduate (UG)</th>
-                      <th className="p-3 text-center">Diploma Programs</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {rows.map((row, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50">
-                        <td className="p-3 font-bold text-[#0A1F44]">{row.medal}</td>
-                        <td className="p-3 text-center">
-                          <input
-                            type="text"
-                            value={row.pg || ""}
-                            onChange={(e) => handleUpdateRow(idx, "pg", e.target.value)}
-                            className="w-32 text-center rounded-md border border-slate-200 px-2 py-1 text-xs"
-                          />
-                        </td>
-                        <td className="p-3 text-center">
-                          <input
-                            type="text"
-                            value={row.ug || ""}
-                            onChange={(e) => handleUpdateRow(idx, "ug", e.target.value)}
-                            className="w-32 text-center rounded-md border border-slate-200 px-2 py-1 text-xs"
-                          />
-                        </td>
-                        <td className="p-3 text-center">
-                          <input
-                            type="text"
-                            value={row.diploma || ""}
-                            onChange={(e) => handleUpdateRow(idx, "diploma", e.target.value)}
-                            className="w-32 text-center rounded-md border border-slate-200 px-2 py-1 text-xs"
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              {/* Table Heading & Descriptions */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
+                    Table Label Badge
+                  </label>
+                  <input
+                    type="text"
+                    value={tableLabel}
+                    onChange={(e) => handleUpdateMeta("tableLabel", e.target.value)}
+                    placeholder="e.g. Table 1"
+                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-[#0A1F44] focus:outline-none focus:border-slate-400"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
+                    Section Heading
+                  </label>
+                  <input
+                    type="text"
+                    value={heading}
+                    onChange={(e) => handleUpdateMeta("heading", e.target.value)}
+                    placeholder="e.g. Minimum Number of Passing Students Required in Batch"
+                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-[#0A1F44] focus:outline-none focus:border-slate-400"
+                  />
+                </div>
+
+                <div className="sm:col-span-3">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
+                    Section Description
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={description}
+                    onChange={(e) => handleUpdateMeta("description", e.target.value)}
+                    placeholder="For the award of respective academic medals..."
+                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-[#0A1F44] focus:outline-none focus:border-slate-400"
+                  />
+                </div>
+              </div>
+
+              {/* Table Rows Management */}
+              <div className="rounded-xl border border-slate-200 bg-white overflow-hidden shadow-xs space-y-3 p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-100">
+                  <div>
+                    <h4 className="font-serif text-base font-bold text-[#0A1F44]">
+                      Threshold Rows ({rows.length})
+                    </h4>
+                    <p className="text-xs text-slate-500">
+                      Configure student count requirements for each medal rank across PG, UG, and Diploma programs.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleAddRow}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E8871A] text-white text-xs font-bold hover:bg-[#F5A623] transition-colors self-start sm:self-auto shadow-2xs"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    <span>Add Row</span>
+                  </button>
+                </div>
+
+                {rows.length === 0 ? (
+                  <div className="py-8 text-center text-slate-400 space-y-2">
+                    <p className="text-xs font-semibold">No threshold rows configured.</p>
+                    <button
+                      type="button"
+                      onClick={handleAddRow}
+                      className="inline-flex items-center gap-1 text-xs text-[#E8871A] font-bold hover:underline"
+                    >
+                      <Plus className="h-3 w-3" />
+                      <span>Add your first row</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto rounded-xl border border-slate-200">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead className="bg-[#0A1F44] text-white uppercase tracking-wider text-[11px] font-semibold">
+                        <tr>
+                          <th className="p-3 w-16 text-center">Order</th>
+                          <th className="p-3">Medal Category</th>
+                          <th className="p-3">Postgraduate (PG)</th>
+                          <th className="p-3">Undergraduate (UG)</th>
+                          <th className="p-3">Diploma Programs</th>
+                          <th className="p-3 w-16 text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {rows.map((row, idx) => (
+                          <tr key={idx} className="hover:bg-slate-50/70 transition-colors">
+                            <td className="p-3 text-center">
+                              <div className="flex items-center justify-center gap-1">
+                                <span className="font-mono text-slate-400 font-bold text-[11px] w-4">
+                                  {idx + 1}
+                                </span>
+                                <div className="flex flex-col">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMoveRow(idx, "up")}
+                                    disabled={idx === 0}
+                                    title="Move Up"
+                                    className="p-0.5 text-slate-400 hover:text-slate-800 disabled:opacity-20"
+                                  >
+                                    <ArrowUp className="h-3 w-3" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMoveRow(idx, "down")}
+                                    disabled={idx === rows.length - 1}
+                                    title="Move Down"
+                                    className="p-0.5 text-slate-400 hover:text-slate-800 disabled:opacity-20"
+                                  >
+                                    <ArrowDown className="h-3 w-3" />
+                                  </button>
+                                </div>
+                              </div>
+                            </td>
+
+                            <td className="p-3">
+                              <input
+                                type="text"
+                                value={row.medal || ""}
+                                onChange={(e) => handleUpdateRow(idx, "medal", e.target.value)}
+                                placeholder="e.g. Gold Medal"
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-[#0A1F44] focus:outline-none focus:border-slate-400"
+                              />
+                            </td>
+
+                            <td className="p-3">
+                              <input
+                                type="text"
+                                value={row.pg || ""}
+                                onChange={(e) => handleUpdateRow(idx, "pg", e.target.value)}
+                                placeholder="e.g. 10 students"
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-slate-400"
+                              />
+                            </td>
+
+                            <td className="p-3">
+                              <input
+                                type="text"
+                                value={row.ug || ""}
+                                onChange={(e) => handleUpdateRow(idx, "ug", e.target.value)}
+                                placeholder="e.g. 20 students"
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-slate-400"
+                              />
+                            </td>
+
+                            <td className="p-3">
+                              <input
+                                type="text"
+                                value={row.diploma || ""}
+                                onChange={(e) => handleUpdateRow(idx, "diploma", e.target.value)}
+                                placeholder="e.g. 20 students"
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-slate-400"
+                              />
+                            </td>
+
+                            <td className="p-3 text-right">
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteRow(idx)}
+                                title="Delete Row"
+                                className="p-1.5 rounded-lg border border-slate-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-colors"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             </div>
           );
@@ -296,6 +500,9 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
         {/* CHANCELLOR'S MEDAL */}
         {activeTab === "chancellor" && (() => {
           const body = getBody("chancellor");
+          const overviewTitle = body.title || body.overviewHeading || "";
+          const overviewDescription = body.description || body.overviewDescription || "";
+          const criteriaList = body.criteria || body.qualificationPoints || [];
 
           return (
             <div className="space-y-6">
@@ -321,8 +528,14 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                 </label>
                 <input
                   type="text"
-                  value={body.title || ""}
-                  onChange={(e) => updateBody("chancellor", (b) => ({ ...b, title: e.target.value }))}
+                  value={overviewTitle}
+                  onChange={(e) =>
+                    updateBody("chancellor", (b) => ({
+                      ...b,
+                      title: e.target.value,
+                      overviewHeading: e.target.value,
+                    }))
+                  }
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44]"
                 />
               </div>
@@ -333,16 +546,28 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                 </label>
                 <textarea
                   rows={3}
-                  value={body.description || ""}
-                  onChange={(e) => updateBody("chancellor", (b) => ({ ...b, description: e.target.value }))}
+                  value={overviewDescription}
+                  onChange={(e) =>
+                    updateBody("chancellor", (b) => ({
+                      ...b,
+                      description: e.target.value,
+                      overviewDescription: e.target.value,
+                    }))
+                  }
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44]"
                 />
               </div>
 
               <CmsStringRepeater
                 title="Eligibility & Qualification Points"
-                items={body.criteria || []}
-                onChange={(next) => updateBody("chancellor", (b) => ({ ...b, criteria: next }))}
+                items={criteriaList}
+                onChange={(next) =>
+                  updateBody("chancellor", (b) => ({
+                    ...b,
+                    criteria: next,
+                    qualificationPoints: next,
+                  }))
+                }
                 placeholder="e.g., Normal Course Duration (No Extension)..."
               />
             </div>
@@ -352,12 +577,57 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
         {/* CHANCELLOR'S WEIGHTAGES */}
         {activeTab === "chancellor_weightage" && (() => {
           const body = getBody("chancellor_weightage");
-          const weightages: any[] = body.weightages || [];
+          const weightages: any[] = body.categories || body.weightages || [];
+          const heading = body.heading || body.title || "Evaluation Weightage Breakdown";
+
+          const handleUpdateHeading = (val: string) => {
+            updateBody("chancellor_weightage", (b) => ({
+              ...b,
+              heading: val,
+              title: val,
+              categories: b.categories || b.weightages || weightages,
+              weightages: b.categories || b.weightages || weightages,
+            }));
+          };
 
           const handleUpdateWeight = (idx: number, field: string, val: any) => {
             const next = [...weightages];
             next[idx] = { ...next[idx], [field]: val };
-            updateBody("chancellor_weightage", (b) => ({ ...b, weightages: next }));
+            updateBody("chancellor_weightage", (b) => ({
+              ...b,
+              heading: b.heading || b.title || heading,
+              title: b.title || b.heading || heading,
+              categories: next,
+              weightages: next,
+            }));
+          };
+
+          const handleAddWeight = () => {
+            const newWeight = {
+              category: "New Activity Category",
+              weightage: "10%",
+              percent: 10,
+              iconKey: "award",
+            };
+            const next = [...weightages, newWeight];
+            updateBody("chancellor_weightage", (b) => ({
+              ...b,
+              heading: b.heading || b.title || heading,
+              title: b.title || b.heading || heading,
+              categories: next,
+              weightages: next,
+            }));
+          };
+
+          const handleDeleteWeight = (idx: number) => {
+            const next = weightages.filter((_, i) => i !== idx);
+            updateBody("chancellor_weightage", (b) => ({
+              ...b,
+              heading: b.heading || b.title || heading,
+              title: b.title || b.heading || heading,
+              categories: next,
+              weightages: next,
+            }));
           };
 
           const totalPercent = weightages.reduce((sum, w) => sum + (Number(w.percent) || 0), 0);
@@ -380,46 +650,85 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                 </button>
               </div>
 
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
+                  Section Heading Title
+                </label>
+                <input
+                  type="text"
+                  value={heading}
+                  onChange={(e) => handleUpdateHeading(e.target.value)}
+                  placeholder="e.g. Evaluation Weightage Breakdown"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-[#0A1F44] focus:outline-none focus:border-slate-400"
+                />
+              </div>
+
               {totalPercent !== 100 && (
                 <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-semibold text-amber-900">
                   Notice: Total weightage is currently {totalPercent}%. It should normally sum to 100%.
                 </div>
               )}
 
-              <div className="space-y-4">
-                {weightages.map((item, idx) => (
-                  <div key={item.category || idx} className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-500 uppercase">Category Name</label>
-                      <input
-                        type="text"
-                        value={item.category || ""}
-                        onChange={(e) => handleUpdateWeight(idx, "category", e.target.value)}
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-[#0A1F44]"
-                      />
+              <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <h4 className="font-serif text-base font-bold text-[#0A1F44]">
+                    Weightage Categories ({weightages.length})
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={handleAddWeight}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E8871A] text-white text-xs font-bold hover:bg-[#F5A623] transition-colors shadow-2xs"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    <span>Add Category</span>
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {weightages.map((item, idx) => (
+                    <div key={item.category || idx} className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 grid grid-cols-1 sm:grid-cols-4 gap-3 items-center">
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-500 uppercase">Category Name</label>
+                        <input
+                          type="text"
+                          value={item.category || ""}
+                          onChange={(e) => handleUpdateWeight(idx, "category", e.target.value)}
+                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-[#0A1F44]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-500 uppercase">Weightage Text</label>
+                        <input
+                          type="text"
+                          value={item.weightage || ""}
+                          onChange={(e) => handleUpdateWeight(idx, "weightage", e.target.value)}
+                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-[#0A1F44]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-500 uppercase">Percentage Number</label>
+                        <input
+                          type="number"
+                          min={0}
+                          max={100}
+                          value={item.percent || 0}
+                          onChange={(e) => handleUpdateWeight(idx, "percent", parseInt(e.target.value) || 0)}
+                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-[#0A1F44]"
+                        />
+                      </div>
+                      <div className="flex items-center justify-end pt-4 sm:pt-0">
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteWeight(idx)}
+                          title="Delete Category"
+                          className="p-1.5 rounded-lg border border-slate-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-colors"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-500 uppercase">Weightage Text</label>
-                      <input
-                        type="text"
-                        value={item.weightage || ""}
-                        onChange={(e) => handleUpdateWeight(idx, "weightage", e.target.value)}
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-[#0A1F44]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-500 uppercase">Percentage Number</label>
-                      <input
-                        type="number"
-                        min={0}
-                        max={100}
-                        value={item.percent || 0}
-                        onChange={(e) => handleUpdateWeight(idx, "percent", parseInt(e.target.value) || 0)}
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-[#0A1F44]"
-                      />
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           );
