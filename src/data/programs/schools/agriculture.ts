@@ -4,7 +4,7 @@ import type { CourseFAQItem } from "../courses/types";
 export const agricultureFaqs: CourseFAQItem[] = [
   {
     question: "What programs are currently offered by the School of Agricultural Sciences?",
-    answer: "The School offers B.Sc. (Hons.) Agriculture, M.Sc. Agronomy, M.Sc. (Horticulture) Vegetable Science, M.Sc. (Horticulture) Fruit Science, M.Sc. Genetics & Plant Breeding, M.Sc. Entomology and Ph.D. Agriculture.",
+    answer: "The School offers B.Sc. (Hons.) Agriculture, M.Sc. Agriculture (Agronomy), and Ph.D. Agriculture.",
     category: "Admissions & Eligibility"
   },
   {
@@ -44,7 +44,7 @@ export const agricultureFaqs: CourseFAQItem[] = [
   },
   {
     question: "What are the M.Sc. specialisations available at the School?",
-    answer: "Students can choose M.Sc. Agronomy, M.Sc. (Horticulture) Vegetable Science, M.Sc. (Horticulture) Fruit Science, M.Sc. Genetics & Plant Breeding or M.Sc. Entomology.",
+    answer: "Students can pursue M.Sc. Agriculture (Agronomy).",
     category: "Programs & Specialisations"
   },
   {
@@ -52,26 +52,7 @@ export const agricultureFaqs: CourseFAQItem[] = [
     answer: "It focuses on crop production, agronomic practices, productivity and sustainable management of agricultural systems.",
     category: "Programs & Specialisations"
   },
-  {
-    question: "What will I study in M.Sc. Horticulture – Vegetable Science?",
-    answer: "The program focuses on scientific vegetable production, crop improvement, cultivation practices and related horticultural management.",
-    category: "Programs & Specialisations"
-  },
-  {
-    question: "What does M.Sc. Horticulture – Fruit Science cover?",
-    answer: "It focuses on fruit production, crop management, improvement, post-harvest aspects and scientific fruit cultivation.",
-    category: "Programs & Specialisations"
-  },
-  {
-    question: "What is M.Sc. Genetics & Plant Breeding about?",
-    answer: "It deals with plant genetics, breeding methods and crop improvement for developing better-performing plant varieties.",
-    category: "Programs & Specialisations"
-  },
-  {
-    question: "What will I learn in M.Sc. Entomology?",
-    answer: "The program focuses on insects affecting agriculture, their identification, management and integrated approaches to pest control.",
-    category: "Programs & Specialisations"
-  },
+
   {
     question: "What areas can be explored through Ph.D. Agriculture?",
     answer: "Research can span areas such as agronomy, soil science, plant breeding, entomology, horticulture, biotechnology and climate-smart agriculture, depending on available research expertise.",
@@ -259,7 +240,7 @@ export const agricultureFaqs: CourseFAQItem[] = [
   },
   {
     question: "Which agriculture specialisation should I choose for postgraduate study?",
-    answer: "Choose according to your interest: Agronomy for crop production, Vegetable or Fruit Science for horticulture, Genetics & Plant Breeding for crop improvement, and Entomology for insect and pest management.",
+    answer: "Choose according to your career goals: B.Sc. (Hons.) Agriculture for comprehensive foundations, M.Sc. Agriculture (Agronomy) for advanced crop and field management, or Ph.D. Agriculture for doctoral research.",
     category: "Parents & Student Decision-Making"
   },
   {
@@ -470,22 +451,6 @@ export const agricultureSchool: ProgramPageData = {
             {
               name: "M.Sc. Agriculture (Agronomy)",
               href: "/programs/school-of-agricultural-studies/msc-agriculture-agronomy",
-            },
-            {
-              name: "M.Sc. Horticulture (Vegetable Science)",
-              href: "/programs/school-of-agricultural-studies",
-            },
-            {
-              name: "M.Sc. Horticulture (Fruit Science)",
-              href: "/programs/school-of-agricultural-studies",
-            },
-            {
-              name: "M.Sc. Genetics & Plant Breeding",
-              href: "/programs/school-of-agricultural-studies",
-            },
-            {
-              name: "M.Sc. Entomology",
-              href: "/programs/school-of-agricultural-studies",
             },
           ],
           eligibility:

@@ -9,6 +9,7 @@ import {
 import { getLocale } from "@/lib/i18n/getLocale";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 interface PageProps {
   params: Promise<{
