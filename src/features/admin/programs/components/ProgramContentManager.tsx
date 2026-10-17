@@ -6,19 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
   ExternalLink,
-  ImageIcon,
-  BookOpen,
-  Compass,
-  GraduationCap,
-  Users,
-  Briefcase,
-  Building2,
-  Award,
-  MessageSquare,
-  HelpCircle,
-  Megaphone,
-  Globe,
-  Code,
   CheckCircle2,
   AlertCircle,
   Search,
@@ -104,24 +91,20 @@ export function ProgramContentManager({
     hasFull: boolean,
     hasPartial: boolean
   ): { label: "Complete" | "Partial" | "Not Configured"; color: string } => {
-    if (hasFull) return { label: "Complete", color: "bg-emerald-100 text-emerald-800" };
-    if (hasPartial) return { label: "Partial", color: "bg-amber-100 text-amber-800" };
-    return { label: "Not Configured", color: "bg-slate-100 text-slate-500" };
+    if (hasFull) return { label: "Complete", color: "bg-[#d1fae5] text-[#065f46]" };
+    if (hasPartial) return { label: "Partial", color: "bg-[#fef3c7] text-[#92400e]" };
+    return { label: "Not Configured", color: "bg-[#f1f5f9] text-[#475569]" };
   };
 
   const sectionCards = [
     {
       id: "overview",
       title: "Basic Information",
-      desc: "Program identity, department assignment, level, duration, and publication status",
-      icon: GraduationCap,
       status: getSectionStatus(!!(program.name && program.slug && program.departmentId), true),
     },
     {
       id: "hero",
       title: "Hero Banner & Quick Facts",
-      desc: "Banner title, description, desktop & mobile imagery, duration, mode, and intake",
-      icon: ImageIcon,
       status: getSectionStatus(
         !!(overview.hero?.title && overview.hero?.image && overview.quickInfo?.duration),
         !!(overview.hero?.title || overview.hero?.image)
@@ -130,8 +113,6 @@ export function ProgramContentManager({
     {
       id: "academicOverview",
       title: "Academic Overview & Curriculum",
-      desc: "Detailed academic description, curriculum subjects, takeaways, and learning outcomes",
-      icon: BookOpen,
       status: getSectionStatus(
         !!(overview.overview?.paragraphs?.length > 0 && overview.subjects?.length > 0),
         !!(overview.overview?.title || overview.subjects?.length > 0)
@@ -140,8 +121,6 @@ export function ProgramContentManager({
     {
       id: "admissions",
       title: "Admissions & Eligibility",
-      desc: "Eligibility prerequisites, admission steps, application links, and criteria",
-      icon: Compass,
       status: getSectionStatus(
         !!(overview.admission?.eligibility || program.eligibility),
         !!(overview.admission?.eligibility || program.eligibility)
@@ -150,8 +129,6 @@ export function ProgramContentManager({
     {
       id: "whyGeeta",
       title: "Why Choose Geeta",
-      desc: "Institutional USPs, distinctive advantages, and academic differentiators",
-      icon: Award,
       status: getSectionStatus(
         !!(overview.whyGeeta?.reasons && overview.whyGeeta.reasons.length > 0),
         !!overview.whyGeeta?.title
@@ -160,8 +137,6 @@ export function ProgramContentManager({
     {
       id: "careers",
       title: "Career Pathways & Recruiters",
-      desc: "Industry job profiles, government/private pathways, and hiring partners",
-      icon: Briefcase,
       status: getSectionStatus(
         !!(overview.career?.roles && overview.career.roles.length > 0),
         !!overview.career?.title
@@ -170,8 +145,6 @@ export function ProgramContentManager({
     {
       id: "learningSpaces",
       title: "Learning Spaces & Labs",
-      desc: "Smart laboratories, computing hubs, research studios, and campus photos",
-      icon: Building2,
       status: getSectionStatus(
         !!(overview.learningSpaces?.spaces && overview.learningSpaces.spaces.length > 0),
         !!overview.learningSpaces?.title
@@ -180,8 +153,6 @@ export function ProgramContentManager({
     {
       id: "scholarships",
       title: "Scholarships & GUTS",
-      desc: "Merit fee concessions, criteria bands, and Geeta University Talent Search details",
-      icon: Award,
       status: getSectionStatus(
         !!(overview.scholarships?.scholarships?.title || overview.scholarships?.guts?.title),
         !!overview.scholarships
@@ -190,8 +161,6 @@ export function ProgramContentManager({
     {
       id: "faculty",
       title: "Faculty & Mentors (Ordered)",
-      desc: "Professor roster, research specializations, photos, and public display ordering",
-      icon: Users,
       status: getSectionStatus(
         !!(overview.faculty && overview.faculty.length > 0),
         !!(overview.faculty && overview.faculty.length > 0)
@@ -200,8 +169,6 @@ export function ProgramContentManager({
     {
       id: "testimonials",
       title: "Student Testimonials",
-      desc: "Alumni success stories, company placements, package figures, and photos",
-      icon: MessageSquare,
       status: getSectionStatus(
         !!(overview.testimonials && overview.testimonials.length > 0),
         !!(overview.testimonials && overview.testimonials.length > 0)
@@ -210,8 +177,6 @@ export function ProgramContentManager({
     {
       id: "faqs",
       title: "Frequently Asked Questions",
-      desc: "Admissions, academic life, and student inquiries answered directly",
-      icon: HelpCircle,
       status: getSectionStatus(
         !!(overview.faqs && overview.faqs.length > 0),
         !!(overview.faqs && overview.faqs.length > 0)
@@ -220,8 +185,6 @@ export function ProgramContentManager({
     {
       id: "cta",
       title: "Final Call to Action",
-      desc: "Closing application callout banner, helpline contacts, and brochure download",
-      icon: Megaphone,
       status: getSectionStatus(
         !!(overview.cta?.title && overview.cta?.applyUrl),
         !!overview.cta?.title
@@ -230,8 +193,6 @@ export function ProgramContentManager({
     {
       id: "seo",
       title: "SEO & Social Metadata",
-      desc: "Meta title, SERP description, search keywords, canonical URL, and OG preview",
-      icon: Globe,
       status: getSectionStatus(
         !!(overview.seo?.title && overview.seo?.description),
         !!(overview.seo?.title || program.seo?.title)
@@ -240,17 +201,14 @@ export function ProgramContentManager({
     {
       id: "advancedJson",
       title: "Advanced JSON Editor",
-      desc: "Direct low-level inspection and raw JSON payload manipulation",
-      icon: Code,
-      status: { label: "Complete", color: "bg-slate-100 text-slate-700" },
+      status: { label: "Complete", color: "bg-[#f1f5f9] text-[#334155]" },
     },
   ];
 
   const completedCount = sectionCards.filter((s) => s.status.label === "Complete").length;
-  const filteredCards = sectionCards.filter(
-    (c) =>
-      c.title.toLowerCase().includes(sectionFilter.toLowerCase()) ||
-      c.desc.toLowerCase().includes(sectionFilter.toLowerCase())
+  const completionPercentage = Math.round((completedCount / sectionCards.length) * 100);
+  const filteredCards = sectionCards.filter((c) =>
+    c.title.toLowerCase().includes(sectionFilter.toLowerCase())
   );
 
   const handleSelectSection = (id: string) => {
@@ -258,143 +216,139 @@ export function ProgramContentManager({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Top Breadcrumb & Program Header */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <Link
-              href="/admin/programs"
-              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 transition"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Academic Programs
-            </Link>
+    <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
+      {/* Top Header Section */}
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <Link
+          href="/admin/programs"
+          className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors mb-4"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back to Academic Programs
+        </Link>
 
-            <div className="mt-3 flex flex-wrap items-center gap-2.5">
-              <h2 className="font-serif text-3xl font-bold text-[#0A1F44]">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <div className="flex flex-wrap items-center gap-3 mb-2">
+              <h1 className="font-serif text-3xl font-bold text-[#0f172a]">
                 {program.name}
-              </h2>
-              <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-bold ${statusStyles[program.status]}`}>
+              </h1>
+              <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-[11px] font-bold tracking-wide uppercase ${statusStyles[program.status]}`}>
                 {program.status}
               </span>
-              <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700">
-                {program.level || "Degree Course"}
+              <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold tracking-wide text-slate-600 uppercase border border-slate-200">
+                {program.level || "Undergraduate Programs"}
               </span>
             </div>
 
-            <p className="mt-1.5 text-sm text-slate-500">
-              Department: <strong className="text-slate-800">{program.department.name}</strong> • Slug:{" "}
-              <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-700">
+            <p className="text-sm text-slate-500">
+              Department: <span className="font-semibold text-slate-800">{program.department.name}</span>{" "}
+              <span className="mx-1 text-slate-300">|</span>{" "}
+              Slug:{" "}
+              <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-600 border border-slate-200">
                 /{program.slug}
               </code>
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href={publicUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs font-bold text-[#0A1F44] shadow-xs hover:bg-slate-100 transition"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-              View Public Course Page
-            </Link>
-          </div>
+          <Link
+            href={publicUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center shrink-0 gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition-colors"
+          >
+            <ExternalLink className="h-4 w-4 text-slate-400" />
+            View Public Course Page
+          </Link>
         </div>
 
-        {/* Completeness Bar */}
-        <div className="mt-6 border-t border-slate-100 pt-4">
-          <div className="flex items-center justify-between text-xs">
-            <span className="font-semibold text-slate-700">
-              Course Page Completeness:{" "}
-              <strong className="text-[#0A1F44]">
+        {/* Completeness Bar exactly mirroring reference UI */}
+        <div className="mt-8 border-t border-slate-100 pt-5">
+          <div className="flex items-center justify-between text-xs mb-2.5">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-white bg-[#374151] px-2 py-0.5 rounded text-[11px] tracking-wide">
+                Course Page Completeness:
+              </span>
+              <span className="font-bold text-[#0f172a]">
                 {completedCount} of {sectionCards.length} Sections Complete
-              </strong>
-            </span>
-            <span className="font-bold text-[#E8871A]">
-              {Math.round((completedCount / sectionCards.length) * 100)}% Complete
+              </span>
+            </div>
+            <span className="font-bold text-[#ea580c] tracking-wide">
+              {completionPercentage}% Complete
             </span>
           </div>
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#0A1F44] to-[#E8871A] transition-all duration-500"
-              style={{ width: `${(completedCount / sectionCards.length) * 100}%` }}
+              className="h-full rounded-full bg-[#ea580c] transition-all duration-500"
+              style={{ width: `${completionPercentage}%` }}
             />
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Feedback Messages */}
-      {updated ? (
-        <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
+      {updated && (
+        <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 shadow-sm">
           <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
           Basic Program Information updated successfully.
         </div>
-      ) : null}
+      )}
 
-      {saved ? (
-        <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
+      {saved && (
+        <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 shadow-sm">
           <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
-          Section content saved and persisted to Aiven MySQL. Public caches revalidated.
+          Section content saved and persisted. Public caches revalidated.
         </div>
-      ) : null}
+      )}
 
-      {error ? (
-        <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800">
+      {error && (
+        <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800 shadow-sm">
           <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
           {error}
         </div>
-      ) : null}
+      )}
 
-      {/* Main Grid: Section Navigation Tabs & Active Section Editor */}
-      <div className="grid gap-6 lg:grid-cols-[300px_1fr]">
-        {/* Left Column: Section Selector */}
-        <div className="space-y-4">
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                value={sectionFilter}
-                onChange={(e) => setSectionFilter(e.target.value)}
-                placeholder="Filter sections..."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 py-1.5 pl-8 pr-3 text-xs outline-none focus:border-slate-400 focus:bg-white"
-              />
-            </div>
+      {/* Main Grid: Section Navigation & Active Section Editor */}
+      <div className="grid gap-6 lg:grid-cols-[280px_1fr] items-start">
+        {/* Left Column: Clean Section Selector */}
+        <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sticky top-6">
+          <div className="relative mb-3">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={sectionFilter}
+              onChange={(e) => setSectionFilter(e.target.value)}
+              placeholder="Filter sections..."
+              className="w-full rounded-md border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-xs text-slate-700 outline-none transition-colors focus:border-[#0f172a] focus:bg-white"
+            />
+          </div>
 
-            <nav className="mt-3 space-y-1">
-              {filteredCards.map((card) => {
-                const Icon = card.icon;
-                const isActive = activeSection === card.id;
-                return (
-                  <button
-                    key={card.id}
-                    type="button"
-                    onClick={() => handleSelectSection(card.id)}
-                    className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs font-medium transition ${
-                      isActive
-                        ? "bg-[#0A1F44] text-white shadow-xs"
-                        : "text-slate-700 hover:bg-slate-50"
+          <nav className="space-y-0.5">
+            {filteredCards.map((card) => {
+              const isActive = activeSection === card.id;
+              return (
+                <button
+                  key={card.id}
+                  type="button"
+                  onClick={() => handleSelectSection(card.id)}
+                  className={`flex w-full items-center justify-between rounded-md px-3 py-2.5 text-left text-xs font-semibold transition-colors ${
+                    isActive
+                      ? "bg-[#0f172a] text-white shadow-sm"
+                      : "text-[#334155] hover:bg-slate-50"
+                  }`}
+                >
+                  <span className="truncate pr-2">{card.title}</span>
+                  <span
+                    className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                      isActive ? "bg-white/20 text-white" : card.status.color
                     }`}
                   >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <Icon className={`h-4 w-4 shrink-0 ${isActive ? "text-[#E8871A]" : "text-slate-400"}`} />
-                      <span className="truncate">{card.title}</span>
-                    </div>
-                    <span
-                      className={`ml-2 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold ${
-                        isActive ? "bg-white/20 text-white" : card.status.color
-                      }`}
-                    >
-                      {card.status.label}
-                    </span>
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
+                    {card.status.label}
+                  </span>
+                </button>
+              );
+            })}
+          </nav>
         </div>
 
         {/* Right Column: Active Section Editor */}
@@ -406,7 +360,7 @@ export function ProgramContentManager({
 
                 <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                   <div className="border-b border-slate-100 pb-4 mb-5">
-                    <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
+                    <h3 className="font-serif text-xl font-bold text-[#0f172a]">
                       Basic Program Information
                     </h3>
                     <p className="mt-1 text-sm text-slate-500">
