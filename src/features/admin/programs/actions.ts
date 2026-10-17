@@ -516,7 +516,7 @@ export async function updateProgramSectionAction(formData: FormData) {
     }
 
     default:
-      redirect(`/admin/programs/${id}/edit?error=${encodeURIComponent("Unknown section: " + section)}`);
+      redirect(`/admin/programs/${id}/edit?error=${encodeURIComponent("The requested section could not be found.")}`);
   }
 
   const updatedProgram = await prisma.program.update({

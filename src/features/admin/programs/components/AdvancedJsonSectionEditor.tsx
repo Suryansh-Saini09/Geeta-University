@@ -47,7 +47,7 @@ export function AdvancedJsonSectionEditor({
       {saved ? (
         <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
           <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
-          Raw JSON overview payload saved successfully to Aiven database.
+          Configuration settings saved successfully.
         </div>
       ) : null}
 

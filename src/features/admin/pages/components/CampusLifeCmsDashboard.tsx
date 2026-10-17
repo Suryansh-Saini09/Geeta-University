@@ -9,6 +9,8 @@ import {
   Trash2,
 } from "lucide-react";
 import { updatePageSectionAction, updatePageSeoAction } from "@/features/admin/pages/actions";
+import { getSectionSuccessMessage } from "@/lib/cms/sectionLabels";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import {
   CmsImagePreviewInput,
   CmsAutoTextarea,
@@ -64,7 +66,7 @@ export function CampusLifeCmsDashboard({ initialData }: CampusLifeCmsDashboardPr
         const currentBody = sectionsData[key]?.body || {};
         const res = await updatePageSectionAction("campus-life", key, currentBody);
         if (res.success) {
-          setFeedback({ type: "success", message: `Section '${key}' updated successfully!` });
+          setFeedback({ type: "success", message: res.message || getSectionSuccessMessage(key, "campus-life", "updated") });
           setSectionsData((prev) => ({
             ...prev,
             [key]: {
@@ -79,7 +81,7 @@ export function CampusLifeCmsDashboard({ initialData }: CampusLifeCmsDashboardPr
         }
       }
     } catch (err: any) {
-      setFeedback({ type: "error", message: err.message || "An unexpected error occurred" });
+      setFeedback({ type: "error", message: sanitizeErrorMessage(err, "An unexpected error occurred") });
     } finally {
       setSavingKey(null);
     }

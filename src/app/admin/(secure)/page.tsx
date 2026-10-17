@@ -18,7 +18,7 @@ const inventoryConfig = [
   { key: "pages", label: "Managed Pages", href: "/admin/pages", desc: "Custom institutional & dynamic pages" },
   { key: "departments", label: "Academic Departments", href: "/admin/departments", desc: "Faculties, schools & institutes" },
   { key: "programs", label: "Academic Programs", href: "/admin/programs", desc: "UG, PG & Doctoral courses" },
-  { key: "courseDetailPages", label: "Course Detail Pages", href: "/admin/programs?courseContent=CONFIGURED", desc: "Aiven MySQL managed course pages" },
+  { key: "courseDetailPages", label: "Course Detail Pages", href: "/admin/programs?courseContent=CONFIGURED", desc: "Configured course content and syllabus" },
   { key: "faculty", label: "Faculty Directory", href: "/admin/departments", desc: "Professors & mentors roster" },
   { key: "notices", label: "Official Notices", href: "/admin/notices", desc: "Bulletins & circulars" },
   { key: "news", label: "University News", href: "/admin/news", desc: "Campus press & announcements" },
