@@ -289,22 +289,6 @@ const programCategories: ProgramCategory[] = [
         href: "/programs/school-of-agricultural-studies/msc-agriculture-agronomy",
       },
       {
-        name: "M.Sc. Horticulture (Vegetable Science)",
-        href: "/programs/school-of-agricultural-studies/",
-      },
-      {
-        name: "M.Sc. Horticulture (Fruit Science)",
-        href: "/programs/school-of-agricultural-studies/",
-      },
-      {
-        name: "M.Sc. Genetics & Plant Breeding",
-        href: "/programs/school-of-agricultural-studies/",
-      },
-      {
-        name: "M.Sc. Entomology",
-        href: "/programs/school-of-agricultural-studies/",
-      },
-      {
         name: "Ph.D. — Agriculture",
         href: "/phd-agriculture",
       },

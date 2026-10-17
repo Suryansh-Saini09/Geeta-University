@@ -201,7 +201,7 @@ export async function getProgramBySlug(
     });
 
     const timeoutPromise = new Promise<null>((_, reject) =>
-      setTimeout(() => reject(new Error("DB query timed out")), 1500)
+      setTimeout(() => reject(new Error("DB query timed out")), 8000)
     );
 
     const dept = await Promise.race([deptPromise, timeoutPromise]);
