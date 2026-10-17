@@ -25,9 +25,9 @@ export function CmsSubmitButton({
 }: CmsSubmitButtonProps) {
   const { pending } = useFormStatus();
 
-  const baseStyles = "inline-flex items-center justify-center gap-2 font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-60";
+  const baseStyles = "inline-flex items-center justify-center gap-2 font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.99]";
   const variantStyles = {
-    primary: "bg-[#0A1F44] hover:bg-[#1A3A6B] text-white shadow-2xs",
+    primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-xs",
     secondary: "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 shadow-2xs",
     danger: "bg-rose-600 hover:bg-rose-700 text-white shadow-2xs",
   };
@@ -55,7 +55,7 @@ export function CmsSubmitButton({
     <button
       type="submit"
       disabled={isPending}
-      className={`${baseStyles} ${variantStyles[variant]} ${className || "rounded-lg px-4 py-2.5 text-sm"}`}
+      className={`${baseStyles} ${variantStyles[variant]} ${className || "rounded-xl px-4 py-2.5 text-xs sm:text-sm"}`}
     >
       {pending ? (
         <>
