@@ -70,7 +70,7 @@ export default function AdminShell({ user, children }: AdminShellProps) {
     .join(" ");
 
   return (
-    <div className="flex h-screen h-dvh overflow-hidden bg-[#F4F6FB] text-slate-900 antialiased font-sans">
+    <div className="flex h-screen h-dvh overflow-hidden bg-[#F8FAFC] text-slate-900 antialiased">
       {/* Mobile Drawer Backdrop */}
       {isMobileOpen && (
         <div
@@ -93,7 +93,7 @@ export default function AdminShell({ user, children }: AdminShellProps) {
             className="flex items-center gap-2.5 overflow-hidden focus:outline-none"
             title="Geeta University CMS"
           >
-            <div className="relative h-9 w-9 shrink-0 flex items-center justify-center rounded-xl bg-white p-1">
+            <div className="relative h-9 w-9 shrink-0 flex items-center justify-center rounded-lg bg-white p-1">
               <Image
                 src="/GU-Logo.webp"
                 alt="Geeta University"
@@ -106,14 +106,14 @@ export default function AdminShell({ user, children }: AdminShellProps) {
             {!isCollapsed && (
               <div className="min-w-0 flex flex-col">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-sm text-slate-900 tracking-tight truncate">
+                  <span className="font-semibold text-sm text-slate-900 tracking-tight truncate">
                     Geeta University
                   </span>
-                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold text-emerald-700 border border-emerald-200">
+                  <span className="rounded bg-emerald-50 px-1 py-0.2 text-[9px] font-bold text-emerald-700 border border-emerald-200">
                     Live
                   </span>
                 </div>
-                <span className="text-[11px] text-slate-400 font-medium">University CMS</span>
+                <span className="text-[11px] text-slate-500 font-medium">University CMS</span>
               </div>
             )}
           </Link>
@@ -122,7 +122,7 @@ export default function AdminShell({ user, children }: AdminShellProps) {
           <button
             type="button"
             onClick={() => setIsMobileOpen(false)}
-            className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 lg:hidden"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 lg:hidden"
             aria-label="Close navigation drawer"
           >
             <X className="h-5 w-5" />
@@ -140,13 +140,18 @@ export default function AdminShell({ user, children }: AdminShellProps) {
         </div>
 
         {/* Sidebar Footer User Info */}
-        <div className="shrink-0 border-t border-slate-100 p-3 bg-white">
-          <AdminUserProfile
-            user={user}
-            userPermissions={userPermissions}
-            variant="sidebar"
-            isCollapsed={isCollapsed}
-          />
+        <div className="shrink-0 border-t border-slate-100 p-3 bg-slate-50/50">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200 text-slate-700 font-bold text-xs">
+              {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+            </div>
+            {!isCollapsed && (
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs font-semibold text-slate-900">{user.name}</p>
+                <p className="truncate text-[10px] text-slate-500 font-medium">{formattedRole}</p>
+              </div>
+            )}
+          </div>
         </div>
       </aside>
 
@@ -159,7 +164,7 @@ export default function AdminShell({ user, children }: AdminShellProps) {
             <button
               type="button"
               onClick={() => setIsMobileOpen(true)}
-              className="rounded-xl p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-800 lg:hidden transition-colors"
+              className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-800 lg:hidden"
               aria-label="Open navigation menu"
             >
               <Menu className="h-5 w-5" />
@@ -169,7 +174,7 @@ export default function AdminShell({ user, children }: AdminShellProps) {
             <button
               type="button"
               onClick={toggleCollapsed}
-              className="hidden lg:flex items-center justify-center rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+              className="hidden lg:flex items-center justify-center rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
               aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
               title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
@@ -182,28 +187,14 @@ export default function AdminShell({ user, children }: AdminShellProps) {
 
             {/* Header Title Context */}
             <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-slate-500">
-              <span className="font-semibold text-slate-700">Geeta University</span>
+              <span>Geeta University</span>
               <span className="text-slate-300">/</span>
-              <span className="font-semibold text-blue-600">Admin Control Panel</span>
+              <span className="font-semibold text-slate-800">Admin Control Panel</span>
             </div>
           </div>
 
           {/* Standardized Administrator Profile & Account Menu */}
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              target="_blank"
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
-            >
-              <span>Public Website</span>
-            </Link>
-
-            <AdminUserProfile
-              user={user}
-              userPermissions={userPermissions}
-              variant="header"
-            />
-          </div>
+          <AdminUserProfile user={user} userPermissions={userPermissions} />
         </header>
 
         {/* Main Route Content (Independent Scroll) */}
