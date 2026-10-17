@@ -30,10 +30,10 @@ const inventoryConfig = [
 ] as const;
 
 const quickShortcuts = [
-  { title: "Homepage CMS", href: "/admin/home", desc: "Manage hero banner, USPs, recruitment partners & testimonials" },
-  { title: "About University CMS", href: "/admin/about", desc: "Core leadership, mission, vision & institutional history" },
+  { title: "Homepage", href: "/admin/home", desc: "Manage hero banner, USPs, recruitment partners & testimonials" },
+  { title: "About University", href: "/admin/about", desc: "Core leadership, mission, vision & institutional history" },
   { title: "Academic Departments", href: "/admin/departments", desc: "Manage 12 schools, faculty ordering, brochures & curriculum" },
-  { title: "Degree & Course Pages CMS", href: "/admin/programs", desc: "Manage academic offerings, course detail pages, and curriculum in Aiven MySQL" },
+  { title: "Degree & Course Pages", href: "/admin/programs", desc: "Manage academic offerings, course detail pages, and curriculum" },
   { title: "Media Asset Library", href: "/admin/media", desc: "Upload and organize university images, PDFs and documents" },
   { title: "Inquiries & Submissions", href: "/admin/submissions", desc: "Review student applications and admission inquiries" },
 ];
