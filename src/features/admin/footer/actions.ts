@@ -9,6 +9,7 @@ import { requireAdminSession } from "@/server/auth/session";
 import { prisma } from "@/server/db/client";
 import { detectMediaFormat, MAX_MEDIA_BYTES, removeMedia, saveMedia } from "@/server/media/storage";
 import { FOOTER_SETTINGS_KEY, getFooterSettings } from "@/server/services/footer";
+import { safeActionError } from "@/lib/cms/errorSanitizer";
 import {
   footerBannerSchema,
   footerBrandingSchema,
@@ -95,8 +96,10 @@ export async function updateFooterBannerAction(
     revalidateSharedFooterRoutes();
     return { success: true, message: "Admissions banner updated successfully.", data: parsed.data };
   } catch (err: any) {
-    console.error("updateFooterBannerAction error:", err);
-    return { success: false, error: err.message || "Failed to update banner." };
+    return safeActionError(err, "Failed to update banner.", {
+      module: "CMS_FOOTER",
+      action: "updateFooterBannerAction",
+    });
   }
 }
 
@@ -148,8 +151,10 @@ export async function updateFooterBrandingAction(
     revalidateSharedFooterRoutes();
     return { success: true, message: "University branding updated successfully.", data: parsed.data };
   } catch (err: any) {
-    console.error("updateFooterBrandingAction error:", err);
-    return { success: false, error: err.message || "Failed to update branding." };
+    return safeActionError(err, "Failed to update branding.", {
+      module: "CMS_FOOTER",
+      action: "updateFooterBrandingAction",
+    });
   }
 }
 
@@ -201,8 +206,10 @@ export async function updateFooterLegalAction(
     revalidateSharedFooterRoutes();
     return { success: true, message: "Legal bar updated successfully.", data: parsed.data };
   } catch (err: any) {
-    console.error("updateFooterLegalAction error:", err);
-    return { success: false, error: err.message || "Failed to update legal bar." };
+    return safeActionError(err, "Failed to update legal bar.", {
+      module: "CMS_FOOTER",
+      action: "updateFooterLegalAction",
+    });
   }
 }
 
@@ -225,7 +232,7 @@ export async function updateFooterColumnHeadingAction(
     const current = await getFooterSettings();
     const colIndex = current.columns.findIndex((c) => c.id === columnId);
     if (colIndex === -1) {
-      return { success: false, error: `Column '${columnId}' not found.` };
+      return { success: false, error: "The requested footer column could not be found." };
     }
 
     const updatedColumns = [...current.columns];
@@ -261,8 +268,10 @@ export async function updateFooterColumnHeadingAction(
     revalidateSharedFooterRoutes();
     return { success: true, message: `Column heading updated to "${trimmedTitle}".` };
   } catch (err: any) {
-    console.error("updateFooterColumnHeadingAction error:", err);
-    return { success: false, error: err.message || "Failed to update column heading." };
+    return safeActionError(err, "Failed to update column heading.", {
+      module: "CMS_FOOTER",
+      action: "updateFooterColumnHeadingAction",
+    });
   }
 }
 
@@ -351,8 +360,10 @@ export async function addFooterLinkAction(
     revalidateSharedFooterRoutes();
     return { success: true, message: `Link "${parsed.data.label}" added to ${targetColumn.title}.`, data: parsed.data };
   } catch (err: any) {
-    console.error("addFooterLinkAction error:", err);
-    return { success: false, error: err.message || "Failed to add footer link." };
+    return safeActionError(err, "Failed to add footer link.", {
+      module: "CMS_FOOTER",
+      action: "addFooterLinkAction",
+    });
   }
 }
 
@@ -371,13 +382,13 @@ export async function updateFooterLinkAction(
     const current = await getFooterSettings();
     const colIndex = current.columns.findIndex((c) => c.id === columnId);
     if (colIndex === -1) {
-      return { success: false, error: `Column '${columnId}' not found.` };
+      return { success: false, error: "The requested footer column could not be found." };
     }
 
     const targetColumn = current.columns[colIndex];
     const linkIndex = targetColumn.links.findIndex((l) => l.id === linkId);
     if (linkIndex === -1) {
-      return { success: false, error: `Link '${linkId}' not found in column '${columnId}'.` };
+      return { success: false, error: "The requested footer link could not be found." };
     }
 
     const existingLink = targetColumn.links[linkIndex];
@@ -441,8 +452,10 @@ export async function updateFooterLinkAction(
     revalidateSharedFooterRoutes();
     return { success: true, message: `Link "${parsed.data.label}" updated successfully.`, data: parsed.data };
   } catch (err: any) {
-    console.error("updateFooterLinkAction error:", err);
-    return { success: false, error: err.message || "Failed to update link." };
+    return safeActionError(err, "Failed to update link.", {
+      module: "CMS_FOOTER",
+      action: "updateFooterLinkAction",
+    });
   }
 }
 
@@ -460,7 +473,7 @@ export async function reorderFooterLinksAction(
     const current = await getFooterSettings();
     const colIndex = current.columns.findIndex((c) => c.id === columnId);
     if (colIndex === -1) {
-      return { success: false, error: `Column '${columnId}' not found.` };
+      return { success: false, error: "The requested footer column could not be found." };
     }
 
     const targetColumn = current.columns[colIndex];
@@ -519,8 +532,10 @@ export async function reorderFooterLinksAction(
     revalidateSharedFooterRoutes();
     return { success: true, message: `Links in "${targetColumn.title}" reordered successfully.` };
   } catch (err: any) {
-    console.error("reorderFooterLinksAction error:", err);
-    return { success: false, error: err.message || "Failed to reorder links." };
+    return safeActionError(err, "Failed to reorder links.", {
+      module: "CMS_FOOTER",
+      action: "reorderFooterLinksAction",
+    });
   }
 }
 
@@ -550,13 +565,13 @@ export async function deleteFooterLinkAction(
     const current = await getFooterSettings();
     const colIndex = current.columns.findIndex((c) => c.id === columnId);
     if (colIndex === -1) {
-      return { success: false, error: `Column '${columnId}' not found.` };
+      return { success: false, error: "The requested footer column could not be found." };
     }
 
     const targetColumn = current.columns[colIndex];
     const removedLink = targetColumn.links.find((l) => l.id === linkId);
     if (!removedLink) {
-      return { success: false, error: `Link '${linkId}' not found in column '${columnId}'.` };
+      return { success: false, error: "The requested footer link could not be found." };
     }
 
     const updatedLinks = targetColumn.links
@@ -594,8 +609,10 @@ export async function deleteFooterLinkAction(
     revalidateSharedFooterRoutes();
     return { success: true, message: `Link "${removedLink.label}" removed from ${targetColumn.title}.` };
   } catch (err: any) {
-    console.error("deleteFooterLinkAction error:", err);
-    return { success: false, error: err.message || "Failed to remove link." };
+    return safeActionError(err, "Failed to remove link.", {
+      module: "CMS_FOOTER",
+      action: "deleteFooterLinkAction",
+    });
   }
 }
 
@@ -641,8 +658,10 @@ export async function saveAllFooterSettingsAction(
     revalidateSharedFooterRoutes();
     return { success: true, message: "All footer changes saved successfully.", data: parsed.data };
   } catch (err: any) {
-    console.error("saveAllFooterSettingsAction error:", err);
-    return { success: false, error: err.message || "Failed to save footer settings." };
+    return safeActionError(err, "Failed to save footer settings.", {
+      module: "CMS_FOOTER",
+      action: "saveAllFooterSettingsAction",
+    });
   }
 }
 
@@ -734,8 +753,10 @@ export async function uploadFooterDocumentAction(formData: FormData): Promise<
       },
     };
   } catch (err: any) {
-    console.error("uploadFooterDocumentAction error:", err);
-    return { success: false, error: err.message || "Failed to upload document." };
+    return safeActionError(err, "Failed to upload document.", {
+      module: "CMS_FOOTER",
+      action: "uploadFooterDocumentAction",
+    });
   }
 }
 
@@ -884,7 +905,10 @@ export async function deleteFooterDocumentAction(documentId: string): Promise<
       },
     };
   } catch (err: any) {
-    console.error("deleteFooterDocumentAction error:", err);
-    return { success: false, error: err.message || "Failed to delete document." };
+    return safeActionError(err, "Failed to delete document.", {
+      module: "CMS_FOOTER",
+      action: "deleteFooterDocumentAction",
+      recordId: documentId,
+    });
   }
 }

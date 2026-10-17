@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { updatePageSectionAction, updatePageSeoAction } from "@/features/admin/pages/actions";
+import { getSectionSuccessMessage, getPageTitle } from "@/lib/cms/sectionLabels";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import {
   CmsImagePreviewInput,
   CmsStringRepeater,
@@ -51,12 +53,12 @@ export function InstitutionalPagesCmsDashboard({
       const body = section?.body || section || {};
       const res = await updatePageSectionAction(pageSlug, key, body);
       if (res.success) {
-        setFeedback({ type: "success", message: `Saved ${key} section for /${pageSlug} successfully!` });
+        setFeedback({ type: "success", message: res.message || getSectionSuccessMessage(key, pageSlug, "saved") });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save section" });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", message: err.message || "An unexpected error occurred" });
+      setFeedback({ type: "error", message: sanitizeErrorMessage(err, "An unexpected error occurred") });
     } finally {
       setSavingKey(null);
     }
@@ -68,12 +70,12 @@ export function InstitutionalPagesCmsDashboard({
     try {
       const res = await updatePageSeoAction(pageSlug, seoData);
       if (res.success) {
-        setFeedback({ type: "success", message: `Saved SEO metadata for /${pageSlug} successfully!` });
+        setFeedback({ type: "success", message: res.message || `${getPageTitle(pageSlug)} SEO metadata saved successfully.` });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save SEO metadata" });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", message: err.message || "An unexpected error occurred" });
+      setFeedback({ type: "error", message: sanitizeErrorMessage(err, "An unexpected error occurred") });
     } finally {
       setSavingKey(null);
     }

@@ -5,6 +5,8 @@ import { prisma } from "@/server/db/client";
 import { requireAdminSession } from "@/server/auth/session";
 import { recordAuditLog } from "@/server/services/auditLogs";
 import { translateObject } from "@/server/services/translation";
+import { getSectionSuccessMessage, getSectionLabel } from "@/lib/cms/sectionLabels";
+import { safeActionError } from "@/lib/cms/errorSanitizer";
 import {
   HomeHeroSchema,
   SmartCampusSchema,
@@ -148,10 +150,14 @@ export async function updatePageSectionAction(
     } else {
       revalidatePath(pageSlug === "home" ? "/" : `/${pageSlug}`);
     }
-    return { success: true, message: `Updated ${sectionKey} section successfully` };
+    return { success: true as const, message: getSectionSuccessMessage(sectionKey, pageSlug, "updated") };
   } catch (err: any) {
-    console.error(`Error updating ${pageSlug} section ${sectionKey}:`, err);
-    return { success: false, error: err.message || "Failed to update section" };
+    return safeActionError(err, "Failed to update section", {
+      module: "CMS_PAGES",
+      action: "updatePageSectionAction",
+      pageSlug,
+      sectionKey,
+    });
   }
 }
 
@@ -221,10 +227,13 @@ export async function updatePageSeoAction(pageSlug: string, rawData: any) {
     } else {
       revalidatePath(pageSlug === "home" ? "/" : `/${pageSlug}`);
     }
-    return { success: true, message: "SEO Metadata saved successfully" };
+    return { success: true as const, message: "SEO Metadata saved successfully" };
   } catch (err: any) {
-    console.error(`Error updating SEO for ${pageSlug}:`, err);
-    return { success: false, error: err.message || "Failed to update SEO" };
+    return safeActionError(err, "Failed to update SEO", {
+      module: "CMS_PAGES",
+      action: "updatePageSeoAction",
+      pageSlug,
+    });
   }
 }
 
@@ -265,9 +274,13 @@ export async function saveRecruiterAction(id: string | null, rawData: any) {
     }
 
     revalidatePath("/");
-    return { success: true, recruiter: result };
+    return { success: true as const, recruiter: result };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to save recruiter" };
+    return safeActionError(err, "Failed to save recruiter", {
+      module: "CMS_PAGES",
+      action: "saveRecruiterAction",
+      recordId: id || undefined,
+    });
   }
 }
 
@@ -286,9 +299,13 @@ export async function deleteRecruiterAction(id: string) {
     });
 
     revalidatePath("/");
-    return { success: true };
+    return { success: true as const, message: "Recruiter deleted successfully" };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to delete recruiter" };
+    return safeActionError(err, "Failed to delete recruiter", {
+      module: "CMS_PAGES",
+      action: "deleteRecruiterAction",
+      recordId: id,
+    });
   }
 }
 
@@ -331,9 +348,13 @@ export async function saveAwardRankingAction(id: string | null, rawData: any) {
     revalidatePath("/");
     revalidatePath("/about");
     revalidatePath("/about-us");
-    return { success: true, awardRanking: result };
+    return { success: true as const, awardRanking: result };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to save award" };
+    return safeActionError(err, "Failed to save award", {
+      module: "CMS_PAGES",
+      action: "saveAwardRankingAction",
+      recordId: id || undefined,
+    });
   }
 }
 
@@ -354,9 +375,13 @@ export async function deleteAwardRankingAction(id: string) {
     revalidatePath("/");
     revalidatePath("/about");
     revalidatePath("/about-us");
-    return { success: true };
+    return { success: true as const, message: "Award/Ranking deleted successfully" };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to delete award" };
+    return safeActionError(err, "Failed to delete award", {
+      module: "CMS_PAGES",
+      action: "deleteAwardRankingAction",
+      recordId: id,
+    });
   }
 }
 
@@ -397,9 +422,13 @@ export async function saveTestimonialAction(id: string | null, rawData: any) {
     }
 
     revalidatePath("/");
-    return { success: true, testimonial: result };
+    return { success: true as const, testimonial: result };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to save testimonial" };
+    return safeActionError(err, "Failed to save testimonial", {
+      module: "CMS_PAGES",
+      action: "saveTestimonialAction",
+      recordId: id || undefined,
+    });
   }
 }
 
@@ -418,9 +447,13 @@ export async function deleteTestimonialAction(id: string) {
     });
 
     revalidatePath("/");
-    return { success: true };
+    return { success: true as const, message: "Testimonial deleted successfully" };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to delete testimonial" };
+    return safeActionError(err, "Failed to delete testimonial", {
+      module: "CMS_PAGES",
+      action: "deleteTestimonialAction",
+      recordId: id,
+    });
   }
 }
 
@@ -462,9 +495,13 @@ export async function saveLeadershipMemberAction(id: string | null, rawData: any
 
     revalidatePath("/about");
     revalidatePath("/about-us");
-    return { success: true, leader: result };
+    return { success: true as const, leader: result };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to save leader" };
+    return safeActionError(err, "Failed to save leader", {
+      module: "CMS_PAGES",
+      action: "saveLeadershipMemberAction",
+      recordId: id || undefined,
+    });
   }
 }
 
@@ -484,9 +521,13 @@ export async function deleteLeadershipMemberAction(id: string) {
 
     revalidatePath("/about");
     revalidatePath("/about-us");
-    return { success: true };
+    return { success: true as const, message: "Leadership member deleted successfully" };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to delete leader" };
+    return safeActionError(err, "Failed to delete leader", {
+      module: "CMS_PAGES",
+      action: "deleteLeadershipMemberAction",
+      recordId: id,
+    });
   }
 }
 
@@ -527,9 +568,13 @@ export async function saveIndustryPartnerAction(id: string | null, rawData: any)
     }
 
     revalidatePath("/");
-    return { success: true, partner: result };
+    return { success: true as const, partner: result };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to save partner" };
+    return safeActionError(err, "Failed to save partner", {
+      module: "CMS_PAGES",
+      action: "saveIndustryPartnerAction",
+      recordId: id || undefined,
+    });
   }
 }
 
@@ -548,9 +593,13 @@ export async function deleteIndustryPartnerAction(id: string) {
     });
 
     revalidatePath("/");
-    return { success: true };
+    return { success: true as const, message: "Partner deleted successfully" };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to delete partner" };
+    return safeActionError(err, "Failed to delete partner", {
+      module: "CMS_PAGES",
+      action: "deleteIndustryPartnerAction",
+      recordId: id,
+    });
   }
 }
 
@@ -591,9 +640,13 @@ export async function saveStarPerformanceAction(id: string | null, rawData: any)
     }
 
     revalidatePath("/");
-    return { success: true, star: result };
+    return { success: true as const, star: result };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to save star performance" };
+    return safeActionError(err, "Failed to save star performance", {
+      module: "CMS_PAGES",
+      action: "saveStarPerformanceAction",
+      recordId: id || undefined,
+    });
   }
 }
 
@@ -612,9 +665,13 @@ export async function deleteStarPerformanceAction(id: string) {
     });
 
     revalidatePath("/");
-    return { success: true };
+    return { success: true as const, message: "Star performance deleted successfully" };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to delete star performance" };
+    return safeActionError(err, "Failed to delete star performance", {
+      module: "CMS_PAGES",
+      action: "deleteStarPerformanceAction",
+      recordId: id,
+    });
   }
 }
 
@@ -656,9 +713,13 @@ export async function saveRecognitionAction(id: string | null, rawData: any) {
 
     revalidatePath("/about");
     revalidatePath("/about-us");
-    return { success: true, recognition: result };
+    return { success: true as const, recognition: result };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to save recognition" };
+    return safeActionError(err, "Failed to save recognition", {
+      module: "CMS_PAGES",
+      action: "saveRecognitionAction",
+      recordId: id || undefined,
+    });
   }
 }
 
@@ -678,9 +739,13 @@ export async function deleteRecognitionAction(id: string) {
 
     revalidatePath("/about");
     revalidatePath("/about-us");
-    return { success: true };
+    return { success: true as const, message: "Recognition deleted successfully" };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to delete recognition" };
+    return safeActionError(err, "Failed to delete recognition", {
+      module: "CMS_PAGES",
+      action: "deleteRecognitionAction",
+      recordId: id,
+    });
   }
 }
 
@@ -722,9 +787,13 @@ export async function saveGovernanceDocumentAction(id: string | null, rawData: a
 
     revalidatePath("/about");
     revalidatePath("/about-us");
-    return { success: true, document: result };
+    return { success: true as const, document: result };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to save document" };
+    return safeActionError(err, "Failed to save document", {
+      module: "CMS_PAGES",
+      action: "saveGovernanceDocumentAction",
+      recordId: id || undefined,
+    });
   }
 }
 
@@ -744,9 +813,13 @@ export async function deleteGovernanceDocumentAction(id: string) {
 
     revalidatePath("/about");
     revalidatePath("/about-us");
-    return { success: true };
+    return { success: true as const, message: "Document deleted successfully" };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to delete document" };
+    return safeActionError(err, "Failed to delete document", {
+      module: "CMS_PAGES",
+      action: "deleteGovernanceDocumentAction",
+      recordId: id,
+    });
   }
 }
 
@@ -819,7 +892,7 @@ export async function updatePageSectionTranslationAction(
     });
 
     if (!existingSection) {
-      return { success: false, error: "Section does not exist yet. Please save English version first." };
+      return { success: false as const, error: "Section does not exist yet. Please save English version first." };
     }
 
     const currentTranslations: Record<string, any> =
@@ -860,13 +933,17 @@ export async function updatePageSectionTranslationAction(
     revalidatePath(targetRoute);
 
     return {
-      success: true,
-      message: `Saved ${targetLocale.toUpperCase()} translation for ${sectionKey} successfully!`,
+      success: true as const,
+      message: `Saved ${targetLocale.toUpperCase()} translation for ${getSectionLabel(sectionKey, pageSlug)} successfully.`,
       translations: updatedTranslations,
     };
   } catch (err: any) {
-    console.error(`Error updating ${targetLocale} translation for ${pageSlug}/${sectionKey}:`, err);
-    return { success: false, error: err.message || "Failed to save translation" };
+    return safeActionError(err, "Failed to save translation", {
+      module: "CMS_PAGES",
+      action: "updatePageSectionTranslationAction",
+      pageSlug,
+      sectionKey,
+    });
   }
 }
 
@@ -878,14 +955,16 @@ export async function generateTranslationDraftAction(
   try {
     await requireAdminSession();
     if (!sourceContent) {
-      return { success: false, error: "Source content is empty" };
+      return { success: false as const, error: "Source content is empty" };
     }
 
     const translated = await translateObject(sourceContent, targetLocale, sourceLocale);
-    return { success: true, translated };
+    return { success: true as const, translated };
   } catch (err: any) {
-    console.error(`Failed to generate ${targetLocale} draft:`, err);
-    return { success: false, error: err.message || "Draft generation failed" };
+    return safeActionError(err, "Draft generation failed", {
+      module: "CMS_PAGES",
+      action: "generateTranslationDraftAction",
+    });
   }
 }
 

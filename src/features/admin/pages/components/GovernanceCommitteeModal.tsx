@@ -495,7 +495,7 @@ export function GovernanceCommitteeModal({
               className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-5 py-2 text-xs font-bold text-white hover:bg-[#153468] disabled:opacity-50 shadow-sm"
             >
               <CheckCircle className="h-3.5 w-3.5" />
-              {isSubmitting ? "Saving to Aiven..." : "Publish Changes"}
+              {isSubmitting ? "Publishing changes..." : "Publish Changes"}
             </button>
           </div>
         </div>

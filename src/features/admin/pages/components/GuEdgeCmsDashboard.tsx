@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { updatePageSectionAction, updatePageSeoAction } from "@/features/admin/pages/actions";
+import { getSectionSuccessMessage } from "@/lib/cms/sectionLabels";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import { CmsActionButton } from "@/components/admin/CmsActionButton";
 import {
   CmsImagePreviewInput,
@@ -110,7 +112,7 @@ export function GuEdgeCmsDashboard({
       if (res.success) {
         setFeedback({
           type: "success",
-          text: `Section "${activeSectionKey}" saved successfully!`,
+          text: res.message || getSectionSuccessMessage(activeSectionKey, selectedPageSlug, "saved"),
         });
         if (sections[activeSectionKey]) {
           sections[activeSectionKey].body = activeBodyState;
@@ -121,7 +123,7 @@ export function GuEdgeCmsDashboard({
         setFeedback({ type: "error", text: res.error || "Failed to update section." });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", text: err.message || "An unexpected error occurred." });
+      setFeedback({ type: "error", text: sanitizeErrorMessage(err, "An unexpected error occurred.") });
     } finally {
       setIsSaving(false);
     }
@@ -161,7 +163,7 @@ export function GuEdgeCmsDashboard({
         setFeedback({ type: "error", text: res.error || "Failed to save SEO metadata." });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", text: err.message || "Failed to save SEO metadata." });
+      setFeedback({ type: "error", text: sanitizeErrorMessage(err, "Failed to save SEO metadata.") });
     } finally {
       setIsSaving(false);
     }

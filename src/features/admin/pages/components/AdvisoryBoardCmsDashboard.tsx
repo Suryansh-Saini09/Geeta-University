@@ -16,6 +16,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { updatePageSectionAction } from "@/features/admin/pages/actions";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import { CmsImagePreviewInput } from "@/features/admin/pages/components/CmsFieldHelpers";
 
 interface AdvisoryBoardCmsDashboardProps {
@@ -42,12 +43,12 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
     try {
       const res = await updatePageSectionAction("advisory-board", "hero", heroBody);
       if (res.success) {
-        setFeedback({ type: "success", message: "Saved Advisory Board hero successfully!" });
+        setFeedback({ type: "success", message: res.message || "Hero Banner saved successfully." });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save hero" });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", message: err.message || "An unexpected error occurred" });
+      setFeedback({ type: "error", message: sanitizeErrorMessage(err, "An unexpected error occurred") });
     } finally {
       setSaving(false);
     }
@@ -59,12 +60,12 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
     try {
       const res = await updatePageSectionAction("advisory-board", "members", { members });
       if (res.success) {
-        setFeedback({ type: "success", message: "Saved Advisory Board members successfully!" });
+        setFeedback({ type: "success", message: res.message || "Advisory Board members saved successfully." });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save members" });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", message: err.message || "An unexpected error occurred" });
+      setFeedback({ type: "error", message: sanitizeErrorMessage(err, "An unexpected error occurred") });
     } finally {
       setSaving(false);
     }

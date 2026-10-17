@@ -297,7 +297,10 @@ export function ProgramContentManager({
       {saved && (
         <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 shadow-sm">
           <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
-          Section content saved and persisted. Public caches revalidated.
+          {sectionCards.find((c) => c.id === activeSection)?.title
+            ? `${sectionCards.find((c) => c.id === activeSection)?.title} saved successfully.`
+            : "Section content saved successfully."}{" "}
+          Public caches revalidated.
         </div>
       )}
 

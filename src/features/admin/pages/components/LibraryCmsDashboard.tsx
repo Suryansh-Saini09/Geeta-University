@@ -11,6 +11,8 @@ import {
   ArrowDown,
 } from "lucide-react";
 import { updatePageSectionAction, updatePageSeoAction } from "@/features/admin/pages/actions";
+import { getSectionSuccessMessage } from "@/lib/cms/sectionLabels";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import {
   CmsImagePreviewInput,
   CmsAutoTextarea,
@@ -50,12 +52,12 @@ export function LibraryCmsDashboard({ initialData }: LibraryCmsDashboardProps) {
       const body = section?.body || section || {};
       const res = await updatePageSectionAction("library", key, body);
       if (res.success) {
-        setFeedback({ type: "success", message: `Saved ${key} section successfully!` });
+        setFeedback({ type: "success", message: res.message || getSectionSuccessMessage(key, "library", "saved") });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save section" });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", message: err.message || "An unexpected error occurred" });
+      setFeedback({ type: "error", message: sanitizeErrorMessage(err, "An unexpected error occurred") });
     } finally {
       setSavingKey(null);
     }
