@@ -1,0 +1,244 @@
+[
+  {
+    "id": "cmuqsaq4w0001urjot50bwmw1",
+    "fileName": "school-of-commerce-and-business-management-hero.webp",
+    "storageKey": "hero-school-of-commerce-and-business-management-1790934730445.webp",
+    "url": "/bba%20banner.jpeg",
+    "mimeType": "image/webp",
+    "sizeBytes": 1024,
+    "createdAt": "2026-10-02T09:52:10.449Z",
+    "createdBy": "System/Unknown",
+    "physicalLocation": {
+      "existsInStorageMedia": false,
+      "existsInPublic": true,
+      "publicFilePath": "public\\bba banner.jpeg",
+      "remoteAccessible": null,
+      "remoteStatus": null
+    },
+    "publishedUsage": [
+      "Department: School of Commerce & Business Management (school-of-commerce-and-business-management) [PUBLISHED]"
+    ],
+    "natureOfRecord": "AD_HOC_DEPARTMENT_SAVE_PLACEHOLDER",
+    "proposedRemediation": "RETAIN_REFERENCE: File exists in public/. Migrate binary to persistent storage during Phase 2/3 and update storageKey."
+  },
+  {
+    "id": "cmuqsaq9f000burjoclmnla09",
+    "fileName": "geeta-institute-of-pharmacy-hero.webp",
+    "storageKey": "hero-geeta-institute-of-pharmacy-1790934730608.webp",
+    "url": "/programs/pharmacy/hero.webp",
+    "mimeType": "image/webp",
+    "sizeBytes": 1024,
+    "createdAt": "2026-10-02T09:52:10.612Z",
+    "createdBy": "System/Unknown",
+    "physicalLocation": {
+      "existsInStorageMedia": false,
+      "existsInPublic": true,
+      "publicFilePath": "public\\programs\\pharmacy\\hero.webp",
+      "remoteAccessible": null,
+      "remoteStatus": null
+    },
+    "publishedUsage": [
+      "Department: Care Beyond Prescriptions. Create a Better Tomorrow (geeta-institute-of-pharmacy) [PUBLISHED]"
+    ],
+    "natureOfRecord": "AD_HOC_DEPARTMENT_SAVE_PLACEHOLDER",
+    "proposedRemediation": "RETAIN_REFERENCE: File exists in public/. Migrate binary to persistent storage during Phase 2/3 and update storageKey."
+  },
+  {
+    "id": "cmuqsaqfe000nurjo6v0rbald",
+    "fileName": "school-of-health-and-allied-sciences-hero.webp",
+    "storageKey": "hero-school-of-health-and-allied-sciences-1790934730822.webp",
+    "url": "/programs/health-sciences/hero.webp",
+    "mimeType": "image/webp",
+    "sizeBytes": 1024,
+    "createdAt": "2026-10-02T09:52:10.826Z",
+    "createdBy": "System/Unknown",
+    "physicalLocation": {
+      "existsInStorageMedia": false,
+      "existsInPublic": true,
+      "publicFilePath": "public\\programs\\health-sciences\\hero.webp",
+      "remoteAccessible": null,
+      "remoteStatus": null
+    },
+    "publishedUsage": [
+      "Department: School of Health & Allied Sciences (school-of-health-and-allied-sciences) [PUBLISHED]"
+    ],
+    "natureOfRecord": "AD_HOC_DEPARTMENT_SAVE_PLACEHOLDER",
+    "proposedRemediation": "RETAIN_REFERENCE: File exists in public/. Migrate binary to persistent storage during Phase 2/3 and update storageKey."
+  },
+  {
+    "id": "cmuqsdvj1000uurcs7yk0rczr",
+    "fileName": "school-of-hospitality-and-hotel-management-hero.webp",
+    "storageKey": "hero-school-of-hospitality-and-hotel-management-1790934877402.webp",
+    "url": "/programs/hotel-management/hero.jpg",
+    "mimeType": "image/webp",
+    "sizeBytes": 1024,
+    "createdAt": "2026-10-02T09:54:37.405Z",
+    "createdBy": "System/Unknown",
+    "physicalLocation": {
+      "existsInStorageMedia": false,
+      "existsInPublic": true,
+      "publicFilePath": "public\\programs\\hotel-management\\hero.jpg",
+      "remoteAccessible": null,
+      "remoteStatus": null
+    },
+    "publishedUsage": [
+      "Department: School of Hospitality & Hotel Management (school-of-hospitality-and-hotel-management) [PUBLISHED]"
+    ],
+    "natureOfRecord": "AD_HOC_DEPARTMENT_SAVE_PLACEHOLDER",
+    "proposedRemediation": "RETAIN_REFERENCE: File exists in public/. Migrate binary to persistent storage during Phase 2/3 and update storageKey."
+  },
+  {
+    "id": "cmuqsdvp00016urcsew7h3lhp",
+    "fileName": "school-of-forensic-sciences-hero.webp",
+    "storageKey": "hero-school-of-forensic-sciences-1790934877617.webp",
+    "url": "/programs/forensic-sciences/hero.jpg",
+    "mimeType": "image/webp",
+    "sizeBytes": 1024,
+    "createdAt": "2026-10-02T09:54:37.620Z",
+    "createdBy": "System/Unknown",
+    "physicalLocation": {
+      "existsInStorageMedia": false,
+      "existsInPublic": true,
+      "publicFilePath": "public\\programs\\forensic-sciences\\hero.jpg",
+      "remoteAccessible": null,
+      "remoteStatus": null
+    },
+    "publishedUsage": [
+      "Department: School of Sciences (school-of-forensic-sciences) [PUBLISHED]"
+    ],
+    "natureOfRecord": "AD_HOC_DEPARTMENT_SAVE_PLACEHOLDER",
+    "proposedRemediation": "RETAIN_REFERENCE: File exists in public/. Migrate binary to persistent storage during Phase 2/3 and update storageKey."
+  },
+  {
+    "id": "cmuqsgvzz001eurdw99erk5ya",
+    "fileName": "geeta-global-law-school-hero.webp",
+    "storageKey": "hero-geeta-global-law-school-1790935017979.webp",
+    "url": "/programs/law/hero.webp",
+    "mimeType": "image/webp",
+    "sizeBytes": 1024,
+    "createdAt": "2026-10-02T09:56:57.983Z",
+    "createdBy": "System/Unknown",
+    "physicalLocation": {
+      "existsInStorageMedia": false,
+      "existsInPublic": true,
+      "publicFilePath": "public\\programs\\law\\hero.webp",
+      "remoteAccessible": null,
+      "remoteStatus": null
+    },
+    "publishedUsage": [
+      "Department: Geeta Global Law School (geeta-global-law-school) [PUBLISHED]"
+    ],
+    "natureOfRecord": "AD_HOC_DEPARTMENT_SAVE_PLACEHOLDER",
+    "proposedRemediation": "RETAIN_REFERENCE: File exists in public/. Migrate binary to persistent storage during Phase 2/3 and update storageKey."
+  },
+  {
+    "id": "cmuqsgw69001qurdwpi3w7ikk",
+    "fileName": "school-of-agricultural-studies-hero.webp",
+    "storageKey": "hero-school-of-agricultural-studies-1790935018205.webp",
+    "url": "/programs/agriculture/hero.jpg",
+    "mimeType": "image/webp",
+    "sizeBytes": 1024,
+    "createdAt": "2026-10-02T09:56:58.209Z",
+    "createdBy": "System/Unknown",
+    "physicalLocation": {
+      "existsInStorageMedia": false,
+      "existsInPublic": true,
+      "publicFilePath": "public\\programs\\agriculture\\hero.jpg",
+      "remoteAccessible": null,
+      "remoteStatus": null
+    },
+    "publishedUsage": [
+      "Department: School of Agricultural Sciences (school-of-agricultural-studies) [PUBLISHED]"
+    ],
+    "natureOfRecord": "AD_HOC_DEPARTMENT_SAVE_PLACEHOLDER",
+    "proposedRemediation": "RETAIN_REFERENCE: File exists in public/. Migrate binary to persistent storage during Phase 2/3 and update storageKey."
+  },
+  {
+    "id": "cmuqsgwbe0020urdwan2ajaay",
+    "fileName": "school-of-humanities-and-social-science-hero.webp",
+    "storageKey": "hero-school-of-humanities-and-social-science-1790935018390.webp",
+    "url": "/programs/humanities/hero.jpg",
+    "mimeType": "image/webp",
+    "sizeBytes": 1024,
+    "createdAt": "2026-10-02T09:56:58.394Z",
+    "createdBy": "System/Unknown",
+    "physicalLocation": {
+      "existsInStorageMedia": false,
+      "existsInPublic": true,
+      "publicFilePath": "public\\programs\\humanities\\hero.jpg",
+      "remoteAccessible": null,
+      "remoteStatus": null
+    },
+    "publishedUsage": [
+      "Department: School of Humanities & Social Sciences (school-of-humanities-and-social-science) [PUBLISHED]"
+    ],
+    "natureOfRecord": "AD_HOC_DEPARTMENT_SAVE_PLACEHOLDER",
+    "proposedRemediation": "RETAIN_REFERENCE: File exists in public/. Migrate binary to persistent storage during Phase 2/3 and update storageKey."
+  },
+  {
+    "id": "cmuqsgwia002eurdwbw3uexnf",
+    "fileName": "school-of-computer-science-and-engineering-hero.webp",
+    "storageKey": "hero-school-of-computer-science-and-engineering-1790935018639.webp",
+    "url": "https://geetauniversity.edu.in/uploads/all/2546/cse-banner.webp",
+    "mimeType": "image/webp",
+    "sizeBytes": 1024,
+    "createdAt": "2026-10-02T09:56:58.643Z",
+    "createdBy": "System/Unknown",
+    "physicalLocation": {
+      "existsInStorageMedia": false,
+      "existsInPublic": false,
+      "publicFilePath": null,
+      "remoteAccessible": true,
+      "remoteStatus": 200
+    },
+    "publishedUsage": [
+      "Department: School of Computer Science & Engineering (school-of-computer-science-and-engineering) [PUBLISHED]"
+    ],
+    "natureOfRecord": "AD_HOC_DEPARTMENT_SAVE_PLACEHOLDER",
+    "proposedRemediation": "RECOVER_FROM_LEGACY: File accessible on remote domain. Download and store in persistent storage during Phase 2 migration."
+  },
+  {
+    "id": "cmuqsgx1n004aurdwjgh6xd6f",
+    "fileName": "sp-bansal-school-of-business-hero.webp",
+    "storageKey": "hero-sp-bansal-school-of-business-1790935019335.webp",
+    "url": "https://geetauniversity.edu.in/uploads/all/2169/spbsb.webp",
+    "mimeType": "image/webp",
+    "sizeBytes": 1024,
+    "createdAt": "2026-10-02T09:56:59.339Z",
+    "createdBy": "System/Unknown",
+    "physicalLocation": {
+      "existsInStorageMedia": false,
+      "existsInPublic": false,
+      "publicFilePath": null,
+      "remoteAccessible": true,
+      "remoteStatus": 200
+    },
+    "publishedUsage": [
+      "Department: SP Bansal School of Business (sp-bansal-school-of-business) [PUBLISHED]"
+    ],
+    "natureOfRecord": "AD_HOC_DEPARTMENT_SAVE_PLACEHOLDER",
+    "proposedRemediation": "RECOVER_FROM_LEGACY: File accessible on remote domain. Download and store in persistent storage during Phase 2 migration."
+  },
+  {
+    "id": "cmuqsgx6z004kurdwiu2hs053",
+    "fileName": "geeta-nursing-college-hero.webp",
+    "storageKey": "hero-geeta-nursing-college-1790935019528.webp",
+    "url": "https://geetauniversity.edu.in/uploads/all/1888/nursing.jpg",
+    "mimeType": "image/webp",
+    "sizeBytes": 1024,
+    "createdAt": "2026-10-02T09:56:59.532Z",
+    "createdBy": "System/Unknown",
+    "physicalLocation": {
+      "existsInStorageMedia": false,
+      "existsInPublic": false,
+      "publicFilePath": null,
+      "remoteAccessible": true,
+      "remoteStatus": 200
+    },
+    "publishedUsage": [
+      "Department: Geeta Nursing College (geeta-nursing-college) [PUBLISHED]"
+    ],
+    "natureOfRecord": "AD_HOC_DEPARTMENT_SAVE_PLACEHOLDER",
+    "proposedRemediation": "RECOVER_FROM_LEGACY: File accessible on remote domain. Download and store in persistent storage during Phase 2 migration."
+  }
+]

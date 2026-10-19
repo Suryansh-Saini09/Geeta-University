@@ -60,7 +60,7 @@ export default function SPBLLifeGrid() {
               <div className="h-[340px] w-full overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="https://geetauniversity.edu.in/uploads/all/2156/corporate.jpg"
+                  src="/uploads/all/2156/corporate.jpg"
                   alt="Case Study and Moot Court Session"
                   className="w-full h-full object-cover"
                 />

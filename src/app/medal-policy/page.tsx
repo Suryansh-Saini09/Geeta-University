@@ -69,7 +69,7 @@ export async function generateMetadata(): Promise<Metadata> {
         "Official policy and regulations for awarding Gold, Silver, Bronze Academic Medals and the prestigious Chancellor’s Medal at the Annual Convocation of Geeta University.",
       images: seo?.ogImage
         ? [{ url: seo.ogImage }]
-        : ["https://geetauniversity.edu.in/uploads/all/224/conversions/new-building-3-full.webp"],
+        : ["/uploads/all/224/conversions/new-building-3-full.webp"],
     },
   };
 }
@@ -88,7 +88,7 @@ export default async function MedalPolicyPage() {
   const heroHighlight = hero?.highlight || "Medal Policy";
   const heroBg =
     hero?.bgImage ||
-    "https://geetauniversity.edu.in/uploads/all/224/conversions/new-building-3-full.webp";
+    "/uploads/all/224/conversions/new-building-3-full.webp";
 
   const medalsList = academicMedals?.medals || [];
   const thresholdList = thresholds?.rows || thresholds?.thresholds || [];
@@ -327,7 +327,7 @@ export default async function MedalPolicyPage() {
               <a
                 href={
                   rankersDocument?.documentUrl ||
-                  "https://geetauniversity.edu.in/uploads/all/1982/Medal-List-24.01.2026.pdf"
+                  "/uploads/all/1982/Medal-List-24.01.2026.pdf"
                 }
                 target="_blank"
                 rel="noopener noreferrer"

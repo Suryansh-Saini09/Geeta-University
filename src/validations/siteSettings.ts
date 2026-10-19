@@ -70,7 +70,7 @@ export const siteMetadataSettingsSchema = z.object({
   tagline: z.string().trim().max(300).default("Empowering Minds. Transforming Futures."),
   siteDescription: z.string().trim().max(500).default("Official website of Geeta University, Panipat, Haryana."),
   defaultLanguage: z.string().trim().max(10).default("en"),
-  logoUrl: safeUrlSchema.default("https://geetauniversity.edu.in/uploads/all/754/GU-Logo-PNG-(1).webp"),
+  logoUrl: safeUrlSchema.default("/uploads/all/754/GU-Logo-PNG-(1).webp"),
   faviconUrl: safeUrlSchema.default("/favicon.ico"),
   copyrightText: z.string().trim().max(300).default("© Geeta University. All Rights Reserved."),
 });

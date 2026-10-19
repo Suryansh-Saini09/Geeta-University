@@ -587,7 +587,7 @@ export const commerceSchool: ProgramPageData = {
     title: "Want to know more?",
     description:
       "Explore comprehensive curriculum guides for BBA, B.Com, M.Com, ACCA certifications, faculty profiles, and placement track records.",
-    fileUrl: "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+    fileUrl: "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     fileName: "School_of_Commerce_Brochure.pdf",
   },
 

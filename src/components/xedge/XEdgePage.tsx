@@ -22,7 +22,7 @@ import LegacyEcosystem from "@/components/about/LegacyEcosystem";
 import type { EdgePageData } from "@/data/edge/types";
 
 export default function XEdgePage({ pageData }: { pageData?: EdgePageData }) {
-  const heroImage = pageData?.hero?.image || "https://geetauniversity.edu.in/uploads/all/120/conversions/2-xedge-full.webp";
+  const heroImage = pageData?.hero?.image || "/uploads/all/120/conversions/2-xedge-full.webp";
 
   return (
     <main className="min-h-screen bg-[#F8FAFC] text-[#1A1A2E]">
@@ -391,7 +391,7 @@ export default function XEdgePage({ pageData }: { pageData?: EdgePageData }) {
             <div className="lg:col-span-6">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[24px] border border-[#E2E8F0] shadow-md shadow-slate-200/50 bg-slate-50">
                 <Image
-                  src="https://geetauniversity.edu.in/uploads/all/508/conversions/college-girl-working-with-laptop-after-lessons-1024x683-1-full.webp"
+                  src="/uploads/all/508/conversions/college-girl-working-with-laptop-after-lessons-1024x683-1-full.webp"
                   alt="More and Better Relationships"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -441,7 +441,7 @@ export default function XEdgePage({ pageData }: { pageData?: EdgePageData }) {
             <div className="lg:col-span-6 order-1 lg:order-2">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[24px] border border-[#E2E8F0] shadow-md shadow-slate-200/50 bg-slate-50">
                 <Image
-                  src="https://geetauniversity.edu.in/uploads/all/514/conversions/pexels-andrea-piacquadio-3762800-full.webp"
+                  src="/uploads/all/514/conversions/pexels-andrea-piacquadio-3762800-full.webp"
                   alt="Greater Efficiency"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"

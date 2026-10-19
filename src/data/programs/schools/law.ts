@@ -420,7 +420,7 @@ export const lawSchool: ProgramPageData = {
     title: "Want to know more?",
     description:
       "Access detailed syllabus guides for B.A. LL.B. (Hons.), B.B.A. LL.B. (Hons.), LL.M., and Ph.D., moot court achievements, mentor profiles, and admission guidelines.",
-    fileUrl: "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+    fileUrl: "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     fileName: "Geeta_Global_Law_School_Brochure.pdf",
   },
 

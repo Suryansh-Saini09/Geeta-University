@@ -40,8 +40,8 @@ export const HARDCODED_SOCIAL_PROFILE: SocialProfile = {
   tagline: "Empowering Minds. Transforming Futures.",
   pageTitle: "Connect with Geeta University",
   description: "Connect with Geeta University through our official digital channels.",
-  heroImage: "https://geetauniversity.edu.in/uploads/all/2080/campus.webp",
-  logo: "https://geetauniversity.edu.in/uploads/all/754/GU-Logo-PNG-(1).webp",
+  heroImage: "/uploads/all/2080/campus.webp",
+  logo: "/uploads/all/754/GU-Logo-PNG-(1).webp",
   enabled: true,
 };
 

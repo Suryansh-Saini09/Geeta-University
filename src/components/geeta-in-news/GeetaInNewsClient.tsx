@@ -36,7 +36,7 @@ export default function GeetaInNewsClient({
   const allPublications = publications && publications.length > 0 ? publications : fallbackPublications;
 
   const heroTitle = hero?.title || "Geeta in News";
-  const heroBg = hero?.heroImage || "https://geetauniversity.edu.in/uploads/all/252/conversions/new-building-3-(1)-full.webp";
+  const heroBg = hero?.heroImage || "/uploads/all/252/conversions/new-building-3-(1)-full.webp";
 
   const [selectedPub, setSelectedPub] = useState("All Publications");
   const [searchQuery, setSearchQuery] = useState("");

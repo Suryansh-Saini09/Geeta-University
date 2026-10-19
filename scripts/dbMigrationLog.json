@@ -1,0 +1,34 @@
+[
+  {
+    "model": "SeoMetadata",
+    "recordId": "cmuy0fy82000gurhcauxzznyl",
+    "field": "ogImage/canonical",
+    "oldUrl": "https://geetauniversity.edu.in/uploads/all/1871/Ph.d.webp",
+    "newUrl": "/uploads/all/1871/Ph.d.webp",
+    "applied": true
+  },
+  {
+    "model": "SeoMetadata",
+    "recordId": "cmuy0gbfq001surhcu20hw6dm",
+    "field": "ogImage/canonical",
+    "oldUrl": "https://geetauniversity.edu.in/uploads/all/1912/Guts_banner.jpg",
+    "newUrl": "/uploads/all/1912/Guts_banner.jpg",
+    "applied": true
+  },
+  {
+    "model": "SeoMetadata",
+    "recordId": "cmuy0ge650024urhck0ehpa2m",
+    "field": "ogImage/canonical",
+    "oldUrl": "https://geetauniversity.edu.in/uploads/all/2540/cuet.jpeg",
+    "newUrl": "/uploads/all/2540/cuet.jpeg",
+    "applied": true
+  },
+  {
+    "model": "SeoMetadata",
+    "recordId": "cmv1vjv020006ur4chf8yq9n1",
+    "field": "ogImage/canonical",
+    "oldUrl": "https://geetauniversity.edu.in/uploads/all/253/conversions/f-block-(1)-full.webp",
+    "newUrl": "/uploads/all/253/conversions/f-block-(1)-full.webp",
+    "applied": true
+  }
+]

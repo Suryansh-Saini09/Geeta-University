@@ -31,9 +31,9 @@ export const bca: CoursePageData = {
     title: "Bachelor of Computer Applications (BCA)",
     description: "",
     image:
-      "https://geetauniversity.edu.in/uploads/all/1846/Bachelor-of-Computer-Applications-(BCA).jpg",
+      "/uploads/all/1846/Bachelor-of-Computer-Applications-(BCA).jpg",
     mobileImage:
-      "https://geetauniversity.edu.in/uploads/all/1845/Bachelor-of-Computer-Applications-(BCA)-2.jpg",
+      "/uploads/all/1845/Bachelor-of-Computer-Applications-(BCA)-2.jpg",
   },
   quickInfo: {
     program: "Bachelor of Computer Applications (BCA)",
@@ -158,42 +158,42 @@ export const bca: CoursePageData = {
       name: "Tanay Bansal",
       role: "BCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2310/conversions/bca-full.webp",
+        "/uploads/all/2310/conversions/bca-full.webp",
       text: "Studying BCA here has been a really positive experience till now. The focus on practical learning and regular projects helped me gain better understanding, and the faculty support made it easier to handle challenging concepts.",
     },
     {
       name: "Shivangi",
       role: "BCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2308/conversions/bca2-full.webp",
+        "/uploads/all/2308/conversions/bca2-full.webp",
       text: "My experience in BCA has been very productive so far. The curriculum covers important topics in computer applications, and the practical exposure helped me improve my technical skills and feel more confident about future career opportunities.",
     },
     {
       name: "Janvi",
       role: "BCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2311/conversions/bca4d-(1)-full.webp",
+        "/uploads/all/2311/conversions/bca4d-(1)-full.webp",
       text: "Being part of the BCA program here has been a good experience till now. The course is well-structured, and the combination of theory and practical learning helped me understand concepts better and grow my technical abilities steadily.",
     },
     {
       name: "Tannu",
       role: "BCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2307/conversions/bca3-full.webp",
+        "/uploads/all/2307/conversions/bca3-full.webp",
       text: "My experience studying BCA here has been really smooth so far. The course structure is clear and practical, and the faculty always supports us, helping me understand programming concepts better and build confidence in my technical skills.",
     },
     {
       name: "Sneha",
       role: "BCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2309/conversions/bca1-full.webp",
+        "/uploads/all/2309/conversions/bca1-full.webp",
       text: "Learning BCA here has been a great journey till now. The practical labs and assignments made concepts easier to understand, and the faculty guidance helped me improve my coding skills and overall confidence in computer applications.",
     },
     {
       name: "Sukhjot Kaur",
       role: "BCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2305/conversions/bca5-full.webp",
+        "/uploads/all/2305/conversions/bca5-full.webp",
       text: "My journey in the BCA course has been quite interesting so far. The mix of theory and practical sessions helped me understand real-world applications, while the supportive faculty made learning more engaging and easier to follow.",
     },
   ],
@@ -203,27 +203,27 @@ export const bca: CoursePageData = {
       {
         title: "Computing & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
       },
       {
         title: "AI & Data Science Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
       },
       {
         title: "Cybersecurity & Cloud Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
       },
       {
         title: "Collaborative Coding & Innovation Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
       },
     ],
   },
@@ -234,7 +234,7 @@ export const bca: CoursePageData = {
       "Apply now at Geeta University and embark on a rewarding journey in computer applications and software technology.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

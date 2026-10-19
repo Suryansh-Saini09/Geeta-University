@@ -146,8 +146,8 @@ export default async function SocialLinksPage() {
       ]
     : [{ title: "Official Digital Channels", items: links }];
 
-  const heroBg = profile?.heroImage || "https://geetauniversity.edu.in/uploads/all/2080/campus.webp";
-  const logoUrl = profile?.logo || "https://geetauniversity.edu.in/uploads/all/754/GU-Logo-PNG-(1).webp";
+  const heroBg = profile?.heroImage || "/uploads/all/2080/campus.webp";
+  const logoUrl = profile?.logo || "/uploads/all/754/GU-Logo-PNG-(1).webp";
   const title = profile?.name || "Geeta University";
   const tagline = profile?.tagline || "Empowering Minds. Transforming Futures.";
 

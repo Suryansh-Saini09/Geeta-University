@@ -31,9 +31,9 @@ export const btechCyberSecurity: CoursePageData = {
   hero: {
     title: "B.Tech (Hons) in CSE with specialization in Cyber Security",
     description: "",
-    image: "https://geetauniversity.edu.in/uploads/all/1827/btech-cyber.jpg",
+    image: "/uploads/all/1827/btech-cyber.jpg",
     mobileImage:
-      "https://geetauniversity.edu.in/uploads/all/1828/1-(2).jpg",
+      "/uploads/all/1828/1-(2).jpg",
   },
   quickInfo: {
     program: "B.Tech (Hons) in CSE with specialization in Cyber Security",
@@ -161,42 +161,42 @@ export const btechCyberSecurity: CoursePageData = {
       name: "Milan Kumar",
       role: "B.Tech Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2280/conversions/milan-kumar-full.webp",
+        "/uploads/all/2280/conversions/milan-kumar-full.webp",
       text: "My experience in B.Tech Cyber Security at Geeta University has been really good so far. The practical labs and supportive faculty helped me understand real-world cyber threats and boosted my confidence for a career in cybersecurity.",
     },
     {
       name: "Nitin",
       role: "B.Tech Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2287/conversions/cyber-full.webp",
+        "/uploads/all/2287/conversions/cyber-full.webp",
       text: "My journey in B.Tech Cyber Security at Geeta University has been very positive so far. The hands-on labs and experienced faculty made learning engaging, helping me understand real-world cyber threats and prepare confidently for my future career.",
     },
     {
       name: "Rishabh Jain",
       role: "B.Tech Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2286/conversions/cyber2-full.webp",
+        "/uploads/all/2286/conversions/cyber2-full.webp",
       text: "Studying B.Tech at Geeta University has been a great experience. The practical sessions and helpful faculty helped me gain strong knowledge about cyber threats and improved my confidence to build a successful career in this field.",
     },
     {
       name: "Divya",
       role: "B.Tech Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2285/conversions/cyber-3-full.webp",
+        "/uploads/all/2285/conversions/cyber-3-full.webp",
       text: "The course offers practical exposure and faculty support that helped me understand cyber threats better and boosted my confidence to pursue a career in cybersecurity.",
     },
     {
       name: "Sonu Kumar",
       role: "B.Tech Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2283/conversions/cyber5-full.webp",
+        "/uploads/all/2283/conversions/cyber5-full.webp",
       text: "My time in the B.Tech program at Geeta University has been very enriching. The practical learning approach and guidance from faculty helped me understand industry concepts and prepared me for future cybersecurity roles confidently.",
     },
     {
       name: "Tanishq Rawat",
       role: "B.Tech Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2284/conversions/cyber4-full.webp",
+        "/uploads/all/2284/conversions/cyber4-full.webp",
       text: "My learning experience in the B.Tech Cyber Security at GU has been really smooth so far. The practical approach and constant support from faculty made concepts clearer and helped me feel more confident about future opportunities.",
     },
   ],
@@ -206,27 +206,27 @@ export const btechCyberSecurity: CoursePageData = {
       {
         title: "Computing & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
       },
       {
         title: "Cybersecurity & Cloud Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
       },
       {
         title: "AI & Data Science Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
       },
       {
         title: "Collaborative Coding & Innovation Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
       },
     ],
   },
@@ -237,7 +237,7 @@ export const btechCyberSecurity: CoursePageData = {
       "Apply now at Geeta University and step into the high-demand field of ethical hacking, network defense, and digital forensics.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
         "Explore Geeta University's presence across national and regional news publications.",
       images: seo?.ogImage
         ? [{ url: seo.ogImage }]
-        : ["https://geetauniversity.edu.in/uploads/all/252/conversions/new-building-3-(1)-full.webp"],
+        : ["/uploads/all/252/conversions/new-building-3-(1)-full.webp"],
     },
   };
 }
