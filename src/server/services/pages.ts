@@ -800,12 +800,21 @@ export async function getPublishedGeetaInNewsPage(locale: string = DEFAULT_LOCAL
         }
       : null;
 
+    const rawItems: any[] = sectionMap.news_items?.items || [];
+    // Only show published / active items on public website
+    const publishedItems = rawItems.filter((item) => {
+      if (!item) return false;
+      const status = String(item.status || "PUBLISHED").toUpperCase().trim();
+      return status === "PUBLISHED" || status === "ACTIVE";
+    });
+
     return {
       sections: sectionMap,
       hero: sectionMap.hero || null,
       newsItems: sectionMap.news_items || null,
-      items: sectionMap.news_items?.items || [],
+      items: publishedItems,
       publications: sectionMap.news_items?.publications || [],
+      categories: sectionMap.news_items?.categories || ["News", "Event", "Placement Updates"],
       seo: localizedSeo,
     };
   } catch (err: any) {

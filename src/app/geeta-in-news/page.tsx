@@ -36,7 +36,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GeetaInNewsPage() {
-  const { hero, items, publications } = await getPublishedGeetaInNewsPage();
+  const { hero, items, publications, categories } = await getPublishedGeetaInNewsPage();
 
-  return <GeetaInNewsClient hero={hero} items={items} publications={publications} />;
+  return (
+    <GeetaInNewsClient
+      hero={hero}
+      items={items}
+      publications={publications}
+      categories={categories}
+    />
+  );
 }

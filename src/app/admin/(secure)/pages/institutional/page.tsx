@@ -8,6 +8,7 @@ import { PlacementsCmsDashboard } from "@/features/admin/pages/components/Placem
 import { LibraryCmsDashboard } from "@/features/admin/pages/components/LibraryCmsDashboard";
 import { AdvisoryBoardCmsDashboard } from "@/features/admin/pages/components/AdvisoryBoardCmsDashboard";
 import { MedalPolicyCmsDashboard } from "@/features/admin/pages/components/MedalPolicyCmsDashboard";
+import { GeetaInNewsCmsDashboard } from "@/features/admin/pages/components/GeetaInNewsCmsDashboard";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,8 @@ export default async function AdminInstitutionalPage({
       return <AdvisoryBoardCmsDashboard initialData={initialData} />;
     case "medal-policy":
       return <MedalPolicyCmsDashboard initialData={initialData} />;
+    case "geeta-in-news":
+      return <GeetaInNewsCmsDashboard initialData={initialData} />;
     default:
       return <InstitutionalPagesCmsDashboard pageSlug={page} initialData={initialData} />;
   }

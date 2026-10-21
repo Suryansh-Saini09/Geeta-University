@@ -5,7 +5,15 @@ export interface NewsItem {
   date: string;
   image: string;
   fullImage: string;
+  category?: string;
+  slug?: string;
+  status?: string;
+  order?: number;
+  content?: string;
+  videoUrl?: string;
+  altText?: string;
 }
+
 
 export const newsData: NewsItem[] = [
   {

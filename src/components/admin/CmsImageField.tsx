@@ -182,11 +182,6 @@ export function CmsImageField({
               CMS Managed
             </span>
           )}
-          {value && isLegacy && (
-            <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
-              Legacy Asset
-            </span>
-          )}
           <button
             type="button"
             onClick={() => setShowManualInput(!showManualInput)}

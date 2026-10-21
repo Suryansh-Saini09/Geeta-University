@@ -71,10 +71,10 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
     pageSize: view === "grid" ? 36 : 25,
   });
 
-  const buildUrl = (updates: Record<string, string | number | undefined>) => {
+  const buildUrl = (updates: Record<string, string | number | undefined | null>) => {
     const sp = new URLSearchParams();
-    const merged = {
-      q: query,
+    const merged: Record<string, string | number | undefined | null> = {
+      q: query || undefined,
       kind: kind !== "ALL" ? kind : undefined,
       dir: directory || undefined,
       usage: usage !== "ALL" ? usage : undefined,
@@ -85,7 +85,13 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
     };
 
     for (const [k, v] of Object.entries(merged)) {
-      if (v !== undefined && v !== "") {
+      if (
+        v !== undefined &&
+        v !== null &&
+        v !== "" &&
+        v !== "ALL" &&
+        !(k === "page" && Number(v) <= 1)
+      ) {
         sp.set(k, String(v));
       }
     }
@@ -154,7 +160,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
       {/* Overview Statistics Cards */}
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
         <Link
-          href={buildUrl({ kind: "ALL", page: 1 })}
+          href={buildUrl({ kind: undefined, usage: undefined, dir: undefined, page: 1 })}
           className={`flex flex-col rounded-xl border p-4 transition ${
             kind === "ALL" && !directory && usage === "ALL"
               ? "border-[#0A1F44] bg-[#0A1F44]/5 ring-1 ring-[#0A1F44]"
@@ -169,9 +175,9 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
         </Link>
 
         <Link
-          href={buildUrl({ kind: "IMAGE", page: 1 })}
+          href={buildUrl({ kind: "IMAGE", usage: undefined, page: 1 })}
           className={`flex flex-col rounded-xl border p-4 transition ${
-            kind === "IMAGE"
+            kind === "IMAGE" && usage === "ALL"
               ? "border-[#0A1F44] bg-[#0A1F44]/5 ring-1 ring-[#0A1F44]"
               : "border-slate-200 bg-white hover:border-slate-300"
           }`}
@@ -184,9 +190,9 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
         </Link>
 
         <Link
-          href={buildUrl({ kind: "PDF", page: 1 })}
+          href={buildUrl({ kind: "PDF", usage: undefined, page: 1 })}
           className={`flex flex-col rounded-xl border p-4 transition ${
-            kind === "PDF"
+            kind === "PDF" && usage === "ALL"
               ? "border-[#0A1F44] bg-[#0A1F44]/5 ring-1 ring-[#0A1F44]"
               : "border-slate-200 bg-white hover:border-slate-300"
           }`}
@@ -199,9 +205,9 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
         </Link>
 
         <Link
-          href={buildUrl({ kind: "VIDEO", page: 1 })}
+          href={buildUrl({ kind: "VIDEO", usage: undefined, page: 1 })}
           className={`flex flex-col rounded-xl border p-4 transition ${
-            kind === "VIDEO"
+            kind === "VIDEO" && usage === "ALL"
               ? "border-[#0A1F44] bg-[#0A1F44]/5 ring-1 ring-[#0A1F44]"
               : "border-slate-200 bg-white hover:border-slate-300"
           }`}
@@ -214,9 +220,13 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
         </Link>
 
         <Link
-          href={buildUrl({ usage: "USED", page: 1 })}
+          href={buildUrl({
+            kind: undefined,
+            usage: usage === "USED" && kind === "ALL" ? undefined : "USED",
+            page: 1,
+          })}
           className={`flex flex-col rounded-xl border p-4 transition ${
-            usage === "USED"
+            usage === "USED" && kind === "ALL"
               ? "border-emerald-600 bg-emerald-50/50 ring-1 ring-emerald-600"
               : "border-slate-200 bg-white hover:border-slate-300"
           }`}
@@ -447,13 +457,6 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
                           <Video className="h-10 w-10 text-blue-500" />
                           <span className="text-[10px] font-bold uppercase text-slate-600">Video</span>
                         </div>
-                      ) : null}
-
-                      {/* In-Use Badge */}
-                      {asset.isReferenced || asset.usageCount > 0 ? (
-                        <span className="absolute top-2 left-2 rounded-md bg-emerald-800/80 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-bold text-white shadow-xs">
-                          In Use ({asset.usageCount})
-                        </span>
                       ) : null}
 
                       {/* Open Link */}
