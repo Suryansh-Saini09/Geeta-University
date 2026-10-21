@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Image as ImageIcon, X, Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { CmsImageField, type CmsImageFieldProps } from "@/components/admin/CmsImageField";
 
-interface CmsImagePreviewInputProps {
+export { CmsImageField, type CmsImageFieldProps };
+
+export interface CmsImagePreviewInputProps {
   label: string;
   value: string;
   onChange: (url: string) => void;
@@ -11,84 +14,14 @@ interface CmsImagePreviewInputProps {
   onAltChange?: (alt: string) => void;
   placeholder?: string;
   helpText?: string;
+  contentArea?: string;
+  section?: string;
+  allowClear?: boolean;
+  compact?: boolean;
 }
 
-export function CmsImagePreviewInput({
-  label,
-  value,
-  onChange,
-  altValue,
-  onAltChange,
-  placeholder = "/images/example.webp",
-  helpText,
-}: CmsImagePreviewInputProps) {
-  const [imageError, setImageError] = useState(false);
-
-  useEffect(() => {
-    setImageError(false);
-  }, [value]);
-
-  return (
-    <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50/70 p-4">
-      <label className="block text-xs font-bold uppercase tracking-wider text-[#0A1F44]">
-        {label}
-      </label>
-
-      {/* Live Image Preview Card */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-        <div className="relative flex h-24 w-36 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-300 bg-white shadow-xs">
-          {value && !imageError ? (
-            <img
-              src={value}
-              alt={altValue || label}
-              onError={() => setImageError(true)}
-              className="h-full w-full object-contain p-1"
-            />
-          ) : (
-            <div className="flex flex-col items-center gap-1 text-slate-400">
-              <ImageIcon className="h-6 w-6" />
-              <span className="text-[10px] font-medium">
-                {imageError ? "Image failed" : "No image"}
-              </span>
-            </div>
-          )}
-
-          {value && (
-            <button
-              type="button"
-              onClick={() => onChange("")}
-              title="Clear Image"
-              className="absolute right-1 top-1 rounded-full bg-slate-900/70 p-1 text-white hover:bg-rose-600 transition-colors"
-            >
-              <X className="h-3 w-3" />
-            </button>
-          )}
-        </div>
-
-        <div className="flex-1 space-y-2.5">
-          <input
-            type="text"
-            value={value || ""}
-            placeholder={placeholder}
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-[#0A1F44] focus:border-slate-300 focus:outline-none"
-          />
-
-          {onAltChange !== undefined && (
-            <input
-              type="text"
-              value={altValue || ""}
-              placeholder="Alt Text (Accessible image description)"
-              onChange={(e) => onAltChange(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-600 focus:border-slate-300 focus:outline-none"
-            />
-          )}
-
-          {helpText && <p className="text-[11px] text-slate-500">{helpText}</p>}
-        </div>
-      </div>
-    </div>
-  );
+export function CmsImagePreviewInput(props: CmsImagePreviewInputProps) {
+  return <CmsImageField {...props} />;
 }
 
 interface CmsAutoTextareaProps {

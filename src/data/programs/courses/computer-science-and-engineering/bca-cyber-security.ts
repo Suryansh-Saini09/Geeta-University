@@ -31,9 +31,9 @@ export const bcaCyberSecurity: CoursePageData = {
     title: "BCA in Cyber Security",
     description: "",
     image:
-      "https://geetauniversity.edu.in/uploads/all/1857/BCA-in-Cyber-Security.jpg",
+      "/uploads/all/1857/BCA-in-Cyber-Security.jpg",
     mobileImage:
-      "https://geetauniversity.edu.in/uploads/all/1856/BCA-in-Cyber-Security-2-(1).jpg",
+      "/uploads/all/1856/BCA-in-Cyber-Security-2-(1).jpg",
   },
   quickInfo: {
     program: "BCA in Cyber Security",
@@ -159,42 +159,42 @@ export const bcaCyberSecurity: CoursePageData = {
       name: "Rajat Saini",
       role: "BCA Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2318/conversions/rajat-saini-full.webp",
+        "/uploads/all/2318/conversions/rajat-saini-full.webp",
       text: "Studying BCA Cyber Security at Geeta University, Panipat gave me real industry exposure. From ethical hacking labs to security projects, everything is aligned with current cybersecurity trends.",
     },
     {
       name: "Bhumika",
       role: "BCA Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2319/conversions/bhumika-full.webp",
+        "/uploads/all/2319/conversions/bhumika-full.webp",
       text: "I highly recommend this BCA Cyber Security program for students in Haryana who want practical knowledge in network security and cyber defense. The course structure is very career-focused.",
     },
     {
       name: "Rubal",
       role: "BCA Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2323/conversions/bca-cyber-full.webp",
+        "/uploads/all/2323/conversions/bca-cyber-full.webp",
       text: "After enrolling in BCA Cyber Security, I developed strong skills in cryptography and cyber threat analysis. It’s the right choice for students looking to apply for a future-ready tech course.",
     },
     {
       name: "Nancy",
       role: "BCA Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2321/conversions/nancy-full.webp",
+        "/uploads/all/2321/conversions/nancy-full.webp",
       text: "I chose BCA Cyber Security in Panipat at Geeta University for its industry-focused curriculum. The hands-on training in ethical hacking and network security makes it perfect for students ready to build a career in cybersecurity.",
     },
     {
       name: "Khushi Bhatia",
       role: "BCA Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2322/conversions/Khushi-Bhatia-full.webp",
+        "/uploads/all/2322/conversions/Khushi-Bhatia-full.webp",
       text: "If you're planning to apply for BCA Cyber Security in Haryana, this program offers great exposure to cyber forensics and real-world security tools. The practical learning approach is really helpful.",
     },
     {
       name: "Vineeta",
       role: "BCA Cyber Security Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2320/conversions/VIneeta-full.webp",
+        "/uploads/all/2320/conversions/VIneeta-full.webp",
       text: "The BCA Cyber Security course here helped me gain strong skills in penetration testing and digital security. It’s a great option for students looking for admission in a career-oriented IT program.",
     },
   ],
@@ -204,27 +204,27 @@ export const bcaCyberSecurity: CoursePageData = {
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
       },
       {
         title: "Cybersecurity & Cloud Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
       },
       {
         title: "Collaborative Coding & Innovation Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
       },
       {
         title: "Computing & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
       },
       {
         title: "AI & Data Science Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
       },
     ],
   },
@@ -235,7 +235,7 @@ export const bcaCyberSecurity: CoursePageData = {
       "Enroll in BCA Cyber Security at Geeta University and launch your career in ethical hacking, digital forensics, and network defense.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

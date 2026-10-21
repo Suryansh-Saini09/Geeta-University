@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
         "Meet Geeta University's eminent Advisory Board comprising global deans, industry chief officers, and international research professors guiding our vision and curricula.",
       images: seo?.ogImage
         ? [{ url: seo.ogImage }]
-        : ["https://geetauniversity.edu.in/uploads/all/252/conversions/new-building-3-(1)-full.webp"],
+        : ["/uploads/all/252/conversions/new-building-3-(1)-full.webp"],
     },
   };
 }
@@ -32,7 +32,7 @@ export default async function AdvisoryBoardPage() {
   const { hero, members } = await getPublishedAdvisoryBoardPage();
   const heroTitle = hero?.title || "Advisory";
   const heroHighlight = hero?.highlight || "Board";
-  const heroBg = hero?.bgImage || "https://geetauniversity.edu.in/uploads/all/252/conversions/new-building-3-(1)-full.webp";
+  const heroBg = hero?.bgImage || "/uploads/all/252/conversions/new-building-3-(1)-full.webp";
 
   return (
     <div className="min-h-screen bg-[#F8FAFC]">

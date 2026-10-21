@@ -255,3 +255,35 @@ export const PageSeoSchema = z.object({
   ogImage: z.string().optional(),
   noIndex: z.boolean().optional().default(false),
 });
+
+export const GeetaNewsItemSchema = z.object({
+  id: z.string().min(1, "Item ID is required"),
+  title: z.string().min(1, "Headline or title is required"),
+  slug: z.string().optional().default(""),
+  publication: z.string().min(1, "Publication / source name is required"),
+  category: z.string().optional().default("News"),
+  date: z.string().min(1, "Publish date is required"),
+  order: z.number().int().optional().default(0),
+  status: z
+    .enum(["PUBLISHED", "DRAFT", "INACTIVE", "ARCHIVED", "Active", "Deactive"])
+    .optional()
+    .default("PUBLISHED"),
+  image: z.string().min(1, "Thumbnail / clipping image is required"),
+  fullImage: z.string().optional().default(""),
+  altText: z.string().optional().default(""),
+  videoUrl: z.string().optional().default(""),
+  content: z.string().optional().default(""),
+});
+
+export const GeetaInNewsItemsSectionSchema = z.object({
+  title: z.string().optional().default("Media Coverage & News Clippings"),
+  publications: z.array(z.string()).optional().default([]),
+  categories: z.array(z.string()).optional().default(["News", "Event", "Placement Updates"]),
+  items: z.array(GeetaNewsItemSchema).optional().default([]),
+});
+
+export const GeetaInNewsHeroSchema = z.object({
+  title: z.string().min(1, "Hero title is required"),
+  subtitle: z.string().optional().default(""),
+  heroImage: z.string().min(1, "Hero image is required"),
+});

@@ -277,7 +277,7 @@ export const mbaPharmaceuticalManagement: CoursePageData = {
       "Apply now at Geeta University to master pharma marketing, regulatory affairs, logistics, and healthcare business strategy.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

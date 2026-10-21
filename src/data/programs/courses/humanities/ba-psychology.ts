@@ -315,7 +315,7 @@ export const baPsychology: CoursePageData = {
       "Enroll at the School of Humanities & Social Sciences at Geeta University and unlock a transformative education in understanding human behavior and mental wellness.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 92787 68000",
   },
 };

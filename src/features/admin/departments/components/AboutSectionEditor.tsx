@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Save, Plus, Trash2, CheckCircle2, AlertCircle, Image as ImageIcon } from "lucide-react";
 import { updateDepartmentSectionAction } from "@/features/admin/departments/actions";
 import { MediaPickerModal, MediaAssetItem } from "./MediaPickerModal";
+import { CmsImageField } from "@/components/admin/CmsImageField";
 
 interface AboutSectionEditorProps {
   departmentId: string;
@@ -182,39 +183,16 @@ export function AboutSectionEditor({
               ))}
             </div>
 
-            <div className="sm:col-span-2 space-y-3">
-              <label className="block text-sm font-bold text-[#0A1F44]">
-                Featured Section Image
-              </label>
-
-              {image ? (
-                <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={image}
-                    alt="Section visual"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              ) : null}
-
-              <div className="flex flex-wrap items-center gap-3">
-                <input
-                  type="text"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                  placeholder="/images/schools/about.jpg or image URL"
-                  className="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
-                />
-                <button
-                  type="button"
-                  onClick={() => setIsMediaPickerOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-700"
-                >
-                  <ImageIcon className="h-4 w-4" />
-                  Media Library
-                </button>
-              </div>
+            <div className="sm:col-span-2">
+              <CmsImageField
+                label="Featured Section Image"
+                value={image}
+                onChange={(url) => setImage(url)}
+                contentArea="departments"
+                section="about"
+                placeholder="/images/schools/about.jpg"
+                helpText="Featured visual image for the school about section."
+              />
             </div>
 
             <div>

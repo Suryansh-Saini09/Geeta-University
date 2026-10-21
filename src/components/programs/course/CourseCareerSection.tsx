@@ -333,6 +333,11 @@ export default function CourseCareerSection({
     ...(career?.privateRoles || []),
   ];
 
+  const statsList = career?.stats && career.stats.length > 0 ? career.stats : [
+    { value: "550+", label: "Recruiters" },
+    { value: "3500+", label: "Job Offers" },
+  ];
+
   return (
     <section
       id="CareerOpportunities"
@@ -479,6 +484,58 @@ export default function CourseCareerSection({
                 </div>
               )}
 
+              {/* Structured Career Section Groups (e.g. Govt, Private, Higher Studies, Reasons) */}
+              {career.groups && career.groups.length > 0 && (
+                <div className="mb-8 pt-6 border-t border-slate-200/60">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                    {career.groups.map((grp, gIdx) => (
+                      <div
+                        key={gIdx}
+                        className="p-6 rounded-2xl bg-white/95 border border-amber-900/10 shadow-xs transition-all duration-200 hover:border-[#E8871A]/40 hover:shadow-md flex flex-col justify-between"
+                      >
+                        <div>
+                          {grp.heading && (
+                            <h4
+                              style={{
+                                fontFamily: "var(--font-serif), Georgia, serif",
+                                fontSize: "18px",
+                                fontWeight: 800,
+                                color: "#0A1F44",
+                                marginBottom: "14px",
+                              }}
+                            >
+                              {grp.heading}
+                            </h4>
+                          )}
+                          <ol className="space-y-2.5">
+                            {grp.items.map((it, iIdx) => (
+                              <li
+                                key={iIdx}
+                                className="flex items-start gap-2.5 text-[#334155] text-[14px] leading-relaxed"
+                              >
+                                <span className="w-5 h-5 rounded-full bg-[#0A1F44]/10 text-[#0A1F44] text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+                                  {iIdx + 1}
+                                </span>
+                                <span>{it}</span>
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Conclusion Paragraph if provided */}
+              {career.conclusion && (
+                <div className="pt-6 border-t border-slate-200/60 text-center max-w-4xl mx-auto">
+                  <p className="text-[15.5px] font-medium text-[#0A1F44] leading-relaxed">
+                    {career.conclusion}
+                  </p>
+                </div>
+              )}
+
               {/* Top Recruiters Carousel */}
               {carouselItems.length > 0 && (
                 <div className="pt-6 border-t border-slate-200/60">
@@ -524,99 +581,61 @@ export default function CourseCareerSection({
               )}
             </div>
 
-            {/* ── 3. Milestone Stats Cards (550+ Recruiters & 3500+ Job Offers) ── */}
+            {/* ── 3. Milestone Stats Cards ── */}
             <div
               style={{
                 marginTop: 48,
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                gridTemplateColumns: `repeat(auto-fit, minmax(220px, 1fr))`,
                 gap: 24,
-                maxWidth: 680,
+                maxWidth: statsList.length >= 3 ? 920 : 680,
                 marginLeft: "auto",
                 marginRight: "auto",
               }}
             >
-              {/* Card 1: 550+ Recruiters */}
-              <div
-                style={{
-                  background: "#0D2738",
-                  borderRadius: 20,
-                  padding: "36px 28px",
-                  textAlign: "center",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 10px 30px rgba(10, 31, 68, 0.15)",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                }}
-                className="career-milestone-card hover:-translate-y-1 hover:shadow-2xl"
-              >
+              {statsList.map((stat, idx) => (
                 <div
+                  key={idx}
                   style={{
-                    fontSize: "clamp(36px, 4.2vw, 44px)",
-                    fontWeight: 900,
-                    color: "#E8871A",
-                    lineHeight: 1.1,
-                    letterSpacing: "-0.5px",
-                    marginBottom: 10,
+                    background: "#0D2738",
+                    borderRadius: 20,
+                    padding: "36px 28px",
+                    textAlign: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: "0 10px 30px rgba(10, 31, 68, 0.15)",
+                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
                   }}
+                  className="career-milestone-card hover:-translate-y-1 hover:shadow-2xl"
                 >
-                  550+
+                  <div
+                    style={{
+                      fontSize: "clamp(34px, 4vw, 44px)",
+                      fontWeight: 900,
+                      color: "#FFFFFF",
+                      lineHeight: 1.1,
+                      letterSpacing: "-0.5px",
+                      marginBottom: 10,
+                    }}
+                  >
+                    <span>{stat.value}</span>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 800,
+                      color: "#FFFFFF",
+                      letterSpacing: "0.5px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {stat.label}
+                  </div>
                 </div>
-                <div
-                  style={{
-                    fontSize: 19,
-                    fontWeight: 800,
-                    color: "#FFFFFF",
-                    letterSpacing: "0.2px",
-                  }}
-                >
-                  Recruiters
-                </div>
-              </div>
-
-              {/* Card 2: 3500+ Job Offers */}
-              <div
-                style={{
-                  background: "#0D2738",
-                  borderRadius: 20,
-                  padding: "36px 28px",
-                  textAlign: "center",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 10px 30px rgba(10, 31, 68, 0.15)",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                }}
-                className="career-milestone-card hover:-translate-y-1 hover:shadow-2xl"
-              >
-                <div
-                  style={{
-                    fontSize: "clamp(36px, 4.2vw, 44px)",
-                    fontWeight: 900,
-                    color: "#E8871A",
-                    lineHeight: 1.1,
-                    letterSpacing: "-0.5px",
-                    marginBottom: 10,
-                  }}
-                >
-                  3500+
-                </div>
-                <div
-                  style={{
-                    fontSize: 19,
-                    fontWeight: 800,
-                    color: "#FFFFFF",
-                    letterSpacing: "0.2px",
-                  }}
-                >
-                  Job Offers
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         )}

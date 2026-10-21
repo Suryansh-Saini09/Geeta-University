@@ -62,7 +62,7 @@ export const DEFAULT_SITE_METADATA_SETTINGS: SiteMetadataSettings = {
   tagline: "Empowering Minds. Transforming Futures.",
   siteDescription: "Official website of Geeta University, Panipat, Haryana.",
   defaultLanguage: "en",
-  logoUrl: "https://geetauniversity.edu.in/uploads/all/754/GU-Logo-PNG-(1).webp",
+  logoUrl: "/uploads/all/754/GU-Logo-PNG-(1).webp",
   faviconUrl: "/favicon.ico",
   copyrightText: "© Geeta University. All Rights Reserved.",
 };

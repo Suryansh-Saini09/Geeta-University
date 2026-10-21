@@ -40,7 +40,7 @@ export const ugcDocuments: UGCDocument[] = [
     description:
       "Official UGC Performa (July 2024) containing comprehensive data on academic infrastructure, governance, faculty strength, and course offerings.",
     fileUrl:
-      "https://geetauniversity.edu.in/uploads/all/360/00-Geeta-University-UGC-Performa-2024-09.07.24.pdf",
+      "/uploads/all/360/00-Geeta-University-UGC-Performa-2024-09.07.24.pdf",
     fileType: "PDF Document",
     iconName: "FileText",
   },
@@ -51,7 +51,7 @@ export const ugcDocuments: UGCDocument[] = [
     description:
       "Detailed presentation slides submitted to the UGC Expert Committee highlighting university milestones, AI-enabled labs, and student outcomes.",
     fileUrl:
-      "https://geetauniversity.edu.in/uploads/all/362/02-PPT-in-support-of-the-information-furnished.pdf",
+      "/uploads/all/362/02-PPT-in-support-of-the-information-furnished.pdf",
     fileType: "PDF Presentation",
     iconName: "Presentation",
   },

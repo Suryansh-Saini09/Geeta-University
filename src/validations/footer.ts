@@ -103,7 +103,7 @@ export type FooterSettings = z.infer<typeof footerSettingsSchema>;
 export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
   banner: {
     enabled: true,
-    heading: "Admissions Open",
+    heading: "Admissions Open for Session 2026-2027",
     description: "Take your next step toward academic and professional excellence.",
     buttonLabel: "Admission Open",
     buttonUrl: "https://admissions.geetauniversity.edu.in/",
@@ -125,7 +125,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "apply-1",
           label: "NCC/NSS",
-          href: "https://geetauniversity.edu.in/uploads/all/1204/NSS-Details.pdf",
+          href: "/uploads/all/1204/NSS-Details.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -135,7 +135,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "apply-2",
           label: "Admission Guidelines",
-          href: "https://geetauniversity.edu.in/uploads/all/1229/Admission-Guidelines-2025.pdf",
+          href: "/uploads/all/1229/Admission-Guidelines-2025.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -272,7 +272,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-2",
           label: "Telephone Directory",
-          href: "https://geetauniversity.edu.in/uploads/all/1179/Telephone_Directory.pdf",
+          href: "/uploads/all/1179/Telephone_Directory.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -292,7 +292,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-4",
           label: "IIC",
-          href: "https://geetauniversity.edu.in/uploads/all/1203/ICC_Report.xlsx",
+          href: "/uploads/all/1203/ICC_Report.xlsx",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -312,7 +312,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-6",
           label: "Pharmacy Faculty List",
-          href: "https://geetauniversity.edu.in/uploads/all/1250/Pharmacy_Faculty_List.pdf",
+          href: "/uploads/all/1250/Pharmacy_Faculty_List.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -322,7 +322,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-7",
           label: "Pharmacy SIF",
-          href: "https://geetauniversity.edu.in/uploads/all/1251/Pharmacy_SIH.pdf",
+          href: "/uploads/all/1251/Pharmacy_SIH.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -372,7 +372,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-12",
           label: "Academic Calendar",
-          href: "https://geetauniversity.edu.in/uploads/all/2805/Academic-Calendar-AY2026-27(1).pdf",
+          href: "/uploads/all/2805/Academic-Calendar-AY2026-27(1).pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -382,7 +382,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-13",
           label: "GU Academic Council",
-          href: "https://geetauniversity.edu.in/uploads/all/2075/Academic-Council-(Reconstituted).pdf",
+          href: "/uploads/all/2075/Academic-Council-(Reconstituted).pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -392,7 +392,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-14",
           label: "GU Board of Management",
-          href: "https://geetauniversity.edu.in/uploads/all/2076/Board-of-Management-(Reconstitution).pdf",
+          href: "/uploads/all/2076/Board-of-Management-(Reconstitution).pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -402,7 +402,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-15",
           label: "GU Governing Body",
-          href: "https://geetauniversity.edu.in/uploads/all/2077/Governing-Body-(Reconstitution).pdf",
+          href: "/uploads/all/2077/Governing-Body-(Reconstitution).pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -412,7 +412,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-16",
           label: "Annual Report 2024 - 25",
-          href: "https://geetauniversity.edu.in/uploads/all/2279/04-10.04-Annual-Report-2024---2025-(Final).pdf",
+          href: "/uploads/all/2279/04-10.04-Annual-Report-2024---2025-(Final).pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -422,7 +422,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-17",
           label: "Annual Report 2023-24",
-          href: "https://geetauniversity.edu.in/uploads/all/1228/02-Annual-Report-of-GU-2023-24.pdf",
+          href: "/uploads/all/1228/02-Annual-Report-of-GU-2023-24.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -432,7 +432,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-18",
           label: "Annual Report 2022-23",
-          href: "https://geetauniversity.edu.in/uploads/all/1272/GEETA_UNIVERSITY_ANNUAL_REPORT_2022-23.pdf",
+          href: "/uploads/all/1272/GEETA_UNIVERSITY_ANNUAL_REPORT_2022-23.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -463,7 +463,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "quick-21",
           label: "Public Self Disclosure",
-          href: "https://geetauniversity.edu.in/uploads/all/1586/Public-Self-Disclosure.pdf",
+          href: "/uploads/all/1586/Public-Self-Disclosure.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -480,7 +480,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "visit-1",
           label: "Research, Innovation and Development Cell",
-          href: "https://geetauniversity.edu.in/uploads/all/1160/Research-and-Innovation-Promotion-Policy.pdf",
+          href: "/uploads/all/1160/Research-and-Innovation-Promotion-Policy.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -490,7 +490,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "visit-2",
           label: "GU First Statutes",
-          href: "https://geetauniversity.edu.in/uploads/all/1625/GEETA_UNIVERSITY_FIRST_STATUES.pdf",
+          href: "/uploads/all/1625/GEETA_UNIVERSITY_FIRST_STATUES.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -500,7 +500,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "visit-3",
           label: "GU Sponsoring Body",
-          href: "https://geetauniversity.edu.in/uploads/all/1236/GEETA_UNIVERSITY_SPONSORING_BODY.pdf",
+          href: "/uploads/all/1236/GEETA_UNIVERSITY_SPONSORING_BODY.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -530,7 +530,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "visit-6",
           label: "GU Gazette",
-          href: "https://geetauniversity.edu.in/uploads/all/1626/GEETA_UNIVERSITY_Gazette.pdf",
+          href: "/uploads/all/1626/GEETA_UNIVERSITY_Gazette.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -550,7 +550,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "visit-8",
           label: "General Information",
-          href: "https://geetauniversity.edu.in/uploads/all/703/GENERAL-INFORMATION-GU-3.pdf",
+          href: "/uploads/all/703/GENERAL-INFORMATION-GU-3.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -580,7 +580,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "visit-11",
           label: "Student Handbook 2026-27",
-          href: "https://geetauniversity.edu.in/uploads/all/2609/Student-HandBook-(1).pdf",
+          href: "/uploads/all/2609/Student-HandBook-(1).pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -590,7 +590,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "visit-12",
           label: "Hostel Fee And Transport Charges",
-          href: "https://geetauniversity.edu.in/uploads/all/702/Proposed-Fee-structure-for-2025-26.pdf",
+          href: "/uploads/all/702/Proposed-Fee-structure-for-2025-26.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -617,7 +617,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "other-2",
           label: "Student Grievance Redressal Committee (SGRC)",
-          href: "https://geetauniversity.edu.in/uploads/all/2718/Reconstitution-of-Student-Grievance-Redressal-Committee.pdf",
+          href: "/uploads/all/2718/Reconstitution-of-Student-Grievance-Redressal-Committee.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -627,7 +627,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "other-3",
           label: "Equal Opportunity Cell details",
-          href: "https://geetauniversity.edu.in/uploads/all/2717/Reconstitution-of-Equal-Opportunity-Cell.pdf",
+          href: "/uploads/all/2717/Reconstitution-of-Equal-Opportunity-Cell.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -637,7 +637,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "other-4",
           label: "Internal Complaints Committee (ICC)",
-          href: "https://geetauniversity.edu.in/uploads/all/2071/4.-Notification-Internal-Complaints-Committee.pdf",
+          href: "/uploads/all/2071/4.-Notification-Internal-Complaints-Committee.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -707,7 +707,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "other-11",
           label: "Fee Refund Policy",
-          href: "https://geetauniversity.edu.in/uploads/all/2547/Notification-fee-refund-policy.pdf",
+          href: "/uploads/all/2547/Notification-fee-refund-policy.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,
@@ -717,7 +717,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "other-12",
           label: "IDP",
-          href: "https://geetauniversity.edu.in/uploads/all/1278/Geeta_University_INSTITUTIONAL_DEVELOPMENT_PLAN.pdf",
+          href: "/uploads/all/1278/Geeta_University_INSTITUTIONAL_DEVELOPMENT_PLAN.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,

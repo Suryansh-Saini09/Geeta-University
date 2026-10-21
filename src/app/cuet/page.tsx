@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
         "Get admission through CUET UG 2026 at Geeta University. Explore UG courses, eligibility, exam schedule & apply now.",
       url: seo?.canonical || "https://geetauniversity.edu.in/cuet",
       type: "website",
-      images: seo?.ogImage ? [{ url: seo.ogImage }] : [{ url: "https://geetauniversity.edu.in/uploads/all/2540/cuet.jpeg" }],
+      images: seo?.ogImage ? [{ url: seo.ogImage }] : [{ url: "/uploads/all/2540/cuet.jpeg" }],
     },
     alternates: {
       canonical: seo?.canonical || "https://geetauniversity.edu.in/cuet",

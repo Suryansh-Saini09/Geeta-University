@@ -8,39 +8,39 @@ export const agricultureFaqs: CourseFAQItem[] = [
     category: "Admissions & Eligibility"
   },
   {
-    question: "What is the eligibility for B.Sc. (Hons.) Agriculture?",
-    answer: "Applicants need 10+2 or equivalent with Physics, Chemistry and Biology/Mathematics or Agriculture, with at least 50% marks.",
-    category: "Admissions & Eligibility"
+    "question": "What is the eligibility for B.Sc. (Hons.) Agriculture?",
+    "answer": "Applicants need 10+2 or equivalent with Physics, Chemistry and Biology/Mathematics or Agriculture, with at least 50% marks.",
+    "category": "Admissions & Eligibility"
   },
   {
-    question: "Can PCB students apply for B.Sc. (Hons.) Agriculture?",
-    answer: "Yes. Biology is one of the accepted subject backgrounds for the program.",
-    category: "Admissions & Eligibility"
+    "question": "Can PCB students apply for B.Sc. (Hons.) Agriculture?",
+    "answer": "Yes. Biology is one of the accepted subject backgrounds for the programme.",
+    "category": "Admissions & Eligibility"
   },
   {
-    question: "Can PCM students apply for B.Sc. (Hons.) Agriculture?",
-    answer: "Yes. Mathematics is included among the eligible subject combinations.",
-    category: "Admissions & Eligibility"
+    "question": "Can PCM students apply for B.Sc. (Hons.) Agriculture?",
+    "answer": "Yes. Mathematics is included among the eligible subject combinations.",
+    "category": "Admissions & Eligibility"
   },
   {
-    question: "Can students who studied Agriculture in Class 12 apply?",
-    answer: "Yes. Agriculture is specifically included among the accepted subject backgrounds.",
-    category: "Admissions & Eligibility"
+    "question": "Can students who studied Agriculture in Class 12 apply?",
+    "answer": "Yes. Agriculture is specifically included among the accepted subject backgrounds.",
+    "category": "Admissions & Eligibility"
   },
   {
-    question: "What is the eligibility for the M.Sc. programs?",
-    answer: "Applicants should hold a relevant graduation degree with at least 50% marks, subject to the specific program's admission requirements.",
-    category: "Admissions & Eligibility"
+    "question": "What is the eligibility for the M.Sc. programmes?",
+    "answer": "Applicants should hold a relevant graduation degree with at least 50% marks, subject to the specific programme's admission requirements.",
+    "category": "Admissions & Eligibility"
   },
   {
-    question: "Who can apply for Ph.D. Agriculture?",
-    answer: "Applicants should meet the University's applicable doctoral eligibility requirements, including the required relevant postgraduate qualification and minimum 55% marks.",
-    category: "Admissions & Eligibility"
+    "question": "Who can apply for Ph.D. Agriculture?",
+    "answer": "Applicants should meet the University's applicable doctoral eligibility requirements, including the required relevant postgraduate qualification and minimum 55% marks.",
+    "category": "Admissions & Eligibility"
   },
   {
-    question: "How long is the B.Sc. (Hons.) Agriculture program?",
-    answer: "It is a four-year undergraduate program spread across eight semesters.",
-    category: "Programs & Specialisations"
+    "question": "How long is the B.Sc. (Hons.) Agriculture programme?",
+    "answer": "It is a four-year undergraduate programme spread across eight semesters.",
+    "category": "Programmes & Specialisations"
   },
   {
     question: "What are the M.Sc. specialisations available at the School?",
@@ -48,195 +48,195 @@ export const agricultureFaqs: CourseFAQItem[] = [
     category: "Programs & Specialisations"
   },
   {
-    question: "What does M.Sc. Agronomy focus on?",
-    answer: "It focuses on crop production, agronomic practices, productivity and sustainable management of agricultural systems.",
-    category: "Programs & Specialisations"
+    "question": "What does M.Sc. Agronomy focus on?",
+    "answer": "It focuses on crop production, agronomic practices, productivity and sustainable management of agricultural systems.",
+    "category": "Programmes & Specialisations"
   },
 
   {
-    question: "What areas can be explored through Ph.D. Agriculture?",
-    answer: "Research can span areas such as agronomy, soil science, plant breeding, entomology, horticulture, biotechnology and climate-smart agriculture, depending on available research expertise.",
-    category: "Programs & Specialisations"
+    "question": "What areas can be explored through Ph.D. Agriculture?",
+    "answer": "Research can span areas such as agronomy, soil science, plant breeding, entomology, horticulture, biotechnology and climate-smart agriculture, depending on available research expertise.",
+    "category": "Programmes & Specialisations"
   },
   {
-    question: "Is the agriculture curriculum aligned with ICAR guidelines?",
-    answer: "The School states that its curriculum is aligned with the ICAR 6th Dean Committee framework and follows the NEP 2020 framework.",
-    category: "Curriculum & Practical Learning"
+    "question": "Is the agriculture curriculum aligned with ICAR guidelines?",
+    "answer": "The School states that its curriculum is aligned with the ICAR 6th Dean Committee framework and follows the NEP 2020 framework.",
+    "category": "Curriculum & Practical Learning"
   },
   {
-    question: "Is B.Sc. Agriculture mainly theoretical?",
-    answer: "No. Classroom learning is combined with farm work, laboratories, field activities, RAWE, experiential learning, visits and demonstrations.",
-    category: "Curriculum & Practical Learning"
+    "question": "Is B.Sc. Agriculture mainly theoretical?",
+    "answer": "No. Classroom learning is combined with farm work, laboratories, field activities, RAWE, experiential learning, visits and demonstrations.",
+    "category": "Curriculum & Practical Learning"
   },
   {
-    question: "How much hands-on farm experience will students get?",
-    answer: "Students receive practical exposure through experimental farms, crop-production training units, demonstration units and other field-based learning spaces.",
-    category: "Curriculum & Practical Learning"
+    "question": "How much hands-on farm experience will students get?",
+    "answer": "Students receive practical exposure through experimental farms, crop-production training units, demonstration units and other field-based learning spaces.",
+    "category": "Curriculum & Practical Learning"
   },
   {
-    question: "What are RAWE and experiential learning in agriculture?",
-    answer: "RAWE provides Rural Agricultural Work Experience, while experiential learning lets students apply agricultural concepts through practical activities and field-based tasks.",
-    category: "Curriculum & Practical Learning"
+    "question": "What are RAWE and experiential learning in agriculture?",
+    "answer": "RAWE provides Rural Agricultural Work Experience, while experiential learning lets students apply agricultural concepts through practical activities and field-based tasks.",
+    "category": "Curriculum & Practical Learning"
   },
   {
-    question: "What modern farming technologies will students be exposed to?",
-    answer: "The School highlights precision farming, smart agriculture, protected cultivation and other technology-enabled approaches to modern farming.",
-    category: "Curriculum & Practical Learning"
+    "question": "What modern farming technologies will students be exposed to?",
+    "answer": "The School highlights precision farming, smart agriculture, protected cultivation and other technology-enabled approaches to modern farming.",
+    "category": "Curriculum & Practical Learning"
   },
   {
-    question: "Does the curriculum cover sustainable agriculture?",
-    answer: "Yes. Sustainable agriculture, climate-smart farming, organic agriculture and responsible resource use are among the School's focus areas.",
-    category: "Curriculum & Practical Learning"
+    "question": "Does the curriculum cover sustainable agriculture?",
+    "answer": "Yes. Sustainable agriculture, climate-smart farming, organic agriculture and responsible resource use are among the School's focus areas.",
+    "category": "Curriculum & Practical Learning"
   },
   {
-    question: "Will students learn about pest management?",
-    answer: "Yes. The academic and research environment covers entomology and Integrated Pest Management as important areas of agricultural practice.",
-    category: "Curriculum & Practical Learning"
+    "question": "Will students learn about pest management?",
+    "answer": "Yes. The academic and research environment covers entomology and Integrated Pest Management as important areas of agricultural practice.",
+    "category": "Curriculum & Practical Learning"
   },
   {
-    question: "Does the School cover crop improvement and plant breeding?",
-    answer: "Yes. Crop improvement, genetics and plant breeding are supported through dedicated academic and laboratory areas.",
-    category: "Curriculum & Practical Learning"
+    "question": "Does the School cover crop improvement and plant breeding?",
+    "answer": "Yes. Crop improvement, genetics and plant breeding are supported through dedicated academic and laboratory areas.",
+    "category": "Curriculum & Practical Learning"
   },
   {
-    question: "What laboratories are available to agriculture students?",
-    answer: "The School highlights Agronomy, Genetics & Plant Breeding, Entomology, Horticulture, Seed Testing and Soil Science laboratories.",
-    category: "Laboratories & Learning Spaces"
+    "question": "What laboratories are available to agriculture students?",
+    "answer": "The School highlights Agronomy, Genetics & Plant Breeding, Entomology, Horticulture, Seed Testing and Soil Science laboratories.",
+    "category": "Laboratories & Learning Spaces"
   },
   {
-    question: "What can students learn in the Seed Testing Laboratory?",
-    answer: "It provides a practical setting for learning about seed quality and testing-related agricultural practices.",
-    category: "Laboratories & Learning Spaces"
+    "question": "What can students learn in the Seed Testing Laboratory?",
+    "answer": "It provides a practical setting for learning about seed quality and testing-related agricultural practices.",
+    "category": "Laboratories & Learning Spaces"
   },
   {
-    question: "Is there a dedicated Soil Science laboratory?",
-    answer: "Yes. The School has a Soil Science Laboratory for practical learning related to soils and agricultural production.",
-    category: "Laboratories & Learning Spaces"
+    "question": "Is there a dedicated Soil Science laboratory?",
+    "answer": "Yes. The School has a Soil Science Laboratory for practical learning related to soils and agricultural production.",
+    "category": "Laboratories & Learning Spaces"
   },
   {
-    question: "Does the School have horticulture learning facilities?",
-    answer: "Yes. Horticulture is supported through a dedicated laboratory, experimental learning spaces and practical exposure to vegetable and fruit production.",
-    category: "Laboratories & Learning Spaces"
+    "question": "Does the School have horticulture learning facilities?",
+    "answer": "Yes. Horticulture is supported through a dedicated laboratory, experimental learning spaces and practical exposure to vegetable and fruit production.",
+    "category": "Laboratories & Learning Spaces"
   },
   {
-    question: "Are protected cultivation facilities available?",
-    answer: "Yes. The School highlights protected cultivation structures as part of its experiential learning spaces.",
-    category: "Laboratories & Learning Spaces"
+    "question": "Are protected cultivation facilities available?",
+    "answer": "Yes. The School highlights protected cultivation structures as part of its experiential learning spaces.",
+    "category": "Laboratories & Learning Spaces"
   },
   {
-    question: "Do students get exposure to precision farming?",
-    answer: "Yes. Precision farming exposure is specifically listed among the School's practical learning facilities.",
-    category: "Laboratories & Learning Spaces"
+    "question": "Do students get exposure to precision farming?",
+    "answer": "Yes. Precision farming exposure is specifically listed among the School's practical learning facilities.",
+    "category": "Laboratories & Learning Spaces"
   },
   {
-    question: "Are there field research facilities at the School?",
-    answer: "Yes. Field research facilities and experimental farms are part of the School's learning environment.",
-    category: "Laboratories & Learning Spaces"
+    "question": "Are there field research facilities at the School?",
+    "answer": "Yes. Field research facilities and experimental farms are part of the School's learning environment.",
+    "category": "Laboratories & Learning Spaces"
   },
   {
-    question: "Do agriculture students get exposure beyond the campus?",
-    answer: "Yes. Students can participate in industrial visits, educational tours, field demonstrations and interactions with agricultural stakeholders.",
-    category: "Industry Exposure, Research & Activities"
+    "question": "What kind of agricultural industry exposure is available?",
+    "answer": "The School highlights connections with organisations such as IFFCO, Bayer, Syngenta, UPL, Mahindra Agri, Godrej Agrovet, Advanta Seeds and Nuziveedu Seeds.",
+    "category": "Industry Exposure, Research & Activities"
   },
   {
-    question: "What kind of agricultural industry exposure is available?",
-    answer: "The School highlights connections with organisations such as IFFCO, Bayer, Syngenta, UPL, Mahindra Agri, Godrej Agrovet, Advanta Seeds and Nuziveedu Seeds.",
-    category: "Industry Exposure, Research & Activities"
+    "question": "Does the School organise interactions with farmers?",
+    "answer": "Yes. Kisan Interaction Programmes are among the School's listed academic and engagement activities.",
+    "category": "Industry Exposure, Research & Activities"
   },
   {
-    question: "Does the School organise interactions with farmers?",
-    answer: "Yes. Kisan Interaction programs are among the School's listed academic and engagement activities.",
-    category: "Industry Exposure, Research & Activities"
+    "question": "What other activities do agriculture students participate in?",
+    "answer": "Activities include crop exhibitions, guest lectures, workshops, seminars, research presentations, awareness campaigns and plantation drives.",
+    "category": "Industry Exposure, Research & Activities"
   },
   {
-    question: "What other activities do agriculture students participate in?",
-    answer: "Activities include crop exhibitions, guest lectures, workshops, seminars, research presentations, awareness campaigns and plantation drives.",
-    category: "Industry Exposure, Research & Activities"
+    "question": "Can students participate in agricultural research?",
+    "answer": "Yes. Research presentations, field research facilities and research-oriented learning are part of the School's academic environment.",
+    "category": "Industry Exposure, Research & Activities"
   },
   {
-    question: "Can students participate in agricultural research?",
-    answer: "Yes. Research presentations, field research facilities and research-oriented learning are part of the School's academic environment.",
-    category: "Industry Exposure, Research & Activities"
+    "question": "What are the School&#039;s major research and innovation focus areas?",
+    "answer": "Key areas include sustainable agriculture, climate-smart farming, organic agriculture, precision farming, crop improvement and Integrated Pest Management.",
+    "category": "Industry Exposure, Research & Activities"
   },
   {
-    question: "What are the School's major research and innovation focus areas?",
-    answer: "Key areas include sustainable agriculture, climate-smart farming, organic agriculture, precision farming, crop improvement and Integrated Pest Management.",
-    category: "Industry Exposure, Research & Activities"
+    "question": "Can students work with space and remote-sensing technologies in agriculture?",
+    "answer": "The School's earlier academic profile highlights exposure to Remote Sensing and GIS through its IIRS-ISRO linkage, subject to the opportunities available in the programme.",
+    "category": "Industry Exposure, Research & Activities"
   },
   {
-    question: "Can students work with space and remote-sensing technologies in agriculture?",
-    answer: "The School's earlier academic profile highlights exposure to Remote Sensing and GIS through its IIRS-ISRO linkage, subject to the opportunities available in the program.",
-    category: "Industry Exposure, Research & Activities"
+    "question": "What career options are available after B.Sc. (Hons.) Agriculture?",
+    "answer": "Graduates can explore roles such as Agronomist, Agricultural Officer, Agri-Entrepreneur and positions in agribusiness, research, government services and allied sectors.",
+    "category": "Career Opportunities & Higher Studies"
   },
   {
-    question: "What career options are available after B.Sc. (Hons.) Agriculture?",
-    answer: "Graduates can explore roles such as Agronomist, Agricultural Officer, Agri-Entrepreneur and positions in agribusiness, research, government services and allied sectors.",
-    category: "Career Opportunities & Higher Studies"
+    "question": "What can I do after an M.Sc. in Agriculture?",
+    "answer": "Depending on the specialisation, graduates can pursue specialist roles, research, teaching, industry positions, agricultural advisory work or doctoral studies.",
+    "category": "Career Opportunities & Higher Studies"
   },
   {
-    question: "What can I do after an M.Sc. in Agriculture?",
-    answer: "Depending on the specialisation, graduates can pursue specialist roles, research, teaching, industry positions, agricultural advisory work or doctoral studies.",
-    category: "Career Opportunities & Higher Studies"
+    "question": "What career opportunities are available after M.Sc. Genetics & Plant Breeding?",
+    "answer": "Possible pathways include plant breeding, crop improvement, seed-sector roles, research and higher studies.",
+    "category": "Career Opportunities & Higher Studies"
   },
   {
-    question: "What career opportunities are available after M.Sc. Genetics & Plant Breeding?",
-    answer: "Possible pathways include plant breeding, crop improvement, seed-sector roles, research and higher studies.",
-    category: "Career Opportunities & Higher Studies"
+    "question": "What can I do after M.Sc. Entomology?",
+    "answer": "Career directions include pest management, research, agricultural advisory roles, agri-input companies and further academic study.",
+    "category": "Career Opportunities & Higher Studies"
   },
   {
-    question: "What can I do after M.Sc. Entomology?",
-    answer: "Career directions include pest management, research, agricultural advisory roles, agri-input companies and further academic study.",
-    category: "Career Opportunities & Higher Studies"
+    "question": "Can agriculture graduates work in agribusiness?",
+    "answer": "Yes. Agribusiness is an important career pathway, covering areas such as inputs, production, marketing, supply chains and agricultural services.",
+    "category": "Career Opportunities & Higher Studies"
   },
   {
-    question: "Can agriculture graduates work in agribusiness?",
-    answer: "Yes. Agribusiness is an important career pathway, covering areas such as inputs, production, marketing, supply chains and agricultural services.",
-    category: "Career Opportunities & Higher Studies"
+    "question": "Can agriculture graduates start their own venture?",
+    "answer": "Yes. Students can explore agri-entrepreneurship in areas such as farm enterprises, nurseries, agricultural inputs, food-related ventures and consultancy.",
+    "category": "Career Opportunities & Higher Studies"
   },
   {
-    question: "Can agriculture graduates start their own venture?",
-    answer: "Yes. Students can explore agri-entrepreneurship in areas such as farm enterprises, nurseries, agricultural inputs, food-related ventures and consultancy.",
-    category: "Career Opportunities & Higher Studies"
+    "question": "Can agriculture graduates work in government services?",
+    "answer": "Yes. Government services and agricultural officer roles are among the career pathways highlighted by the School, subject to the requirements of individual posts.",
+    "category": "Career Opportunities & Higher Studies"
   },
   {
-    question: "Can agriculture graduates work in government services?",
-    answer: "Yes. Government services and agricultural officer roles are among the career pathways highlighted by the School, subject to the requirements of individual posts.",
-    category: "Career Opportunities & Higher Studies"
+    "question": "Can I pursue a Ph.D. after completing an M.Sc. at the School?",
+    "answer": "Yes. Students who meet the applicable doctoral eligibility requirements can progress to Ph.D. Agriculture.",
+    "category": "Career Opportunities & Higher Studies"
   },
   {
-    question: "Can I pursue a Ph.D. after completing an M.Sc. at the School?",
-    answer: "Yes. Students who meet the applicable doctoral eligibility requirements can progress to Ph.D. Agriculture.",
-    category: "Career Opportunities & Higher Studies"
+    "question": "What areas do the School&#039;s faculty specialise in?",
+    "answer": "Faculty expertise covers areas such as agronomy, horticulture, plant breeding, entomology, soil science, nutrient management, protected cultivation and post-harvest technology.",
+    "category": "Faculty & Student Experience"
   },
   {
-    question: "What areas do the School's faculty specialise in?",
-    answer: "Faculty expertise covers areas such as agronomy, horticulture, plant breeding, entomology, soil science, nutrient management, protected cultivation and post-harvest technology.",
-    category: "Faculty & Student Experience"
+    "question": "How are students prepared for real agricultural work?",
+    "answer": "Students combine academic study with laboratory work, farm activities, field demonstrations, RAWE, experiential learning and industry exposure.",
+    "category": "Faculty & Student Experience"
   },
   {
-    question: "How are students prepared for real agricultural work?",
-    answer: "Students combine academic study with laboratory work, farm activities, field demonstrations, RAWE, experiential learning and industry exposure.",
-    category: "Faculty & Student Experience"
+    "question": "Will I develop skills beyond technical agriculture?",
+    "answer": "Yes. Fieldwork, presentations, expert interactions, workshops and experiential activities help students build communication, teamwork and professional skills.",
+    "category": "Faculty & Student Experience"
   },
   {
-    question: "Will I develop skills beyond technical agriculture?",
-    answer: "Yes. Fieldwork, presentations, expert interactions, workshops and experiential activities help students build communication, teamwork and professional skills.",
-    category: "Faculty & Student Experience"
+    "question": "Is B.Sc. Agriculture suitable for a student who does not come from a farming family?",
+    "answer": "Yes. The programme is science-based and does not require students to come from a farming background.",
+    "category": "Parents & Student Decision-Making"
   },
   {
-    question: "Is B.Sc. Agriculture suitable for a student who does not come from a farming family?",
-    answer: "Yes. The program is science-based and does not require students to come from a farming background.",
-    category: "Parents & Student Decision-Making"
+    "question": "Is Agriculture only about farming?",
+    "answer": "No. Modern agriculture includes agritech, crop improvement, horticulture, pest management, food systems, agribusiness, research and sustainable resource management.",
+    "category": "Parents & Student Decision-Making"
   },
   {
-    question: "Is Agriculture only about farming?",
-    answer: "No. Modern agriculture includes agritech, crop improvement, horticulture, pest management, food systems, agribusiness, research and sustainable resource management.",
-    category: "Parents & Student Decision-Making"
+    "question": "Can a student interested in technology build a career in agriculture?",
+    "answer": "Yes. Areas such as precision farming, smart agriculture and technology-enabled crop management connect agriculture with modern technology.",
+    "category": "Parents & Student Decision-Making"
   },
   {
-    question: "Can a student interested in technology build a career in agriculture?",
-    answer: "Yes. Areas such as precision farming, smart agriculture and technology-enabled crop management connect agriculture with modern technology.",
-    category: "Parents & Student Decision-Making"
+    "question": "Which agriculture specialisation should I choose for postgraduate study?",
+    "answer": "Choose according to your interest: Agronomy for crop production, Vegetable or Fruit Science for horticulture, Genetics & Plant Breeding for crop improvement, and Entomology for insect and pest management.",
+    "category": "Parents & Student Decision-Making"
   },
   {
     question: "Which agriculture specialisation should I choose for postgraduate study?",
@@ -244,24 +244,19 @@ export const agricultureFaqs: CourseFAQItem[] = [
     category: "Parents & Student Decision-Making"
   },
   {
-    question: "What makes the School different from a classroom-only agriculture program?",
-    answer: "It combines an ICAR-aligned academic framework with laboratories, experimental farms, RAWE, field activities, protected cultivation, precision-farming exposure, research and industry interaction.",
-    category: "Parents & Student Decision-Making"
+    "question": "Can agriculture graduates work outside traditional farming?",
+    "answer": "Yes. Career avenues also include agribusiness, seed and agri-input companies, research, government services, horticulture, pest management, agricultural marketing and entrepreneurship.",
+    "category": "General"
   },
   {
-    question: "Can agriculture graduates work outside traditional farming?",
-    answer: "Yes. Career avenues also include agribusiness, seed and agri-input companies, research, government services, horticulture, pest management, agricultural marketing and entrepreneurship.",
-    category: "General"
+    "question": "What is the long-term scope of an Agriculture degree?",
+    "answer": "The field now extends into agritech, sustainable and climate-smart farming, crop improvement, horticulture, research, agribusiness and technology-driven agriculture.",
+    "category": "General"
   },
   {
-    question: "What is the long-term scope of an Agriculture degree?",
-    answer: "The field now extends into agritech, sustainable and climate-smart farming, crop improvement, horticulture, research, agribusiness and technology-driven agriculture.",
-    category: "General"
-  },
-  {
-    question: "Does the School provide placement and career support?",
-    answer: "The School highlights industry connections and career pathways. Individual placement outcomes depend on student skills, recruiter requirements and opportunities available in a particular cycle.",
-    category: "General"
+    "question": "Does the School provide placement and career support?",
+    "answer": "The School highlights industry connections and career pathways. Individual placement outcomes depend on student skills, recruiter requirements and opportunities available in a particular cycle.",
+    "category": "General"
   }
 ];
 
@@ -709,16 +704,16 @@ export const agricultureSchool: ProgramPageData = {
       { name: "Godrej Agrovet", logo: "/programs/agriculture/recruiters/godrej_agrovet.png" },
       { name: "Advanta Seeds", logo: "/programs/agriculture/recruiters/advanta_seeds.png" },
       { name: "Nuziveedu Seeds", logo: "/programs/agriculture/recruiters/nuziveedu_seeds.png" },
-      { name: "Russian", logo: "https://geetauniversity.edu.in/uploads/all/2160/russian.png" },
-      { name: "Shankar Seed", logo: "https://geetauniversity.edu.in/uploads/all/2159/shankar-seed.png" },
-      { name: "JK Group", logo: "https://geetauniversity.edu.in/uploads/all/2158/JK-group.png" },
-      { name: "Yamuna Seed", logo: "https://geetauniversity.edu.in/uploads/all/2157/Yamuna-seed.jpg" },
-      { name: "Swaraj", logo: "https://geetauniversity.edu.in/uploads/all/2162/swaraj.png" },
-      { name: "Patanjali", logo: "https://geetauniversity.edu.in/uploads/all/2161/patanjali.png" },
-      { name: "Bayer", logo: "https://geetauniversity.edu.in/uploads/all/2167/Bayer.png" },
-      { name: "Syngenta", logo: "https://geetauniversity.edu.in/uploads/all/2166/syngenta.png" },
-      { name: "Shipra", logo: "https://geetauniversity.edu.in/uploads/all/2164/shipra.png" },
-      { name: "In-Hydra", logo: "https://geetauniversity.edu.in/uploads/all/2163/in-hydra.png" },
+      { name: "Russian", logo: "/uploads/all/2160/russian.png" },
+      { name: "Shankar Seed", logo: "/uploads/all/2159/shankar-seed.png" },
+      { name: "JK Group", logo: "/uploads/all/2158/JK-group.png" },
+      { name: "Yamuna Seed", logo: "/uploads/all/2157/Yamuna-seed.jpg" },
+      { name: "Swaraj", logo: "/uploads/all/2162/swaraj.png" },
+      { name: "Patanjali", logo: "/uploads/all/2161/patanjali.png" },
+      { name: "Bayer", logo: "/uploads/all/2167/Bayer.png" },
+      { name: "Syngenta", logo: "/uploads/all/2166/syngenta.png" },
+      { name: "Shipra", logo: "/uploads/all/2164/shipra.png" },
+      { name: "In-Hydra", logo: "/uploads/all/2163/in-hydra.png" },
     ],
     rolesTitle: "Agriculture Science students with a recognized degree can find employment in the following sectors:",
     notableRoles: [

@@ -356,7 +356,7 @@ export default function SitemapPage() {
         {/* Campus Background with Overlay */}
                 <div className="absolute inset-0 z-0">
                   <Image
-                    src="https://geetauniversity.edu.in/uploads/all/253/conversions/f-block-(1)-full.webp"
+                    src="/uploads/all/253/conversions/f-block-(1)-full.webp"
                     alt="Geeta University campus in Panipat"
                     fill
                     className="object-cover opacity-20"

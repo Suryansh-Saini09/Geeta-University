@@ -62,7 +62,7 @@ export default function IcnfprAbout() {
               {/* University Campus Image */}
               <div className="mt-8 relative w-full h-[260px] sm:h-[320px] rounded-2xl overflow-hidden border border-slate-200 shadow-md">
                 <Image
-                  src="https://geetauniversity.edu.in/uploads/all/2057/img.webp"
+                  src="/uploads/all/2057/img.webp"
                   alt="Geeta University Campus"
                   fill
                   sizes="(max-width: 1024px) 100vw, 58vw"
@@ -246,7 +246,7 @@ export default function IcnfprAbout() {
           {/* Full-width Pharmacy Infrastructure Showcase Image */}
           <div className="mt-12 relative w-full h-[280px] sm:h-[400px] lg:h-[480px] rounded-3xl overflow-hidden border border-slate-200 shadow-md">
             <Image
-              src="https://geetauniversity.edu.in/uploads/all/2226/1.webp"
+              src="/uploads/all/2226/1.webp"
               alt="Geeta Institute of Pharmacy Campus and Facilities"
               fill
               sizes="100vw"
@@ -260,7 +260,7 @@ export default function IcnfprAbout() {
               <div className="md:col-span-4 flex items-center justify-center p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
                 <div className="relative w-full h-24">
                   <Image
-                    src="https://geetauniversity.edu.in/uploads/all/2059/ipa.webp"
+                    src="/uploads/all/2059/ipa.webp"
                     alt="Indian Pharmacist Association (IPA) Haryana Branch"
                     fill
                     className="object-contain object-center"

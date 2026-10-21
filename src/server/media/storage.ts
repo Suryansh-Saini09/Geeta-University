@@ -1,10 +1,9 @@
-import "server-only";
+if (typeof window !== "undefined") {
+  throw new Error("This module can only be executed on the server.");
+}
 
-import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { randomUUID } from "node:crypto";
-
-import { env } from "@/lib/env";
+import { getStorageProvider, sanitizeStorageKey, type StorageProvider } from "./provider";
 
 export const MAX_MEDIA_BYTES = 10 * 1024 * 1024;
 
@@ -16,38 +15,64 @@ const formats = [
   { mimeType: "application/pdf", extension: "pdf", matches: (bytes: Buffer) => bytes.toString("ascii", 0, 5) === "%PDF-" },
 ] as const;
 
-function storageRoot() {
-  if (env.NODE_ENV === "production" && !env.MEDIA_STORAGE_DIR) {
-    throw new Error("MEDIA_STORAGE_DIR must point to persistent storage in production.");
-  }
-  return env.MEDIA_STORAGE_DIR
-    ? path.resolve(/* turbopackIgnore: true */ env.MEDIA_STORAGE_DIR)
-    : path.join(/* turbopackIgnore: true */ process.cwd(), "storage", "media");
-}
-
-function storagePath(key: string) {
-  if (!/^[a-f0-9-]{36}\.(jpg|png|gif|webp|pdf)$/.test(key)) {
-    throw new Error("Invalid media key.");
-  }
-  return path.join(storageRoot(), key);
-}
-
 export function detectMediaFormat(bytes: Buffer) {
   return formats.find((format) => format.matches(bytes)) ?? null;
 }
 
-export async function saveMedia(bytes: Buffer, extension: string) {
-  const key = `${randomUUID()}.${extension}`;
-  const root = storageRoot();
-  await mkdir(root, { recursive: true });
-  await writeFile(storagePath(key), bytes, { flag: "wx" });
-  return key;
+export interface SaveMediaOptions {
+  keyPrefix?: string;
+  customKey?: string;
 }
 
-export function readMedia(key: string) {
-  return readFile(storagePath(key));
+/**
+ * Saves binary bytes into configured persistent storage.
+ * Returns the unique, collision-safe storage key.
+ */
+export async function saveMedia(
+  bytes: Buffer,
+  extension: string,
+  options?: SaveMediaOptions
+): Promise<string> {
+  const provider = getStorageProvider();
+  const format = detectMediaFormat(bytes);
+  const mimeType = format?.mimeType || "application/octet-stream";
+  const ext = extension.replace(/^\./, "");
+
+  const baseKey = options?.customKey ? sanitizeStorageKey(options.customKey) : `${randomUUID()}.${ext}`;
+  const key = options?.keyPrefix
+    ? sanitizeStorageKey(`${options.keyPrefix.replace(/\/+$/, "")}/${baseKey}`)
+    : baseKey;
+
+  const result = await provider.save(key, bytes, mimeType);
+  return result.key;
 }
 
-export function removeMedia(key: string) {
-  return unlink(storagePath(key));
+/**
+ * Reads binary bytes for a given storage key.
+ */
+export function readMedia(key: string): Promise<Buffer> {
+  return getStorageProvider().read(key);
 }
+
+/**
+ * Checks whether an object exists in storage for a given key.
+ */
+export function existsMedia(key: string): Promise<boolean> {
+  return getStorageProvider().exists(key);
+}
+
+/**
+ * Removes an object from storage.
+ */
+export function removeMedia(key: string): Promise<void> {
+  return getStorageProvider().delete(key);
+}
+
+/**
+ * Generates the stable public URL for a given storage key.
+ */
+export function getMediaUrl(key: string): string {
+  return getStorageProvider().getPublicUrl(key);
+}
+
+export { getStorageProvider, type StorageProvider };

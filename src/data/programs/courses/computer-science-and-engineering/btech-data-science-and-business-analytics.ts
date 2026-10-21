@@ -32,9 +32,9 @@ export const btechDataScienceAndBusinessAnalytics: CoursePageData = {
       "B.Tech (Hons) in CSE with specialization in Data Science & Business Analytics with HCL",
     description: "",
     image:
-      "https://geetauniversity.edu.in/uploads/all/1844/BCA-in-Data-Science-&-Business-Analytics.jpg",
+      "/uploads/all/1844/BCA-in-Data-Science-&-Business-Analytics.jpg",
     mobileImage:
-      "https://geetauniversity.edu.in/uploads/all/1843/BCA-in-Data-Science-&-Business-Analytics-2.jpg",
+      "/uploads/all/1843/BCA-in-Data-Science-&-Business-Analytics-2.jpg",
   },
   quickInfo: {
     program:
@@ -155,7 +155,7 @@ export const btechDataScienceAndBusinessAnalytics: CoursePageData = {
       name: "Parvjeet Singh",
       role: "Student, B.Tech CSE Data Science",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2303/conversions/ds1-full.webp",
+        "/uploads/all/2303/conversions/ds1-full.webp",
       text:
         "My journey in this Data Science and Business Analytics course has been very engaging. The combination of data analysis, tools, and business concepts helped me build strong understanding, while practical exposure made learning more relevant and useful.",
     },
@@ -163,7 +163,7 @@ export const btechDataScienceAndBusinessAnalytics: CoursePageData = {
       name: "Nikhil Kumar",
       role: "Student, B.Tech CSE Data Science",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2302/conversions/ds2-full.webp",
+        "/uploads/all/2302/conversions/ds2-full.webp",
       text:
         "Studying Data Science and Business Analytics here has been a great journey till now. The curriculum covers both technical and business aspects, and the faculty guidance helped me understand how data can solve real-world problems effectively.",
     },
@@ -171,7 +171,7 @@ export const btechDataScienceAndBusinessAnalytics: CoursePageData = {
       name: "Tushar Sharma",
       role: "Student, B.Tech CSE Data Science",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2304/conversions/ds-full.webp",
+        "/uploads/all/2304/conversions/ds-full.webp",
       text:
         "My experience in Data Science and Business Analytics here has been really insightful so far. The course helped me understand data-driven decision making, and the practical projects made learning more interesting while improving my analytical thinking and technical skills.",
     },
@@ -179,7 +179,7 @@ export const btechDataScienceAndBusinessAnalytics: CoursePageData = {
       name: "Himankk Sharma",
       role: "Student, B.Tech CSE Data Science",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2301/conversions/ds3-full.webp",
+        "/uploads/all/2301/conversions/ds3-full.webp",
       text:
         "Learning Data Science and Business Analytics here has been a valuable experience so far. The course structure is practical and industry-focused, helping me understand analytics concepts better and develop confidence to work on real-world data problems.",
     },
@@ -190,35 +190,35 @@ export const btechDataScienceAndBusinessAnalytics: CoursePageData = {
       {
         title: "Data Science & Analytics Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
         description:
           "Equipped with high-performance computing clusters and analytical software suites for big data modeling.",
       },
       {
         title: "Business Intelligence & Cloud Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
         description:
           "Dedicated infrastructure for Power BI, Tableau, and enterprise data visualization pipelines.",
       },
       {
         title: "AI & Machine Learning Innovation Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
         description:
           "GPU-accelerated systems designed for training deep learning models and predictive analytics algorithms.",
       },
       {
         title: "Advanced Software & Programming Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
         description:
           "Interactive programming workspace configured for Python, R, SQL, and distributed frameworks.",
       },
       {
         title: "Collaborative Project Hub",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
         description:
           "Collaborative hackathon and project development space for team-based industry analytics capstones.",
       },
@@ -232,7 +232,7 @@ export const btechDataScienceAndBusinessAnalytics: CoursePageData = {
       "Apply now at Geeta University to build high-demand expertise in big data, machine learning, and predictive business intelligence.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

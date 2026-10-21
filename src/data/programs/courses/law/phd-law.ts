@@ -250,7 +250,7 @@ export const phdLaw: CoursePageData = {
       "Apply now at Geeta University and conduct advanced legal research under expert guidance in a research-driven environment.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

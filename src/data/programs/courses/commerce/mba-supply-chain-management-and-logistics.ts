@@ -277,7 +277,7 @@ export const mbaSupplyChainManagement: CoursePageData = {
       "Apply now at Geeta University to master SCM strategies, warehouse operations, procurement, and global trade logistics.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

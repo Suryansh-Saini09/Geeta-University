@@ -25,37 +25,54 @@ interface GeetaInNewsClientProps {
   } | null;
   items?: NewsItem[];
   publications?: string[];
+  categories?: string[];
 }
 
 export default function GeetaInNewsClient({
   hero,
   items,
   publications,
+  categories,
 }: GeetaInNewsClientProps) {
   const allNews = items && items.length > 0 ? items : fallbackNews;
   const allPublications = publications && publications.length > 0 ? publications : fallbackPublications;
+  const allCategories = useMemo(() => {
+    const set = new Set<string>(["All Categories"]);
+    (categories || ["News", "Event", "Placement Updates"]).forEach((c) => set.add(c));
+    allNews.forEach((n) => {
+      if (n.category) set.add(n.category);
+    });
+    return Array.from(set);
+  }, [categories, allNews]);
 
   const heroTitle = hero?.title || "Geeta in News";
-  const heroBg = hero?.heroImage || "https://geetauniversity.edu.in/uploads/all/252/conversions/new-building-3-(1)-full.webp";
+  const heroBg = hero?.heroImage || "/uploads/all/252/conversions/new-building-3-(1)-full.webp";
 
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [selectedPub, setSelectedPub] = useState("All Publications");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedImage, setSelectedImage] = useState<NewsItem | null>(null);
 
-  // Filter items based on publication and search query
+  // Filter items based on category, publication, and search query
   const filteredNews = useMemo(() => {
     return allNews.filter((item) => {
+      const matchCat =
+        selectedCategory === "All Categories" ||
+        (item.category || "News").toLowerCase() === selectedCategory.toLowerCase();
       const matchPub =
         selectedPub === "All Publications" ||
         item.publication.toLowerCase().includes(selectedPub.toLowerCase());
+      const q = searchQuery.trim().toLowerCase();
       const matchQuery =
-        searchQuery.trim() === "" ||
-        item.publication.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.date.includes(searchQuery);
-      return matchPub && matchQuery;
+        q === "" ||
+        item.publication.toLowerCase().includes(q) ||
+        (item.title && item.title.toLowerCase().includes(q)) ||
+        (item.category && item.category.toLowerCase().includes(q)) ||
+        item.date.includes(q);
+      return matchCat && matchPub && matchQuery;
     });
-  }, [allNews, selectedPub, searchQuery]);
+  }, [allNews, selectedCategory, selectedPub, searchQuery]);
 
   // Pagination calculation
   const totalPages = Math.ceil(filteredNews.length / ITEMS_PER_PAGE) || 1;
@@ -68,6 +85,12 @@ export default function GeetaInNewsClient({
     setSelectedPub(pub);
     setCurrentPage(1);
   };
+
+  const handleCategoryChange = (cat: string) => {
+    setSelectedCategory(cat);
+    setCurrentPage(1);
+  };
+
 
   // Helper for visible page numbers in pagination
   const visiblePages = useMemo(() => {
@@ -158,6 +181,30 @@ export default function GeetaInNewsClient({
               </div>
             </div>
 
+            {/* Category Filter Pills */}
+            {allCategories.length > 2 && (
+              <div className="flex flex-wrap items-center gap-2 pb-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 mr-1">Category:</span>
+                {allCategories.map((cat) => {
+                  const isActive = selectedCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => handleCategoryChange(cat)}
+                      className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all ${
+                        isActive
+                          ? "bg-[#E8871A] text-white shadow-sm"
+                          : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
             {/* Publication Filter Pills */}
             <div className="flex flex-wrap gap-2">
               {allPublications.map((pub) => {
@@ -165,6 +212,7 @@ export default function GeetaInNewsClient({
                 return (
                   <button
                     key={pub}
+                    type="button"
                     onClick={() => handlePubChange(pub)}
                     className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${
                       isActive
@@ -185,8 +233,10 @@ export default function GeetaInNewsClient({
                 <h3 className="font-serif text-lg font-bold text-slate-700">No clippings found</h3>
                 <p className="text-xs text-slate-500 mt-1">Try clearing your search query or selecting another publication tab.</p>
                 <button
+                  type="button"
                   onClick={() => {
                     setSelectedPub("All Publications");
+                    setSelectedCategory("All Categories");
                     setSearchQuery("");
                   }}
                   className="mt-4 rounded-xl bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white hover:bg-[#0D2857]"
@@ -206,7 +256,7 @@ export default function GeetaInNewsClient({
                     <div className="relative aspect-[3/4] w-full overflow-hidden bg-slate-100/80 p-2">
                       <Image
                         src={item.image}
-                        alt={`${item.publication} clipping - ${item.date}`}
+                        alt={item.altText || `${item.publication} clipping - ${item.date}`}
                         fill
                         className="object-contain transition-transform duration-500 group-hover:scale-105 p-1"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -221,11 +271,23 @@ export default function GeetaInNewsClient({
                     {/* Metadata Strip */}
                     <div className="p-4 flex flex-col justify-between flex-1 border-t border-slate-100">
                       <div>
-                        <h4 className="font-serif text-base font-bold text-[#0A1F44] group-hover:text-[#E8871A] transition-colors line-clamp-1">
-                          {item.publication}
-                        </h4>
+                        <div className="flex items-center justify-between gap-2">
+                          <h4 className="font-serif text-base font-bold text-[#0A1F44] group-hover:text-[#E8871A] transition-colors line-clamp-1">
+                            {item.publication}
+                          </h4>
+                          {item.category && (
+                            <span className="shrink-0 rounded-md bg-[#0A1F44]/5 px-2 py-0.5 text-[10px] font-bold text-[#0A1F44]">
+                              {item.category}
+                            </span>
+                          )}
+                        </div>
+                        {item.title && item.title !== item.publication && (
+                          <p className="text-xs text-slate-600 line-clamp-1 mt-1 font-medium">
+                            {item.title}
+                          </p>
+                        )}
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-2">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-2.5">
                         <Calendar className="h-3.5 w-3.5 text-slate-400" />
                         <span>{item.date}</span>
                       </div>
@@ -308,16 +370,37 @@ export default function GeetaInNewsClient({
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 bg-slate-50">
               <div className="flex items-center gap-3">
-                <Newspaper className="h-5 w-5 text-[#E8871A]" />
+                <Newspaper className="h-5 w-5 text-[#E8871A] shrink-0" />
                 <div>
-                  <h3 className="font-serif text-base font-bold text-[#0A1F44]">
-                    {selectedImage.publication}
-                  </h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-serif text-base font-bold text-[#0A1F44]">
+                      {selectedImage.publication}
+                    </h3>
+                    {selectedImage.category && (
+                      <span className="rounded-md bg-[#0A1F44]/10 px-2 py-0.5 text-[10px] font-bold text-[#0A1F44]">
+                        {selectedImage.category}
+                      </span>
+                    )}
+                  </div>
+                  {selectedImage.title && selectedImage.title !== selectedImage.publication && (
+                    <p className="text-xs font-semibold text-slate-700 mt-0.5">{selectedImage.title}</p>
+                  )}
                   <p className="text-xs text-slate-500">Published Date: {selectedImage.date}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
+                {selectedImage.videoUrl && (
+                  <a
+                    href={selectedImage.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5 text-rose-500" />
+                    <span>Watch Video</span>
+                  </a>
+                )}
                 <a
                   href={selectedImage.fullImage || selectedImage.image}
                   target="_blank"
@@ -328,6 +411,7 @@ export default function GeetaInNewsClient({
                   <span>Open Full Image</span>
                 </a>
                 <button
+                  type="button"
                   onClick={() => setSelectedImage(null)}
                   className="rounded-full bg-slate-200 p-2 text-slate-600 hover:bg-slate-300 hover:text-slate-900 transition-colors"
                 >
@@ -336,15 +420,23 @@ export default function GeetaInNewsClient({
               </div>
             </div>
 
-            {/* Modal Body: Zoomable Image */}
-            <div className="relative flex-1 overflow-auto p-4 bg-slate-950/90 flex items-center justify-center min-h-[400px]">
+            {/* Modal Body: Zoomable Image & Content */}
+            <div className="relative flex-1 overflow-auto bg-slate-950/90 flex flex-col items-center justify-center p-4 min-h-[400px]">
               <Image
                 src={selectedImage.fullImage || selectedImage.image}
-                alt={selectedImage.publication}
+                alt={selectedImage.altText || selectedImage.publication}
                 width={1000}
                 height={1400}
-                className="max-h-[75vh] w-auto rounded-xl object-contain shadow-2xl"
+                className="max-h-[70vh] w-auto rounded-xl object-contain shadow-2xl"
               />
+              {selectedImage.content && (
+                <div className="w-full max-w-2xl mt-4 rounded-xl bg-white p-5 text-slate-800 text-sm shadow-xl leading-relaxed">
+                  <div
+                    className="prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: selectedImage.content }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

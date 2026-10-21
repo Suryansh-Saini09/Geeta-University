@@ -31,6 +31,8 @@ export interface CourseQuickInfo {
 export interface CourseOverview {
   title: string;
   paragraphs: string[];
+  bullets?: string[];
+  outro?: string;
   image?: string;
 }
 
@@ -71,6 +73,16 @@ export interface CareerRole {
   description?: string;
 }
 
+export interface CareerSectionGroup {
+  heading?: string;
+  items: string[];
+}
+
+export interface CareerStat {
+  value: string;
+  label: string;
+}
+
 export interface CourseCareerPathways {
   title: string;
   intro: string;
@@ -83,6 +95,9 @@ export interface CourseCareerPathways {
   }[];
   govtRoles?: CareerRole[];
   privateRoles?: CareerRole[];
+  groups?: CareerSectionGroup[];
+  conclusion?: string;
+  stats?: CareerStat[];
   notes?: string;
   whoShouldPursue?: {
     title?: string;

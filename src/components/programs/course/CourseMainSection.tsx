@@ -102,6 +102,36 @@ export default function CourseMainSection({
                   ))}
                 </div>
               )}
+
+              {/* Overview Bullet Points if provided */}
+              {overview?.bullets && overview.bullets.length > 0 && (
+                <div className="mt-3.5 space-y-2">
+                  {overview.bullets.map((bullet, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-2.5 p-2 rounded-lg bg-[#F8FAFC] border border-slate-100 text-[#334155] text-[13.5px] sm:text-[14px] leading-relaxed"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E8871A] shrink-0 mt-2" />
+                      <span>{renderBulletText(bullet)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Overview Outro if provided */}
+              {overview?.outro && (
+                <p
+                  style={{
+                    fontSize: "15px",
+                    color: "#334155",
+                    lineHeight: 1.7,
+                    fontWeight: 400,
+                  }}
+                  className="text-justify mt-3.5"
+                >
+                  {overview.outro}
+                </p>
+              )}
             </div>
 
             {/* 2. Key Takeaways / USP Cards */}
@@ -443,7 +473,7 @@ export default function CourseMainSection({
               <div className="relative w-full rounded-xl overflow-hidden bg-[#F8FAFC] border border-slate-100 p-3 sm:p-4 flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="https://geetauniversity.edu.in/uploads/all/1830/1__1_-removebg-preview.png"
+                  src="/uploads/all/1830/1__1_-removebg-preview.png"
                   alt="Design Your Own Degree With GU - Industry Ready Curriculum"
                   className="w-full h-auto object-contain block mx-auto"
                   loading="lazy"

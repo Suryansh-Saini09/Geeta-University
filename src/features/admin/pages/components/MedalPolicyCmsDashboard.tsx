@@ -865,7 +865,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                 label="Hero Background Overlay Image"
                 value={body.bgImage || ""}
                 onChange={(url) => updateBody("hero", (b) => ({ ...b, bgImage: url }))}
-                placeholder="https://geetauniversity.edu.in/uploads/all/224/conversions/new-building-3-full.webp"
+                placeholder="/uploads/all/224/conversions/new-building-3-full.webp"
               />
             </div>
           );

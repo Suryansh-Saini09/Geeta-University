@@ -34,8 +34,8 @@ export const phdComputerApplication: CoursePageData = {
     title:
       "PhD in Computer Application & Computer Science (After MCA)",
     description: "",
-    image: "https://geetauniversity.edu.in/uploads/all/1730/phd-ca.jpeg",
-    mobileImage: "https://geetauniversity.edu.in/uploads/all/1730/phd-ca.jpeg",
+    image: "/uploads/all/1730/phd-ca.jpeg",
+    mobileImage: "/uploads/all/1730/phd-ca.jpeg",
   },
   quickInfo: {
     program:
@@ -162,27 +162,27 @@ export const phdComputerApplication: CoursePageData = {
       {
         title: "AI & Data Science Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
       },
       {
         title: "Cybersecurity & Cloud Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
       },
       {
         title: "Collaborative Coding & Innovation Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
       },
       {
         title: "Computing & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
       },
     ],
   },
@@ -193,7 +193,7 @@ export const phdComputerApplication: CoursePageData = {
       "Advance the boundaries of computing research with a Ph.D. in Computer Application & Computer Science at Geeta University.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

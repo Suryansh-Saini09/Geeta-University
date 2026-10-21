@@ -101,7 +101,7 @@ interface CuetHeroAndCalculatorProps {
 
 export default function CuetHeroAndCalculator({ data }: CuetHeroAndCalculatorProps) {
   const title = data?.title || "CUET UG 2026 Admissions & Merit Scholarships at GU";
-  const bannerImage = data?.bannerImage || "https://geetauniversity.edu.in/uploads/all/2540/cuet.jpeg";
+  const bannerImage = data?.bannerImage || "/uploads/all/2540/cuet.jpeg";
 
   // Calculator States
   const [selectedArea, setSelectedArea] = useState<string>("Computer Science & Engineering");

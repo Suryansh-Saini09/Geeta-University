@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
         "Want scholarships in Haryana? Apply for GUTS 2026 at Geeta University & get up to 100% scholarship for UG & PG courses with top placement.",
       url: seo?.canonical || "https://geetauniversity.edu.in/guts",
       type: "website",
-      images: seo?.ogImage ? [{ url: seo.ogImage }] : [{ url: "https://geetauniversity.edu.in/uploads/all/1912/Guts_banner.jpg" }],
+      images: seo?.ogImage ? [{ url: seo.ogImage }] : [{ url: "/uploads/all/1912/Guts_banner.jpg" }],
     },
     alternates: {
       canonical: seo?.canonical || "https://geetauniversity.edu.in/guts",

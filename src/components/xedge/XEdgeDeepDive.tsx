@@ -14,7 +14,7 @@ export default function XEdgeDeepDive() {
           <div className="lg:col-span-6">
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[24px] border border-[#E2E8F0] shadow-lg shadow-black/5">
               <Image
-                src="https://geetauniversity.edu.in/uploads/all/508/conversions/college-girl-working-with-laptop-after-lessons-1024x683-1-full.webp"
+                src="/uploads/all/508/conversions/college-girl-working-with-laptop-after-lessons-1024x683-1-full.webp"
                 alt="More and Better Relationships - Geeta University XEdge"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -86,7 +86,7 @@ export default function XEdgeDeepDive() {
           <div className="lg:col-span-6 order-1 lg:order-2">
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[24px] border border-[#E2E8F0] shadow-lg shadow-black/5">
               <Image
-                src="https://geetauniversity.edu.in/uploads/all/514/conversions/pexels-andrea-piacquadio-3762800-full.webp"
+                src="/uploads/all/514/conversions/pexels-andrea-piacquadio-3762800-full.webp"
                 alt="Greater Efficiency - Geeta University XEdge"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"

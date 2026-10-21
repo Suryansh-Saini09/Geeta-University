@@ -56,7 +56,7 @@ export default function GutsVideoBanner() {
                 className="group relative aspect-video w-full overflow-hidden rounded-2xl border border-white/20 shadow-2xl cursor-pointer bg-slate-900"
               >
                 <Image
-                  src="https://geetauniversity.edu.in/uploads/all/1839/guts_final.jpg"
+                  src="/uploads/all/1839/guts_final.jpg"
                   alt="Watch GUTS Video"
                   fill
                   sizes="(max-width: 1024px) 100vw, 600px"

@@ -33,9 +33,9 @@ export const mca: CoursePageData = {
     title: "Master of Computer Applications (MCA)",
     description: "",
     image:
-      "https://geetauniversity.edu.in/uploads/all/1054/Master-of-Computer-Applications-(MCA).jpg",
+      "/uploads/all/1054/Master-of-Computer-Applications-(MCA).jpg",
     mobileImage:
-      "https://geetauniversity.edu.in/uploads/all/1055/Master-of-Computer-Applications-(MCA)-2.png",
+      "/uploads/all/1055/Master-of-Computer-Applications-(MCA)-2.png",
   },
   quickInfo: {
     program: "Master of Computer Applications (MCA)",
@@ -157,42 +157,42 @@ export const mca: CoursePageData = {
       name: "Jiya Sukhija",
       role: "MCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2329/conversions/jiya-shukhija-full.webp",
+        "/uploads/all/2329/conversions/jiya-shukhija-full.webp",
       text: "The best part about my MCA experience is the supportive faculty. They’re always ready to help, whether it’s coding doubts or career guidance.",
     },
     {
       name: "Joseph Lalnunthara",
       role: "MCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2330/conversions/joseph-lalnanuthara-full.webp",
+        "/uploads/all/2330/conversions/joseph-lalnanuthara-full.webp",
       text: "What I like most is the hands-on learning approach. We get to work on live projects, which gives confidence for real job roles.",
     },
     {
       name: "Namahe Umar Yahaya",
       role: "MCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2332/conversions/manahe-umar-yagaue-full.webp",
+        "/uploads/all/2332/conversions/manahe-umar-yagaue-full.webp",
       text: "Joining MCA was a great decision for me. The environment is friendly, and I’ve learned so much about software development and new technologies.",
     },
     {
       name: "Chahal",
       role: "MCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2334/conversions/chahl-full.webp",
+        "/uploads/all/2334/conversions/chahl-full.webp",
       text: "The MCA course helped me gain expertise in programming, database management, and system design. It’s a great option for students planning to apply for a career-focused postgraduate IT program.",
     },
     {
       name: "Shourya Malik",
       role: "MCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2333/conversions/sourya-malik-full.webp",
+        "/uploads/all/2333/conversions/sourya-malik-full.webp",
       text: "Studying MCA in GU, Panipat gave me hands-on experience in cloud computing and AI-based applications. The curriculum is updated with industry trends, which is very helpful for career growth",
     },
     {
       name: "Khushi Saini",
       role: "MCA Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2331/conversions/khushi-saini-full.webp",
+        "/uploads/all/2331/conversions/khushi-saini-full.webp",
       text: "After enrolling in MCA in GU, I improved my skills in coding, data analytics, and application development. It’s a great choice for students in Delhi NCR aiming for high-demand IT careers.",
     },
   ],
@@ -202,27 +202,27 @@ export const mca: CoursePageData = {
       {
         title: "AI & Data Science Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
       },
       {
         title: "Cybersecurity & Cloud Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
       },
       {
         title: "Collaborative Coding & Innovation Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
       },
       {
         title: "Computing & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
       },
     ],
   },
@@ -233,7 +233,7 @@ export const mca: CoursePageData = {
       "Enroll in the Master of Computer Applications (MCA) at Geeta University and equip yourself with top-tier programming, cloud, and AI development skills.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };
