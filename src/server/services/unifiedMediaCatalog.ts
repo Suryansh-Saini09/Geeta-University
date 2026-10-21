@@ -543,12 +543,15 @@ export async function deleteUnifiedMediaAssetSafe(params: {
     }
 
     // Remove file on disk if it exists under public/uploads/cms
-    const diskPath = path.join(process.cwd(), "public", target.url.replace(/^\//, ""));
-    if (fs.existsSync(diskPath)) {
-      try {
-        fs.unlinkSync(diskPath);
-      } catch (err) {
-        console.warn("Could not remove file on disk:", err);
+    if (target.url.startsWith("/uploads/cms/")) {
+      const cmsSubPath = target.url.replace(/^\/uploads\/cms\//, "");
+      const diskPath = path.join(process.cwd(), "public", "uploads", "cms", cmsSubPath);
+      if (fs.existsSync(diskPath)) {
+        try {
+          fs.unlinkSync(diskPath);
+        } catch (err) {
+          console.warn("Could not remove file on disk:", err);
+        }
       }
     }
 
