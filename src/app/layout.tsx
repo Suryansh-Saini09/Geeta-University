@@ -3,6 +3,7 @@ import LenisProvider from "@/components/providers/LenisProvider";
 import SiteChrome from "@/components/layout/SiteChrome";
 import Footer from "@/components/layout/Footer";
 import { getFooterSettings } from "@/server/services/footer";
+import { getHeaderNavigation } from "@/server/services/navigation";
 import { fetchSocialData } from "@/lib/socialLinks";
 import "./globals.css";
 
@@ -16,9 +17,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [footerData, socialData] = await Promise.all([
+  const [footerData, socialData, navData] = await Promise.all([
     getFooterSettings(),
     fetchSocialData(),
+    getHeaderNavigation(),
   ]);
 
   return (
@@ -26,6 +28,7 @@ export default async function RootLayout({
       <body>
         <LenisProvider>
           <SiteChrome
+            navData={navData}
             footer={
               <Footer
                 data={footerData}
