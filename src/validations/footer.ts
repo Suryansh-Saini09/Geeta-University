@@ -103,7 +103,7 @@ export type FooterSettings = z.infer<typeof footerSettingsSchema>;
 export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
   banner: {
     enabled: true,
-    heading: "Admissions Open",
+    heading: "Admissions Open for Session 2026-2027",
     description: "Take your next step toward academic and professional excellence.",
     buttonLabel: "Admission Open",
     buttonUrl: "https://admissions.geetauniversity.edu.in/",
