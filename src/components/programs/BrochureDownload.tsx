@@ -12,7 +12,7 @@ interface BrochureDownloadProps {
 
 export default function BrochureDownload({
   title = "Want to know more?",
-  fileUrl = "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+  fileUrl = "/uploads/all/1892/GU-Brochure-2026-27.pdf",
   fileName = "Geeta_University_Brochure.pdf",
   buttonText = "Download Brochure",
 }: BrochureDownloadProps) {

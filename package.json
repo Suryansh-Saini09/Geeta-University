@@ -10,7 +10,9 @@
     "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "db:seed": "node prisma/seed.mjs"
+    "db:seed": "node prisma/seed.mjs",
+    "media:manifest": "npx tsx scripts/generatePublicMediaManifest.ts",
+    "media:audit": "npx tsx scripts/auditUnifiedMediaCatalog.ts"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^6.19.3",

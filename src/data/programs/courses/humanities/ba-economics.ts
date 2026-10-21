@@ -326,7 +326,7 @@ export const baEconomics: CoursePageData = {
       "Join the School of Humanities & Social Sciences at Geeta University to master economic analysis, financial decision-making, and public policy strategy.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 92787 68000",
   },
 };

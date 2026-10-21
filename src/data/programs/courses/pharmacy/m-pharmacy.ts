@@ -282,7 +282,7 @@ export const mPharmacy: CoursePageData = {
       "Explore admissions at Geeta University and step into an advanced research-oriented M.Pharm program.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 92787 68000",
   },
 };

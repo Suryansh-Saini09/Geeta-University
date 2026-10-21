@@ -18,23 +18,23 @@ export default function GlobalEdgeContent({ data }: GlobalEdgeContentProps) {
   // Gallery Carousel State
   const gallerySlides = [
     {
-      src: "https://geetauniversity.edu.in/uploads/all/2208/sp1.webp",
+      src: "/uploads/all/2208/sp1.webp",
       caption: "International Conference in Collaboration with Kathmandu School of Law, Nepal",
     },
     {
-      src: "https://geetauniversity.edu.in/uploads/all/2209/sp2.webp",
+      src: "/uploads/all/2209/sp2.webp",
       caption: "Experiential Learning & Moot Court Presentations",
     },
     {
-      src: "https://geetauniversity.edu.in/uploads/all/2210/sp3.webp",
+      src: "/uploads/all/2210/sp3.webp",
       caption: "Legal Aid Campaigns & Clinical Training Programs",
     },
     {
-      src: "https://geetauniversity.edu.in/uploads/all/2211/sp4.webp",
+      src: "/uploads/all/2211/sp4.webp",
       caption: "National Seminars & Legal Literacy Assemblies",
     },
     {
-      src: "https://geetauniversity.edu.in/uploads/all/2212/sp5.webp",
+      src: "/uploads/all/2212/sp5.webp",
       caption: "Academic Internships & Research Presentations",
     },
   ];
@@ -326,7 +326,7 @@ export default function GlobalEdgeContent({ data }: GlobalEdgeContentProps) {
                   Highlights
                 </button>
                 <a
-                  href="https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf"
+                  href="/uploads/all/1892/GU-Brochure-2026-27.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[#0f2e4c] hover:bg-[#0c233a] text-[#ffffff] font-bold text-sm px-6 py-2.5 rounded-md transition-colors"

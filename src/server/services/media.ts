@@ -1,22 +1,50 @@
-import { type Prisma } from "@prisma/client";
+import {
+  queryUnifiedMediaCatalog,
+  getUnifiedMediaAssetByIdOrUrl,
+  type CatalogQueryFilters,
+  type CatalogQueryResult,
+  type UnifiedMediaAsset,
+  type MediaCategory,
+  type MediaSortOption,
+} from "./unifiedMediaCatalog";
 
-import { prisma } from "@/server/db/client";
+export type {
+  CatalogQueryFilters,
+  CatalogQueryResult,
+  UnifiedMediaAsset,
+  MediaCategory,
+  MediaSortOption,
+};
 
-export async function getAdminMedia(filters: { query?: string; kind?: "ALL" | "IMAGE" | "PDF"; page?: number } = {}) {
-  const where: Prisma.MediaAssetWhereInput = {};
-  const query = filters.query?.trim();
-  if (query) where.OR = [{ fileName: { contains: query } }, { altText: { contains: query } }, { caption: { contains: query } }];
-  if (filters.kind === "IMAGE") where.mimeType = { startsWith: "image/" };
-  if (filters.kind === "PDF") where.mimeType = "application/pdf";
-  const page = Math.max(1, filters.page ?? 1);
-  const pageSize = 20;
-  const [assets, totalCount] = await Promise.all([
-    prisma.mediaAsset.findMany({ where, orderBy: { createdAt: "desc" }, skip: (page - 1) * pageSize, take: pageSize, include: { createdBy: { select: { name: true } }, _count: { select: { galleryImages: true, departmentsAsHero: true, programsAsHero: true, facultyPortraits: true, heroBanners: true, downloads: true } } } }),
-    prisma.mediaAsset.count({ where }),
-  ]);
-  return { assets, totalCount, page, totalPages: Math.max(1, Math.ceil(totalCount / pageSize)) };
+/**
+ * Returns unified media assets across database records and static public repository files.
+ * Used by /admin/media and administrative views.
+ */
+export async function getAdminMedia(
+  filters: {
+    query?: string;
+    kind?: MediaCategory;
+    directory?: string;
+    usage?: "ALL" | "USED" | "UNUSED";
+    sort?: MediaSortOption;
+    page?: number;
+    pageSize?: number;
+  } = {}
+): Promise<CatalogQueryResult> {
+  return queryUnifiedMediaCatalog({
+    query: filters.query,
+    category: filters.kind || "ALL",
+    directory: filters.directory,
+    usage: filters.usage,
+    sort: filters.sort,
+    page: filters.page,
+    pageSize: filters.pageSize ?? 24,
+  });
 }
 
-export function getAdminMediaById(id: string) {
-  return prisma.mediaAsset.findUnique({ where: { id } });
+/**
+ * Finds a media asset by database ID or canonical relative URL.
+ */
+export async function getAdminMediaById(idOrUrl: string): Promise<UnifiedMediaAsset | null> {
+  return getUnifiedMediaAssetByIdOrUrl(idOrUrl);
 }

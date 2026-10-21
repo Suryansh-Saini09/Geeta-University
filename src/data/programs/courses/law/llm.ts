@@ -251,7 +251,7 @@ export const llm: CoursePageData = {
       "Apply now at Geeta University and specialize in high-demand legal fields with world-class faculty and practical moot court exposure.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

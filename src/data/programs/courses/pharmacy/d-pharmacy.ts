@@ -267,7 +267,7 @@ export const dPharmacy: CoursePageData = {
       "Explore admissions at Geeta University and take the first step towards a rewarding career in pharmaceutical science and healthcare.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 92787 68000",
   },
 };

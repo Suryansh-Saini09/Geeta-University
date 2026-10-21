@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
         "Enroll in a UGC-compliant PhD at a leading private university with expert faculty, advanced labs, and interdisciplinary research opportunities. Apply Now!",
       url: seo?.canonical || "https://geetauniversity.edu.in/phd",
       type: "website",
-      images: seo?.ogImage ? [{ url: seo.ogImage }] : [{ url: "https://geetauniversity.edu.in/uploads/all/1871/Ph.d.webp" }],
+      images: seo?.ogImage ? [{ url: seo.ogImage }] : [{ url: "/uploads/all/1871/Ph.d.webp" }],
     },
   };
 }

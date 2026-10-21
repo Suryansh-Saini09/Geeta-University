@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Sparkles } from "lucide-react";
 
 export default function PhdHero({ data }: { data?: any }) {
-  const bannerImage = data?.bannerImage || "https://geetauniversity.edu.in/uploads/all/1871/Ph.d.webp";
+  const bannerImage = data?.bannerImage || "/uploads/all/1871/Ph.d.webp";
   const bannerAlt = data?.bannerAlt || "PhD Admissions at Geeta University";
   const badgeText = data?.badgeText || "Part Time for Working Professionals in Corporate & Academia";
 

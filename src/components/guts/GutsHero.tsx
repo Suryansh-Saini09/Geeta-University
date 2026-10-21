@@ -16,7 +16,7 @@ interface GutsHeroProps {
 export default function GutsHero({ data }: GutsHeroProps) {
   const title = data?.title || "GUTS – Geeta University Test of Scholarship";
   const subtitle = data?.subtitle || "GUTS is Geeta University's in-house scholarship test to identify students' capability and interest to excel academically. Depending on how well they perform in the test, students can pursue their dream of acquiring higher education with 0 tuition fees.";
-  const bannerImage = data?.bannerImage || "https://geetauniversity.edu.in/uploads/all/1912/Guts_banner.jpg";
+  const bannerImage = data?.bannerImage || "/uploads/all/1912/Guts_banner.jpg";
 
   return (
     <section className="w-full bg-white">

@@ -405,7 +405,7 @@ export const bbaHumanResourceManagement: CoursePageData = {
       "Apply now at Geeta University and build a rewarding corporate leadership and talent management career.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

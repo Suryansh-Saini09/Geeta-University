@@ -93,7 +93,7 @@ export default function XEdgeHero() {
             <div className="relative overflow-hidden rounded-[24px] border border-[#E2E8F0] bg-white p-3 shadow-xl shadow-slate-200/60">
               <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden rounded-[18px] bg-slate-50">
                 <Image
-                  src="https://geetauniversity.edu.in/uploads/all/120/conversions/2-xedge-full.webp"
+                  src="/uploads/all/120/conversions/2-xedge-full.webp"
                   alt="XEDGE - Geeta University"
                   fill
                   priority

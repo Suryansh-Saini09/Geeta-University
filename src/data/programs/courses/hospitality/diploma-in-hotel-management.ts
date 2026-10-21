@@ -219,7 +219,7 @@ export const diplomaHotelManagement: CoursePageData = {
     description:
       "Apply now at Geeta University and take the first step towards an exciting career in hospitality and hotel operations.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
-    brochureUrl: "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+    brochureUrl: "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

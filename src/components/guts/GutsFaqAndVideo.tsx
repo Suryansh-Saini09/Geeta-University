@@ -75,7 +75,7 @@ export default function GutsFaqAndVideo() {
                 className="group relative h-[360px] sm:h-[420px] w-full overflow-hidden rounded-[24px] border border-[#E2E8F0] shadow-xl cursor-pointer bg-[#0A1F44]"
               >
                 <Image
-                  src="https://geetauniversity.edu.in/uploads/all/1839/guts_final.jpg"
+                  src="/uploads/all/1839/guts_final.jpg"
                   alt="Watch GUTS Video"
                   fill
                   sizes="(max-width: 1024px) 100vw, 500px"

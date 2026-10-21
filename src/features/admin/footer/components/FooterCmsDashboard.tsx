@@ -26,6 +26,7 @@ import {
   X,
   Layers,
 } from "lucide-react";
+import { CmsImageField } from "@/components/admin/CmsImageField";
 
 import {
   addFooterLinkAction,
@@ -886,30 +887,21 @@ export default function FooterCmsDashboard({
               <h2 className="text-base font-bold text-[#0A1F44]">University Branding Column</h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Footer Logo Image URL / Path
-                </label>
-                <input
-                  type="text"
-                  value={brandingForm.logoUrl}
-                  onChange={(e) => setBrandingForm((b) => ({ ...b, logoUrl: e.target.value }))}
-                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-[#0A1F44] focus:outline-none focus:border-slate-400 font-mono text-xs"
-                />
-              </div>
+            <div className="space-y-4">
+              <CmsImageField
+                label="Footer Logo Image"
+                value={brandingForm.logoUrl}
+                onChange={(url) => setBrandingForm((b) => ({ ...b, logoUrl: url }))}
+                altValue={brandingForm.logoAlt}
+                onAltChange={(alt) => setBrandingForm((b) => ({ ...b, logoAlt: alt }))}
+                contentArea="footer"
+                section="branding"
+                placeholder="/images/logo.webp"
+                helpText="Official logo displayed in the footer branding column."
+              />
+            </div>
 
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Logo Alternative Text (Alt)
-                </label>
-                <input
-                  type="text"
-                  value={brandingForm.logoAlt}
-                  onChange={(e) => setBrandingForm((b) => ({ ...b, logoAlt: e.target.value }))}
-                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-[#0A1F44] focus:outline-none focus:border-slate-400"
-                />
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">

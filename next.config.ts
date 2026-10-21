@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  outputFileTracingExcludes: {
+    "*": ["./public/**/*"],
+    "**/*": ["./public/**/*"],
+  },
   images: {
     remotePatterns: [
       {

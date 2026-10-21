@@ -12,37 +12,37 @@ interface CollagePhoto {
 const COLLAGE_PHOTOS: CollagePhoto[] = [
   {
     id: "top",
-    src: "https://geetauniversity.edu.in/uploads/all/2248/6.webp",
+    src: "/uploads/all/2248/6.webp",
     alt: "Placement Day Celebration - Top Group",
   },
   {
     id: "circle",
-    src: "https://geetauniversity.edu.in/uploads/all/2247/5.webp",
+    src: "/uploads/all/2247/5.webp",
     alt: "Placement Day Dignitary Speech",
   },
   {
     id: "mid",
-    src: "https://geetauniversity.edu.in/uploads/all/2249/7.webp",
+    src: "/uploads/all/2249/7.webp",
     alt: "Placement Day Panel Discussion",
   },
   {
     id: "right",
-    src: "https://geetauniversity.edu.in/uploads/all/2246/4.webp",
+    src: "/uploads/all/2246/4.webp",
     alt: "Placement Day Award Ceremony",
   },
   {
     id: "bottom-left",
-    src: "https://geetauniversity.edu.in/uploads/all/2245/3.webp",
+    src: "/uploads/all/2245/3.webp",
     alt: "Placement Day Auditorium Audience",
   },
   {
     id: "bottom-right",
-    src: "https://geetauniversity.edu.in/uploads/all/2251/9.webp",
+    src: "/uploads/all/2251/9.webp",
     alt: "Placement Day Star Stage Setup",
   },
   {
     id: "star",
-    src: "https://geetauniversity.edu.in/uploads/all/2250/8.webp",
+    src: "/uploads/all/2250/8.webp",
     alt: "Placement Day Student Performance",
   },
 ];
