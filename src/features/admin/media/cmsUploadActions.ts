@@ -1,10 +1,7 @@
 "use server";
 
-import fs from "node:fs";
-import path from "node:path";
 import { assertPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
-import { prisma } from "@/server/db/client";
 import {
   checkMediaAssetUsage,
   saveCmsAsset,
@@ -94,126 +91,52 @@ export async function checkMediaUsageAction(url: string): Promise<{
   }
 }
 
-// In-memory cache for legacy manifest items
-let cachedLegacyManifest: Array<{
-  fileName: string;
-  url: string;
-  category: string;
-}> | null = null;
-
-function getLegacyManifestItems() {
-  if (cachedLegacyManifest) return cachedLegacyManifest;
-  try {
-    const manifestPath = path.join(process.cwd(), "scripts", "legacyMediaManifest.json");
-    if (fs.existsSync(manifestPath)) {
-      const raw = fs.readFileSync(manifestPath, "utf-8");
-      const data = JSON.parse(raw);
-      if (Array.isArray(data)) {
-        cachedLegacyManifest = data.map((item: any) => {
-          let relUrl = item.originalUrl.replace(/^https:\/\/geetauniversity\.edu\.in/, "");
-          if (!relUrl.startsWith("/")) relUrl = `/${relUrl}`;
-          return {
-            fileName: item.fileName || path.basename(relUrl),
-            url: relUrl,
-            category: item.category || "IMAGE",
-          };
-        });
-        return cachedLegacyManifest;
-      }
-    }
-  } catch (err) {
-    console.warn("Could not load legacyMediaManifest.json for picker:", err);
-  }
-  cachedLegacyManifest = [];
-  return cachedLegacyManifest;
-}
+import {
+  queryUnifiedMediaCatalog,
+  type MediaCategory,
+} from "@/server/services/unifiedMediaCatalog";
 
 /**
  * Server action to fetch media library items for the unified picker.
- * Combines database MediaAsset records and migrated legacy assets.
+ * Uses the single shared unified catalog across Aiven MySQL records and public assets.
  */
 export async function getMediaLibraryItemsAction(
   query: string = "",
-  kind: "ALL" | "IMAGE" | "PDF" = "ALL",
+  kind: "ALL" | "IMAGE" | "PDF" | "VIDEO" = "ALL",
   page: number = 1,
   pageSize: number = 24
 ): Promise<MediaLibraryResponse> {
   try {
     await requireAdminSession();
 
-    const normalizedQuery = query.toLowerCase().trim();
+    const category: MediaCategory =
+      kind === "IMAGE" ? "IMAGE" : kind === "PDF" ? "PDF" : kind === "VIDEO" ? "VIDEO" : "ALL";
 
-    // 1. Fetch DB MediaAsset records
-    const whereClause: any = {};
-    if (normalizedQuery) {
-      whereClause.OR = [
-        { fileName: { contains: normalizedQuery } },
-        { altText: { contains: normalizedQuery } },
-        { caption: { contains: normalizedQuery } },
-        { url: { contains: normalizedQuery } },
-      ];
-    }
-    if (kind === "IMAGE") whereClause.mimeType = { startsWith: "image/" };
-    if (kind === "PDF") whereClause.mimeType = "application/pdf";
-
-    const dbAssets = await prisma.mediaAsset.findMany({
-      where: whereClause,
-      orderBy: { createdAt: "desc" },
-      take: 100,
+    const result = await queryUnifiedMediaCatalog({
+      query,
+      category,
+      page,
+      pageSize,
     });
 
-    const dbItems: MediaLibraryItem[] = dbAssets.map((a) => ({
-      id: a.id,
-      fileName: a.fileName,
-      url: a.url,
-      mimeType: a.mimeType,
-      sizeBytes: a.sizeBytes,
-      altText: a.altText,
-      caption: a.caption,
-      source: "cms",
-      createdAt: a.createdAt.toISOString(),
+    const items: MediaLibraryItem[] = result.assets.map((asset) => ({
+      id: asset.id,
+      fileName: asset.fileName,
+      url: asset.url,
+      mimeType: asset.mimeType,
+      sizeBytes: asset.sizeBytes,
+      altText: asset.altText,
+      caption: asset.caption,
+      source: asset.source === "db" ? "cms" : "legacy",
+      createdAt: asset.createdAt.toISOString(),
     }));
-
-    // 2. Supplement with legacy assets from manifest
-    const legacyList = getLegacyManifestItems();
-    const seenUrls = new Set(dbItems.map((i) => i.url.toLowerCase()));
-
-    const filteredLegacy: MediaLibraryItem[] = [];
-    for (const leg of legacyList) {
-      if (seenUrls.has(leg.url.toLowerCase())) continue;
-
-      if (kind === "IMAGE" && leg.category !== "IMAGE") continue;
-      if (kind === "PDF" && leg.category !== "DOCUMENT" && !leg.url.endsWith(".pdf")) continue;
-
-      if (
-        !normalizedQuery ||
-        leg.fileName.toLowerCase().includes(normalizedQuery) ||
-        leg.url.toLowerCase().includes(normalizedQuery)
-      ) {
-        filteredLegacy.push({
-          id: `legacy-${leg.url}`,
-          fileName: leg.fileName,
-          url: leg.url,
-          mimeType: leg.category === "IMAGE" ? "image/webp" : "application/pdf",
-          source: "legacy",
-        });
-      }
-    }
-
-    // Combine: CMS DB assets first, then legacy assets
-    const allCombined = [...dbItems, ...filteredLegacy];
-    const totalCount = allCombined.length;
-    const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
-    const safePage = Math.max(1, Math.min(page, totalPages));
-    const startIndex = (safePage - 1) * pageSize;
-    const paginatedItems = allCombined.slice(startIndex, startIndex + pageSize);
 
     return {
       success: true,
-      items: paginatedItems,
-      totalCount,
-      page: safePage,
-      totalPages,
+      items,
+      totalCount: result.totalCount,
+      page: result.page,
+      totalPages: result.totalPages,
     };
   } catch (error: any) {
     console.error("getMediaLibraryItemsAction error:", error);

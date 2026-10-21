@@ -56,23 +56,6 @@ export function UnifiedMediaPickerModal({
   const [, startTransition] = useTransition();
 
   const fetchItems = (query: string, category: "ALL" | "IMAGE" | "PDF", pageNum: number) => {
-    // If static initialAssets were provided and no search, we can use them as a fallback
-    if (initialAssets && initialAssets.length > 0 && !query && category === kind && pageNum === 1) {
-      setItems(
-        initialAssets.map((a) => ({
-          id: a.id,
-          fileName: a.fileName,
-          url: a.url,
-          mimeType: a.mimeType || "image/webp",
-          altText: a.altText,
-          source: "cms",
-        }))
-      );
-      setTotalCount(initialAssets.length);
-      setTotalPages(1);
-      return;
-    }
-
     setLoading(true);
     setError(null);
     startTransition(async () => {
@@ -129,7 +112,7 @@ export function UnifiedMediaPickerModal({
             <div>
               <h3 className="font-serif text-lg font-bold text-[#0A1F44]">{title}</h3>
               <p className="text-xs text-slate-500">
-                {totalCount} total verified assets across CMS &amp; Legacy migrations
+                {totalCount.toLocaleString()} assets available in media catalog
               </p>
             </div>
           </div>
@@ -242,11 +225,7 @@ export function UnifiedMediaPickerModal({
                         </div>
                       )}
 
-                      {asset.source === "legacy" && (
-                        <span className="absolute bottom-1 left-1 rounded bg-slate-900/70 px-1 py-0.5 text-[9px] font-semibold text-white">
-                          Legacy
-                        </span>
-                      )}
+
                     </div>
                     <div className="p-2">
                       <p className="truncate text-xs font-semibold text-slate-800" title={asset.fileName}>
