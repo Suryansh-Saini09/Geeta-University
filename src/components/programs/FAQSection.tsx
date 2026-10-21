@@ -134,9 +134,11 @@ export default function FAQSection({
           >
             {title}
           </h2>
-          {/* <p style={{ fontSize: 16, color: "#64748B", maxWidth: 600, margin: "0 auto", lineHeight: 1.6 }}>
-            {subtitle}
-          </p> */}
+          {subtitle && (
+            <p style={{ fontSize: 16, color: "#64748B", maxWidth: 640, margin: "14px auto 0", lineHeight: 1.6 }}>
+              {subtitle}
+            </p>
+          )}
         </div>
 
         {/* Search Bar */}

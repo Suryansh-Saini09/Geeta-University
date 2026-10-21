@@ -87,6 +87,7 @@ export default function CourseSharedSections({
       {faculty && faculty.length > 0 && (
         <ProgramMentors
           title="Meet Our Mentors"
+          subtitle="Guiding Futures with Expertise, Experience & Empathy"
           faculty={faculty}
         />
       )}

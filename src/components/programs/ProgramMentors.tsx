@@ -7,9 +7,11 @@ import type { FacultyMember } from "@/data/programs/types";
 
 interface ProgramMentorsProps {
   title?: string;
+  subtitle?: string;
   mentorsSection?: {
     eyebrow?: string;
     title?: string;
+    subtitle?: string;
     faculty: FacultyMember[];
   };
   faculty?: FacultyMember[];
@@ -21,6 +23,7 @@ const STEP = CARD_WIDTH + CARD_GAP; // 304px
 
 export default function ProgramMentors({
   title = "Meet our Mentors",
+  subtitle,
   mentorsSection,
   faculty,
 }: ProgramMentorsProps) {
@@ -35,6 +38,7 @@ export default function ProgramMentors({
 
   const isCarousel = mentors.length > 4;
   const sectionTitle = mentorsSection?.title || title;
+  const sectionSubtitle = mentorsSection?.subtitle || subtitle;
 
   // For carousel mode (5+ mentors), duplicate 3 sets for seamless infinite loop
   const displayMentors = isCarousel
@@ -265,6 +269,11 @@ export default function ProgramMentors({
         <h2 style={{ fontSize: 44, fontWeight: 800, color: "#0A1F44", lineHeight: 1.2, letterSpacing: "-1px" }}>
           {sectionTitle}
         </h2>
+        {sectionSubtitle && (
+          <p style={{ fontSize: 20, color: "#64748B", marginTop: 8, fontWeight: 600, lineHeight: 1.4 }}>
+            {sectionSubtitle}
+          </p>
+        )}
 
         <div style={{ position: "relative", marginTop: 48 }}>
           {!isCarousel ? (

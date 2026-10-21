@@ -38,7 +38,7 @@ export default function CourseQuickInfo({ quickInfo }: CourseQuickInfoProps) {
                 Duration
               </span>
               <p className="text-lg md:text-xl font-bold text-[#0A1F44]">
-                {quickInfo.duration?.replace(/\bYears\b/g, "years")}
+                {quickInfo.duration}
               </p>
             </div>
           </div>
