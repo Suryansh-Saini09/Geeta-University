@@ -16,6 +16,7 @@ import {
   saveGovernanceDocumentAction,
   deleteGovernanceDocumentAction,
 } from "@/features/admin/pages/actions";
+import { getSectionSuccessMessage } from "@/lib/cms/sectionLabels";
 import { CmsLanguageTabs } from "@/components/admin/CmsLanguageTabs";
 import { Locale, TranslationStatus } from "@/lib/i18n/localization";
 import {
@@ -277,7 +278,7 @@ export function AboutCmsDashboard({
     setSavingSection(null);
 
     if (res.success) {
-      setFeedback({ type: "success", text: res.message || "Section updated successfully!" });
+      setFeedback({ type: "success", text: res.message || getSectionSuccessMessage(sectionKey, "about", "updated") });
     } else {
       setFeedback({ type: "error", text: res.error || "Failed to update section." });
     }
@@ -305,10 +306,6 @@ export function AboutCmsDashboard({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-            <Sparkles className="h-4 w-4" />
-            About Page CMS
-          </div>
           <h1 className="font-serif text-3xl font-bold text-[#0A1F44]">
             Manage About Page Content
           </h1>

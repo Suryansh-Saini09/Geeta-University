@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { updatePageSectionAction, updatePageSeoAction } from "@/features/admin/pages/actions";
+import { getSectionSuccessMessage } from "@/lib/cms/sectionLabels";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import { CmsActionButton } from "@/components/admin/CmsActionButton";
 import {
   CmsImagePreviewInput,
@@ -20,27 +22,10 @@ import {
   GraduationCap,
   FileText,
   HelpCircle,
-  Award,
-  Globe,
-  BookOpen,
-  Sparkles,
-  TrendingUp,
-  CheckCircle2,
-  Layers,
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
 import { GU_EDGE_PAGES_OPTIONS } from "../guEdgeConfig";
-
-const ICON_MAP: Record<string, any> = {
-  Sparkles,
-  TrendingUp,
-  Globe,
-  BookOpen,
-  Award,
-  CheckCircle2,
-  Layers,
-};
 
 interface GuEdgeCmsDashboardProps {
   initialPageSlug?: string;
@@ -127,7 +112,7 @@ export function GuEdgeCmsDashboard({
       if (res.success) {
         setFeedback({
           type: "success",
-          text: `Section "${activeSectionKey}" saved successfully!`,
+          text: res.message || getSectionSuccessMessage(activeSectionKey, selectedPageSlug, "saved"),
         });
         if (sections[activeSectionKey]) {
           sections[activeSectionKey].body = activeBodyState;
@@ -138,7 +123,7 @@ export function GuEdgeCmsDashboard({
         setFeedback({ type: "error", text: res.error || "Failed to update section." });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", text: err.message || "An unexpected error occurred." });
+      setFeedback({ type: "error", text: sanitizeErrorMessage(err, "An unexpected error occurred.") });
     } finally {
       setIsSaving(false);
     }
@@ -178,7 +163,7 @@ export function GuEdgeCmsDashboard({
         setFeedback({ type: "error", text: res.error || "Failed to save SEO metadata." });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", text: err.message || "Failed to save SEO metadata." });
+      setFeedback({ type: "error", text: sanitizeErrorMessage(err, "Failed to save SEO metadata.") });
     } finally {
       setIsSaving(false);
     }
@@ -266,22 +251,18 @@ export function GuEdgeCmsDashboard({
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
           {GU_EDGE_PAGES_OPTIONS.map((pageOpt) => {
             const isSelected = pageOpt.slug === selectedPageSlug;
-            const Icon = ICON_MAP[pageOpt.iconName] || BookOpen;
 
             return (
               <button
                 key={pageOpt.slug}
                 type="button"
                 onClick={() => handlePageSelect(pageOpt.slug)}
-                className={`flex flex-col items-start justify-between rounded-xl p-3.5 text-left transition-all border ${
+                className={`flex flex-col items-start justify-center rounded-xl p-3.5 text-left transition-all border ${
                   isSelected
                     ? "border-[#0A1F44] bg-[#0A1F44] text-white shadow-md ring-2 ring-[#E8871A]/40"
                     : "border-slate-200 bg-white text-slate-800 hover:border-slate-300 hover:bg-slate-50"
                 }`}
               >
-                <div className="flex items-center justify-between w-full mb-2">
-                  <Icon className={`h-5 w-5 ${isSelected ? "text-slate-700" : "text-slate-400"}`} />
-                </div>
                 <div>
                   <p className="text-xs font-bold leading-snug">{pageOpt.title}</p>
                   <p className={`text-[10px] ${isSelected ? "text-slate-300" : "text-slate-500"}`}>

@@ -2,11 +2,32 @@ import { NextResponse } from "next/server";
 import dns from "dns/promises";
 import net from "net";
 import { prisma } from "@/server/db/client";
+import { getAdminSession } from "@/server/auth/session";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   const rawUrl = process.env.DATABASE_URL;
+
+  // Protect internal database infrastructure details from unauthenticated public inspection
+  const session = await getAdminSession();
+  if (!session) {
+    if (!rawUrl) {
+      return NextResponse.json({ status: "unhealthy" }, { status: 503 });
+    }
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+      return NextResponse.json(
+        { status: "healthy", timestamp: new Date().toISOString() },
+        { status: 200 }
+      );
+    } catch {
+      return NextResponse.json(
+        { status: "service_unavailable", timestamp: new Date().toISOString() },
+        { status: 503 }
+      );
+    }
+  }
 
   const result: Record<string, any> = {
     timestamp: new Date().toISOString(),

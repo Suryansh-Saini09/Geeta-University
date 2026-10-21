@@ -18,6 +18,7 @@ import {
   saveStarPerformanceAction,
   deleteStarPerformanceAction,
 } from "@/features/admin/pages/actions";
+import { getSectionSuccessMessage } from "@/lib/cms/sectionLabels";
 import { CmsLanguageTabs } from "@/components/admin/CmsLanguageTabs";
 import { Locale, TranslationStatus } from "@/lib/i18n/localization";
 import {
@@ -342,7 +343,7 @@ export function HomeCmsDashboard({
     setSavingSection(null);
 
     if (res.success) {
-      setFeedback({ type: "success", text: res.message || "Section updated successfully!" });
+      setFeedback({ type: "success", text: res.message || getSectionSuccessMessage(sectionKey, "home", "updated") });
     } else {
       setFeedback({ type: "error", text: res.error || "Failed to update section." });
     }

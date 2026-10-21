@@ -12,7 +12,7 @@ import {
   STANDARD_INSTITUTIONAL_PAGE_SLUGS,
   ALL_INSTITUTIONAL_PAGE_SLUGS,
 } from "../src/lib/cms/pageEditorRoutes";
-import { getPageSectionsAdmin } from "../src/server/services/pages";
+import { getPageSectionsAdmin, getAdminPages } from "../src/server/services/pages";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -219,6 +219,45 @@ async function runTests() {
     pagesUiContent.includes("No pages match your search. Try another title or status, or clear the filters."),
     "Empty state message updated to approved copy"
   );
+
+  // -------------------------------------------------------------------
+  // TEST F: SEARCH & FILTERING IN GETADMINPAGES
+  // -------------------------------------------------------------------
+  console.log("\n--- Test F: Search & Filtering in getAdminPages ---");
+
+  try {
+    const ugcResult = await getAdminPages({ query: "ugc" });
+    assert(
+      ugcResult.totalCount > 0 && ugcResult.pages.some((p) => p.slug === "ugc"),
+      `Search query "ugc" returns UGC page (found ${ugcResult.totalCount} matches)`
+    );
+
+    const panipatResult = await getAdminPages({ query: "panipat" });
+    assert(
+      panipatResult.totalCount > 0 && panipatResult.pages.some((p) => p.slug === "about-panipat"),
+      `Search query "panipat" returns About Panipat page (found ${panipatResult.totalCount} matches)`
+    );
+
+    const publishedResult = await getAdminPages({ status: "PUBLISHED" });
+    assert(
+      publishedResult.pages.every((p) => p.status === "PUBLISHED"),
+      `Status filter "PUBLISHED" returns only published pages (${publishedResult.totalCount} total)`
+    );
+
+    const noMatchResult = await getAdminPages({ query: "nonexistent-query-xyz-12345" });
+    assert(
+      noMatchResult.totalCount === 0 && noMatchResult.pages.length === 0,
+      "Non-matching search returns 0 results cleanly"
+    );
+
+    const allPagesResult = await getAdminPages({});
+    assert(
+      allPagesResult.totalCount >= 30 && allPagesResult.totalPages >= 1,
+      `Unfiltered getAdminPages returns all pages (${allPagesResult.totalCount} total, ${allPagesResult.totalPages} pages)`
+    );
+  } catch (err: any) {
+    assert(false, "Search & filtering in getAdminPages threw an error", err.message);
+  }
 
   console.log("\n=========================================================");
   console.log(`TEST SUMMARY: ${passed} passed, ${failed} failed`);

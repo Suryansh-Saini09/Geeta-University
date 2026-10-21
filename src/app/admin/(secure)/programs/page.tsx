@@ -6,10 +6,10 @@ import {
   Plus,
   Search,
   ExternalLink,
-  BookOpen,
   CheckCircle2,
   Clock,
   Layers,
+  Filter,
 } from "lucide-react";
 import { ContentStatus, Prisma } from "@prisma/client";
 
@@ -38,9 +38,9 @@ interface ProgramsPageProps {
 }
 
 const statusStyles = {
-  DRAFT: "border-slate-200 bg-slate-100 text-slate-700",
-  PUBLISHED: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  ARCHIVED: "border-amber-200 bg-amber-50 text-amber-700",
+  DRAFT: "bg-slate-100 text-slate-700 ring-1 ring-inset ring-slate-200",
+  PUBLISHED: "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200",
+  ARCHIVED: "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200",
 };
 
 export default async function AdminProgramsPage({
@@ -50,12 +50,20 @@ export default async function AdminProgramsPage({
   const selectedStatus = isContentStatus(params.status) ? params.status : "ALL";
   const selectedDepartmentId = params.departmentId?.trim() || "ALL";
   const selectedLevel = params.level?.trim() || "ALL";
-  const selectedCourseContent = isCourseContentFilter(params.courseContent) ? params.courseContent : "ALL";
+  const selectedCourseContent = isCourseContentFilter(params.courseContent)
+    ? params.courseContent
+    : "ALL";
   const query = params.q?.trim() ?? "";
   const page = parsePositiveInt(params.page) ?? 1;
 
   // Aggregate live metrics from Aiven MySQL
-  const [totalProgramsCount, publishedProgramsCount, populatedCoursesCount, departments, programResult] = await Promise.all([
+  const [
+    totalProgramsCount,
+    publishedProgramsCount,
+    populatedCoursesCount,
+    departments,
+    programResult,
+  ] = await Promise.all([
     prisma.program.count(),
     prisma.program.count({ where: { status: ContentStatus.PUBLISHED } }),
     prisma.program.count({
@@ -71,7 +79,8 @@ export default async function AdminProgramsPage({
       status: selectedStatus,
       departmentId: selectedDepartmentId,
       level: selectedLevel !== "ALL" ? selectedLevel : undefined,
-      courseContent: selectedCourseContent !== "ALL" ? selectedCourseContent : undefined,
+      courseContent:
+        selectedCourseContent !== "ALL" ? selectedCourseContent : undefined,
       page,
       pageSize: 15,
     }),
@@ -80,21 +89,22 @@ export default async function AdminProgramsPage({
   const { programs, totalCount, totalPages } = programResult;
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-7xl space-y-8 pb-12">
       {/* Page Title & Action */}
-      <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <section className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="mt-2 font-serif text-4xl font-bold text-[#0A1F44]">
+          <h2 className="font-serif text-3xl font-semibold tracking-tight text-[#0A1F44]">
             Academic Programs & Course Pages
           </h2>
-          <p className="mt-2 max-w-2xl text-base leading-6 text-slate-600">
-            Manage comprehensive academic course detail pages, curriculum information, faculty mentors, and admissions.
+          <p className="mt-1.5 max-w-2xl text-sm text-slate-500">
+            Manage comprehensive academic course detail pages, curriculum
+            information, faculty mentors, and admissions.
           </p>
         </div>
 
         <Link
           href="/admin/programs/new"
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A1F44] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#F5A623]"
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-[#0A1F44] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#12366E] focus:outline-none focus:ring-2 focus:ring-[#0A1F44] focus:ring-offset-2"
         >
           <Plus className="h-4 w-4" />
           Create Program
@@ -102,156 +112,187 @@ export default async function AdminProgramsPage({
       </section>
 
       {/* KPI Metrics Cards */}
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500">
-            <span className="text-xs font-bold uppercase tracking-wider">Total Offerings</span>
-            <Layers className="h-4 w-4 text-[#0A1F44]" />
+      <section className="grid gap-4 sm:grid-cols-3">
+        <div className="flex flex-col justify-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+          <span className="text-xs font-bold tracking-wider text-slate-500 uppercase">
+            Total Offerings
+          </span>
+          <div className="mt-3">
+            <p className="text-3xl font-bold tracking-tight text-slate-900">
+              {totalProgramsCount}
+            </p>
+            <p className="mt-1.5 text-sm text-slate-500">
+              Active degree & sub-program records
+            </p>
           </div>
-          <p className="mt-2 text-3xl font-bold text-[#0A1F44]">{totalProgramsCount}</p>
-          <p className="mt-1 text-xs text-slate-500">Active degree & sub-program records</p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-          <div className="flex items-center justify-between text-emerald-600">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Published Status</span>
-            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+        <div className="flex flex-col justify-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+          <span className="text-xs font-bold tracking-wider text-emerald-600 uppercase">
+            Published Status
+          </span>
+          <div className="mt-3">
+            <p className="text-3xl font-bold tracking-tight text-slate-900">
+              {publishedProgramsCount}
+            </p>
+            <p className="mt-1.5 text-sm text-slate-500">
+              Publicly accessible on web
+            </p>
           </div>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{publishedProgramsCount}</p>
-          <p className="mt-1 text-xs text-slate-500">Publicly accessible on web</p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-          <div className="flex items-center justify-between text-amber-600">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Draft / In Progress</span>
-            <Clock className="h-4 w-4 text-amber-600" />
+        <div className="flex flex-col justify-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+          <span className="text-xs font-bold tracking-wider text-amber-600 uppercase">
+            Draft / In Progress
+          </span>
+          <div className="mt-3">
+            <p className="text-3xl font-bold tracking-tight text-slate-900">
+              {totalProgramsCount - publishedProgramsCount}
+            </p>
+            <p className="mt-1.5 text-sm text-slate-500">
+              Draft or pending review
+            </p>
           </div>
-          <p className="mt-2 text-3xl font-bold text-amber-700">{totalProgramsCount - publishedProgramsCount}</p>
-          <p className="mt-1 text-xs text-slate-500">Draft or pending review</p>
         </div>
       </section>
 
       {/* Action Notifications */}
-      {params.created ? (
-        <StatusMessage tone="success" message="Program created successfully with course content initialized." />
-      ) : null}
-      {params.updated ? (
-        <StatusMessage tone="success" message="Program updated successfully in Aiven MySQL." />
-      ) : null}
-      {params.archived ? (
+      {params.created && (
+        <StatusMessage
+          tone="success"
+          message="Program created successfully with course content initialized."
+        />
+      )}
+      {params.updated && (
+        <StatusMessage
+          tone="success"
+          message="Program updated successfully."
+        />
+      )}
+      {params.archived && (
         <StatusMessage tone="warning" message="Program archived successfully." />
-      ) : null}
-      {params.error ? (
+      )}
+      {params.error && (
         <StatusMessage tone="error" message="Program could not be found." />
-      ) : null}
+      )}
 
-      {/* Search & Filter Bar */}
-      <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex flex-col gap-3 border-b border-slate-200 p-4 xl:flex-row xl:items-center xl:justify-between">
-          <div>
-            <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
-              All Academic Offerings
-            </h3>
-            <p className="text-xs text-slate-500">
-              {totalCount} matching program{totalCount === 1 ? "" : "s"} found
-            </p>
+      {/* Main Content Area */}
+      <section className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        {/* Search & Filter Header Section */}
+        <div className="flex flex-col border-b border-slate-200">
+          <div className="flex items-center justify-between px-6 py-5">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900">
+                All Offerings
+              </h3>
+            </div>
           </div>
 
-          <form className="flex flex-wrap items-center gap-2">
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
-              <input
-                type="search"
-                name="q"
-                defaultValue={query}
-                placeholder="Search programs..."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 py-1.5 pl-8 pr-3 text-xs outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-[#E8871A]/15 sm:w-52"
-              />
-            </div>
+          <div className="bg-slate-50/80 border-t border-slate-100 px-6 py-4">
+            <form className="flex flex-col gap-3 md:flex-row md:items-center md:flex-wrap">
+              <div className="relative w-full md:max-w-[260px]">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="search"
+                  name="q"
+                  defaultValue={query}
+                  placeholder="Search programs..."
+                  className="w-full h-9 rounded-md border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-[#0A1F44] focus:ring-1 focus:ring-[#0A1F44]"
+                />
+              </div>
 
-            <select
-              name="departmentId"
-              defaultValue={selectedDepartmentId}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs outline-none transition focus:border-slate-300 focus:bg-white"
-            >
-              <option value="ALL">All Schools / Departments</option>
-              {departments.map((department) => (
-                <option key={department.id} value={department.id}>
-                  {department.shortName
-                    ? `${department.name} (${department.shortName})`
-                    : department.name}
-                </option>
-              ))}
-            </select>
-
-            <select
-              name="level"
-              defaultValue={selectedLevel}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs outline-none transition focus:border-slate-300 focus:bg-white"
-            >
-              <option value="ALL">All Academic Levels</option>
-              <option value="Undergraduate">Undergraduate</option>
-              <option value="Postgraduate">Postgraduate</option>
-              <option value="Diploma">Diploma / Poly</option>
-              <option value="Doctoral">Doctoral / Ph.D</option>
-            </select>
-
-            <select
-              name="courseContent"
-              defaultValue={selectedCourseContent}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs outline-none transition focus:border-slate-300 focus:bg-white"
-            >
-              <option value="ALL">All Content States</option>
-              <option value="CONFIGURED">With Course Page (CMS)</option>
-              <option value="MISSING">Basic Listing Only</option>
-            </select>
-
-            <select
-              name="status"
-              defaultValue={selectedStatus}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs outline-none transition focus:border-slate-300 focus:bg-white"
-            >
-              <option value="ALL">All Statuses</option>
-              <option value={ContentStatus.DRAFT}>Draft</option>
-              <option value={ContentStatus.PUBLISHED}>Published</option>
-              <option value={ContentStatus.ARCHIVED}>Archived</option>
-            </select>
-
-            <input type="hidden" name="page" value="1" />
-
-            <button
-              type="submit"
-              className="rounded-lg bg-[#0A1F44] px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-[#12366E]"
-            >
-              Filter
-            </button>
-
-            {(query ||
-              selectedStatus !== "ALL" ||
-              selectedDepartmentId !== "ALL" ||
-              selectedLevel !== "ALL" ||
-              selectedCourseContent !== "ALL") ? (
-              <Link
-                href="/admin/programs"
-                className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:border-slate-300 hover:text-slate-800"
+              <select
+                name="departmentId"
+                defaultValue={selectedDepartmentId}
+                className="h-9 w-full md:w-auto rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none transition-all focus:border-[#0A1F44] focus:ring-1 focus:ring-[#0A1F44]"
               >
-                Reset
-              </Link>
-            ) : null}
-          </form>
+                <option value="ALL">All Schools / Departments</option>
+                {departments.map((department) => (
+                  <option key={department.id} value={department.id}>
+                    {department.shortName
+                      ? `${department.name} (${department.shortName})`
+                      : department.name}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                name="level"
+                defaultValue={selectedLevel}
+                className="h-9 w-full md:w-auto rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none transition-all focus:border-[#0A1F44] focus:ring-1 focus:ring-[#0A1F44]"
+              >
+                <option value="ALL">All Levels</option>
+                <option value="Undergraduate">Undergraduate</option>
+                <option value="Postgraduate">Postgraduate</option>
+                <option value="Diploma">Diploma / Poly</option>
+                <option value="Doctoral">Doctoral / Ph.D</option>
+              </select>
+
+              <select
+                name="courseContent"
+                defaultValue={selectedCourseContent}
+                className="h-9 w-full md:w-auto rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none transition-all focus:border-[#0A1F44] focus:ring-1 focus:ring-[#0A1F44]"
+              >
+                <option value="ALL">All Content States</option>
+                <option value="CONFIGURED">With Course Page (CMS)</option>
+                <option value="MISSING">Basic Listing Only</option>
+              </select>
+
+              <select
+                name="status"
+                defaultValue={selectedStatus}
+                className="h-9 w-full md:w-auto rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none transition-all focus:border-[#0A1F44] focus:ring-1 focus:ring-[#0A1F44]"
+              >
+                <option value="ALL">All Statuses</option>
+                <option value={ContentStatus.DRAFT}>Draft</option>
+                <option value={ContentStatus.PUBLISHED}>Published</option>
+                <option value={ContentStatus.ARCHIVED}>Archived</option>
+              </select>
+
+              <input type="hidden" name="page" value="1" />
+
+              <div className="flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0">
+                <button
+                  type="submit"
+                  className="inline-flex h-9 flex-1 md:flex-none items-center justify-center gap-2 rounded-md bg-slate-900 px-4 text-sm font-medium text-white transition-colors hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 shadow-sm"
+                >
+                  <Filter className="h-3.5 w-3.5" />
+                  Filter
+                </button>
+
+                {(query ||
+                  selectedStatus !== "ALL" ||
+                  selectedDepartmentId !== "ALL" ||
+                  selectedLevel !== "ALL" ||
+                  selectedCourseContent !== "ALL") && (
+                  <Link
+                    href="/admin/programs"
+                    className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium text-slate-600 bg-white border border-slate-300 transition-colors hover:bg-slate-50 hover:text-slate-900 shadow-sm"
+                  >
+                    Reset
+                  </Link>
+                )}
+              </div>
+            </form>
+          </div>
         </div>
 
+        {/* Data Table */}
         {programs.length === 0 ? (
-          <div className="p-10 text-center">
-            <h4 className="font-serif text-2xl font-bold text-[#0A1F44]">
+          <div className="flex flex-col items-center justify-center py-24 text-center px-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-500 mb-4">
+              <Search className="h-6 w-6" />
+            </div>
+            <h4 className="text-base font-semibold text-slate-900">
               No programs found
             </h4>
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">
-              Adjust your search filters or create a new academic program offering.
+            <p className="mt-1.5 max-w-sm text-sm text-slate-500">
+              Adjust your search filters or create a new academic program offering
+              to get started.
             </p>
             <Link
               href="/admin/programs/new"
-              className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A1F44] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#12366E]"
+              className="mt-6 inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-2.5 text-sm font-medium text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 shadow-sm transition-all"
             >
               <Plus className="h-4 w-4" />
               Create Program
@@ -259,85 +300,95 @@ export default async function AdminProgramsPage({
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1100px] text-left text-sm">
-              <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500">
+            <table className="w-full min-w-[1000px] text-left">
+              <thead className="border-b border-slate-200 bg-white text-xs font-semibold uppercase tracking-wider text-slate-500">
                 <tr>
-                  <th className="px-5 py-3 font-bold">Program & Route</th>
-                  <th className="px-5 py-3 font-bold">School / Department</th>
-                  <th className="px-5 py-3 font-bold">Level / Duration</th>
-                  <th className="px-5 py-3 font-bold">Content Completeness</th>
-                  <th className="px-5 py-3 font-bold">Status</th>
-                  <th className="px-5 py-3 font-bold">Last Updated</th>
-                  <th className="px-5 py-3 font-bold text-right min-w-[220px] whitespace-nowrap">Actions</th>
+                  <th className="px-6 py-4">Program & Route</th>
+                  <th className="px-6 py-4">School / Department</th>
+                  <th className="px-6 py-4">Level / Duration</th>
+                  <th className="px-6 py-4">Completeness</th>
+                  <th className="px-6 py-4">Status</th>
+                  <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-200 bg-white text-sm">
                 {programs.map((program) => {
                   const schoolSlug = program.department.slug || "programs";
                   const publicUrl = `/programs/${schoolSlug}/${program.slug}`;
                   return (
-                    <tr key={program.id} className="hover:bg-slate-50/70 transition">
-                      <td className="px-5 py-3.5">
+                    <tr
+                      key={program.id}
+                      className="group transition-colors hover:bg-slate-50/60"
+                    >
+                      <td className="px-6 py-4 align-top">
                         <Link
                           href={`/admin/programs/${program.id}/edit`}
-                          className="font-bold text-[#0A1F44] hover:text-[#E8871A] transition"
+                          className="font-medium text-slate-900 transition-colors hover:text-[#0A1F44]"
                         >
                           {program.name}
                         </Link>
-                        <p className="font-mono text-xs text-slate-500">
-                          /{program.slug}
-                        </p>
+                        <div className="mt-1 flex items-center text-xs text-slate-500">
+                          <span className="truncate">/{program.slug}</span>
+                        </div>
                       </td>
 
-                      <td className="px-5 py-3.5 text-slate-700 text-xs">
+                      <td className="px-6 py-4 align-top text-slate-600">
                         {program.department.shortName
                           ? `${program.department.name} (${program.department.shortName})`
                           : program.department.name}
                       </td>
 
-                      <td className="px-5 py-3.5 text-slate-600 text-xs">
-                        <p className="font-semibold text-slate-800">{program.level || "Degree"}</p>
-                        <p className="text-[11px] text-slate-500">{program.duration || "Multi-year"}</p>
+                      <td className="px-6 py-4 align-top text-slate-600">
+                        <p className="font-medium text-slate-900">
+                          {program.level || "Degree"}
+                        </p>
+                        <p className="mt-1 text-xs text-slate-500">
+                          {program.duration || "Multi-year"}
+                        </p>
                       </td>
 
-                      <td className="px-5 py-3.5">
-                        <div className="flex flex-col gap-1">
-                          <span
-                            className={`inline-flex items-center gap-1.5 w-fit rounded-full border px-2 py-0.5 text-[11px] font-bold ${program.completeness.color}`}
-                          >
-                            <span className="h-1.5 w-1.5 rounded-full bg-current" />
-                            {program.completeness.label} ({program.completeness.score}%)
-                          </span>
-                          <span className="text-[10px] text-slate-400">
-                            {program.completeness.completedSections}/{program.completeness.totalSections} sections filled
+                      <td className="px-6 py-4 align-top">
+                        <div className="flex flex-col gap-1.5">
+                          <div className="flex items-center gap-2">
+                            <div
+                              className={`h-2 w-2 rounded-full ${
+                                program.completeness.score >= 80
+                                  ? "bg-emerald-500"
+                                  : program.completeness.score >= 40
+                                  ? "bg-amber-500"
+                                  : "bg-slate-300"
+                              }`}
+                            />
+                            <span className="text-xs font-medium text-slate-700">
+                              {program.completeness.label} (
+                              {program.completeness.score}%)
+                            </span>
+                          </div>
+                          <span className="text-[11px] text-slate-400">
+                            {program.completeness.completedSections}/
+                            {program.completeness.totalSections} sections filled
                           </span>
                         </div>
                       </td>
 
-                      <td className="px-5 py-3.5">
+                      <td className="px-6 py-4 align-top">
                         <span
-                          className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-bold ${statusStyles[program.status]}`}
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                            statusStyles[program.status]
+                          }`}
                         >
                           {program.status}
                         </span>
                       </td>
 
-                      <td className="px-5 py-3.5 text-xs text-slate-500">
-                        {program.updatedAt.toLocaleDateString("en-IN", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </td>
-
-                      <td className="px-5 py-3.5 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-1.5">
+                      <td className="px-6 py-4 align-top text-right">
+                        <div className="flex items-center justify-end gap-2">
                           <Link
                             href={`/admin/programs/${program.id}/edit`}
-                            className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-semibold text-[#0A1F44] shadow-2xs transition-colors hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 whitespace-nowrap shrink-0"
+                            className="inline-flex h-8 items-center justify-center rounded-md bg-white px-3 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-200 transition-all hover:bg-slate-50 hover:text-slate-900 shadow-sm"
                           >
-                            <Pencil className="h-3.5 w-3.5 text-slate-500" />
-                            <span>Edit Page</span>
+                            <Pencil className="mr-1.5 h-3.5 w-3.5 text-slate-400" />
+                            Edit
                           </Link>
 
                           <Link
@@ -345,9 +396,12 @@ export default async function AdminProgramsPage({
                             target="_blank"
                             rel="noopener noreferrer"
                             title="Preview Public Page"
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 shadow-2xs transition-colors hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 shrink-0"
+                            className="text-slate-400 transition-colors hover:text-slate-900"
                           >
-                            <ExternalLink className="h-3.5 w-3.5" />
+                            <span className="sr-only">Preview</span>
+                            <div className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-slate-100">
+                              <ExternalLink className="h-4 w-4" />
+                            </div>
                           </Link>
 
                           {program.status !== "ARCHIVED" ? (
@@ -366,10 +420,15 @@ export default async function AdminProgramsPage({
           </div>
         )}
 
-        {totalCount > 0 ? (
-          <div className="flex flex-col gap-3 border-t border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs text-slate-500">
-              Page {programResult.page} of {totalPages} ({totalCount} total results)
+        {/* Pagination Footer */}
+        {totalCount > 0 && (
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-slate-200 bg-slate-50/50 px-6 py-4">
+            <p className="text-sm text-slate-500">
+              Showing page <span className="font-medium text-slate-900">{programResult.page}</span> of{" "}
+              <span className="font-medium text-slate-900">{totalPages}</span>{" "}
+              <span className="hidden sm:inline">
+                ({totalCount} total results)
+              </span>
             </p>
             <div className="flex gap-2">
               <PaginationLink
@@ -400,7 +459,7 @@ export default async function AdminProgramsPage({
               />
             </div>
           </div>
-        ) : null}
+        )}
       </section>
     </div>
   );
@@ -414,13 +473,22 @@ function StatusMessage({
   message: string;
 }) {
   const styles = {
-    success: "border-emerald-200 bg-emerald-50 text-emerald-700",
-    warning: "border-amber-200 bg-amber-50 text-amber-700",
-    error: "border-red-200 bg-red-50 text-red-700",
+    success: "bg-emerald-50 text-emerald-800 ring-emerald-500/20",
+    warning: "bg-amber-50 text-amber-800 ring-amber-500/20",
+    error: "bg-red-50 text-red-800 ring-red-500/20",
+  };
+
+  const icons = {
+    success: <CheckCircle2 className="h-4 w-4 text-emerald-600" />,
+    warning: <Clock className="h-4 w-4 text-amber-600" />,
+    error: <Layers className="h-4 w-4 text-red-600" />,
   };
 
   return (
-    <div className={`rounded-lg border px-4 py-3 text-sm font-semibold ${styles[tone]}`}>
+    <div
+      className={`flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium ring-1 ring-inset ${styles[tone]}`}
+    >
+      {icons[tone]}
       {message}
     </div>
   );
@@ -439,15 +507,15 @@ function PaginationLink({
 }) {
   const content = (
     <>
-      {icon === "previous" ? <ChevronLeft className="h-3.5 w-3.5" /> : null}
+      {icon === "previous" && <ChevronLeft className="mr-1 h-4 w-4" />}
       {label}
-      {icon === "next" ? <ChevronRight className="h-3.5 w-3.5" /> : null}
+      {icon === "next" && <ChevronRight className="ml-1 h-4 w-4" />}
     </>
   );
 
   if (disabled) {
     return (
-      <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-300">
+      <span className="inline-flex cursor-not-allowed items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-medium text-slate-300 ring-1 ring-inset ring-slate-200">
         {content}
       </span>
     );
@@ -456,7 +524,7 @@ function PaginationLink({
   return (
     <Link
       href={href}
-      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-[#0A1F44] transition hover:border-slate-300 hover:text-slate-800"
+      className="inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-medium text-slate-700 ring-1 ring-inset ring-slate-300 transition-colors hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0A1F44] focus:ring-offset-2 shadow-sm"
     >
       {content}
     </Link>
@@ -491,7 +559,9 @@ function buildProgramsHref({
   return queryString ? `/admin/programs?${queryString}` : "/admin/programs";
 }
 
-function isContentStatus(value: string | undefined): value is ContentStatus | "ALL" {
+function isContentStatus(
+  value: string | undefined
+): value is ContentStatus | "ALL" {
   return (
     value === "ALL" ||
     value === ContentStatus.DRAFT ||
@@ -500,7 +570,9 @@ function isContentStatus(value: string | undefined): value is ContentStatus | "A
   );
 }
 
-function isCourseContentFilter(value: string | undefined): value is "ALL" | "CONFIGURED" | "MISSING" {
+function isCourseContentFilter(
+  value: string | undefined
+): value is "ALL" | "CONFIGURED" | "MISSING" {
   return value === "ALL" || value === "CONFIGURED" || value === "MISSING";
 }
 

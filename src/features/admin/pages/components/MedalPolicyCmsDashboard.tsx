@@ -11,6 +11,8 @@ import {
   ArrowDown,
 } from "lucide-react";
 import { updatePageSectionAction } from "@/features/admin/pages/actions";
+import { getSectionSuccessMessage } from "@/lib/cms/sectionLabels";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import {
   CmsImagePreviewInput,
   CmsStringRepeater,
@@ -47,12 +49,12 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
       const body = section?.body || section || {};
       const res = await updatePageSectionAction("medal-policy", key, body);
       if (res.success) {
-        setFeedback({ type: "success", message: `Saved ${key} section successfully!` });
+        setFeedback({ type: "success", message: res.message || getSectionSuccessMessage(key, "medal-policy", "saved") });
       } else {
         setFeedback({ type: "error", message: res.error || "Failed to save section" });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", message: err.message || "An unexpected error occurred" });
+      setFeedback({ type: "error", message: sanitizeErrorMessage(err, "An unexpected error occurred") });
     } finally {
       setSavingKey(null);
     }
@@ -82,7 +84,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <h2 className="font-serif text-3xl font-bold text-[#0A1F44]">
-            GU Medal Policy CMS
+            GU Medal Policy
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             Manage academic medals, batch cohort size thresholds, Chancellor's Medal weightages, and convocation ranker PDFs.

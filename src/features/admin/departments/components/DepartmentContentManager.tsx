@@ -511,40 +511,26 @@ export function DepartmentContentManager({
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredSectionCards.map((card) => {
-                const Icon = card.icon;
                 return (
                   <button
                     key={card.id}
                     type="button"
                     onClick={() => navigateToSection(card.id)}
-                    className="group flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 text-left shadow-2xs transition hover:border-slate-400 hover:shadow-md"
+                    className="group flex flex-col gap-2.5 rounded-xl border border-slate-200 bg-white p-5 text-left shadow-2xs transition hover:border-slate-400 hover:shadow-md"
                   >
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition group-hover:bg-slate-200 group-hover:text-slate-900">
-                          <Icon className="h-4.5 w-4.5" />
-                        </div>
-                        <span
-                          className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${card.status.color}`}
-                        >
-                          {card.status.label}
-                        </span>
-                      </div>
-
-                      <div>
-                        <h4 className="font-serif text-base font-bold text-slate-900 group-hover:text-slate-700 transition">
-                          {card.title}
-                        </h4>
-                        <p className="mt-1 text-xs text-slate-500 leading-relaxed line-clamp-2">
-                          {card.desc}
-                        </p>
-                      </div>
+                    <div className="flex w-full items-start justify-between gap-3">
+                      <h4 className="font-serif text-base font-bold text-slate-900 transition group-hover:text-slate-700">
+                        {card.title}
+                      </h4>
+                      <span
+                        className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${card.status.color}`}
+                      >
+                        {card.status.label}
+                      </span>
                     </div>
-
-                    <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-slate-700 group-hover:text-slate-900">
-                      <span>Edit Section</span>
-                      <span className="transition group-hover:translate-x-1">→</span>
-                    </div>
+                    <p className="text-xs leading-relaxed text-slate-500 line-clamp-2">
+                      {card.desc}
+                    </p>
                   </button>
                 );
               })}

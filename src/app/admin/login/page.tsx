@@ -24,8 +24,8 @@ export const dynamic = "force-dynamic";
 export default async function AdminLoginPage({
   searchParams,
 }: AdminLoginPageProps) {
-  const { error } = await searchParams;
-  const message = error ? errorMessages[error] : null;
+  const resolvedParams = searchParams ? await searchParams : {};
+  const message = resolvedParams.error ? errorMessages[resolvedParams.error] : null;
 
   return (
     <main className="relative flex min-h-screen items-center justify-center bg-[#F8FAFC] px-4 py-8 sm:px-6 lg:px-12 overflow-hidden">
@@ -55,6 +55,7 @@ export default async function AdminLoginPage({
                     src="/GU-Logo.webp"
                     alt="Geeta University"
                     fill
+                    sizes="144px"
                     className="object-contain"
                     priority
                   />
@@ -84,7 +85,7 @@ export default async function AdminLoginPage({
 
           {/* Footer Copyright */}
           <p className="mt-5 text-center text-xs text-slate-500 select-none">
-            &copy; All rights reserved, Geeta University, 2025-26
+            &copy; All rights reserved, Geeta University, 2026-27
           </p>
         </div>
 
@@ -95,6 +96,7 @@ export default async function AdminLoginPage({
               src="/admin-login-illustration.svg"
               alt="Geeta University CMS Administration Illustration"
               fill
+              sizes="(max-width: 1280px) 512px, 576px"
               className="object-contain drop-shadow-xs select-none pointer-events-none"
               priority
             />
