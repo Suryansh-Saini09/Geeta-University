@@ -23,24 +23,107 @@ import {
 
 import SearchOverlay from "@/components/search/SearchOverlay";
 
-interface MegaCol {
+export interface MegaCol {
   heading?: string;
   links: { label: string; href: string }[];
 }
 
-interface BannerItem {
-  icon: React.ReactNode;
+export interface BannerItem {
+  icon?: React.ReactNode | string;
   label: string;
   href: string;
 }
 
-interface NavEntry {
+export interface NavEntry {
   label: string;
   key: string;
   cols?: MegaCol[];
   banner?: { text: string; items: BannerItem[] };
   href?: string;
 }
+
+export interface TopBarLinkItem {
+  label: string;
+  href: string;
+  icon?: string;
+  badge?: string;
+}
+
+export interface HeaderNavData {
+  primaryNav: NavEntry[];
+  topBarLinks: TopBarLinkItem[];
+  announcements: string[];
+}
+
+export interface NavbarProps {
+  initialNavData?: HeaderNavData | null;
+}
+
+function renderBannerIcon(icon?: React.ReactNode | string): React.ReactNode {
+  if (!icon) return null;
+  if (React.isValidElement(icon)) return icon;
+  switch (icon) {
+    case "GraduationCap":
+      return <GraduationCap size={15} />;
+    case "BookOpen":
+      return <BookOpen size={15} />;
+    case "Microscope":
+      return <Microscope size={15} />;
+    case "Trophy":
+      return <Trophy size={15} />;
+    case "Globe":
+      return <Globe size={15} />;
+    case "Award":
+      return <Award size={15} />;
+    case "Sparkles":
+      return <Sparkles size={15} />;
+    case "TrendingUp":
+      return <TrendingUp size={15} />;
+    default:
+      return <Sparkles size={15} />;
+  }
+}
+
+function renderTopBarIcon(icon?: string, label?: string): React.ReactNode {
+  if (icon === "Trophy" || label?.toLowerCase().includes("predictor")) {
+    return <Trophy size={13} style={{ color: "#e8871a" }} />;
+  }
+  if (icon === "Globe" || label?.toLowerCase().includes("international")) {
+    return <Globe size={13} />;
+  }
+  if (label?.toLowerCase().includes("whatsapp")) {
+    return (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+      </svg>
+    );
+  }
+  if (label?.toLowerCase().includes("call")) {
+    return (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z" />
+      </svg>
+    );
+  }
+  return null;
+}
+
+const defaultTopBarLinks: TopBarLinkItem[] = [
+  { label: "Social Links", href: "/social-links" },
+  { label: "Contact Us", href: "/contact-us" },
+  { label: "Careers", href: "/careers" },
+  { label: "Scholarship Predictor", href: "/scholarship-predictor", icon: "Trophy" },
+  { label: "International Admissions", href: "/international-admissions", icon: "Globe" },
+  { label: "WhatsApp", href: "https://wa.me/919812345678" },
+  { label: "Call Us", href: "tel:01742639100" },
+];
+
+const defaultAnnouncements: string[] = [
+  "Admissions Open — Apply Now for UG, PG & PhD Programs",
+  "Geeta University Ranked Among Top Universities in Haryana — NIRF 2024",
+  "Joint Campus Placement Drive — 500+ Companies Visiting This Season",
+  "International Student Exchange Program Now Open for Applications",
+];
 
 /* ── NAV DATA ────────────────────────────────────────────────── */
 const primaryNavLinks: NavEntry[] = [
@@ -193,7 +276,22 @@ function isNavEntryActive(entry: NavEntry, pathname: string): boolean {
   return false;
 }
 
-export default function Navbar() {
+export default function Navbar({ initialNavData }: NavbarProps = {}) {
+  const primaryNav =
+    initialNavData?.primaryNav && initialNavData.primaryNav.length > 0
+      ? initialNavData.primaryNav
+      : primaryNavLinks;
+
+  const topBarLinks =
+    initialNavData?.topBarLinks && initialNavData.topBarLinks.length > 0
+      ? initialNavData.topBarLinks
+      : defaultTopBarLinks;
+
+  const announcements =
+    initialNavData?.announcements && initialNavData.announcements.length > 0
+      ? initialNavData.announcements
+      : defaultAnnouncements;
+
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
@@ -207,13 +305,6 @@ export default function Navbar() {
   const openTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
-
-  const announcements = [
-    "Admissions Open — Apply Now for UG, PG & PhD Programs",
-    "Geeta University Ranked Among Top Universities in Haryana — NIRF 2024",
-    "Joint Campus Placement Drive — 500+ Companies Visiting This Season",
-    "International Student Exchange Program Now Open for Applications",
-  ];
 
   /* ── Announcement Ticker Interval ── */
   useEffect(() => {
@@ -969,41 +1060,24 @@ export default function Navbar() {
           </div>
 
           <div className="gu-topbar-right">
-            <Link href="/social-links" className="gu-topbar-ico" style={{ fontWeight: 600 }}>
-              Social Links
-            </Link>
-            <div className="gu-vdivider" />
-            <Link href="/contact-us" className="gu-topbar-ico" style={{ fontWeight: 600 }}>
-              Contact Us
-            </Link>
-            <div className="gu-vdivider" />
-            <Link href="/careers" className="gu-topbar-ico" style={{ fontWeight: 600 }}>
-              Careers
-            </Link>
-            <div className="gu-vdivider" />
-            <Link href="/scholarship-predictor" className="gu-topbar-ico" style={{ fontWeight: 700, color: "#e8871a" }}>
-              <Trophy size={13} style={{ color: "#e8871a" }} />
-              Scholarship Predictor
-            </Link>
-            <div className="gu-vdivider" />
-            <Link href="/international-admissions" className="gu-topbar-ico" style={{ fontWeight: 600 }}>
-              <Globe size={13} />
-              International Admissions
-            </Link>
-            <div className="gu-vdivider" />
-            <Link href="https://wa.me/919812345678" target="_blank" rel="noreferrer" className="gu-topbar-ico">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-              </svg>
-              WhatsApp
-            </Link>
-            <div className="gu-vdivider" />
-            <Link href="tel:01742639100" className="gu-topbar-ico">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z" />
-              </svg>
-              Call Us
-            </Link>
+            {topBarLinks.map((item, idx) => (
+              <React.Fragment key={item.label}>
+                {idx > 0 && <div className="gu-vdivider" />}
+                <Link
+                  href={item.href}
+                  className="gu-topbar-ico"
+                  style={{
+                    fontWeight: item.label.includes("Predictor") ? 700 : 600,
+                    color: item.label.includes("Predictor") ? "#e8871a" : undefined,
+                  }}
+                  target={item.href.startsWith("http") ? "_blank" : undefined}
+                  rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                >
+                  {renderTopBarIcon(item.icon, item.label)}
+                  {item.label}
+                </Link>
+              </React.Fragment>
+            ))}
             <div className="gu-vdivider" />
             <div className="gu-socials">
               <Link href="https://www.facebook.com/geetauniversity" target="_blank" rel="noreferrer" title="Facebook">
@@ -1043,7 +1117,7 @@ export default function Navbar() {
 
           {/* Integrated Primary Navigation Directly Beside Logo */}
           <nav className="gu-main-nav" aria-label="Main navigation">
-            {primaryNavLinks.map((link) => {
+            {primaryNav.map((link) => {
               const isActive = isNavEntryActive(link, pathname);
 
               if (link.href) {
@@ -1128,7 +1202,7 @@ export default function Navbar() {
                                 className="gu-mega-banner-item"
                                 onClick={() => setActiveDropdown(null)}
                               >
-                                <span className="gu-mega-banner-icon">{bi.icon}</span>
+                                <span className="gu-mega-banner-icon">{renderBannerIcon(bi.icon)}</span>
                                 <span className="gu-mega-banner-lbl">{bi.label}</span>
                               </Link>
                             ))}
@@ -1184,7 +1258,7 @@ export default function Navbar() {
         {/* ── MOBILE DRAWER ── */}
         {isMobileMenuOpen && (
           <div className="gu-mob-drawer" role="dialog" aria-label="Mobile Navigation Drawer">
-            {primaryNavLinks.map((link) => {
+            {primaryNav.map((link) => {
               const isActive = isNavEntryActive(link, pathname);
 
               if (link.href) {

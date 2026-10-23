@@ -7,6 +7,17 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { recruiters as defaultRecruiters } from "@/data/recruiters";
 import { useFiniteCarousel } from "@/hooks/useFiniteCarousel";
 
+export interface RecruiterItem {
+  id: string | number;
+  name: string;
+  logo: string;
+}
+
+interface TopRecruitersSectionProps {
+  data?: RecruiterItem[] | null;
+  title?: string;
+}
+
 const sectionVariants: Variants = {
   hidden: {
     opacity: 0,
@@ -98,7 +109,7 @@ export default function TopRecruitersSection({ data }: TopRecruitersSectionProps
                 color: "var(--gu-navy)",
               }}
             >
-              Our Top Recruiters
+              {title}
             </h2>
 
             <div

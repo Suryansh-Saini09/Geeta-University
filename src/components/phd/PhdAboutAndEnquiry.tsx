@@ -1,52 +1,21 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { phdDisciplines } from "@/data/phdData";
-import { User, Phone, MapPin, Building, GraduationCap, ArrowRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
-
-interface CityItem {
-  name: string;
-  state_code: string;
-}
-
-const INDIA_STATES = [
-  { code: "HR", name: "Haryana" },
-  { code: "MH", name: "Maharashtra" },
-  { code: "GA", name: "Goa" },
-  { code: "MN", name: "Manipur" },
-  { code: "PY", name: "Puducherry" },
-  { code: "TG", name: "Telangana" },
-  { code: "OR", name: "Odisha" },
-  { code: "RJ", name: "Rajasthan" },
-  { code: "PB", name: "Punjab" },
-  { code: "UK", name: "Uttarakhand" },
-  { code: "AP", name: "Andhra Pradesh" },
-  { code: "NL", name: "Nagaland" },
-  { code: "LD", name: "Lakshadweep" },
-  { code: "HP", name: "Himachal Pradesh" },
-  { code: "DL", name: "Delhi" },
-  { code: "UP", name: "Uttar Pradesh" },
-  { code: "AN", name: "Andaman and Nicobar Islands" },
-  { code: "AR", name: "Arunachal Pradesh" },
-  { code: "JH", name: "Jharkhand" },
-  { code: "KA", name: "Karnataka" },
-  { code: "AS", name: "Assam" },
-  { code: "KL", name: "Kerala" },
-  { code: "JK", name: "Jammu and Kashmir" },
-  { code: "GJ", name: "Gujarat" },
-  { code: "CH", name: "Chandigarh" },
-  { code: "DH", name: "Dadra and Nagar Haveli and Daman and Diu" },
-  { code: "SK", name: "Sikkim" },
-  { code: "TN", name: "Tamil Nadu" },
-  { code: "MZ", name: "Mizoram" },
-  { code: "BR", name: "Bihar" },
-  { code: "TR", name: "Tripura" },
-  { code: "MP", name: "Madhya Pradesh" },
-  { code: "CT", name: "Chhattisgarh" },
-  { code: "LA", name: "Ladakh" },
-  { code: "WB", name: "West Bengal" },
-];
+import { INDIAN_STATES, getCitiesForState } from "@/data/indianLocations";
+import {
+  User,
+  Phone,
+  Mail,
+  MapPin,
+  Building,
+  GraduationCap,
+  ArrowRight,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
 
 export interface PhdAboutAndEnquiryProps {
   data?: {
@@ -61,36 +30,25 @@ export default function PhdAboutAndEnquiry({ data }: PhdAboutAndEnquiryProps = {
     ? data.disciplines.map((d) => (typeof d === "string" ? { name: d, href: "#enquire" } : { name: d.name, href: d.href || "#enquire" }))
     : phdDisciplines;
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedProgram, setSelectedProgram] = useState("");
-  const [citiesData, setCitiesData] = useState<CityItem[]>([]);
-  const [filteredCities, setFilteredCities] = useState<CityItem[]>([]);
+  const [filteredCities, setFilteredCities] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(false);
-  const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error" | "info"; text: string } | null>(null);
+  const [statusMsg, setStatusMsg] = useState<{
+    type: "success" | "error" | "info";
+    text: string;
+  } | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  useEffect(() => {
-    fetch("https://raw.githubusercontent.com/MrZorawaR/IndianCities/refs/heads/main/NewCities.json")
-      .then((res) => res.json())
-      .then((data: CityItem[]) => {
-        setCitiesData(data);
-      })
-      .catch(() => {
-        // Fallback placeholder
-      });
-  }, []);
-
   const handleStateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const stCode = e.target.value;
-    setSelectedState(stCode);
+    const stName = e.target.value;
+    setSelectedState(stName);
     setSelectedCity("");
-    if (citiesData.length > 0) {
-      const filtered = citiesData.filter((c) => c.state_code === stCode);
-      setFilteredCities(filtered);
-    }
+    setFilteredCities(getCitiesForState(stName));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -102,7 +60,10 @@ export default function PhdAboutAndEnquiry({ data }: PhdAboutAndEnquiryProps = {
       return;
     }
     if (mobile.trim().length < 10 || !/^\d+$/.test(mobile.trim())) {
-      setStatusMsg({ type: "error", text: "Please enter a valid 10-digit mobile number." });
+      setStatusMsg({
+        type: "error",
+        text: "Please enter a valid 10-digit mobile number.",
+      });
       return;
     }
     if (!selectedState) {
@@ -114,7 +75,10 @@ export default function PhdAboutAndEnquiry({ data }: PhdAboutAndEnquiryProps = {
       return;
     }
     if (!selectedProgram) {
-      setStatusMsg({ type: "error", text: "Please select a Ph.D. program discipline." });
+      setStatusMsg({
+        type: "error",
+        text: "Please select a Ph.D. program discipline.",
+      });
       return;
     }
 
@@ -122,30 +86,44 @@ export default function PhdAboutAndEnquiry({ data }: PhdAboutAndEnquiryProps = {
     setStatusMsg({ type: "info", text: "Submitting your application..." });
 
     try {
-      const formData = {
-        api_key: "phddfgj@2343dfjh3245dfgjhgdfjgh!dfgjhk99452kdskjg",
-        name: name.trim(),
-        mobile_number: mobile.trim(),
-        state: selectedState,
-        city: selectedCity,
-        program: selectedProgram,
-      };
-
-      const response = await fetch("https://geetauniversity.com/Rapi/form/insert", {
+      const response = await fetch("/api/enquiry", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim() || undefined,
+          mobile: mobile.trim(),
+          state: selectedState,
+          city: selectedCity,
+          discipline: "Doctoral Programs (Ph.D.)",
+          course: selectedProgram,
+          type: "PHD_ENQUIRY",
+          page_url:
+            typeof window !== "undefined"
+              ? window.location.href
+              : "https://geetauniversity.edu.in/phd",
+        }),
       });
 
       const data = await response.json();
-      if (data.status === true) {
-        setStatusMsg({ type: "success", text: "Thank you! Your enquiry has been submitted successfully. The Ph.D. cell will contact you shortly." });
+      if (response.ok && data.success) {
+        setStatusMsg({
+          type: "success",
+          text:
+            "Thank you! Your enquiry has been submitted successfully. The Ph.D. cell will contact you shortly.",
+        });
         setSubmitted(true);
       } else {
-        setStatusMsg({ type: "error", text: data.message || "Submission failed. Please try again." });
+        setStatusMsg({
+          type: "error",
+          text: data.message || "Submission failed. Please try again.",
+        });
       }
     } catch {
-      setStatusMsg({ type: "error", text: "Submission failed due to network error. Please try again." });
+      setStatusMsg({
+        type: "error",
+        text: "Submission failed due to a network error. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -215,6 +193,7 @@ export default function PhdAboutAndEnquiry({ data }: PhdAboutAndEnquiryProps = {
                     onClick={() => {
                       setSubmitted(false);
                       setName("");
+                      setEmail("");
                       setMobile("");
                       setSelectedState("");
                       setSelectedCity("");
@@ -237,6 +216,18 @@ export default function PhdAboutAndEnquiry({ data }: PhdAboutAndEnquiryProps = {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
+                      className="w-full rounded-[12px] border border-[#E2E8F0] bg-[#F8FAFC] py-3 pl-11 pr-4 text-[15px] font-medium text-[#0A1F44] placeholder:text-[#94A3B8] focus:border-[#E8871A] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E8871A]/20 transition-all"
+                    />
+                  </div>
+
+                  {/* Email Address (Optional) */}
+                  <div className="relative">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-[#94A3B8]" />
+                    <input
+                      type="email"
+                      placeholder="Email Address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full rounded-[12px] border border-[#E2E8F0] bg-[#F8FAFC] py-3 pl-11 pr-4 text-[15px] font-medium text-[#0A1F44] placeholder:text-[#94A3B8] focus:border-[#E8871A] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E8871A]/20 transition-all"
                     />
                   </div>
@@ -265,9 +256,9 @@ export default function PhdAboutAndEnquiry({ data }: PhdAboutAndEnquiryProps = {
                       className="w-full rounded-[12px] border border-[#E2E8F0] bg-[#F8FAFC] py-3 pl-11 pr-8 text-[15px] font-medium text-[#0A1F44] focus:border-[#E8871A] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E8871A]/20 transition-all appearance-none cursor-pointer"
                     >
                       <option value="">Select State</option>
-                      {INDIA_STATES.map((st) => (
-                        <option key={st.code} value={st.code}>
-                          {st.name}
+                      {INDIAN_STATES.map((st) => (
+                        <option key={st} value={st}>
+                          {st}
                         </option>
                       ))}
                     </select>
@@ -284,9 +275,9 @@ export default function PhdAboutAndEnquiry({ data }: PhdAboutAndEnquiryProps = {
                       className="w-full rounded-[12px] border border-[#E2E8F0] bg-[#F8FAFC] py-3 pl-11 pr-8 text-[15px] font-medium text-[#0A1F44] focus:border-[#E8871A] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E8871A]/20 transition-all appearance-none cursor-pointer disabled:opacity-60"
                     >
                       <option value="">{selectedState ? "Select City" : "Select State First"}</option>
-                      {filteredCities.map((city, idx) => (
-                        <option key={idx} value={city.name}>
-                          {city.name}
+                      {filteredCities.map((cityName, idx) => (
+                        <option key={idx} value={cityName}>
+                          {cityName}
                         </option>
                       ))}
                     </select>
