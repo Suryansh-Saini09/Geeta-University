@@ -222,7 +222,7 @@ export async function updateFooterColumnHeadingAction(
 ): Promise<ActionResponse> {
   try {
     const session = await requireAdminSession();
-    assertPermission(session.user.role, "manageContent");
+    assertPermission(session.user.role, "manageNavigation");
 
     const trimmedTitle = newTitle.trim();
     if (!trimmedTitle) {
@@ -284,7 +284,7 @@ export async function addFooterLinkAction(
 ): Promise<ActionResponse<FooterLinkItem>> {
   try {
     const session = await requireAdminSession();
-    assertPermission(session.user.role, "manageContent");
+    assertPermission(session.user.role, "manageNavigation");
 
     const current = await getFooterSettings();
     const colIndex = current.columns.findIndex((c) => c.id === columnId);
@@ -377,7 +377,7 @@ export async function updateFooterLinkAction(
 ): Promise<ActionResponse<FooterLinkItem>> {
   try {
     const session = await requireAdminSession();
-    assertPermission(session.user.role, "manageContent");
+    assertPermission(session.user.role, "manageNavigation");
 
     const current = await getFooterSettings();
     const colIndex = current.columns.findIndex((c) => c.id === columnId);
@@ -468,7 +468,7 @@ export async function reorderFooterLinksAction(
 ): Promise<ActionResponse> {
   try {
     const session = await requireAdminSession();
-    assertPermission(session.user.role, "manageContent");
+    assertPermission(session.user.role, "manageNavigation");
 
     const current = await getFooterSettings();
     const colIndex = current.columns.findIndex((c) => c.id === columnId);
@@ -773,7 +773,7 @@ export async function deleteFooterDocumentAction(documentId: string): Promise<
 > {
   try {
     const session = await requireAdminSession();
-    assertPermission(session.user.role, "manageContent");
+    assertPermission(session.user.role, "manageNavigation");
 
     if (!documentId || typeof documentId !== "string") {
       return { success: false, error: "Invalid document ID." };

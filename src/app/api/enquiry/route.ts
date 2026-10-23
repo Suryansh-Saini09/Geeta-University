@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/server/db/client";
+import { checkRateLimit } from "@/server/auth/rateLimiter";
 import { admissionEnquirySchema } from "@/validations/admissionEnquiry";
 import { env } from "@/lib/env";
 
@@ -10,6 +11,29 @@ export async function POST(request: Request) {
   const contentLength = Number(request.headers.get("content-length"));
   if (contentLength > 10_000) {
     return NextResponse.json({ success: false, message: "Enquiry is too large." }, { status: 413 });
+  }
+
+  const ipAddress =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    null;
+
+  // Rate limit: 10 submissions per hour per IP
+  const clientIp = ipAddress || "unknown-ip";
+  const rateLimit = checkRateLimit(`enquiry_ip_${clientIp}`, 10, 3600);
+  if (!rateLimit.success) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: `Too many enquiry submissions from your network. Please try again in ${Math.ceil(rateLimit.resetSeconds / 60)} minutes.`,
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimit.resetSeconds),
+        },
+      }
+    );
   }
 
   let body: unknown;
@@ -35,10 +59,6 @@ export async function POST(request: Request) {
     }
   }
 
-  const ipAddress =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    null;
   const userAgent = request.headers.get("user-agent") || null;
 
   try {
