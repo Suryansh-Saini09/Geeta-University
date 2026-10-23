@@ -32,8 +32,17 @@ const itemVariants: Variants = {
   },
 };
 
-export default function VirtualCampusTourSection() {
+export interface PhdVirtualCampusTourProps {
+  data?: {
+    title?: string;
+    description?: string;
+    videoId?: string;
+  };
+}
+
+export default function VirtualCampusTourSection({ data }: PhdVirtualCampusTourProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
+  const videoId = data?.videoId || "arnFS6rf454";
 
   return (
     <>
@@ -99,16 +108,28 @@ export default function VirtualCampusTourSection() {
                   id="virtual-tour-heading"
                   className="font-serif text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-7xl"
                 >
-                  Experience the
-                  <span
-                    className="block"
-                    style={{
-                      color: "var(--gu-gold)",
-                    }}
-                  >
-                    Campus.
-                  </span>
+                  {data?.title ? (
+                    data.title
+                  ) : (
+                    <>
+                      Experience the
+                      <span
+                        className="block"
+                        style={{
+                          color: "var(--gu-gold)",
+                        }}
+                      >
+                        Campus.
+                      </span>
+                    </>
+                  )}
                 </motion.h2>
+
+                {data?.description && (
+                  <p className="mt-4 text-white/80 text-base md:text-lg max-w-xl">
+                    {data.description}
+                  </p>
+                )}
 
                 {/* Play button */}
                 <motion.button
@@ -116,7 +137,7 @@ export default function VirtualCampusTourSection() {
                   type="button"
                   onClick={() => setIsOpen(true)}
                   aria-label="Play Geeta University virtual campus tour"
-                  className="group mt-9 flex items-center gap-4 rounded-full border border-white/30 bg-white/10 px-5 py-3 text-left backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/15"
+                  className="group mt-9 flex items-center gap-4 rounded-full border border-white/30 bg-white/10 px-5 py-3 text-left backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 cursor-pointer"
                 >
                   <span
                     className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center transition-transform duration-300 group-hover:scale-110"
@@ -198,7 +219,7 @@ export default function VirtualCampusTourSection() {
                 type="button"
                 onClick={() => setIsOpen(false)}
                 aria-label="Close virtual campus tour"
-                className="absolute right-3 top-3 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-2xl text-white backdrop-blur-md transition hover:bg-black/80"
+                className="absolute right-3 top-3 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-2xl text-white backdrop-blur-md transition hover:bg-black/80 cursor-pointer"
               >
                 ×
               </button>
@@ -207,7 +228,7 @@ export default function VirtualCampusTourSection() {
               <div className="aspect-video w-full">
                 <iframe
                   title="Geeta University Virtual Campus Tour"
-                  src="https://www.youtube.com/embed/arnFS6rf454?autoplay=1"
+                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
                   className="h-full w-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen

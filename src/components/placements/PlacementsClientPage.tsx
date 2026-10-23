@@ -48,6 +48,13 @@ export default function PlacementsClientPage({ sections }: PlacementsClientPageP
     category: faq.category || "Placements",
   }));
 
+  const recruitersList =
+    sections.recruiters?.companies && sections.recruiters.companies.length > 0
+      ? sections.recruiters.companies.map((c: any) =>
+          typeof c === "string" ? { name: c } : c
+        )
+      : undefined;
+
   return (
     <div className="min-w-0 overflow-x-clip bg-[#F7F9FC] text-[#0A1F44]">
       {/* 1. Hero Section & Stats */}
@@ -60,6 +67,7 @@ export default function PlacementsClientPage({ sections }: PlacementsClientPageP
       <div id="recruiters" className="scroll-mt-[190px]">
         <TopRecruiters
           title={sections.recruiters?.title || "Top Recruiters"}
+          recruiters={recruitersList}
         />
       </div>
 
@@ -67,19 +75,22 @@ export default function PlacementsClientPage({ sections }: PlacementsClientPageP
       <CareerDevelopmentCell data={sections.cdc} />
 
       {/* 5. Placement Snapshot & Package Breakdown */}
-      <PlacementSnapshotSection />
+      <PlacementSnapshotSection data={sections.placement_snapshot} />
 
       {/* 6. Student Success Stories */}
-      <StudentSuccessStories />
+      <StudentSuccessStories data={sections.student_stories} />
 
       {/* 7. Placement Drives & Featured Videos */}
-      <PlacementDrivesSection onOpenVideoModal={handleOpenVideoModal} />
+      <PlacementDrivesSection
+        data={sections.drives}
+        onOpenVideoModal={handleOpenVideoModal}
+      />
 
       {/* 8. HR & Recruiter Testimonials */}
-      <RecruiterVoicesSection />
+      <RecruiterVoicesSection data={sections.hr_voices} />
 
       {/* 9. Placement Day Celebrations & Gallery */}
-      <PlacementDayGallery />
+      <PlacementDayGallery data={sections.placement_gallery} />
 
       {/* 10. Canonical Legacy & Ecosystem */}
       <LegacyEcosystem

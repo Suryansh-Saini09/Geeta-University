@@ -26,7 +26,7 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
       }),
       prisma.recruiter.findMany({
         where: { status: "PUBLISHED" },
-        orderBy: { sortOrder: "asc" },
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
       }),
       prisma.awardRanking.findMany({
         where: { status: "PUBLISHED" },
@@ -50,10 +50,8 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
       }),
     ]);
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedHomePage failed:", {
-      message: err?.message ? String(err.message).replace(/:[^:@]+@/, ":****@") : String(err),
-      code: err?.code,
-    });
+    const errorMsg = err?.message ? String(err.message).replace(/:[^:@]+@/, ":****@") : String(err);
+    console.error(`[CMS DB ERROR] getPublishedHomePage failed: ${errorMsg} (code: ${err?.code || "UNKNOWN"})`);
   }
 
   const sectionMap: Record<string, any> = {};
@@ -215,33 +213,42 @@ export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
 }
 
 export async function getPageSectionsAdmin(pageSlug: string) {
-  const [sections, pageRecord] = await Promise.all([
-    prisma.pageSection.findMany({
-      where: { pageSlug },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.page.findUnique({
-      where: { slug: pageSlug },
-      include: { seo: true },
-    }),
-  ]);
+  try {
+    const [sections, pageRecord] = await Promise.all([
+      prisma.pageSection.findMany({
+        where: { pageSlug },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.page.findUnique({
+        where: { slug: pageSlug },
+        include: { seo: true },
+      }),
+    ]);
 
-  const sectionMap: Record<string, any> = {};
-  sections.forEach((sec: any) => {
-    sectionMap[sec.sectionKey] = {
-      id: sec.id,
-      title: sec.title,
-      body: sec.body,
-      translations: sec.translations || {},
-      status: sec.status,
-      updatedAt: sec.updatedAt,
+    const sectionMap: Record<string, any> = {};
+    sections.forEach((sec: any) => {
+      sectionMap[sec.sectionKey] = {
+        id: sec.id,
+        title: sec.title,
+        body: sec.body,
+        translations: sec.translations || {},
+        status: sec.status,
+        updatedAt: sec.updatedAt,
+      };
+    });
+
+    return {
+      sections: sectionMap,
+      seo: pageRecord?.seo || null,
     };
-  });
-
-  return {
-    sections: sectionMap,
-    seo: pageRecord?.seo || null,
-  };
+  } catch (err: any) {
+    const errorMsg = err?.message ? String(err.message).replace(/:[^:@]+@/, ":****@") : String(err);
+    console.error(`[CMS DB ERROR] getPageSectionsAdmin('${pageSlug}') failed: ${errorMsg}`);
+    return {
+      sections: {},
+      seo: null,
+    };
+  }
 }
 
 export interface AdminPageFilters {

@@ -3,7 +3,16 @@
 import React from "react";
 import { Calendar, FileCheck2, CheckCircle2, Globe2, Check } from "lucide-react";
 
-export default function PhdCourseworkFramework() {
+export interface PhdCourseworkFrameworkProps {
+  data?: {
+    title?: string;
+    description?: string;
+    stipendText?: string;
+    weekendClassesText?: string;
+  };
+}
+
+export default function PhdCourseworkFramework({ data }: PhdCourseworkFrameworkProps = {}) {
   return (
     <section id="coursework-framework" className="w-full bg-[#F8FAFC] py-14 sm:py-18 md:py-22 border-b border-[#E2E8F0]">
       <div className="gu-container space-y-16">
@@ -160,6 +169,11 @@ export default function PhdCourseworkFramework() {
             Scholarship &amp; Stipend for Full-Time Ph.D. Scholars
           </h3>
           <div className="mt-4 space-y-2.5 text-[15px] sm:text-[16px] text-[#E2E8F0] max-w-3xl">
+            {data?.stipendText && (
+              <p className="text-amber-400 font-bold mb-3 text-base">
+                {data.stipendText}
+              </p>
+            )}
             <div className="flex items-start gap-3">
               <div className="h-2 w-2 rounded-full bg-[#E8871A] mt-2 shrink-0" />
               <p>

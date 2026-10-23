@@ -178,6 +178,7 @@ export const LegacyEcosystemSchema = z.object({
 export const RecruiterSchema = z.object({
   name: z.string().min(1, "Recruiter name is required"),
   logo: z.string().min(1, "Logo URL is required"),
+  status: z.enum(["PUBLISHED", "DRAFT", "ARCHIVED"]).optional().default("PUBLISHED"),
   sortOrder: z.number().optional().default(0),
 });
 

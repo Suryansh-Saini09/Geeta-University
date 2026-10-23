@@ -66,7 +66,7 @@ export default async function Home() {
 
       <HomeStatsSection data={homeData.stats} />
 
-      <TopRecruitersSection />
+      <TopRecruitersSection data={homeData.recruiters} />
 
       <HomeProgramsSection data={homeData.programsOffered} />
 

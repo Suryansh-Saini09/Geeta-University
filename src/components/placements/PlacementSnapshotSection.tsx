@@ -68,7 +68,23 @@ const SECTORS_DATA: SectorSlice[] = [
   },
 ];
 
-export default function PlacementSnapshotSection() {
+export interface PlacementSnapshotSectionProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    packages?: Array<{
+      tier: string;
+      range: string;
+      category: string;
+      description?: string;
+      isAverage?: boolean;
+      isTopTier?: boolean;
+    }>;
+    companies?: string[];
+  };
+}
+
+export default function PlacementSnapshotSection({ data }: PlacementSnapshotSectionProps = {}) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeSectorId, setActiveSectorId] = useState<string>("sales-marketing");
 

@@ -7,6 +7,7 @@ import { fetchSocialData } from "@/lib/socialLinks";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://geetauniversity.edu.in"),
   title: "Geeta University | Panipat, Delhi NCR",
   description: "Welcome to Geeta University, a premier state university in Panipat, Haryana.",
 };
@@ -22,7 +23,7 @@ export default async function RootLayout({
   ]);
 
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body>
         <LenisProvider>
           <SiteChrome

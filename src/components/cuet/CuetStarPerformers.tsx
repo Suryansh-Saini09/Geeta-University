@@ -5,7 +5,22 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { starPerformances } from "@/data/starPerformances";
 import { useFiniteCarousel } from "@/hooks/useFiniteCarousel";
 
-export default function StarPerformancesSection() {
+interface CuetStarPerformersProps {
+  data?: {
+    title?: string;
+    items?: Array<{
+      name: string;
+      image: string;
+    }>;
+    youtubeUrl?: string;
+  };
+}
+
+export default function CuetStarPerformers({ data }: CuetStarPerformersProps = {}) {
+  const items = data?.items !== undefined ? data.items : starPerformances;
+  const title = data?.title || "Star Performances @GU";
+  const youtubeUrl = data?.youtubeUrl || "https://www.youtube.com/embed/D-TW0dcqMDA";
+
   const {
     containerRef,
     maxIndex,
@@ -21,13 +36,14 @@ export default function StarPerformancesSection() {
     handleTouchMove,
     handleTouchEnd,
   } = useFiniteCarousel({
-    totalItems: starPerformances.length,
+    totalItems: items.length,
     autoplayInterval: 2500,
     enableAutoplay: true,
   });
 
-  // YouTube video URL.
-  const youtubeUrl = "https://www.youtube.com/embed/D-TW0dcqMDA";
+  if (data?.items && data.items.length === 0) {
+    return null;
+  }
 
   return (
     <section className="relative overflow-hidden bg-[#F7F9FC] py-12 md:py-16">
@@ -46,8 +62,7 @@ export default function StarPerformancesSection() {
         {/* Heading */}
         <div className="px-5 text-center sm:px-8">
           <h2 className="font-serif text-4xl font-bold leading-tight text-[#06355F] sm:text-5xl md:text-6xl">
-            Star Performances
-            <span className="text-[#F28C18]">@GU</span>
+            {title}
           </h2>
 
           {/* Accent line */}
@@ -58,39 +73,41 @@ export default function StarPerformancesSection() {
           </div>
 
           {/* YouTube CTA */}
-          <a
-            href={youtubeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group mt-7 inline-flex items-center gap-3 rounded-full border border-[#E63946]/20 bg-white px-6 py-3 text-sm font-semibold text-[#E63946] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#E63946]/40 hover:shadow-lg"
-          >
-            {/* YouTube Icon */}
-            <svg
-              width="26"
-              height="26"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-              className="transition-transform duration-300 group-hover:scale-110"
+          {youtubeUrl && (
+            <a
+              href={youtubeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group mt-7 inline-flex items-center gap-3 rounded-full border border-[#E63946]/20 bg-white px-6 py-3 text-sm font-semibold text-[#E63946] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#E63946]/40 hover:shadow-lg"
             >
-              <path
-                d="M23.498 6.186a2.99 2.99 0 0 0-2.106-2.117C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.392.569A2.99 2.99 0 0 0 .502 6.186C0 8.08 0 12 0 12s0 3.92.502 5.814a2.99 2.99 0 0 0 2.106 2.117C4.495 20.5 12 20.5 12 20.5s7.505 0 9.392-.569a2.99 2.99 0 0 0 2.106-2.117C24 15.92 24 12 24 12s0-3.92-.502-5.814Z"
-                fill="#E63946"
-              />
+              {/* YouTube Icon */}
+              <svg
+                width="26"
+                height="26"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover:scale-110"
+              >
+                <path
+                  d="M23.498 6.186a2.99 2.99 0 0 0-2.106-2.117C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.392.569A2.99 2.99 0 0 0 .502 6.186C0 8.08 0 12 0 12s0 3.92.502 5.814a2.99 2.99 0 0 0 2.106 2.117C4.495 20.5 12 20.5 12 20.5s7.505 0 9.392-.569a2.99 2.99 0 0 0 2.106-2.117C24 15.92 24 12 24 12s0-3.92-.502-5.814Z"
+                  fill="#E63946"
+                />
 
-              <path
-                d="M9.545 15.568 15.818 12 9.545 8.432v7.136Z"
-                fill="white"
-              />
-            </svg>
+                <path
+                  d="M9.545 15.568 15.818 12 9.545 8.432v7.136Z"
+                  fill="white"
+                />
+              </svg>
 
-            <span>Click Here to Watch Video</span>
+              <span>Click Here to Watch Video</span>
 
-            <span className="transition-transform duration-300 group-hover:translate-x-1 flex items-center">
-              <ArrowRight size={16} />
-            </span>
-          </a>
+              <span className="transition-transform duration-300 group-hover:translate-x-1 flex items-center">
+                <ArrowRight size={16} />
+              </span>
+            </a>
+          )}
         </div>
 
         {/* Gallery & Scroll Container */}
@@ -147,7 +164,7 @@ export default function StarPerformancesSection() {
               className="flex w-full overflow-x-auto scroll-smooth cursor-grab active:cursor-grabbing select-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               <div className="flex w-max items-center">
-                {starPerformances.map((star, index) => (
+                {items.map((star, index) => (
                   <div
                     key={`${star.image}-${index}`}
                     className="star-card group/item relative mx-2 aspect-[3/4.8] w-[190px] shrink-0 overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:mx-3 sm:w-[235px] md:w-[275px]"

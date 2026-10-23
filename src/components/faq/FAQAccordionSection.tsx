@@ -4,16 +4,54 @@ import React, { useState } from "react";
 import { ChevronDown, Sparkles } from "lucide-react";
 import { allFaqs, faqCategories } from "@/data/faqData";
 
-export default function FAQAccordionSection() {
+interface FAQAccordionSectionProps {
+  categoriesData?: {
+    title?: string;
+    categories?: Array<{
+      name: string;
+      iconName?: string;
+      description?: string;
+    }>;
+  };
+  faqsListData?: {
+    title?: string;
+    items?: Array<{
+      id?: number | string;
+      question?: string;
+      answer?: string;
+      category?: string;
+      q?: string;
+      a?: string;
+    }>;
+  };
+}
+
+export default function FAQAccordionSection({
+  categoriesData,
+  faqsListData,
+}: FAQAccordionSectionProps = {}) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [openFaqId, setOpenFaqId] = useState<number | null>(1);
+  const [openFaqId, setOpenFaqId] = useState<number | string | null>(1);
+
+  const categories = (categoriesData?.categories && categoriesData.categories.length > 0)
+    ? categoriesData.categories
+    : faqCategories;
+
+  const rawFaqs = (faqsListData?.items && faqsListData.items.length > 0)
+    ? faqsListData.items.map((f, i) => ({
+        id: f.id !== undefined ? f.id : i + 1,
+        question: f.question || f.q || "",
+        answer: f.answer || f.a || "",
+        category: f.category || "General",
+      }))
+    : (faqsListData?.items?.length === 0 ? [] : allFaqs);
 
   // Filter FAQs by Category
-  const filteredFaqs = allFaqs.filter((faq) => {
+  const filteredFaqs = rawFaqs.filter((faq) => {
     return selectedCategory === "All" || faq.category === selectedCategory;
   });
 
-  const toggleFaq = (id: number) => {
+  const toggleFaq = (id: number | string) => {
     setOpenFaqId(openFaqId === id ? null : id);
   };
 
@@ -22,7 +60,7 @@ export default function FAQAccordionSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Category Pills Header */}
         <div className="mb-10 flex flex-wrap gap-2.5 justify-center">
-          {faqCategories.map((cat) => {
+          {categories.map((cat) => {
             const isSelected = selectedCategory === cat.name;
 
             return (
@@ -44,8 +82,9 @@ export default function FAQAccordionSection() {
         {/* FAQs List Container */}
         <div className="mx-auto max-w-4xl space-y-4">
           {filteredFaqs.length > 0 ? (
-            filteredFaqs.map((faq) => {
+            filteredFaqs.map((faq, idx) => {
               const isOpen = openFaqId === faq.id;
+              const displayId = typeof faq.id === "number" ? faq.id : idx + 1;
               return (
                 <div
                   key={faq.id}
@@ -62,7 +101,7 @@ export default function FAQAccordionSection() {
                   >
                     <div className="flex items-center gap-3.5 pr-4">
                       <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#E8871A]/10 text-xs font-bold text-[#E8871A]">
-                        Q{faq.id}
+                        Q{displayId}
                       </span>
                       <h3 className="font-serif text-base font-bold text-[#0A1F44] sm:text-lg leading-snug">
                         {faq.question}

@@ -1,18 +1,38 @@
 "use client";
 
 import React from "react";
-import { phdImportantDates } from "@/data/phdData";
-import { Calendar, Clock, CheckCircle, FileText } from "lucide-react";
+import { phdImportantDates as defaultDates } from "@/data/phdData";
+import { Calendar } from "lucide-react";
 
-export default function PhdImportantDates() {
+export interface PhdImportantDatesProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    dates?: Array<{
+      srNo?: number | string;
+      dates: string;
+      activityTitle: string;
+      activitySubtitle?: string;
+    }>;
+  };
+}
+
+export default function PhdImportantDates({ data }: PhdImportantDatesProps = {}) {
+  const dates = data?.dates && data.dates.length > 0 ? data.dates : defaultDates;
+
   return (
     <section id="important-dates" className="w-full bg-white py-14 sm:py-18 md:py-22 border-b border-[#E2E8F0]">
       <div className="gu-container">
         {/* Section Header */}
         <div className="mx-auto mb-12 max-w-4xl text-center">
           <h2 className="font-serif text-[32px] sm:text-[42px] md:text-[48px] font-black text-[#0A1F44] leading-tight">
-            Important Dates
+            {data?.title || "Important Dates"}
           </h2>
+          {data?.subtitle && (
+            <p className="mt-3 text-[#64748B] text-base max-w-2xl mx-auto">
+              {data.subtitle}
+            </p>
+          )}
         </div>
 
         {/* Quick Highlights Banner */}
@@ -72,9 +92,9 @@ export default function PhdImportantDates() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E2E8F0] text-[15px] sm:text-[16px] text-[#334155]">
-                {phdImportantDates.map((row) => (
-                  <tr key={row.srNo} className="hover:bg-[#F8FAFC] transition-colors">
-                    <td className="py-4 px-5 text-center font-bold text-[#0A1F44]">{row.srNo}</td>
+                {dates.map((row, idx) => (
+                  <tr key={row.srNo || idx} className="hover:bg-[#F8FAFC] transition-colors">
+                    <td className="py-4 px-5 text-center font-bold text-[#0A1F44]">{row.srNo || idx + 1}</td>
                     <td className="py-4 px-6">
                       <div className="font-bold text-[#0E385D] leading-snug">{row.activityTitle}</div>
                       {row.activitySubtitle && (

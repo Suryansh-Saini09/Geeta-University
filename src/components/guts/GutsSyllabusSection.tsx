@@ -4,7 +4,20 @@ import React, { useState } from "react";
 import { gutsSyllabusList } from "@/data/gutsData";
 import { Download, FileText, ExternalLink, Sparkles } from "lucide-react";
 
-export default function GutsSyllabusSection() {
+export interface GutsSyllabusSectionProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    items?: Array<{
+      title: string;
+      category?: string;
+      pdfUrl?: string;
+      subtitle?: string;
+    }>;
+  };
+}
+
+export default function GutsSyllabusSection({ data }: GutsSyllabusSectionProps = {}) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
   const categories = ["All", "Commerce & Mgmt", "Sciences", "Humanities", "Aptitude & Core"];

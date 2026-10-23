@@ -2,11 +2,36 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { SCHOLARSHIP_PREDICTOR_FAQS } from "@/data/scholarshipPredictorData";
 
-export default function ScholarshipPredictorFAQ() {
+interface ScholarshipPredictorFAQProps {
+  data?: {
+    title?: string;
+    items?: Array<{
+      q?: string;
+      question?: string;
+      a?: string;
+      answer?: string;
+    }>;
+  };
+}
+
+export default function ScholarshipPredictorFAQ({ data }: ScholarshipPredictorFAQProps = {}) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  if (data?.items && data.items.length === 0) {
+    return null;
+  }
+
+  const faqs = (data?.items && data.items.length > 0)
+    ? data.items.map((item) => ({
+        question: item.question || item.q || "",
+        answer: item.answer || item.a || "",
+      }))
+    : SCHOLARSHIP_PREDICTOR_FAQS;
+
+  const title = data?.title || "Scholarship FAQs";
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -18,7 +43,7 @@ export default function ScholarshipPredictorFAQ() {
         {/* Section Header */}
         <div className="mx-auto mb-14 max-w-3xl text-center">
           <h2 className="font-serif text-[36px] font-black text-[#0A1F44] sm:text-[44px]">
-            Scholarship <span className="text-[#E8871A]">FAQs</span>
+            {title}
           </h2>
           <p className="mt-3 text-[16px] text-[#64748B]">
             Find answers to standard questions about scholarship eligibility, documents required, and waiver applications.
@@ -27,11 +52,11 @@ export default function ScholarshipPredictorFAQ() {
 
         {/* FAQ Accordion */}
         <div className="mx-auto max-w-4xl space-y-4">
-          {SCHOLARSHIP_PREDICTOR_FAQS.map((faq, index) => {
+          {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
               <div
-                key={faq.question}
+                key={faq.question || index}
                 className="overflow-hidden rounded-[16px] border border-[#E2E8F0] bg-white shadow-[0_4px_15px_rgba(10,31,68,0.03)] transition-all duration-200 hover:border-[#E8871A]/40"
               >
                 <button

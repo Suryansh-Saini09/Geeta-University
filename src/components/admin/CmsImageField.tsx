@@ -157,8 +157,17 @@ export function CmsImageField({
   };
 
   const fileName = value ? value.split("/").pop() || value : "";
-  const isCmsManaged = value.startsWith("/uploads/cms/");
-  const isLegacy = value.startsWith("/uploads/all/");
+  const isCmsManaged = Boolean(value && typeof value === "string" && value.startsWith("/uploads/cms/"));
+  const isLegacy = Boolean(value && typeof value === "string" && value.startsWith("/uploads/all/"));
+  const isValidImageUrl = Boolean(
+    value &&
+    typeof value === "string" &&
+    (value.startsWith("/") ||
+      value.startsWith("http://") ||
+      value.startsWith("https://") ||
+      value.startsWith("data:") ||
+      value.startsWith("blob:"))
+  );
 
   return (
     <div className={`space-y-2.5 rounded-xl border border-slate-200 bg-slate-50/80 p-4 transition-all ${compact ? "p-3" : "p-4"}`}>
@@ -196,7 +205,7 @@ export function CmsImageField({
       <div className="flex flex-col sm:flex-row sm:items-stretch gap-4 rounded-lg border border-slate-200 bg-white p-3 shadow-xs">
         {/* Thumbnail Box */}
         <div className="relative group flex h-28 w-40 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
-          {value && !imageError ? (
+          {isValidImageUrl && !imageError ? (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img

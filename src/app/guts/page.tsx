@@ -52,19 +52,19 @@ export default async function GutsPage() {
       <GutsHero data={sections.hero} />
 
       {/* 2. Scholarship Slabs & Exam Pattern */}
-      <GutsScholarshipSlabs />
+      <GutsScholarshipSlabs data={sections.scholarship_slabs} />
 
       {/* 3. Download Subject-Wise Syllabus (14 Subjects) */}
-      <GutsSyllabusSection />
+      <GutsSyllabusSection data={sections.syllabus} />
 
       {/* 4. Step-by-Step Admission Process & Exam Guidelines */}
-      <GutsAdmissionProcess />
+      <GutsAdmissionProcess data={sections.admission_process} />
 
       {/* 5. Programs Applicable Under GUTS */}
-      <GutsProgramsApplicable />
+      <GutsProgramsApplicable data={sections.applicable_programs} />
 
       {/* 6. GUTS Video Walkthrough Banner */}
-      <GutsVideoBanner />
+      <GutsVideoBanner data={sections.video_banner} />
 
       {/* 7. Frequently Asked Questions (Unified Design) */}
       <section id="faqs" className="w-full scroll-mt-20">
@@ -79,7 +79,7 @@ export default async function GutsPage() {
       </section>
 
       {/* 8. Virtual Campus Tour Video */}
-      <GutsVirtualCampus />
+      <GutsVirtualCampus data={sections.virtual_campus} />
 
       {/* 9. Legacy & Ecosystem Section */}
       <LegacyEcosystem

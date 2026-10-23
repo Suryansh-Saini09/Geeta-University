@@ -420,13 +420,41 @@ function GenericSectionObjectEditor({
         const value = bodyState[key];
         const keyLower = key.toLowerCase();
 
+        // Alt text detection (e.g. bannerAlt, imageAlt) - must NOT be treated as an image URL
+        const isAltField =
+          keyLower.endsWith("alt") || keyLower.includes("alttext") || keyLower === "alt";
+
         // Image Field Detection
         const isImageField =
-          keyLower.includes("image") ||
-          keyLower.includes("banner") ||
-          keyLower.includes("logo") ||
-          keyLower.includes("poster") ||
-          keyLower.includes("portrait");
+          !isAltField &&
+          (keyLower.includes("image") ||
+            keyLower.includes("logo") ||
+            keyLower.includes("poster") ||
+            keyLower.includes("portrait") ||
+            keyLower === "banner" ||
+            keyLower.endsWith("banner") ||
+            keyLower.startsWith("bannerimage") ||
+            (typeof value === "string" &&
+              (value.startsWith("/") || value.startsWith("http")) &&
+              /\.(webp|png|jpg|jpeg|svg|gif|avif)$/i.test(value)));
+
+        // Alt Text Field
+        if (typeof value === "string" && isAltField) {
+          return (
+            <div key={key}>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
+                {formatLabel(key)} (Alt Text)
+              </label>
+              <input
+                type="text"
+                value={value}
+                onChange={(e) => updateField(key, e.target.value)}
+                placeholder="Image description for accessibility and SEO..."
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44] focus:border-slate-300 focus:outline-none"
+              />
+            </div>
+          );
+        }
 
         // Long Text Field Detection
         const isLongText =

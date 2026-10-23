@@ -274,6 +274,10 @@ export async function saveRecruiterAction(id: string | null, rawData: any) {
     }
 
     revalidatePath("/");
+    revalidatePath("/admin/home");
+    revalidatePath("/en");
+    revalidatePath("/hi");
+    revalidatePath("/fr");
     return { success: true as const, recruiter: result };
   } catch (err: any) {
     return safeActionError(err, "Failed to save recruiter", {
@@ -299,6 +303,10 @@ export async function deleteRecruiterAction(id: string) {
     });
 
     revalidatePath("/");
+    revalidatePath("/admin/home");
+    revalidatePath("/en");
+    revalidatePath("/hi");
+    revalidatePath("/fr");
     return { success: true as const, message: "Recruiter deleted successfully" };
   } catch (err: any) {
     return safeActionError(err, "Failed to delete recruiter", {
