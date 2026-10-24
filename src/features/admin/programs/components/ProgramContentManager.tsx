@@ -26,7 +26,7 @@ import { FaqSectionEditor } from "./FaqSectionEditor";
 import { CtaSectionEditor } from "./CtaSectionEditor";
 import { SeoSectionEditor } from "./SeoSectionEditor";
 import { AdvancedJsonSectionEditor } from "./AdvancedJsonSectionEditor";
-import { ProgramFields, ProgramPublishingPanel } from "@/app/admin/(secure)/programs/new/page";
+import { ProgramFields, ProgramPublishingPanel } from "./ProgramFormFields";
 import { updateProgramAction } from "@/features/admin/programs/actions";
 
 export interface ProgramDataProps {

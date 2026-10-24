@@ -11,6 +11,8 @@ export interface RecruiterItem {
   id: string | number;
   name: string;
   logo: string;
+  status?: string;
+  sortOrder?: number;
 }
 
 interface TopRecruitersSectionProps {
@@ -46,19 +48,10 @@ const itemVariants: Variants = {
   },
 };
 
-export interface RecruiterItem {
-  id: string | number;
-  name: string;
-  logo: string;
-  status?: string;
-  sortOrder?: number;
-}
-
-interface TopRecruitersSectionProps {
-  data?: RecruiterItem[] | null;
-}
-
-export default function TopRecruitersSection({ data }: TopRecruitersSectionProps = {}) {
+export default function TopRecruitersSection({
+  data,
+  title = "Our Top Recruiters",
+}: TopRecruitersSectionProps = {}) {
   const items = data !== undefined ? (data || []) : defaultRecruiters;
   if (!items || items.length === 0) return null;
 
