@@ -4,7 +4,13 @@ import React from "react";
 import Image from "next/image";
 import { Building, Rocket, GraduationCap } from "lucide-react";
 
-export default function LegacyEcosystemSection() {
+interface LegacyEcosystemSectionProps {
+  data?: {
+    contextText?: string;
+  };
+}
+
+export default function LegacyEcosystemSection({ data }: LegacyEcosystemSectionProps = {}) {
   const ecosystem = [
     {
       title: "Geeta University",
@@ -43,11 +49,15 @@ export default function LegacyEcosystemSection() {
           {/* Left Content */}
           <div className="lg:col-span-7 space-y-6">
             <p className="text-[17px] sm:text-[18px] leading-[1.8] text-[#475569]">
-              Founded in 1985, the{" "}
-              <strong className="text-[#0A1F44]">Geeta Group of Institutions</strong> has
-              emerged as a prominent educational powerhouse spanning from modern K-12 schooling to
-              advanced doctoral research programs. Our students directly benefit from this integrated
-              360° ecosystem:
+              {data?.contextText || (
+                <>
+                  Founded in 1985, the{" "}
+                  <strong className="text-[#0A1F44]">Geeta Group of Institutions</strong> has
+                  emerged as a prominent educational powerhouse spanning from modern K-12 schooling to
+                  advanced doctoral research programs. Our students directly benefit from this integrated
+                  360° ecosystem:
+                </>
+              )}
             </p>
 
             {/* Ecosystem Cards List */}

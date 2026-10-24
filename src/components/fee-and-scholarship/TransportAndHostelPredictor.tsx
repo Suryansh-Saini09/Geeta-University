@@ -4,7 +4,21 @@ import React, { useState } from "react";
 import { HOSTEL_DATA, TRANSPORT_ROUTES, HostelOption, TransportRoute } from "@/data/feeAndScholarshipData";
 import { Building2, Bus, CheckCircle2, ArrowLeft, ArrowRight, RotateCcw, Loader2, Sparkles } from "lucide-react";
 
-export default function TransportAndHostelPredictor() {
+interface TransportAndHostelPredictorProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    hostelData?: HostelOption[];
+    transportRoutes?: TransportRoute[];
+  };
+}
+
+export default function TransportAndHostelPredictor({ data }: TransportAndHostelPredictorProps = {}) {
+  const hostelList = (data?.hostelData && data.hostelData.length > 0) ? data.hostelData : HOSTEL_DATA;
+  const transportList = (data?.transportRoutes && data.transportRoutes.length > 0) ? data.transportRoutes : TRANSPORT_ROUTES;
+  const title = data?.title || "Hostel & Transport Fee Predictor";
+  const subtitle = data?.subtitle || "Estimate your annual hostel accommodation or bus travel charges across Haryana and Delhi NCR in seconds.";
+
   const [activeStep, setActiveStep] = useState<1 | 2 | 3>(1);
   const [selectedService, setSelectedService] = useState<"hostel" | "travel" | null>(null);
 
@@ -14,7 +28,7 @@ export default function TransportAndHostelPredictor() {
   const [hostelWashroom, setHostelWashroom] = useState<"attached" | "common">("attached");
 
   // Travel Form State
-  const [selectedRouteName, setSelectedRouteName] = useState<string>(TRANSPORT_ROUTES[0]?.route || "Panipat");
+  const [selectedRouteName, setSelectedRouteName] = useState<string>(transportList[0]?.route || "Panipat");
 
   // Loading state for smooth calculation effect
   const [isLoading, setIsLoading] = useState(false);
@@ -53,14 +67,14 @@ export default function TransportAndHostelPredictor() {
       if (selectedService === "hostel") {
         const sharingNum = parseInt(hostelSharing, 10);
         const match =
-          HOSTEL_DATA.find(
+          hostelList.find(
             (h) => h.sharing === sharingNum && h.ac === hostelAc && h.washroom === hostelWashroom
-          ) || HOSTEL_DATA[0];
+          ) || hostelList[0];
         setMatchedHostel(match);
         setMatchedTransport(null);
       } else if (selectedService === "travel") {
         const match =
-          TRANSPORT_ROUTES.find((r) => r.route === selectedRouteName) || TRANSPORT_ROUTES[0];
+          transportList.find((r) => r.route === selectedRouteName) || transportList[0];
         setMatchedTransport(match);
         setMatchedHostel(null);
       }
@@ -74,7 +88,7 @@ export default function TransportAndHostelPredictor() {
     setHostelSharing("3");
     setHostelAc("ac");
     setHostelWashroom("attached");
-    setSelectedRouteName(TRANSPORT_ROUTES[0]?.route || "Panipat");
+    setSelectedRouteName(transportList[0]?.route || "Panipat");
     setActiveStep(1);
   };
 
@@ -88,10 +102,10 @@ export default function TransportAndHostelPredictor() {
             <span>Campus Living &amp; Commute</span>
           </div>
           <h2 className="font-serif text-[30px] sm:text-[38px] md:text-[44px] font-black text-[#0A1F44] leading-[1.2]">
-            Hostel &amp; Transport Fee Predictor
+            {title}
           </h2>
           <p className="mt-3 text-[16px] sm:text-[18px] text-[#475569]">
-            Estimate your annual hostel accommodation or bus travel charges across Haryana and Delhi NCR in seconds.
+            {subtitle}
           </p>
         </div>
 
@@ -323,7 +337,7 @@ export default function TransportAndHostelPredictor() {
                       onChange={(e) => setSelectedRouteName(e.target.value)}
                       className="w-full rounded-[10px] border border-[#CBD5E1] bg-white px-4 py-3 text-[15px] font-semibold text-[#0A1F44] focus:border-[#E8871A] focus:outline-none focus:ring-2 focus:ring-[#E8871A]/20 transition-all cursor-pointer"
                     >
-                      {TRANSPORT_ROUTES.map((route, idx) => (
+                      {transportList.map((route, idx) => (
                         <option key={idx} value={route.route}>
                           {route.route} ({route.km} Km)
                         </option>

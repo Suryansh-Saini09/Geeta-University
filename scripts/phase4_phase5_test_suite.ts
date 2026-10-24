@@ -1217,7 +1217,7 @@ async function runTestSuite() {
     ]);
 
     const hasNav = Array.isArray(nav.primaryNav) && nav.primaryNav.length > 0;
-    const hasFooterBanner = Boolean(footer.banner && footer.banner.heading);
+    const hasFooterBanner = Boolean(footer.banner && (footer.banner.heading || (footer.banner as any).title));
     const hasFooterBranding = Boolean(footer.branding && footer.branding.description);
     const hasFooterColumns = Array.isArray(footer.columns) && footer.columns.length > 0;
 

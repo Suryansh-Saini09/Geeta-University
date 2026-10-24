@@ -1,7 +1,7 @@
 import type { SearchDocument } from "./types";
-import { getProgramBySlugSync } from "@/lib/programs/programRepository";
-import { getAllCourseParams, getCourseBySlugSync } from "@/lib/programs/courseRepository";
-import { getAllEdgePages } from "@/lib/edge/edgeRepository";
+import { getProgramBySlugSync } from "@/lib/programs/programStatic";
+import { getAllCourseParams, getCourseBySlugSync } from "@/lib/programs/courseStatic";
+import { getAllEdgePages } from "@/lib/edge/edgeStatic";
 
 import { recognitions, vision, mission } from "@/data/about";
 import { ugcHeroData } from "@/data/ugcData";

@@ -778,7 +778,14 @@ function ProgramCategoryDetails({
   );
 }
 
-export default function HomeProgramsSection() {
+interface CuetProgramsOfferedProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+  };
+}
+
+export default function CuetProgramsOffered({ data }: CuetProgramsOfferedProps = {}) {
   const [activeCategory, setActiveCategory] = useState<string | null>("cse");
   const [openLevels, setOpenLevels] = useState<Record<string, boolean>>({
     Undergraduate: true,
@@ -835,7 +842,7 @@ export default function HomeProgramsSection() {
                 color: "var(--gu-navy)",
               }}
             >
-              Programs Offered
+              {data?.title || "Programs Offered Under CUET Admission"}
             </h2>
 
             <div
@@ -851,7 +858,7 @@ export default function HomeProgramsSection() {
                 color: "var(--gu-text-muted)",
               }}
             >
-              70+ Study Programs at Diploma, UG, PG, and Ph.D. Levels
+              {data?.subtitle || "70+ Study Programs at Diploma, UG, PG, and Ph.D. Levels"}
             </p>
           </motion.div>
 

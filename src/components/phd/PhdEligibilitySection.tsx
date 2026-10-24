@@ -1,17 +1,25 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { CheckCircle, ShieldAlert, ArrowUpRight, FileSpreadsheet, HelpCircle } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
-export default function PhdEligibilitySection() {
+export interface PhdEligibilitySectionProps {
+  data?: {
+    title?: string;
+    eligibilityText?: string;
+    selectionText?: string;
+    exemptionText?: string;
+  };
+}
+
+export default function PhdEligibilitySection({ data }: PhdEligibilitySectionProps = {}) {
   return (
     <section id="eligibility" className="w-full bg-[#F3F5F6] py-14 sm:py-18 md:py-22 border-b border-[#E2E8F0]">
       <div className="gu-container space-y-10">
         {/* Section Header */}
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-serif text-[32px] sm:text-[42px] font-black text-[#0A1F44]">
-            Eligibility &amp; Selection Criteria
+            {data?.title || "Eligibility & Selection Criteria"}
           </h2>
         </div>
 
@@ -21,6 +29,11 @@ export default function PhdEligibilitySection() {
             <h3 className="font-serif text-[24px] sm:text-[26px] font-bold text-[#0E395C] mb-4">
               Eligibility Criteria
             </h3>
+            {data?.eligibilityText && (
+              <div className="mb-4 rounded-xl bg-blue-50 border border-blue-200 p-4 text-[15px] font-semibold text-[#0E395C]">
+                {data.eligibilityText}
+              </div>
+            )}
             <p className="text-[16px] font-semibold text-[#0A1F44] mb-3">
               Eligibility criteria for admission to the Ph.D. Program:
             </p>
@@ -57,6 +70,11 @@ export default function PhdEligibilitySection() {
             <h3 className="font-serif text-[24px] sm:text-[26px] font-bold text-[#0E395C] mb-4">
               Admission Selection Criteria
             </h3>
+            {data?.selectionText && (
+              <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 p-4 text-[15px] font-semibold text-amber-900">
+                {data.selectionText}
+              </div>
+            )}
             <ul className="space-y-3.5 text-[15.5px] text-[#334155] leading-relaxed">
               <li className="flex items-start gap-3">
                 <div className="h-2 w-2 rounded-full bg-[#E8871A] mt-2.5 shrink-0" />
@@ -90,6 +108,11 @@ export default function PhdEligibilitySection() {
             <h3 className="font-serif text-[24px] sm:text-[26px] font-bold text-[#0E395C] mb-4">
               Exemption Criteria
             </h3>
+            {data?.exemptionText && (
+              <div className="mb-4 rounded-xl bg-emerald-50 border border-emerald-200 p-4 text-[15px] font-semibold text-emerald-900">
+                {data.exemptionText}
+              </div>
+            )}
             <ul className="space-y-3 text-[15.5px] text-[#334155] leading-relaxed">
               <li className="flex items-start gap-3">
                 <div className="h-2 w-2 rounded-full bg-[#10B981] mt-2.5 shrink-0" />

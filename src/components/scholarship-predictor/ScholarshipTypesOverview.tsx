@@ -11,7 +11,24 @@ import {
   BookOpen,
 } from "lucide-react";
 
-const SCHOLARSHIP_TYPES = [
+interface ScholarshipCategoryItem {
+  name?: string;
+  title?: string;
+  coverage?: string;
+  subtitle?: string;
+  description?: string;
+  color?: string;
+}
+
+interface ScholarshipTypesOverviewProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    categories?: ScholarshipCategoryItem[];
+  };
+}
+
+const DEFAULT_SCHOLARSHIP_TYPES = [
   {
     icon: GraduationCap,
     title: "GUTS Test Scholarship",
@@ -56,27 +73,56 @@ const SCHOLARSHIP_TYPES = [
   },
 ];
 
-export default function ScholarshipTypesOverview() {
+const ICONS = [GraduationCap, Award, Trophy, Shield, Users, BookOpen];
+const COLORS = [
+  "bg-blue-500/10 text-blue-600 border-blue-500/20",
+  "bg-amber-500/10 text-amber-600 border-amber-500/20",
+  "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
+  "bg-purple-500/10 text-purple-600 border-purple-500/20",
+  "bg-rose-500/10 text-rose-600 border-rose-500/20",
+  "bg-cyan-500/10 text-cyan-600 border-cyan-500/20",
+];
+
+export default function ScholarshipTypesOverview({ data }: ScholarshipTypesOverviewProps = {}) {
+  const hasDynamicCategories = data?.categories && data.categories.length > 0;
+  
+  if (data?.categories && data.categories.length === 0) {
+    return null;
+  }
+
+  const items = hasDynamicCategories
+    ? data!.categories!.map((cat, idx) => ({
+        icon: ICONS[idx % ICONS.length],
+        title: cat.name || cat.title || "",
+        subtitle: cat.coverage || cat.subtitle || "Up to 100% Waiver",
+        description: cat.description || "Merit and policy-linked tuition fee concession for eligible applicants.",
+        color: cat.color || COLORS[idx % COLORS.length],
+      }))
+    : DEFAULT_SCHOLARSHIP_TYPES;
+
+  const title = data?.title || "Comprehensive Financial Aid";
+  const subtitle = data?.subtitle || "Geeta University ensures no deserving student is deprived of quality higher education due to financial constraints.";
+
   return (
     <section className="bg-[#F8FAFC] py-12 md:py-16 border-t border-[#E2E8F0]">
       <div className="gu-container">
         {/* Section Header */}
         <div className="mx-auto mb-14 max-w-3xl text-center">
           <h2 className="font-serif text-[36px] font-black text-[#0A1F44] sm:text-[42px] md:text-[48px]">
-            Comprehensive <span className="text-[#E8871A]">Financial Aid</span>
+            {title}
           </h2>
           <p className="mt-4 text-[16px] leading-[1.7] text-[#64748B] sm:text-[17px]">
-            Geeta University ensures no deserving student is deprived of quality higher education due to financial constraints.
+            {subtitle}
           </p>
         </div>
 
         {/* Grid of Scholarship Cards */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {SCHOLARSHIP_TYPES.map((item, index) => {
+          {items.map((item, index) => {
             const Icon = item.icon;
             return (
               <motion.div
-                key={item.title}
+                key={item.title || index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}

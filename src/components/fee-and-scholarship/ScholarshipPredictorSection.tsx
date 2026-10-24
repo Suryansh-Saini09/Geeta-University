@@ -7,7 +7,19 @@ import {
   ProgramItem,
 } from "@/data/feeAndScholarshipData";
 
-export default function ScholarshipPredictorSection() {
+interface ScholarshipPredictorSectionProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    rulesDatabase?: any;
+  };
+}
+
+export default function ScholarshipPredictorSection({ data }: ScholarshipPredictorSectionProps = {}) {
+  const rulesDb = (data?.rulesDatabase && Object.keys(data.rulesDatabase).length > 0)
+    ? data.rulesDatabase
+    : SCHOLARSHIP_RULES_DATABASE;
+
   const areaKeys = useMemo(() => Object.keys(PROGRAMS_FEE_DATABASE), []);
 
   const [selectedArea, setSelectedArea] = useState<string>("");
@@ -29,21 +41,21 @@ export default function ScholarshipPredictorSection() {
   }, [selectedArea]);
 
   // Filter available scholarship categories based on area and level
-  const availableCategories = useMemo(() => {
+  const availableCategories = useMemo<Array<[string, any]>>(() => {
     if (!selectedProgramData || !selectedArea) return [];
-    return Object.entries(SCHOLARSHIP_RULES_DATABASE).filter(([key, rule]) => {
-      if (rule.exclude_groups?.includes(selectedArea)) return false;
-      if (rule.eligible_groups && !rule.eligible_groups.includes(selectedArea)) return false;
-      if (rule.level_applicability && !rule.level_applicability.includes(selectedProgramData.level)) return false;
+    return Object.entries(rulesDb).filter(([key, rule]: [string, any]) => {
+      if (rule?.exclude_groups?.includes(selectedArea)) return false;
+      if (rule?.eligible_groups && !rule.eligible_groups.includes(selectedArea)) return false;
+      if (rule?.level_applicability && !rule.level_applicability.includes(selectedProgramData.level)) return false;
       return true;
-    });
-  }, [selectedArea, selectedProgramData]);
+    }) as Array<[string, any]>;
+  }, [selectedArea, selectedProgramData, rulesDb]);
 
   // Current selected category rule
   const currentRule = useMemo(() => {
     if (!selectedCategoryKey) return null;
-    return SCHOLARSHIP_RULES_DATABASE[selectedCategoryKey] || null;
-  }, [selectedCategoryKey]);
+    return rulesDb[selectedCategoryKey] || null;
+  }, [selectedCategoryKey, rulesDb]);
 
   // Subcategories
   const currentSubcategories = useMemo(() => {
@@ -178,7 +190,10 @@ export default function ScholarshipPredictorSection() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* LEFT COLUMN: FINDER CONTENT & PRAGATI SCHOLARSHIP */}
             <div className="lg:col-span-7 finder-content">
-              <h3 className="finder-heading">Find out your exact scholarship in seconds!</h3>
+              <h3 className="finder-heading">{data?.title || "Find out your exact scholarship in seconds!"}</h3>
+              {data?.subtitle && (
+                <p className="font-semibold text-[#06355F] mb-3">{data.subtitle}</p>
+              )}
               <p>
                 Find your true potential by using our simple-to-use scholarship
                 Predictor Tool created to assist you in determining the amount
@@ -420,7 +435,7 @@ export default function ScholarshipPredictorSection() {
                         disabled={!selectedProgramData}
                       >
                         <option value="">Select</option>
-                        {availableCategories.map(([key, rule]) => (
+                        {availableCategories.map(([key, rule]: [string, any]) => (
                           <option key={key} value={key}>
                             {rule.label}
                           </option>
@@ -439,7 +454,7 @@ export default function ScholarshipPredictorSection() {
                         disabled={!selectedCategoryKey || currentSubcategories.length === 0}
                       >
                         <option value="">Select</option>
-                        {currentSubcategories.map((s, i) => (
+                        {currentSubcategories.map((s: any, i: number) => (
                           <option key={i} value={i.toString()}>
                             {s.label}
                           </option>
@@ -460,7 +475,7 @@ export default function ScholarshipPredictorSection() {
                       disabled={selectedSubCategoryIdx === "" || currentSlabs.length === 0}
                     >
                       <option value="">Select Slab</option>
-                      {currentSlabs.map((s, idx) => (
+                      {currentSlabs.map((s: any, idx: number) => (
                         <option key={idx} value={s.percent.toString()}>
                           {s.label} – {s.percent}%
                         </option>

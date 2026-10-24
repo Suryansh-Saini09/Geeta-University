@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["@prisma/adapter-mariadb", "mariadb"],
   experimental: {
     serverActions: {
       bodySizeLimit: "11mb",

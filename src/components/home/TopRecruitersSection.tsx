@@ -11,6 +11,8 @@ export interface RecruiterItem {
   id: string | number;
   name: string;
   logo: string;
+  status?: string;
+  sortOrder?: number;
 }
 
 interface TopRecruitersSectionProps {
@@ -49,8 +51,9 @@ const itemVariants: Variants = {
 export default function TopRecruitersSection({
   data,
   title = "Our Top Recruiters",
-}: TopRecruitersSectionProps) {
-  const recruiterList = data && data.length > 0 ? data : defaultRecruiters;
+}: TopRecruitersSectionProps = {}) {
+  const items = data !== undefined ? (data || []) : defaultRecruiters;
+  if (!items || items.length === 0) return null;
 
   const {
     containerRef,
@@ -67,7 +70,7 @@ export default function TopRecruitersSection({
     handleTouchMove,
     handleTouchEnd,
   } = useFiniteCarousel({
-    totalItems: recruiterList.length,
+    totalItems: items.length,
     autoplayInterval: 2500,
     enableAutoplay: true,
   });
@@ -178,24 +181,43 @@ export default function TopRecruitersSection({
               className="flex w-full overflow-x-auto scroll-smooth cursor-grab active:cursor-grabbing select-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               <div className="flex w-max items-center py-2">
-                {recruiterList.map((recruiter) => (
-                  <div
-                    key={recruiter.id}
-                    className="group/card mx-3 flex h-24 w-52 shrink-0 items-center justify-center rounded-2xl border bg-white px-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:mx-4 sm:h-28 sm:w-60 md:h-32 md:w-64 pointer-events-auto"
-                    style={{
-                      borderColor: "rgba(6, 53, 95, 0.08)",
-                    }}
-                  >
-                    <Image
-                      src={recruiter.logo}
-                      alt={`${recruiter.name} logo`}
-                      width={220}
-                      height={90}
-                      sizes="(max-width: 640px) 180px, 240px"
-                      className="max-h-16 sm:max-h-20 md:max-h-22 w-auto max-w-[85%] object-contain transition-all duration-300 pointer-events-none"
-                    />
-                  </div>
-                ))}
+                {items.map((recruiter) => {
+                  const logoUrl = recruiter.logo;
+                  const isExternal =
+                    logoUrl?.startsWith("http://") || logoUrl?.startsWith("https://");
+                  const normalizedLogo =
+                    isExternal || !logoUrl
+                      ? logoUrl
+                      : logoUrl.startsWith("/")
+                      ? logoUrl
+                      : `/${logoUrl}`;
+
+                  return (
+                    <div
+                      key={recruiter.id}
+                      className="group/card mx-3 flex h-24 w-52 shrink-0 items-center justify-center rounded-2xl border bg-white px-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:mx-4 sm:h-28 sm:w-60 md:h-32 md:w-64 pointer-events-auto"
+                      style={{
+                        borderColor: "rgba(6, 53, 95, 0.08)",
+                      }}
+                    >
+                      {normalizedLogo ? (
+                        <Image
+                          src={normalizedLogo}
+                          alt={`${recruiter.name} logo`}
+                          width={220}
+                          height={90}
+                          sizes="(max-width: 640px) 180px, 240px"
+                          className="max-h-16 sm:max-h-20 md:max-h-22 w-auto max-w-[85%] object-contain transition-all duration-300 pointer-events-none"
+                          unoptimized={isExternal}
+                        />
+                      ) : (
+                        <span className="font-serif text-sm font-bold text-[#0A1F44] truncate px-2 text-center">
+                          {recruiter.name}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </motion.div>

@@ -39,6 +39,8 @@ import {
   ArrowDown,
   Search,
   X,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 
 interface HomeCmsDashboardProps {
@@ -168,6 +170,33 @@ export function HomeCmsDashboard({
     }
   );
 
+  const [expandedEvents, setExpandedEvents] = useState<Record<number, boolean>>({ 0: true });
+  const [expandedPlacements, setExpandedPlacements] = useState<Record<number, boolean>>({ 0: true });
+
+  const toggleEvent = (idx: number) => {
+    setExpandedEvents((prev) => ({ ...prev, [idx]: !prev[idx] }));
+  };
+
+  const expandAllEvents = (total: number) => {
+    const all: Record<number, boolean> = {};
+    for (let i = 0; i < total; i++) all[i] = true;
+    setExpandedEvents(all);
+  };
+
+  const collapseAllEvents = () => setExpandedEvents({});
+
+  const togglePlacement = (idx: number) => {
+    setExpandedPlacements((prev) => ({ ...prev, [idx]: !prev[idx] }));
+  };
+
+  const expandAllPlacements = (total: number) => {
+    const all: Record<number, boolean> = {};
+    for (let i = 0; i < total; i++) all[i] = true;
+    setExpandedPlacements(all);
+  };
+
+  const collapseAllPlacements = () => setExpandedPlacements({});
+
   // 7. WHY JOIN GEETA FORM
   const [whyJoinForm, setWhyJoinForm] = useState(
     sections.whyJoinGeeta?.body || {
@@ -223,6 +252,20 @@ export function HomeCmsDashboard({
       categories: [],
     }
   );
+
+  const [expandedCategories, setExpandedCategories] = useState<Record<number, boolean>>({ 0: true });
+
+  const toggleCategory = (idx: number) => {
+    setExpandedCategories((prev) => ({ ...prev, [idx]: !prev[idx] }));
+  };
+
+  const expandAllCategories = (total: number) => {
+    const all: Record<number, boolean> = {};
+    for (let i = 0; i < total; i++) all[i] = true;
+    setExpandedCategories(all);
+  };
+
+  const collapseAllCategories = () => setExpandedCategories({});
 
   // 11. SEO FORM
   const [seoForm, setSeoForm] = useState(
@@ -895,227 +938,365 @@ export function HomeCmsDashboard({
 
       {/* TAB 3.5: PROGRAMS OFFERED */}
       {activeTab === "programsOffered" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
-          <h3 className="text-lg font-bold text-[#0A1F44]">Programs Offered Section</h3>
-
-          <div className="grid gap-4 sm:grid-cols-2">
+        <div className="rounded-xl border border-slate-200/90 bg-white p-6 shadow-xs space-y-6">
+          {/* Section Header & Bulk Accordion Actions */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
+              <h3 className="text-base font-bold text-[#0A1F44]">Programs Offered Section</h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Manage academic faculties, schools, and degree specializations.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => expandAllCategories(programsOfferedForm.categories?.length || 0)}
+                className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"
+              >
+                Expand All
+              </button>
+              <button
+                type="button"
+                onClick={collapseAllCategories}
+                className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"
+              >
+                Collapse All
+              </button>
+            </div>
+          </div>
+
+          {/* Section Global Info */}
+          <div className="grid gap-4 sm:grid-cols-2 rounded-xl border border-slate-200/80 bg-slate-50/50 p-4">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                 Section Heading
               </label>
               <input
                 type="text"
                 value={programsOfferedForm.heading || ""}
-                onChange={(e) => setProgramsOfferedForm({ ...programsOfferedForm, heading: e.target.value })}
-                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
+                onChange={(e) =>
+                  setProgramsOfferedForm({ ...programsOfferedForm, heading: e.target.value })
+                }
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-900 outline-none focus:border-[#0A1F44] focus:ring-1 focus:ring-[#0A1F44]"
               />
             </div>
             <div className="sm:col-span-2">
               <CmsAutoTextarea
                 label="Section Subtitle / Description"
                 value={programsOfferedForm.description || ""}
-                onChange={(val) => setProgramsOfferedForm({ ...programsOfferedForm, description: val })}
+                onChange={(val) =>
+                  setProgramsOfferedForm({ ...programsOfferedForm, description: val })
+                }
               />
             </div>
           </div>
 
           {/* Categories Repeater */}
-          <div className="space-y-4 rounded-xl border border-slate-200 p-4 bg-slate-50/50">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-[#0A1F44]">
-                Program Categories ({programsOfferedForm.categories?.length || 0})
-              </h4>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#0A1F44]">
+                  Academic Faculties ({programsOfferedForm.categories?.length || 0})
+                </span>
+                </div>
+
               <button
                 type="button"
-                onClick={() =>
+                onClick={() => {
+                  const newIdx = programsOfferedForm.categories?.length || 0;
                   setProgramsOfferedForm({
                     ...programsOfferedForm,
                     categories: [
                       ...(programsOfferedForm.categories || []),
                       {
                         id: `cat-${Date.now()}`,
-                        number: String((programsOfferedForm.categories?.length || 0) + 1).padStart(2, "0"),
-                        title: "New Category",
-                        shortTitle: "New Category",
-                        description: "Category description...",
-                        schoolHref: "/programs/school-of-computer-science-and-engineering",
-                        programs: [{ name: "B.Tech CSE", href: "/programs/school-of-computer-science-and-engineering/btech-cse" }],
+                        number: String(newIdx + 1).padStart(2, "0"),
+                        title: "New Faculty / School",
+                        shortTitle: "New Faculty",
+                        description: "Faculty overview description...",
+                        schoolHref: "/programs/school-path",
+                        programs: [{ name: "Degree Name", href: "/programs/school-path/degree" }],
                       },
                     ],
-                  })
-                }
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-[#0A1F44] hover:bg-slate-50"
+                  });
+                  setExpandedCategories((prev) => ({ ...prev, [newIdx]: true }));
+                }}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#153468] shadow-xs transition"
               >
                 <Plus className="h-3.5 w-3.5" />
                 Add Category
               </button>
             </div>
 
-            <div className="space-y-4">
-              {(programsOfferedForm.categories || []).map((cat: any, catIdx: number) => (
-                <div key={catIdx} className="rounded-xl border border-slate-200 bg-white p-4 space-y-4">
-                  <div className="flex items-center justify-between border-b pb-2">
-                    <span className="text-xs font-bold text-slate-700">
-                      #{cat.number || catIdx + 1} — {cat.shortTitle || cat.title || "Category"}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const updated = programsOfferedForm.categories.filter((_: any, i: number) => i !== catIdx);
-                        setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
-                      }}
-                      className="p-1 text-rose-600 hover:bg-rose-50 rounded"
+            <div className="space-y-2.5">
+              {(programsOfferedForm.categories || []).map((cat: any, catIdx: number) => {
+                const isExpanded = Boolean(expandedCategories[catIdx]);
+
+                return (
+                  <div
+                    key={catIdx}
+                    className="rounded-xl border border-slate-200 bg-white shadow-2xs overflow-hidden transition"
+                  >
+                    {/* Accordion Toggle Bar */}
+                    <div
+                      onClick={() => toggleCategory(catIdx)}
+                      className="flex items-center justify-between px-4 py-3 bg-slate-50/70 hover:bg-slate-100/60 cursor-pointer select-none border-b border-slate-100"
                     >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="h-6 w-8 rounded bg-slate-200 text-slate-700 font-mono text-xs font-bold flex items-center justify-center shrink-0">
+                          {cat.number || String(catIdx + 1).padStart(2, "0")}
+                        </span>
+                        <div className="truncate">
+                          <span className="text-xs font-bold text-slate-900 block truncate">
+                            {cat.title || "Untitled Category"}
+                          </span>
+                          <span className="text-[11px] text-slate-500 font-mono">
+                            {cat.shortTitle ? `(${cat.shortTitle})` : ""}
+                          </span>
+                        </div>
+                      </div>
 
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-500 mb-1">Number Prefix</label>
-                      <input
-                        type="text"
-                        value={cat.number || ""}
-                        onChange={(e) => {
-                          const updated = [...programsOfferedForm.categories];
-                          updated[catIdx].number = e.target.value;
-                          setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
-                        }}
-                        className="w-full rounded border p-2 text-sm"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-500 mb-1">Full Title</label>
-                      <input
-                        type="text"
-                        value={cat.title || ""}
-                        onChange={(e) => {
-                          const updated = [...programsOfferedForm.categories];
-                          updated[catIdx].title = e.target.value;
-                          setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
-                        }}
-                        className="w-full rounded border p-2 text-sm font-semibold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-500 mb-1">Short Title (Tab Label)</label>
-                      <input
-                        type="text"
-                        value={cat.shortTitle || ""}
-                        onChange={(e) => {
-                          const updated = [...programsOfferedForm.categories];
-                          updated[catIdx].shortTitle = e.target.value;
-                          setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
-                        }}
-                        className="w-full rounded border p-2 text-sm"
-                      />
-                    </div>
-                    <div className="sm:col-span-3">
-                      <label className="block text-[11px] font-bold text-slate-500 mb-1">Description</label>
-                      <textarea
-                        rows={2}
-                        value={cat.description || ""}
-                        onChange={(e) => {
-                          const updated = [...programsOfferedForm.categories];
-                          updated[catIdx].description = e.target.value;
-                          setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
-                        }}
-                        className="w-full rounded border p-2 text-sm"
-                      />
-                    </div>
-                    <div className="sm:col-span-3">
-                      <label className="block text-[11px] font-bold text-slate-500 mb-1">School Explore URL (href)</label>
-                      <input
-                        type="text"
-                        value={cat.schoolHref || ""}
-                        onChange={(e) => {
-                          const updated = [...programsOfferedForm.categories];
-                          updated[catIdx].schoolHref = e.target.value;
-                          setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
-                        }}
-                        className="w-full rounded border p-2 text-xs font-mono"
-                      />
-                    </div>
-                  </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="rounded-full bg-slate-200/80 px-2 py-0.5 text-[10px] font-semibold text-slate-700">
+                          {cat.programs?.length || 0} Programs
+                        </span>
 
-                  {/* Sub-programs repeater */}
-                  <div className="space-y-2 rounded-lg border border-slate-100 bg-slate-50 p-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold uppercase text-[#0A1F44]">
-                        Degree Programs in this Category ({cat.programs?.length || 0})
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = [...programsOfferedForm.categories];
-                          updated[catIdx].programs = [
-                            ...(updated[catIdx].programs || []),
-                            { name: "New Degree Program", href: "" },
-                          ];
-                          setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
-                        }}
-                        className="text-xs text-slate-700 font-bold hover:underline"
-                      >
-                        + Add Program
-                      </button>
-                    </div>
-
-                    <div className="space-y-2">
-                      {(cat.programs || []).map((prog: any, progIdx: number) => (
-                        <div key={progIdx} className="flex items-center gap-2 bg-white border rounded p-2">
-                          <input
-                            type="text"
-                            placeholder="Program Name"
-                            value={prog.name || ""}
-                            onChange={(e) => {
-                              const updated = [...programsOfferedForm.categories];
-                              updated[catIdx].programs[progIdx].name = e.target.value;
-                              setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
-                            }}
-                            className="flex-1 rounded border p-1 text-xs font-semibold"
-                          />
-                          <input
-                            type="text"
-                            placeholder="Link (href)"
-                            value={prog.href || ""}
-                            onChange={(e) => {
-                              const updated = [...programsOfferedForm.categories];
-                              updated[catIdx].programs[progIdx].href = e.target.value;
-                              setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
-                            }}
-                            className="w-1/3 rounded border p-1 text-xs font-mono text-slate-600"
-                          />
+                        {/* Reorder and Delete Controls */}
+                        <div
+                          className="flex items-center gap-0.5"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {catIdx > 0 && (
+                            <button
+                              type="button"
+                              title="Move Up"
+                              onClick={() => {
+                                const list = [...programsOfferedForm.categories];
+                                const temp = list[catIdx];
+                                list[catIdx] = list[catIdx - 1];
+                                list[catIdx - 1] = temp;
+                                setProgramsOfferedForm({ ...programsOfferedForm, categories: list });
+                              }}
+                              className="p-1 text-slate-400 hover:text-slate-700 rounded transition"
+                            >
+                              <ArrowUp className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                          {catIdx < programsOfferedForm.categories.length - 1 && (
+                            <button
+                              type="button"
+                              title="Move Down"
+                              onClick={() => {
+                                const list = [...programsOfferedForm.categories];
+                                const temp = list[catIdx];
+                                list[catIdx] = list[catIdx + 1];
+                                list[catIdx + 1] = temp;
+                                setProgramsOfferedForm({ ...programsOfferedForm, categories: list });
+                              }}
+                              className="p-1 text-slate-400 hover:text-slate-700 rounded transition"
+                            >
+                              <ArrowDown className="h-3.5 w-3.5" />
+                            </button>
+                          )}
                           <button
                             type="button"
+                            title="Delete Category"
                             onClick={() => {
-                              const updated = [...programsOfferedForm.categories];
-                              updated[catIdx].programs = updated[catIdx].programs.filter(
-                                (_: any, i: number) => i !== progIdx
-                              );
-                              setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
+                              if (confirm(`Delete ${cat.title || "this faculty"}?`)) {
+                                const updated = programsOfferedForm.categories.filter(
+                                  (_: any, i: number) => i !== catIdx
+                                );
+                                setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
+                              }
                             }}
-                            className="p-1 text-rose-600 hover:bg-rose-50 rounded"
+                            className="p-1 text-slate-400 hover:text-rose-600 rounded transition ml-1"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
                         </div>
-                      ))}
+
+                        {isExpanded ? (
+                          <ChevronDown className="h-4 w-4 text-slate-400" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4 text-slate-400" />
+                        )}
+                      </div>
                     </div>
+
+                    {/* Accordion Form Body */}
+                    {isExpanded && (
+                      <div className="p-4 space-y-4 bg-white">
+                        <div className="grid gap-3 sm:grid-cols-3">
+                          <div>
+                            <label className="block text-[11px] font-bold text-slate-500 mb-1">
+                              Number Prefix
+                            </label>
+                            <input
+                              type="text"
+                              value={cat.number || ""}
+                              onChange={(e) => {
+                                const updated = [...programsOfferedForm.categories];
+                                updated[catIdx].number = e.target.value;
+                                setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
+                              }}
+                              className="w-full rounded border border-slate-200 p-2 text-xs font-mono"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-bold text-slate-500 mb-1">
+                              Full Faculty Title
+                            </label>
+                            <input
+                              type="text"
+                              value={cat.title || ""}
+                              onChange={(e) => {
+                                const updated = [...programsOfferedForm.categories];
+                                updated[catIdx].title = e.target.value;
+                                setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
+                              }}
+                              className="w-full rounded border border-slate-200 p-2 text-xs font-semibold text-slate-900"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-bold text-slate-500 mb-1">
+                              Short Title (Tab Label)
+                            </label>
+                            <input
+                              type="text"
+                              value={cat.shortTitle || ""}
+                              onChange={(e) => {
+                                const updated = [...programsOfferedForm.categories];
+                                updated[catIdx].shortTitle = e.target.value;
+                                setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
+                              }}
+                              className="w-full rounded border border-slate-200 p-2 text-xs text-slate-900"
+                            />
+                          </div>
+                          <div className="sm:col-span-3">
+                            <label className="block text-[11px] font-bold text-slate-500 mb-1">
+                              Overview Description
+                            </label>
+                            <textarea
+                              rows={2}
+                              value={cat.description || ""}
+                              onChange={(e) => {
+                                const updated = [...programsOfferedForm.categories];
+                                updated[catIdx].description = e.target.value;
+                                setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
+                              }}
+                              className="w-full rounded border border-slate-200 p-2 text-xs text-slate-700 outline-none focus:border-slate-400"
+                            />
+                          </div>
+                          <div className="sm:col-span-3">
+                            <label className="block text-[11px] font-bold text-slate-500 mb-1">
+                              School Explore URL (href)
+                            </label>
+                            <input
+                              type="text"
+                              value={cat.schoolHref || ""}
+                              onChange={(e) => {
+                                const updated = [...programsOfferedForm.categories];
+                                updated[catIdx].schoolHref = e.target.value;
+                                setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
+                              }}
+                              className="w-full rounded border border-slate-200 p-2 text-xs font-mono text-slate-800"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Compact Degree Specializations List */}
+                        <div className="space-y-2 rounded-lg border border-slate-200/90 bg-slate-50/50 p-3">
+                          <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60">
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-[#0A1F44]">
+                              Degree Programs ({cat.programs?.length || 0})
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = [...programsOfferedForm.categories];
+                                updated[catIdx].programs = [
+                                  ...(updated[catIdx].programs || []),
+                                  { name: "New Degree Program", href: "" },
+                                ];
+                                setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
+                              }}
+                              className="inline-flex items-center gap-1 text-xs text-[#0A1F44] font-bold hover:underline"
+                            >
+                              <Plus className="h-3 w-3" />
+                              Add Program
+                            </button>
+                          </div>
+
+                          <div className="space-y-1.5 max-h-96 overflow-y-auto pr-1">
+                            {(cat.programs || []).map((prog: any, progIdx: number) => (
+                              <div
+                                key={progIdx}
+                                className="flex items-center gap-2 bg-white border border-slate-200/80 rounded-md p-1.5 shadow-2xs hover:border-slate-300 transition"
+                              >
+                                <span className="text-[10px] text-slate-400 font-mono w-5 text-center shrink-0">
+                                  {progIdx + 1}
+                                </span>
+                                <input
+                                  type="text"
+                                  placeholder="Program Name (e.g. B.Tech CSE AI & ML)"
+                                  value={prog.name || ""}
+                                  onChange={(e) => {
+                                    const updated = [...programsOfferedForm.categories];
+                                    updated[catIdx].programs[progIdx].name = e.target.value;
+                                    setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
+                                  }}
+                                  className="flex-1 rounded border border-slate-200 px-2 py-1 text-xs font-medium text-slate-800"
+                                />
+                                <input
+                                  type="text"
+                                  placeholder="/programs/btech-cse"
+                                  value={prog.href || ""}
+                                  onChange={(e) => {
+                                    const updated = [...programsOfferedForm.categories];
+                                    updated[catIdx].programs[progIdx].href = e.target.value;
+                                    setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
+                                  }}
+                                  className="w-1/3 rounded border border-slate-200 px-2 py-1 text-xs font-mono text-slate-600"
+                                />
+                                <button
+                                  type="button"
+                                  title="Remove Program"
+                                  onClick={() => {
+                                    const updated = [...programsOfferedForm.categories];
+                                    updated[catIdx].programs = updated[catIdx].programs.filter(
+                                      (_: any, i: number) => i !== progIdx
+                                    );
+                                    setProgramsOfferedForm({ ...programsOfferedForm, categories: updated });
+                                  }}
+                                  className="p-1 text-slate-400 hover:text-rose-600 rounded transition"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => handleSaveSection("programsOffered", programsOfferedForm)}
-            disabled={savingSection === "programsOffered"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
-          >
-            <Save className="h-4 w-4" />
-            {savingSection === "programsOffered" ? "Saving..." : "Save Programs Offered Section"}
-          </button>
+          {/* Section Save Action */}
+          <div className="flex justify-end pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => handleSaveSection("programsOffered", programsOfferedForm)}
+              disabled={savingSection === "programsOffered"}
+              className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#153468] disabled:opacity-50 transition"
+            >
+              <Save className="h-4 w-4" />
+              {savingSection === "programsOffered" ? "Saving..." : "Save Programs Offered Section"}
+            </button>
+          </div>
         </div>
       )}
 
@@ -1130,7 +1311,7 @@ export function HomeCmsDashboard({
             <button
               type="button"
               onClick={() => {
-                setEditingRecruiter({ name: "", logo: "", sortOrder: recruiters.length });
+                setEditingRecruiter({ name: "", logo: "", status: "PUBLISHED", sortOrder: recruiters.length });
                 setRecruiterModalOpen(true);
               }}
               className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white hover:bg-[#153468]"
@@ -1149,7 +1330,14 @@ export function HomeCmsDashboard({
                   ) : (
                     <div className="h-8 w-8 rounded bg-slate-200 flex items-center justify-center text-xs font-bold">R</div>
                   )}
-                  <span className="truncate text-sm font-bold text-[#0A1F44]">{r.name}</span>
+                  <div className="flex flex-col min-w-0">
+                    <span className="truncate text-sm font-bold text-[#0A1F44]">{r.name}</span>
+                    {r.status && r.status !== "PUBLISHED" && (
+                      <span className="text-[10px] font-semibold text-amber-600">
+                        {r.status}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="flex items-center gap-1">
                   <button
@@ -1481,154 +1669,423 @@ export function HomeCmsDashboard({
 
       {/* TAB 9: UPDATES */}
       {activeTab === "updates" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
-          <h3 className="text-lg font-bold text-[#0A1F44]">Campus Updates & Happenings</h3>
+        <div className="rounded-xl border border-slate-200/90 bg-white p-6 shadow-xs space-y-6">
+          {/* Section Header & Bulk Accordion Actions */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <h3 className="text-base font-bold text-[#0A1F44]">Campus Updates & Happenings</h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Manage upcoming campus events, academic news, and top student placement records.
+              </p>
+            </div>
 
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Section Heading</label>
-            <input
-              type="text"
-              value={updatesForm.heading || ""}
-              onChange={(e) => setUpdatesForm({ ...updatesForm, heading: e.target.value })}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-            />
-          </div>
-
-          {/* Event Updates */}
-          <div className="space-y-4 rounded-xl border border-slate-200 p-4 bg-slate-50/50">
-            <div className="flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-[#0A1F44]">
-                Event Updates ({updatesForm.eventUpdates?.length || 0})
-              </h4>
+            <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() =>
-                  setUpdatesForm({
-                    ...updatesForm,
-                    eventUpdates: [...(updatesForm.eventUpdates || []), { title: "New Event", description: "Event description..." }],
-                  })
-                }
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-[#0A1F44] hover:bg-slate-50"
+                onClick={() => {
+                  expandAllEvents(updatesForm.eventUpdates?.length || 0);
+                  expandAllPlacements(updatesForm.placementUpdates?.length || 0);
+                }}
+                className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"
               >
-                <Plus className="h-3.5 w-3.5" />
-                Add Event Update
+                Expand All
               </button>
-            </div>
-
-            <div className="space-y-3">
-              {(updatesForm.eventUpdates || []).map((ev: any, idx: number) => (
-                <div key={idx} className="rounded-lg border border-slate-200 bg-white p-3 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <input
-                      type="text"
-                      placeholder="Event Title"
-                      value={ev.title || ""}
-                      onChange={(e) => {
-                        const updated = [...updatesForm.eventUpdates];
-                        updated[idx].title = e.target.value;
-                        setUpdatesForm({ ...updatesForm, eventUpdates: updated });
-                      }}
-                      className="w-full rounded border p-1.5 text-sm font-bold"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const updated = updatesForm.eventUpdates.filter((_: any, i: number) => i !== idx);
-                        setUpdatesForm({ ...updatesForm, eventUpdates: updated });
-                      }}
-                      className="p-1.5 text-rose-600 hover:bg-rose-50 rounded ml-2"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <textarea
-                    rows={2}
-                    placeholder="Event Description"
-                    value={ev.description || ""}
-                    onChange={(e) => {
-                      const updated = [...updatesForm.eventUpdates];
-                      updated[idx].description = e.target.value;
-                      setUpdatesForm({ ...updatesForm, eventUpdates: updated });
-                    }}
-                    className="w-full rounded border p-1.5 text-xs text-slate-600"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Placement Updates */}
-          <div className="space-y-4 rounded-xl border border-slate-200 p-4 bg-slate-50/50">
-            <div className="flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-[#0A1F44]">
-                Placement Updates ({updatesForm.placementUpdates?.length || 0})
-              </h4>
               <button
                 type="button"
-                onClick={() =>
-                  setUpdatesForm({
-                    ...updatesForm,
-                    placementUpdates: [...(updatesForm.placementUpdates || []), { title: "New Placement Record", description: "Placement description..." }],
-                  })
-                }
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-[#0A1F44] hover:bg-slate-50"
+                onClick={() => {
+                  collapseAllEvents();
+                  collapseAllPlacements();
+                }}
+                className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"
               >
-                <Plus className="h-3.5 w-3.5" />
-                Add Placement Update
+                Collapse All
               </button>
-            </div>
-
-            <div className="space-y-3">
-              {(updatesForm.placementUpdates || []).map((pl: any, idx: number) => (
-                <div key={idx} className="rounded-lg border border-slate-200 bg-white p-3 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <input
-                      type="text"
-                      placeholder="Placement Title"
-                      value={pl.title || ""}
-                      onChange={(e) => {
-                        const updated = [...updatesForm.placementUpdates];
-                        updated[idx].title = e.target.value;
-                        setUpdatesForm({ ...updatesForm, placementUpdates: updated });
-                      }}
-                      className="w-full rounded border p-1.5 text-sm font-bold"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const updated = updatesForm.placementUpdates.filter((_: any, i: number) => i !== idx);
-                        setUpdatesForm({ ...updatesForm, placementUpdates: updated });
-                      }}
-                      className="p-1.5 text-rose-600 hover:bg-rose-50 rounded ml-2"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <textarea
-                    rows={2}
-                    placeholder="Placement Detail Description"
-                    value={pl.description || ""}
-                    onChange={(e) => {
-                      const updated = [...updatesForm.placementUpdates];
-                      updated[idx].description = e.target.value;
-                      setUpdatesForm({ ...updatesForm, placementUpdates: updated });
-                    }}
-                    className="w-full rounded border p-1.5 text-xs text-slate-600"
-                  />
-                </div>
-              ))}
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => handleSaveSection("updates", updatesForm)}
-            disabled={savingSection === "updates"}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#1A3A6B] disabled:opacity-50"
-          >
-            <Save className="h-4 w-4" />
-            {savingSection === "updates" ? "Saving..." : "Save Updates Section"}
-          </button>
+          {/* Section Global Info */}
+          <div className="grid gap-4 sm:grid-cols-2 rounded-xl border border-slate-200/80 bg-slate-50/50 p-4">
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                Section Heading
+              </label>
+              <input
+                type="text"
+                value={updatesForm.heading || ""}
+                onChange={(e) => setUpdatesForm({ ...updatesForm, heading: e.target.value })}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-900 outline-none focus:border-[#0A1F44] focus:ring-1 focus:ring-[#0A1F44]"
+              />
+            </div>
+          </div>
+
+          {/* Event Updates Repeater */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#0A1F44]">
+                  Event Updates ({updatesForm.eventUpdates?.length || 0})
+                </span>
+                              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    Object.keys(expandedEvents).length > 0
+                      ? collapseAllEvents()
+                      : expandAllEvents(updatesForm.eventUpdates?.length || 0)
+                  }
+                  className="text-[11px] font-semibold text-slate-500 hover:text-slate-800 transition"
+                >
+                  {Object.keys(expandedEvents).length > 0 ? "Collapse Events" : "Expand Events"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newIdx = updatesForm.eventUpdates?.length || 0;
+                    setUpdatesForm({
+                      ...updatesForm,
+                      eventUpdates: [
+                        ...(updatesForm.eventUpdates || []),
+                        { title: "New Event Update", description: "Event description & details..." },
+                      ],
+                    });
+                    setExpandedEvents((prev) => ({ ...prev, [newIdx]: true }));
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#153468] shadow-xs transition"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  Add Event Update
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-2.5">
+              {(updatesForm.eventUpdates || []).map((ev: any, idx: number) => {
+                const isExpanded = Boolean(expandedEvents[idx]);
+
+                return (
+                  <div
+                    key={idx}
+                    className="rounded-xl border border-slate-200 bg-white shadow-2xs overflow-hidden transition"
+                  >
+                    {/* Accordion Toggle Bar */}
+                    <div
+                      onClick={() => toggleEvent(idx)}
+                      className="flex items-center justify-between px-4 py-3 bg-slate-50/70 hover:bg-slate-100/60 cursor-pointer select-none border-b border-slate-100"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="h-6 w-8 rounded bg-slate-200 text-slate-700 font-mono text-xs font-bold flex items-center justify-center shrink-0">
+                          {String(idx + 1).padStart(2, "0")}
+                        </span>
+                        <div className="truncate">
+                          <span className="text-xs font-bold text-slate-900 block truncate">
+                            {ev.title || "Untitled Event"}
+                          </span>
+                          {ev.description && (
+                            <span className="text-[11px] text-slate-500 block truncate max-w-md">
+                              {ev.description}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {/* Reorder and Delete Controls */}
+                        <div
+                          className="flex items-center gap-0.5"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {idx > 0 && (
+                            <button
+                              type="button"
+                              title="Move Up"
+                              onClick={() => {
+                                const list = [...updatesForm.eventUpdates];
+                                const temp = list[idx];
+                                list[idx] = list[idx - 1];
+                                list[idx - 1] = temp;
+                                setUpdatesForm({ ...updatesForm, eventUpdates: list });
+                              }}
+                              className="p-1 text-slate-400 hover:text-slate-700 rounded transition"
+                            >
+                              <ArrowUp className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                          {idx < updatesForm.eventUpdates.length - 1 && (
+                            <button
+                              type="button"
+                              title="Move Down"
+                              onClick={() => {
+                                const list = [...updatesForm.eventUpdates];
+                                const temp = list[idx];
+                                list[idx] = list[idx + 1];
+                                list[idx + 1] = temp;
+                                setUpdatesForm({ ...updatesForm, eventUpdates: list });
+                              }}
+                              className="p-1 text-slate-400 hover:text-slate-700 rounded transition"
+                            >
+                              <ArrowDown className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            title="Delete Event"
+                            onClick={() => {
+                              if (confirm(`Delete "${ev.title || "this event"}"?`)) {
+                                const updated = updatesForm.eventUpdates.filter(
+                                  (_: any, i: number) => i !== idx
+                                );
+                                setUpdatesForm({ ...updatesForm, eventUpdates: updated });
+                              }
+                            }}
+                            className="p-1 text-slate-400 hover:text-rose-600 rounded transition ml-1"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+
+                        {isExpanded ? (
+                          <ChevronDown className="h-4 w-4 text-slate-400" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4 text-slate-400" />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Accordion Form Body */}
+                    {isExpanded && (
+                      <div className="p-4 space-y-3 bg-white">
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-500 mb-1">
+                            Event Title
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g. National Conference on AI & Emerging Tech"
+                            value={ev.title || ""}
+                            onChange={(e) => {
+                              const updated = [...updatesForm.eventUpdates];
+                              updated[idx].title = e.target.value;
+                              setUpdatesForm({ ...updatesForm, eventUpdates: updated });
+                            }}
+                            className="w-full rounded border border-slate-200 p-2 text-xs font-semibold text-slate-900 outline-none focus:border-[#0A1F44]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-500 mb-1">
+                            Event Description
+                          </label>
+                          <textarea
+                            rows={3}
+                            placeholder="Brief description about the event, location, key highlights..."
+                            value={ev.description || ""}
+                            onChange={(e) => {
+                              const updated = [...updatesForm.eventUpdates];
+                              updated[idx].description = e.target.value;
+                              setUpdatesForm({ ...updatesForm, eventUpdates: updated });
+                            }}
+                            className="w-full rounded border border-slate-200 p-2 text-xs text-slate-700 outline-none focus:border-[#0A1F44]"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Placement Updates Repeater */}
+          <div className="space-y-3 pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#0A1F44]">
+                  Placement Milestones ({updatesForm.placementUpdates?.length || 0})
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    Object.keys(expandedPlacements).length > 0
+                      ? collapseAllPlacements()
+                      : expandAllPlacements(updatesForm.placementUpdates?.length || 0)
+                  }
+                  className="text-[11px] font-semibold text-slate-500 hover:text-slate-800 transition"
+                >
+                  {Object.keys(expandedPlacements).length > 0 ? "Collapse Placements" : "Expand Placements"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newIdx = updatesForm.placementUpdates?.length || 0;
+                    setUpdatesForm({
+                      ...updatesForm,
+                      placementUpdates: [
+                        ...(updatesForm.placementUpdates || []),
+                        { title: "New Placement Record", description: "Placement detail and package..." },
+                      ],
+                    });
+                    setExpandedPlacements((prev) => ({ ...prev, [newIdx]: true }));
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#153468] shadow-xs transition"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  Add Placement Update
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-2.5">
+              {(updatesForm.placementUpdates || []).map((pl: any, idx: number) => {
+                const isExpanded = Boolean(expandedPlacements[idx]);
+
+                return (
+                  <div
+                    key={idx}
+                    className="rounded-xl border border-slate-200 bg-white shadow-2xs overflow-hidden transition"
+                  >
+                    {/* Accordion Toggle Bar */}
+                    <div
+                      onClick={() => togglePlacement(idx)}
+                      className="flex items-center justify-between px-4 py-3 bg-slate-50/70 hover:bg-slate-100/60 cursor-pointer select-none border-b border-slate-100"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="h-6 w-8 rounded bg-emerald-100 text-emerald-800 font-mono text-xs font-bold flex items-center justify-center shrink-0">
+                          {String(idx + 1).padStart(2, "0")}
+                        </span>
+                        <div className="truncate">
+                          <span className="text-xs font-bold text-slate-900 block truncate">
+                            {pl.title || "Untitled Placement"}
+                          </span>
+                          {pl.description && (
+                            <span className="text-[11px] text-slate-500 block truncate max-w-md">
+                              {pl.description}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {/* Reorder and Delete Controls */}
+                        <div
+                          className="flex items-center gap-0.5"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {idx > 0 && (
+                            <button
+                              type="button"
+                              title="Move Up"
+                              onClick={() => {
+                                const list = [...updatesForm.placementUpdates];
+                                const temp = list[idx];
+                                list[idx] = list[idx - 1];
+                                list[idx - 1] = temp;
+                                setUpdatesForm({ ...updatesForm, placementUpdates: list });
+                              }}
+                              className="p-1 text-slate-400 hover:text-slate-700 rounded transition"
+                            >
+                              <ArrowUp className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                          {idx < updatesForm.placementUpdates.length - 1 && (
+                            <button
+                              type="button"
+                              title="Move Down"
+                              onClick={() => {
+                                const list = [...updatesForm.placementUpdates];
+                                const temp = list[idx];
+                                list[idx] = list[idx + 1];
+                                list[idx + 1] = temp;
+                                setUpdatesForm({ ...updatesForm, placementUpdates: list });
+                              }}
+                              className="p-1 text-slate-400 hover:text-slate-700 rounded transition"
+                            >
+                              <ArrowDown className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            title="Delete Placement"
+                            onClick={() => {
+                              if (confirm(`Delete "${pl.title || "this placement record"}"?`)) {
+                                const updated = updatesForm.placementUpdates.filter(
+                                  (_: any, i: number) => i !== idx
+                                );
+                                setUpdatesForm({ ...updatesForm, placementUpdates: updated });
+                              }
+                            }}
+                            className="p-1 text-slate-400 hover:text-rose-600 rounded transition ml-1"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+
+                        {isExpanded ? (
+                          <ChevronDown className="h-4 w-4 text-slate-400" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4 text-slate-400" />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Accordion Form Body */}
+                    {isExpanded && (
+                      <div className="p-4 space-y-3 bg-white">
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-500 mb-1">
+                            Placement Record Title
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Record 40 LPA Package Secured"
+                            value={pl.title || ""}
+                            onChange={(e) => {
+                              const updated = [...updatesForm.placementUpdates];
+                              updated[idx].title = e.target.value;
+                              setUpdatesForm({ ...updatesForm, placementUpdates: updated });
+                            }}
+                            className="w-full rounded border border-slate-200 p-2 text-xs font-semibold text-slate-900 outline-none focus:border-[#0A1F44]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-500 mb-1">
+                            Placement Detail Description
+                          </label>
+                          <textarea
+                            rows={3}
+                            placeholder="Student name, company, package, role, campus department..."
+                            value={pl.description || ""}
+                            onChange={(e) => {
+                              const updated = [...updatesForm.placementUpdates];
+                              updated[idx].description = e.target.value;
+                              setUpdatesForm({ ...updatesForm, placementUpdates: updated });
+                            }}
+                            className="w-full rounded border border-slate-200 p-2 text-xs text-slate-700 outline-none focus:border-[#0A1F44]"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Section Save Action */}
+          <div className="flex justify-end pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => handleSaveSection("updates", updatesForm)}
+              disabled={savingSection === "updates"}
+              className="inline-flex items-center gap-2 rounded-lg bg-[#0A1F44] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#153468] disabled:opacity-50 transition"
+            >
+              <Save className="h-4 w-4" />
+              {savingSection === "updates" ? "Saving..." : "Save Updates Section"}
+            </button>
+          </div>
         </div>
       )}
 
@@ -2166,6 +2623,18 @@ export function HomeCmsDashboard({
                 value={editingRecruiter.logo || ""}
                 onChange={(url) => setEditingRecruiter({ ...editingRecruiter, logo: url })}
               />
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Status</label>
+                <select
+                  value={editingRecruiter.status || "PUBLISHED"}
+                  onChange={(e) => setEditingRecruiter({ ...editingRecruiter, status: e.target.value })}
+                  className="w-full rounded-lg border border-slate-300 p-2 text-sm bg-white"
+                >
+                  <option value="PUBLISHED">PUBLISHED</option>
+                  <option value="DRAFT">DRAFT</option>
+                  <option value="ARCHIVED">ARCHIVED</option>
+                </select>
+              </div>
             </div>
             <div className="flex justify-end gap-3 pt-2">
               <button

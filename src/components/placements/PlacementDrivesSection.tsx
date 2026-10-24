@@ -2,35 +2,50 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { Play, ChevronLeft, ChevronRight, Sparkles, Building2, Users } from "lucide-react";
-import { placementDriveSnapshots } from "@/data/placements";
+import { Play, ChevronLeft, ChevronRight, Building2, Users } from "lucide-react";
+import { placementDriveSnapshots as defaultSnapshots } from "@/data/placements";
 
 interface PlacementDrivesProps {
   onOpenVideoModal: (videoId: string, title: string) => void;
+  data?: {
+    title?: string;
+    subtitle?: string;
+    drives?: Array<{
+      src: string;
+      title: string;
+      subtitle?: string;
+      videoUrl?: string;
+    }>;
+  };
 }
 
-export default function PlacementDrivesSection({ onOpenVideoModal }: PlacementDrivesProps) {
+export default function PlacementDrivesSection({ onOpenVideoModal, data }: PlacementDrivesProps) {
+  const snapshots = data?.drives !== undefined ? (data.drives || []) : defaultSnapshots;
+  if (data && snapshots.length === 0) return null;
+
   const [activeSlide, setActiveSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
   const nextSlide = useCallback(() => {
-    setActiveSlide((prev) => (prev + 1) % placementDriveSnapshots.length);
-  }, []);
+    if (snapshots.length === 0) return;
+    setActiveSlide((prev) => (prev + 1) % snapshots.length);
+  }, [snapshots.length]);
 
   const prevSlide = useCallback(() => {
+    if (snapshots.length === 0) return;
     setActiveSlide((prev) =>
-      prev === 0 ? placementDriveSnapshots.length - 1 : prev - 1
+      prev === 0 ? snapshots.length - 1 : prev - 1
     );
-  }, []);
+  }, [snapshots.length]);
 
   // Auto-play loop (3 seconds, pauses on hover)
   useEffect(() => {
-    if (isHovered) return;
+    if (isHovered || snapshots.length <= 1) return;
     const timer = setInterval(() => {
       nextSlide();
     }, 3000);
     return () => clearInterval(timer);
-  }, [isHovered, nextSlide]);
+  }, [isHovered, nextSlide, snapshots.length]);
 
   // Touch Swipe Handling
   const touchStartX = useRef<number | null>(null);
@@ -53,8 +68,6 @@ export default function PlacementDrivesSection({ onOpenVideoModal }: PlacementDr
     touchEndX.current = null;
   };
 
-  const currentSnapshot = placementDriveSnapshots[activeSlide];
-
   return (
     <section id="drives" className="scroll-mt-[190px] bg-white py-12 md:py-16 border-t border-[#E2E8F0]">
       <div className="gu-container">
@@ -66,8 +79,19 @@ export default function PlacementDrivesSection({ onOpenVideoModal }: PlacementDr
           </div>
 
           <h2 className="font-serif text-[38px] font-black leading-[1.08] tracking-[-1.5px] text-[#0A1F44] sm:text-[46px] md:text-[52px]">
-            Placement Drives &amp; <span className="text-[#E8871A]">Snapshots</span>
+            {data?.title ? (
+              data.title
+            ) : (
+              <>
+                Placement Drives &amp; <span className="text-[#E8871A]">Snapshots</span>
+              </>
+            )}
           </h2>
+          {data?.subtitle && (
+            <p className="mt-3 text-[#64748B] text-base max-w-2xl mx-auto">
+              {data.subtitle}
+            </p>
+          )}
         </div>
 
         {/* 2-Column Showcase */}
@@ -149,7 +173,7 @@ export default function PlacementDrivesSection({ onOpenVideoModal }: PlacementDr
                   Live Drive Moments
                 </span>
                 <span className="rounded-full border border-slate-200 bg-white px-3 py-0.5 text-[11px] font-bold text-[#0A1F44] shadow-xs">
-                  {activeSlide + 1} / {placementDriveSnapshots.length}
+                  {snapshots.length > 0 ? `${activeSlide + 1} / ${snapshots.length}` : "0 / 0"}
                 </span>
               </div>
 
@@ -169,8 +193,9 @@ export default function PlacementDrivesSection({ onOpenVideoModal }: PlacementDr
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
             >
-              {placementDriveSnapshots.map((item, idx) => {
+              {snapshots.map((item, idx) => {
                 const isCurrent = activeSlide === idx;
+                const isExternal = item.src?.startsWith("http://") || item.src?.startsWith("https://");
 
                 return (
                   <div
@@ -181,13 +206,16 @@ export default function PlacementDrivesSection({ onOpenVideoModal }: PlacementDr
                         : "opacity-0 scale-105 pointer-events-none z-0"
                     }`}
                   >
-                    <Image
-                      src={item.src}
-                      alt={item.title}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                    />
+                    {item.src && (
+                      <Image
+                        src={item.src}
+                        alt={item.title}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                        unoptimized={isExternal}
+                      />
+                    )}
 
                     {/* Gradient Info Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0A1F44]/95 via-[#0A1F44]/35 to-transparent flex flex-col justify-end p-6 text-white">
@@ -197,66 +225,78 @@ export default function PlacementDrivesSection({ onOpenVideoModal }: PlacementDr
                       <h4 className="font-serif text-[20px] font-black text-white sm:text-[22px] leading-snug">
                         {item.title}
                       </h4>
-                      <p className="mt-1 text-[13px] text-slate-200 leading-relaxed max-w-xl">
-                        {item.subtitle}
-                      </p>
+                      {item.subtitle && (
+                        <p className="mt-1 text-[13px] text-slate-200 leading-relaxed max-w-xl">
+                          {item.subtitle}
+                        </p>
+                      )}
                     </div>
                   </div>
                 );
               })}
 
               {/* Floating Prev / Next Chevron Buttons */}
-              <button
-                type="button"
-                onClick={prevSlide}
-                aria-label="Previous drive snapshot"
-                className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20 transition-all hover:bg-[#E8871A] hover:scale-110 hover:border-transparent cursor-pointer"
-              >
-                <ChevronLeft size={20} />
-              </button>
-
-              <button
-                type="button"
-                onClick={nextSlide}
-                aria-label="Next drive snapshot"
-                className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20 transition-all hover:bg-[#E8871A] hover:scale-110 hover:border-transparent cursor-pointer"
-              >
-                <ChevronRight size={20} />
-              </button>
-            </div>
-
-            {/* Interactive 5-Thumbnail Navigation Strip */}
-            <div className="mt-5 grid grid-cols-5 gap-2.5">
-              {placementDriveSnapshots.map((item, idx) => {
-                const isActive = activeSlide === idx;
-
-                return (
+              {snapshots.length > 1 && (
+                <>
                   <button
-                    key={idx}
-                    onClick={() => setActiveSlide(idx)}
-                    className={`group/thumb relative aspect-[16/11] w-full overflow-hidden rounded-[12px] border transition-all duration-300 cursor-pointer ${
-                      isActive
-                        ? "border-[#E8871A] ring-2 ring-[#E8871A]/40 scale-105 shadow-md"
-                        : "border-slate-200 opacity-60 hover:opacity-100 hover:border-slate-400"
-                    }`}
-                    aria-label={`View drive snapshot ${idx + 1}`}
+                    type="button"
+                    onClick={prevSlide}
+                    aria-label="Previous drive snapshot"
+                    className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20 transition-all hover:bg-[#E8871A] hover:scale-110 hover:border-transparent cursor-pointer"
                   >
-                    <Image
-                      src={item.src}
-                      alt={item.title}
-                      fill
-                      sizes="80px"
-                      className="object-cover"
-                    />
-
-                    {/* Progress Bar Active Indicator */}
-                    {isActive && (
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#E8871A] animate-pulse" />
-                    )}
+                    <ChevronLeft size={20} />
                   </button>
-                );
-              })}
+
+                  <button
+                    type="button"
+                    onClick={nextSlide}
+                    aria-label="Next drive snapshot"
+                    className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20 transition-all hover:bg-[#E8871A] hover:scale-110 hover:border-transparent cursor-pointer"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </>
+              )}
             </div>
+
+            {/* Interactive Thumbnail Navigation Strip */}
+            {snapshots.length > 1 && (
+              <div className="mt-5 grid grid-cols-5 gap-2.5">
+                {snapshots.slice(0, 5).map((item, idx) => {
+                  const isActive = activeSlide === idx;
+                  const isExternal = item.src?.startsWith("http://") || item.src?.startsWith("https://");
+
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveSlide(idx)}
+                      className={`group/thumb relative aspect-[16/11] w-full overflow-hidden rounded-[12px] border transition-all duration-300 cursor-pointer ${
+                        isActive
+                          ? "border-[#E8871A] ring-2 ring-[#E8871A]/40 scale-105 shadow-md"
+                          : "border-slate-200 opacity-60 hover:opacity-100 hover:border-slate-400"
+                      }`}
+                      aria-label={`View drive snapshot ${idx + 1}`}
+                    >
+                      {item.src && (
+                        <Image
+                          src={item.src}
+                          alt={item.title}
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                          unoptimized={isExternal}
+                        />
+                      )}
+
+                      {/* Progress Bar Active Indicator */}
+                      {isActive && (
+                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#E8871A] animate-pulse" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -5,7 +5,15 @@ import Image from "next/image";
 import { Phone, ArrowRight } from "lucide-react";
 import VideoModal from "@/components/campus-life/VideoModal";
 
-export default function GutsVideoBanner() {
+export interface GutsVideoBannerProps {
+  data?: {
+    title?: string;
+    videoId?: string;
+  };
+}
+
+export default function GutsVideoBanner({ data }: GutsVideoBannerProps = {}) {
+  const videoId = data?.videoId || "7kF06aZ4f_g";
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   return (

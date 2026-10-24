@@ -13,6 +13,7 @@ import FAQSection from "@/components/programs/FAQSection";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
 import { phdFaqsData } from "@/data/phdData";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
+import { prisma } from "@/server/db/client";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { seo } = await getPublishedAdmissionsPage("phd");
@@ -35,7 +36,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PhdPage() {
-  const { sections } = await getPublishedAdmissionsPage("phd");
+  const [{ sections }, awards] = await Promise.all([
+    getPublishedAdmissionsPage("phd"),
+    prisma.awardRanking
+      .findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      })
+      .catch(() => []),
+  ]);
 
   const heroData = sections.hero;
   const faqsData = sections.faqs;
@@ -47,28 +56,28 @@ export default async function PhdPage() {
       <PhdHero data={heroData} />
 
       {/* 2. About Program & Disciplines with Lead Enquiry Form */}
-      <PhdAboutAndEnquiry />
+      <PhdAboutAndEnquiry data={sections.about_disciplines} />
 
       {/* 3. Important Dates & Schedule Table */}
-      <PhdImportantDates />
+      <PhdImportantDates data={sections.important_dates} />
 
       {/* 4. Coursework Framework for Part-Time/International & Fellowship/Stipend */}
-      <PhdCourseworkFramework />
+      <PhdCourseworkFramework data={sections.coursework_framework} />
 
       {/* 5. Awards, Rankings & THE Impact Section */}
-      <AwardsRankingsSection />
+      <AwardsRankingsSection data={awards} />
 
       {/* 6. Virtual Campus Tour with Modal */}
-      <PhdVirtualCampusTour />
+      <PhdVirtualCampusTour data={sections.virtual_tour} />
 
       {/* 7. Eligibility, Selection, Exemption & How to Apply */}
-      <PhdEligibilitySection />
+      <PhdEligibilitySection data={sections.eligibility} />
 
       {/* 8. Ph.D. Entrance Syllabus (13 subjects / PDFs) */}
-      <PhdSyllabusSection />
+      <PhdSyllabusSection data={sections.syllabus} />
 
       {/* 9. Important Notice & Ph.D. Cell Contact Box */}
-      <PhdNoticeAndContact />
+      <PhdNoticeAndContact data={sections.notice_contact} />
 
       {/* 10. Frequently Asked Questions */}
       <section id="faqs" className="w-full scroll-mt-20">

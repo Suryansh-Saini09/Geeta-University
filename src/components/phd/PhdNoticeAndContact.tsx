@@ -2,9 +2,23 @@
 
 import React from "react";
 import Link from "next/link";
-import { Info, Phone, Mail, UserCheck, ArrowRight } from "lucide-react";
+import { Info, Phone, Mail, ArrowRight } from "lucide-react";
 
-export default function PhdNoticeAndContact() {
+export interface PhdNoticeAndContactProps {
+  data?: {
+    title?: string;
+    noticeText?: string;
+    officeHours?: string;
+    contactEmail?: string;
+    contactPhone?: string;
+  };
+}
+
+export default function PhdNoticeAndContact({ data }: PhdNoticeAndContactProps = {}) {
+  const phone = data?.contactPhone || "+91 9996748478";
+  const email = data?.contactEmail || "phdcell@geetauniversity.edu.in";
+  const hours = data?.officeHours || "Monday – Saturday, 9:00 AM to 5:00 PM IST";
+
   return (
     <section className="w-full bg-[#F8FAFC] py-14 sm:py-18 border-b border-[#E2E8F0]">
       <div className="gu-container">
@@ -15,11 +29,12 @@ export default function PhdNoticeAndContact() {
               <div className="flex items-center gap-3 mb-3">
                 <Info className="h-6 w-6 text-[#FF5F19]" />
                 <h3 className="font-serif text-[22px] sm:text-[24px] font-bold text-[#0E385D]">
-                  Important Notice
+                  {data?.title || "Important Notice"}
                 </h3>
               </div>
               <p className="text-[15.5px] leading-relaxed text-[#555] mb-4">
-                Applicants and candidates are requested to regularly check Geeta University’s official website for all updates regarding amendments to the doctoral advertisement, shortlist information, exam centers, and important dates for the written entrance test:
+                {data?.noticeText ||
+                  "Applicants and candidates are requested to regularly check Geeta University’s official website for all updates regarding amendments to the doctoral advertisement, shortlist information, exam centers, and important dates for the written entrance test:"}
               </p>
             </div>
 
@@ -52,21 +67,21 @@ export default function PhdNoticeAndContact() {
               <div className="space-y-2.5 text-[15px]">
                 <div className="flex items-center gap-3">
                   <Phone className="h-4 w-4 text-[#64748B] shrink-0" />
-                  <a href="tel:+919996748478" className="font-semibold text-[#0A1F44] hover:text-[#E8871A] transition-colors">
-                    +91 9996748478
+                  <a href={`tel:${phone.replace(/\s+/g, "")}`} className="font-semibold text-[#0A1F44] hover:text-[#E8871A] transition-colors">
+                    {phone}
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="h-4 w-4 text-[#64748B] shrink-0" />
-                  <a href="mailto:phdcell@geetauniversity.edu.in" className="font-semibold text-[#0A1F44] hover:text-[#E8871A] transition-colors">
-                    phdcell@geetauniversity.edu.in
+                  <a href={`mailto:${email}`} className="font-semibold text-[#0A1F44] hover:text-[#E8871A] transition-colors">
+                    {email}
                   </a>
                 </div>
               </div>
             </div>
 
             <div className="mt-6 pt-4 border-t border-[#F1F5F9] text-xs text-[#94A3B8]">
-              Office Hours: Monday – Saturday, 9:00 AM to 5:00 PM IST
+              Office Hours: {hours}
             </div>
           </div>
         </div>

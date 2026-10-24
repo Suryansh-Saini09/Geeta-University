@@ -33,10 +33,21 @@ export async function generateStaticParams() {
   ];
 }
 
+function isValidSlug(slug: string): boolean {
+  if (!slug || typeof slug !== "string") return false;
+  if (slug.includes(" ") || slug.includes("%20") || slug.startsWith("admin/") || slug.includes(".")) {
+    return false;
+  }
+  return true;
+}
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  if (!isValidSlug(slug)) {
+    return {};
+  }
   const locale = await getLocale();
 
   const course = await getCourseByDirectSlug(slug);
@@ -113,6 +124,9 @@ export async function generateMetadata({
 
 export default async function DirectSlugPage({ params }: PageProps) {
   const { slug } = await params;
+  if (!isValidSlug(slug)) {
+    notFound();
+  }
   const locale = await getLocale();
 
   // 1. Check if slug matches a course directly (e.g., phd-computer-application, phd-cse, mca, etc.)

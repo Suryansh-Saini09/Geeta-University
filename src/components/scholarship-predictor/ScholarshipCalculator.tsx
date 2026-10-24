@@ -11,7 +11,14 @@ import {
   detectLevel,
 } from "@/data/scholarshipPredictorData";
 
-export default function ScholarshipCalculator() {
+interface ScholarshipCalculatorProps {
+  data?: {
+    title?: string;
+    instructionText?: string;
+  };
+}
+
+export default function ScholarshipCalculator({ data }: ScholarshipCalculatorProps = {}) {
   const [selectedArea, setSelectedArea] = useState<string>("");
   const [selectedProgramJson, setSelectedProgramJson] = useState<string>("");
   const [selectedCategoryKey, setSelectedCategoryKey] = useState<string>("");
@@ -153,10 +160,14 @@ export default function ScholarshipCalculator() {
         {/* Section Title */}
         <div className="mx-auto mb-14 max-w-3xl text-center">
           <h2 className="font-serif text-[36px] font-black text-[#0A1F44] sm:text-[44px]">
-            Scholarship <span className="text-[#066191]">Calculator</span>
+            {data?.title || (
+              <>
+                Scholarship <span className="text-[#066191]">Calculator</span>
+              </>
+            )}
           </h2>
           <p className="mt-3 text-[16px] leading-[1.7] text-[#64748B]">
-            Select your discipline, academic program, and qualifying eligibility category to view your custom semester fee breakdown and tuition scholarship.
+            {data?.instructionText || "Select your discipline, academic program, and qualifying eligibility category to view your custom semester fee breakdown and tuition scholarship."}
           </p>
         </div>
 

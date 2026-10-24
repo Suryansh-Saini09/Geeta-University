@@ -45,22 +45,22 @@ export default async function InternationalAdmissionsPage() {
       <InternationalHero data={sections.hero} />
 
       {/* Partner Flags / Logos Ticker Marquee */}
-      <InternationalLogoMarquee />
+      <InternationalLogoMarquee data={sections.partner_marquee} />
 
       {/* Universe of GU Narrative & Enquiry Form */}
-      <UniverseOfGUSection />
+      <UniverseOfGUSection data={sections.universe_of_gu} />
 
       {/* Leadership Spotlight */}
-      <LeadershipSpotlightSection />
+      <LeadershipSpotlightSection data={sections.leadership_spotlight} />
 
       {/* International Student Testimonials */}
-      <InternationalTestimonials />
+      <InternationalTestimonials data={sections.testimonials} />
 
       {/* Campus Life & Virtual Campus Tour Videos */}
-      <InternationalVideoSection />
+      <InternationalVideoSection data={sections.video_showcase} />
 
       {/* Programs Offered Accordion Catalog */}
-      <InternationalProgramsAccordion />
+      <InternationalProgramsAccordion data={sections.program_accordion} />
 
       {/* Legacy & Ecosystem */}
       <LegacyEcosystem contextText={sections.legacy_ecosystem?.contextText || "International students benefit from the integrated ecosystem of:"} />

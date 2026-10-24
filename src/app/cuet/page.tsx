@@ -44,19 +44,19 @@ export default async function CuetPage() {
       <CuetHeroAndCalculator data={sections.hero} />
 
       {/* 2. 6-Step Fast-Track Admission Flow */}
-      <CuetAdmissionProcess />
+      <CuetAdmissionProcess data={sections.admission_process} />
 
       {/* 3. Programs Offered Under CUET */}
-      <CuetProgramsOffered />
+      <CuetProgramsOffered data={sections.programs_offered} />
 
       {/* 4. Why CUET at Geeta & Placement Stats */}
-      <CuetWhyAndStats />
+      <CuetWhyAndStats data={sections.why_and_stats} />
 
       {/* 5. From Campus to Corporate Testimonials */}
-      <CuetTestimonials />
+      <CuetTestimonials data={sections.testimonials} />
 
       {/* 6. Star Performances at GU */}
-      <CuetStarPerformers />
+      <CuetStarPerformers data={sections.star_performers} />
 
       {/* 7. Frequently Asked Questions (Unified Design) */}
       <section id="faqs" className="w-full scroll-mt-20">

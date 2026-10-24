@@ -17,7 +17,18 @@ import {
   Loader2,
 } from "lucide-react";
 
-export default function PhdAboutAndEnquiry() {
+export interface PhdAboutAndEnquiryProps {
+  data?: {
+    title?: string;
+    description?: string;
+    disciplines?: Array<{ name: string; href?: string } | string>;
+  };
+}
+
+export default function PhdAboutAndEnquiry({ data }: PhdAboutAndEnquiryProps = {}) {
+  const disciplines = data?.disciplines && data.disciplines.length > 0
+    ? data.disciplines.map((d) => (typeof d === "string" ? { name: d, href: "#enquire" } : { name: d.name, href: d.href || "#enquire" }))
+    : phdDisciplines;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
@@ -143,7 +154,7 @@ export default function PhdAboutAndEnquiry() {
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {phdDisciplines.map((item, idx) => (
+                {disciplines.map((item, idx) => (
                   <Link
                     key={idx}
                     href={item.href}

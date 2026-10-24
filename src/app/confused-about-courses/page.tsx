@@ -35,12 +35,17 @@ export default async function ConfusedAboutCoursesPage() {
       <ConfusedHero data={heroData} />
 
       {/* 2. Structured Decision Framework & Institutional Guidance */}
-      <ConfusedContentSections />
+      <ConfusedContentSections
+        statisticsReality={sections.statistics_reality}
+        decisionFramework={sections.decision_framework}
+        firstDecisionCourse={sections.first_decision_course}
+        secondDecisionInstitution={sections.second_decision_institution}
+      />
 
       {/* 3. Shared Legacy & Ecosystem Section */}
       <LegacyEcosystem
         id="legacy-ecosystem"
-        contextText="Students at Geeta University benefit from the integrated ecosystem of:"
+        contextText={sections.legacy_ecosystem?.contextText || "Students at Geeta University benefit from the integrated ecosystem of:"}
       />
     </div>
   );

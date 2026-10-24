@@ -109,9 +109,6 @@ export default function AdminShell({ user, children }: AdminShellProps) {
                   <span className="font-semibold text-sm text-slate-900 tracking-tight truncate">
                     Geeta University
                   </span>
-                  <span className="rounded bg-emerald-50 px-1 py-0.2 text-[9px] font-bold text-emerald-700 border border-emerald-200">
-                    Live
-                  </span>
                 </div>
                 <span className="text-[11px] text-slate-500 font-medium">University CMS</span>
               </div>

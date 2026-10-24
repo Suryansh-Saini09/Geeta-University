@@ -5,9 +5,18 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { PARTNER_LOGOS } from "@/data/internationalAdmissions";
 
-export default function InternationalLogoMarquee() {
+export interface InternationalLogoMarqueeProps {
+  data?: {
+    title?: string;
+    logos?: string[];
+  };
+}
+
+export default function InternationalLogoMarquee({ data }: InternationalLogoMarqueeProps = {}) {
+  const logos = data?.logos && data.logos.length > 0 ? data.logos : PARTNER_LOGOS;
+  if (data && logos.length === 0) return null;
   // Triplicate the partner logos array to guarantee seamless continuous marquee
-  const marqueeLogos = [...PARTNER_LOGOS, ...PARTNER_LOGOS, ...PARTNER_LOGOS];
+  const marqueeLogos = [...logos, ...logos, ...logos];
 
   return (
     <div className="w-full bg-white py-6 border-b border-[#E2E8F0] overflow-hidden shadow-sm">

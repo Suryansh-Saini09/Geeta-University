@@ -4,7 +4,23 @@ import React from "react";
 import { gutsScholarshipSlabs, gutsExamPattern } from "@/data/gutsData";
 import { Clock, FileText, CheckCircle2 } from "lucide-react";
 
-export default function GutsScholarshipSlabs() {
+export interface GutsScholarshipSlabsProps {
+  data?: {
+    title?: string;
+    slabs?: Array<{
+      scoreCriteria: string;
+      scholarshipPercentage: string;
+    }>;
+    examPattern?: {
+      totalQuestions?: string;
+      duration?: string;
+      sections?: Array<{ name: string; questions: string }>;
+    };
+  };
+}
+
+export default function GutsScholarshipSlabs({ data }: GutsScholarshipSlabsProps = {}) {
+  const slabs = data?.slabs && data.slabs.length > 0 ? data.slabs : gutsScholarshipSlabs;
   return (
     <section id="scholarship-slabs" className="w-full bg-[#F3F5F6] py-14 sm:py-18 md:py-22 border-b border-[#E2E8F0]">
       <div className="gu-container">
@@ -25,7 +41,7 @@ export default function GutsScholarshipSlabs() {
                 </div>
 
                 <div className="divide-y divide-[#E2E8F0] bg-white text-[15px]">
-                  {gutsScholarshipSlabs.map((slab, idx) => (
+                  {slabs.map((slab, idx) => (
                     <div
                       key={idx}
                       className="grid grid-cols-2 px-5 py-3.5 items-center hover:bg-[#F8FAFC] transition-colors"

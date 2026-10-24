@@ -34,7 +34,20 @@ const itemVariants: Variants = {
   },
 };
 
-export default function InternationalVideoSection() {
+export interface InternationalVideoSectionProps {
+  data?: {
+    showcaseVideos?: Array<{
+      id: string;
+      title: string;
+      thumbnail?: string;
+    }>;
+    virtualTourVideoId?: string;
+  };
+}
+
+export default function InternationalVideoSection({ data }: InternationalVideoSectionProps = {}) {
+  const showcaseVideos = data?.showcaseVideos && data.showcaseVideos.length > 0 ? data.showcaseVideos : INTERNATIONAL_VIDEOS.showcaseVideos;
+  const tourVideoId = data?.virtualTourVideoId || INTERNATIONAL_VIDEOS.virtualTourVideoId;
   const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
   const [isTourOpen, setIsTourOpen] = useState(false);
 
@@ -43,7 +56,7 @@ export default function InternationalVideoSection() {
       <div className="gu-container">
         {/* Video Frames Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          {INTERNATIONAL_VIDEOS.showcaseVideos.map((video, idx) => (
+          {showcaseVideos.map((video: any, idx: number) => (
             <div
               key={idx}
               className="rounded-2xl overflow-hidden bg-[#0A1F44] border border-[#E2E8F0] shadow-md transition-transform duration-300 hover:-translate-y-1 group"
@@ -247,7 +260,7 @@ export default function InternationalVideoSection() {
               <div className="aspect-video w-full">
                 <iframe
                   title="Geeta University Virtual Campus Tour"
-                  src={`https://www.youtube.com/embed/${INTERNATIONAL_VIDEOS.virtualTourVideoId}?autoplay=1`}
+                  src={`https://www.youtube.com/embed/${tourVideoId}?autoplay=1`}
                   className="h-full w-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen

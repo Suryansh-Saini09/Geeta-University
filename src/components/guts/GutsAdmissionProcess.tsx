@@ -3,7 +3,19 @@
 import React from "react";
 import { gutsAdmissionSteps } from "@/data/gutsData";
 
-export default function GutsAdmissionProcess() {
+export interface GutsAdmissionProcessProps {
+  data?: {
+    title?: string;
+    steps?: Array<{
+      stepNumber?: number | string;
+      title: string;
+      description: string;
+    }>;
+  };
+}
+
+export default function GutsAdmissionProcess({ data }: GutsAdmissionProcessProps = {}) {
+  const steps = data?.steps && data.steps.length > 0 ? data.steps : gutsAdmissionSteps;
   return (
     <section id="admission-process" className="w-full bg-[#F8FAFC] py-14 sm:py-18 md:py-22 border-b border-[#E2E8F0]">
       <div className="gu-container space-y-12">
@@ -22,7 +34,7 @@ export default function GutsAdmissionProcess() {
 
         {/* 6-Step Interactive Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {gutsAdmissionSteps.map((step) => {
+          {steps.map((step) => {
             return (
               <div
                 key={step.stepNumber}
