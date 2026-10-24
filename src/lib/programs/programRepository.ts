@@ -43,7 +43,7 @@ export async function getProgramBySlug(
     const dept = await Promise.race([deptPromise, timeoutPromise]);
 
     if (dept && dept.body && typeof dept.body === "object") {
-      const resolvedBody = getLocalizedBody(dept.body, (dept as any).translations, locale);
+      const resolvedBody = getLocalizedBody(dept.body, (dept as unknown as { translations?: unknown }).translations, locale);
       const data = JSON.parse(JSON.stringify(resolvedBody)) as ProgramPageData;
 
       // Preserve requested slug so links on the page remain consistent
@@ -55,6 +55,10 @@ export async function getProgramBySlug(
         if (data.hero) {
           data.hero.title = data.hero.title || deptName;
         }
+      }
+
+      if (dept.shortName) {
+        data.shortName = dept.shortName;
       }
 
       // Dynamically inject updated MediaAsset hero image if present
