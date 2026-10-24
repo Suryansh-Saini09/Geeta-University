@@ -451,25 +451,30 @@ model ContactSubmission {
 }
 
 model NavigationMenu {
-  id        String           @id @default(cuid())
-  key       String           @unique
-  label     String
-  items     NavigationItem[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  id          String           @id @default(cuid())
+  key         String           @unique
+  label       String
+  description String?
+  items       NavigationItem[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 }
 
 model NavigationItem {
-  id        String        @id @default(cuid())
-  menuId    String
-  parentId  String?
-  label     String
-  href      String?
-  status    ContentStatus @default(PUBLISHED)
-  sortOrder Int           @default(0)
+  id           String        @id @default(cuid())
+  menuId       String
+  parentId     String?
+  label        String
+  href         String?
+  icon         String?
+  badge        String?
+  description  String?
+  metadata     Json?
+  status       ContentStatus @default(PUBLISHED)
+  sortOrder    Int           @default(0)
   translations Json?
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
   menu     NavigationMenu   @relation(fields: [menuId], references: [id], onDelete: Cascade)
   parent   NavigationItem?  @relation("NavigationTree", fields: [parentId], references: [id], onDelete: Cascade)

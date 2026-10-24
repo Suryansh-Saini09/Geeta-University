@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { AdminUserStatus, AuditAction } from "@prisma/client";
 
 import { prisma } from "@/server/db/client";
@@ -11,9 +12,22 @@ import {
   setAdminSessionCookie,
 } from "@/server/auth/session";
 import { verifyPassword } from "@/server/auth/password";
+import { checkRateLimit, resetRateLimit } from "@/server/auth/rateLimiter";
 import { adminLoginSchema } from "@/validations/adminAuth";
 
 export async function loginAction(formData: FormData) {
+  const headerList = await headers();
+  const clientIp =
+    headerList.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    headerList.get("x-real-ip") ||
+    "unknown-ip";
+
+  // Check IP rate limit (max 5 attempts per 15 minutes)
+  const ipRateLimit = checkRateLimit(`login_ip_${clientIp}`, 5, 900);
+  if (!ipRateLimit.success) {
+    redirect("/admin/login?error=too-many-attempts");
+  }
+
   const parsed = adminLoginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -23,12 +37,20 @@ export async function loginAction(formData: FormData) {
     redirect("/admin/login?error=invalid-input");
   }
 
+  const normalizedEmail = parsed.data.email.toLowerCase();
+
+  // Check email-specific rate limit
+  const emailRateLimit = checkRateLimit(`login_email_${normalizedEmail}`, 5, 900);
+  if (!emailRateLimit.success) {
+    redirect("/admin/login?error=too-many-attempts");
+  }
+
   let user = null;
   let passwordMatches = false;
 
   try {
     user = await prisma.adminUser.findUnique({
-      where: { email: parsed.data.email.toLowerCase() },
+      where: { email: normalizedEmail },
     });
 
     if (user && user.status === AdminUserStatus.ACTIVE) {
@@ -51,6 +73,10 @@ export async function loginAction(formData: FormData) {
   }
 
   try {
+    // Reset rate limit counters on successful authentication
+    resetRateLimit(`login_ip_${clientIp}`);
+    resetRateLimit(`login_email_${normalizedEmail}`);
+
     const session = await createAdminSession(user.id);
 
     await prisma.adminUser.update({
