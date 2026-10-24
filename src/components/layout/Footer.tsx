@@ -83,30 +83,33 @@ export default function Footer({ data, socialLinks }: FooterProps) {
     );
   };
 
-  const renderColumn = (col: (typeof columns)[number]) => {
+  const renderColumn = (col: (typeof columns)[number], colIdx: number) => {
     // Only display enabled links to public visitors
-    const activeLinks = col.links
+    const activeLinks = (col.links || [])
       .filter((l) => l.enabled !== false)
-      .sort((a, b) => a.sortOrder - b.sortOrder);
+      .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 
-    const isExpanded = Boolean(expandedCols[col.id]);
+    const columnKey = col.id || `col-${colIdx}`;
+    const isExpanded = Boolean(expandedCols[columnKey]);
     const visibleLinks = isExpanded ? activeLinks : activeLinks.slice(0, 5);
 
     return (
-      <div key={col.id} className="flex flex-col gap-3 min-w-[200px] flex-1">
+      <div key={columnKey} className="flex flex-col gap-3 min-w-[200px] flex-1">
         <h4 className="font-serif text-base font-bold text-white border-l-4 border-[#E8871A] pl-2.5">
           {col.title}
         </h4>
         <ul className="flex flex-col gap-2.5 list-none p-0 m-0">
-          {visibleLinks.map((item) => (
-            <li key={item.id || item.label}>{renderLinkItem(item)}</li>
+          {visibleLinks.map((item, itemIdx) => (
+            <li key={item.id || `${item.label}-${itemIdx}` || `link-${itemIdx}`}>
+              {renderLinkItem(item)}
+            </li>
           ))}
         </ul>
 
         {activeLinks.length > 5 && (
           <button
             type="button"
-            onClick={() => toggleColumn(col.id)}
+            onClick={() => toggleColumn(columnKey)}
             className="mt-1 flex items-center justify-center gap-1 self-start text-xs font-semibold text-[#E8871A] hover:text-amber-300 transition-colors cursor-pointer"
             aria-label={`Toggle ${col.title} links`}
           >
@@ -246,7 +249,7 @@ export default function Footer({ data, socialLinks }: FooterProps) {
 
           {/* Columns 2-5: Apply Here, Quick Links, Visit Here, Others */}
           <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {columns.map((col) => renderColumn(col))}
+            {columns.map((col, colIdx) => renderColumn(col, colIdx))}
           </div>
         </div>
 
@@ -258,8 +261,8 @@ export default function Footer({ data, socialLinks }: FooterProps) {
           </p>
 
           <div className="flex items-center gap-4">
-            {legal.links.map((link, idx) => (
-              <React.Fragment key={link.id || link.label}>
+            {legal?.links?.map((link, idx) => (
+              <React.Fragment key={link.id || `${link.label}-${idx}` || `legal-${idx}`}>
                 {idx > 0 && <span>/</span>}
                 <a
                   href={link.href}
