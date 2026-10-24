@@ -32,6 +32,7 @@ export default async function RootLayout({
             navData={navData}
             footer={
               <Footer
+                key="gu-footer"
                 data={footerData}
                 socialLinks={socialData.data?.links}
               />
