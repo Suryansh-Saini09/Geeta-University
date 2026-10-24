@@ -627,3 +627,22 @@ model GovernanceDocument {
 
   @@index([category, status, sortOrder])
 }
+
+model SearchDocument {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @default("")
+  href        String   @unique
+  category    String
+  subcategory String?
+  description String?  @db.Text
+  content     String?  @db.LongText
+  tags        Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([slug])
+  @@map("search_documents")
+}
+

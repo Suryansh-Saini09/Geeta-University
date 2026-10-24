@@ -252,7 +252,6 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
         <div className="gu-search-suggestions">
           <div className="gu-search-sug-title">
-            <Sparkles size={14} style={{ color: "#e8871a" }} />
             Popular Searches
           </div>
           <div className="gu-search-tags">

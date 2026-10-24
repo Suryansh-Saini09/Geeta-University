@@ -6,18 +6,23 @@ export type SearchCategory =
   | "GU Edge"
   | "Campus Life"
   | "Placements"
-  | "General";
+  | "General"
+  | string;
 
 export interface SearchDocument {
   id: string;
   title: string;
+  slug?: string;
   description: string;
   content?: string;
   href: string;
   category: SearchCategory;
   subcategory?: string;
   keywords?: string[];
+  tags?: string[];
   type?: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export interface SearchResultItem {
