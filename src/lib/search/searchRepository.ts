@@ -17,9 +17,8 @@ export interface SearchDocumentRecord {
   updatedAt: Date;
 }
 
-// Delegate accessor ensuring compatibility across IDE language servers
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const searchDocModel = (prisma as any).searchDocument;
+// Delegate accessor using strongly-typed Prisma model
+const searchDocModel = prisma.searchDocument;
 
 // In-memory cache for search documents with 60-second TTL
 let cachedDocs: SearchDocument[] | null = null;

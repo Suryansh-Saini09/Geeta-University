@@ -202,8 +202,10 @@ export async function updateProgramAction(formData: FormData) {
     },
   });
 
-  revalidateProgramPaths(existing.slug, program.slug, department.slug, existing.aliases.map((a) => a.slug), program.id);
-  redirect(`/admin/programs/${program.id}/edit?updated=1`);
+  const returnSection = formData.get("section")
+    ? `?section=${encodeURIComponent(String(formData.get("section")))}&updated=1`
+    : `?section=overview&updated=1`;
+  redirect(`/admin/programs/${program.id}/edit${returnSection}`);
 }
 
 export async function updateProgramSectionAction(formData: FormData) {
@@ -550,7 +552,8 @@ export async function updateProgramSectionAction(formData: FormData) {
     updatedProgram.id
   );
 
-  redirect(`/admin/programs/${id}/edit?section=${section}&saved=1`);
+  const redirectSection = section === "quickInfo" ? "hero" : section;
+  redirect(`/admin/programs/${id}/edit?section=${redirectSection}&saved=1`);
 }
 
 export async function archiveProgramAction(formData: FormData) {

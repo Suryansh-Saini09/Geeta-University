@@ -122,16 +122,33 @@ function textContainsWord(text: string, term: string): boolean {
   return regex.test(text);
 }
 
+function cleanSnippetText(raw: string): string {
+  if (!raw) return "";
+  return raw
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\{[^{}]*\}/g, " ")
+    .replace(/\[[^\[\]]*\]/g, " ")
+    .replace(/[{}"]+/g, " ")
+    .replace(/https?:\/\/[^\s]+/gi, "")
+    .replace(/\/uploads\/[^\s]+/gi, "")
+    .replace(/[a-zA-Z0-9_-]+\.(webp|jpg|jpeg|png|svg|pdf)/gi, "")
+    .replace(/[\r\n\t]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 /**
- * Generates a clean 160-character snippet around matched search terms
+ * Generates a clean ~160-character snippet around matched search terms,
+ * strictly honoring word boundaries and stripping raw JSON/URLs.
  */
 export function generateSnippet(
   doc: SearchDocument,
   matchedTokens: string[],
   exactPhrase?: string
 ): string {
-  const fullText = [doc.description, doc.content || ""].filter(Boolean).join(" ");
-  if (!fullText.trim()) return doc.description || doc.title;
+  const rawText = [doc.description, doc.content || ""].filter(Boolean).join(" ");
+  const fullText = cleanSnippetText(rawText);
+  if (!fullText) return cleanSnippetText(doc.description || doc.title);
 
   const lowerText = fullText.toLowerCase();
   let firstMatchIndex = -1;
@@ -157,15 +174,35 @@ export function generateSnippet(
   }
 
   if (firstMatchIndex === -1) {
-    return fullText.length > 170 ? fullText.substring(0, 167) + "..." : fullText;
+    if (fullText.length <= 160) return fullText;
+    const boundary = fullText.lastIndexOf(" ", 157);
+    return (boundary > 50 ? fullText.substring(0, boundary) : fullText.substring(0, 157)) + "...";
   }
 
-  const start = Math.max(0, firstMatchIndex - 45);
-  const end = Math.min(fullText.length, firstMatchIndex + 125);
-  let snippet = fullText.substring(start, end).trim();
+  const rawStart = Math.max(0, firstMatchIndex - 45);
+  const rawEnd = Math.min(fullText.length, firstMatchIndex + 125);
 
-  if (start > 0) snippet = "..." + snippet;
-  if (end < fullText.length) snippet = snippet + "...";
+  let adjustedStart = rawStart;
+  if (adjustedStart > 0) {
+    const nextSpace = fullText.indexOf(" ", adjustedStart);
+    if (nextSpace !== -1 && nextSpace < firstMatchIndex) {
+      adjustedStart = nextSpace + 1;
+    }
+  }
+
+  let adjustedEnd = rawEnd;
+  if (adjustedEnd < fullText.length) {
+    const lastSpace = fullText.lastIndexOf(" ", adjustedEnd);
+    if (lastSpace !== -1 && lastSpace > firstMatchIndex) {
+      adjustedEnd = lastSpace;
+    }
+  }
+
+  let snippet = fullText.substring(adjustedStart, adjustedEnd).trim();
+  snippet = snippet.replace(/^[^\w]+/, "").replace(/[^\w.]+$/, "");
+
+  if (adjustedStart > 0) snippet = "..." + snippet;
+  if (adjustedEnd < fullText.length) snippet = snippet + "...";
 
   return snippet;
 }
@@ -314,6 +351,18 @@ export function searchWebsite(
   const parsed = parseSearchQuery(query);
 
   if (parsed.rawTokens.length === 0) {
+    return {
+      results: [],
+      totalResults: 0,
+      query,
+      page: 1,
+      pageSize,
+      totalPages: 0,
+    };
+  }
+
+  // Gracefully handle overly broad queries containing only stop words (e.g. "of", "the", "in")
+  if (!parsed.isQuoted && parsed.rawTokens.every((t) => STOP_WORDS.has(t))) {
     return {
       results: [],
       totalResults: 0,
@@ -497,11 +546,21 @@ export function searchWebsite(
   // Sort descending by relevance score
   scoredItems.sort((a, b) => b.score - a.score);
 
-  const totalResults = scoredItems.length;
+  // Deduplicate results pointing to identical canonical destinations
+  const seenHrefs = new Set<string>();
+  const deduplicatedItems: SearchResultItem[] = [];
+  for (const item of scoredItems) {
+    if (!seenHrefs.has(item.document.href)) {
+      seenHrefs.add(item.document.href);
+      deduplicatedItems.push(item);
+    }
+  }
+
+  const totalResults = deduplicatedItems.length;
   const totalPages = Math.ceil(totalResults / pageSize) || 1;
   const currentPage = Math.max(1, Math.min(page, totalPages));
   const startIndex = (currentPage - 1) * pageSize;
-  const paginatedResults = scoredItems.slice(startIndex, startIndex + pageSize);
+  const paginatedResults = deduplicatedItems.slice(startIndex, startIndex + pageSize);
 
   return {
     results: paginatedResults,

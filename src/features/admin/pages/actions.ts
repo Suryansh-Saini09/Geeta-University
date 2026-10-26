@@ -245,6 +245,66 @@ export async function updatePageSeoAction(pageSlug: string, rawData: any) {
 }
 
 /* =========================================================
+   PAGE STATUS SAVER (Admissions / General Pages)
+========================================================= */
+export async function updatePageStatusAction(pageSlug: string, status: ContentStatus) {
+  try {
+    const session = await requireAdminSession();
+    assertPermission(session.user.role, "publishContent");
+
+    const pageRecord = await prisma.page.findUnique({
+      where: { slug: pageSlug },
+    });
+
+    if (!pageRecord) {
+      return safeActionError(new Error("Page not found"), "Page not found");
+    }
+
+    const isPublishing =
+      pageRecord.status !== ContentStatus.PUBLISHED && status === ContentStatus.PUBLISHED;
+    const publishedAt = isPublishing
+      ? new Date()
+      : status === ContentStatus.PUBLISHED
+      ? pageRecord.publishedAt || new Date()
+      : null;
+
+    const updated = await prisma.page.update({
+      where: { slug: pageSlug },
+      data: {
+        status,
+        publishedAt,
+        updatedById: session.user.id,
+      },
+    });
+
+    await recordAuditLog({
+      actorId: session.user.id,
+      action: status === ContentStatus.PUBLISHED ? AuditAction.PUBLISH : AuditAction.UPDATE,
+      entityType: "Page",
+      entityId: updated.id,
+      before: { status: pageRecord.status },
+      after: { status: updated.status },
+    });
+
+    revalidatePath(`/${pageSlug}`);
+    revalidatePath("/admin/admissions");
+    revalidatePath("/admin/gu-edge");
+
+    return {
+      success: true as const,
+      message: `Page publication status updated to ${status}.`,
+      status: updated.status,
+    };
+  } catch (err: any) {
+    return safeActionError(err, "Failed to update page status", {
+      module: "CMS_PAGES",
+      action: "updatePageStatusAction",
+      pageSlug,
+    });
+  }
+}
+
+/* =========================================================
    RECRUITERS MANAGEMENT ACTIONS
 ========================================================= */
 export async function saveRecruiterAction(id: string | null, rawData: any) {
