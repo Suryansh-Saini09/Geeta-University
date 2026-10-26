@@ -240,6 +240,16 @@ export async function getPageSectionsAdmin(pageSlug: string) {
     return {
       sections: sectionMap,
       seo: pageRecord?.seo || null,
+      page: pageRecord
+        ? {
+            id: pageRecord.id,
+            slug: pageRecord.slug,
+            title: pageRecord.title,
+            status: pageRecord.status,
+            updatedAt: pageRecord.updatedAt,
+            publishedAt: pageRecord.publishedAt,
+          }
+        : null,
     };
   } catch (err: any) {
     const errorMsg = err?.message ? String(err.message).replace(/:[^:@]+@/, ":****@") : String(err);
@@ -247,6 +257,7 @@ export async function getPageSectionsAdmin(pageSlug: string) {
     return {
       sections: {},
       seo: null,
+      page: null,
     };
   }
 }

@@ -639,10 +639,21 @@ export default function SearchResultsView() {
                     <HighlightedText text={item.snippet} query={data.query} />
                   </p>
 
-                  <Link href={item.document.href} className="gu-search-item-url">
-                    <span>geetauniversity.edu.in{item.document.href}</span>
-                    <ExternalLink size={12} />
-                  </Link>
+                  {item.document.href.startsWith("http") ? (
+                    <a
+                      href={item.document.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="gu-search-item-url"
+                    >
+                      <span>{item.document.href}</span>
+                      <ExternalLink size={12} />
+                    </a>
+                  ) : (
+                    <Link href={item.document.href} className="gu-search-item-url">
+                      <span>{item.document.href}</span>
+                    </Link>
+                  )}
                 </article>
               ))}
             </div>
