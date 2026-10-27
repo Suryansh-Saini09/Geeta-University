@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "11mb",
     },
+    cpus: 1,
+    workerThreads: false,
   },
   turbopack: {
     root: path.resolve(__dirname),
