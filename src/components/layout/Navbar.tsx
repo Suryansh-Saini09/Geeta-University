@@ -1061,7 +1061,7 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
 
           <div className="gu-topbar-right">
             {topBarLinks.map((item, idx) => (
-              <React.Fragment key={item.label}>
+              <React.Fragment key={item.href || `${item.label}-${idx}`}>
                 {idx > 0 && <div className="gu-vdivider" />}
                 <Link
                   href={item.href}
@@ -1175,9 +1175,9 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
                         {link.cols?.map((col, idx) => (
                           <div key={col.heading || idx} className="gu-mega-col">
                             {col.heading && <div className="gu-mega-col-heading">{col.heading}</div>}
-                            {col.links.map((item) => (
+                            {col.links.map((item, itemIdx) => (
                               <Link
-                                key={item.label}
+                                key={item.href || `${item.label}-${itemIdx}`}
                                 href={item.href}
                                 className={`gu-mega-link${pathname === item.href ? " active" : ""}`}
                                 role="menuitem"
@@ -1195,9 +1195,9 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
                         <div className="gu-mega-banner">
                           <span className="gu-mega-banner-title">{link.banner.text}</span>
                           <div className="gu-mega-banner-items">
-                            {link.banner.items.map((bi) => (
+                            {link.banner.items.map((bi, biIdx) => (
                               <Link
-                                key={bi.label}
+                                key={bi.href || `${bi.label}-${biIdx}`}
                                 href={bi.href}
                                 className="gu-mega-banner-item"
                                 onClick={() => setActiveDropdown(null)}
@@ -1295,9 +1295,9 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
                   </button>
                   {isExpanded && (
                     <div className="gu-mob-sub">
-                      {link.cols?.flatMap((col) => col.links).map((item) => (
+                      {link.cols?.flatMap((col) => col.links).map((item, itemIdx) => (
                         <Link
-                          key={item.label}
+                          key={`mob-sub-${item.href || item.label}-${itemIdx}`}
                           href={item.href}
                           className={`gu-mob-sub-link${pathname === item.href ? " active" : ""}`}
                           onClick={() => setIsMobileMenuOpen(false)}

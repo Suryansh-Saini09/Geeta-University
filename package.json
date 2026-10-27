@@ -12,7 +12,8 @@
     "prisma:migrate": "prisma migrate dev",
     "db:seed": "node prisma/seed.mjs",
     "media:manifest": "npx tsx scripts/generatePublicMediaManifest.ts",
-    "media:audit": "npx tsx scripts/auditUnifiedMediaCatalog.ts"
+    "media:audit": "npx tsx scripts/auditUnifiedMediaCatalog.ts",
+    "search:reindex": "npx tsx scripts/reindexSearch.ts"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^6.19.3",

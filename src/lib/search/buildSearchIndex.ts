@@ -1,7 +1,8 @@
 import type { SearchDocument } from "./types";
 import { getProgramBySlugSync } from "@/lib/programs/programStatic";
-import { getAllCourseParams, getCourseBySlugSync } from "@/lib/programs/courseStatic";
+import { courses } from "@/lib/programs/courseStatic";
 import { getAllEdgePages } from "@/lib/edge/edgeStatic";
+import { awards } from "@/data/awards";
 
 import { recognitions, vision, mission } from "@/data/about";
 import { ugcHeroData } from "@/data/ugcData";
@@ -11,29 +12,40 @@ import { gutsScholarshipSlabs } from "@/data/gutsData";
 import { INTERNATIONAL_HERO } from "@/data/internationalAdmissions";
 import { allFaqs } from "@/data/faqData";
 import { industryIntegrationHero } from "@/data/industryIntegration";
-
-function cleanText(text?: string | null): string {
-  if (!text) return "";
-  return text.replace(/\s+/g, " ").trim();
-}
+import { cleanSearchText } from "./contentExtractor";
+import { resolveCanonicalUrl } from "./urlResolver";
 
 /**
  * Master Search Index Builder
- * Generates structured SearchDocuments from all active application data sources.
- * CMS Compatible: Future CMS content feeds into this builder function.
+ * Generates verified, canonical SearchDocuments from application data sources.
+ * Validates URLs and prevents alias duplication.
  */
 export function buildSearchIndex(): SearchDocument[] {
   const documents: SearchDocument[] = [];
   const addedHrefs = new Set<string>();
 
   const addDoc = (doc: SearchDocument) => {
-    if (!doc.href || addedHrefs.has(doc.href)) return;
-    addedHrefs.add(doc.href);
+    // 1. Resolve & verify canonical URL
+    const resolved = resolveCanonicalUrl(doc.href, {
+      category: doc.category,
+      subcategory: doc.subcategory,
+      title: doc.title,
+      id: doc.id,
+    });
+
+    if (!resolved.valid) return;
+    const canonicalHref = resolved.canonicalUrl;
+
+    // Deduplicate identical canonical destinations
+    if (addedHrefs.has(canonicalHref)) return;
+    addedHrefs.add(canonicalHref);
+
     documents.push({
       ...doc,
-      title: cleanText(doc.title),
-      description: cleanText(doc.description),
-      content: cleanText(doc.content),
+      href: canonicalHref,
+      title: cleanSearchText(doc.title),
+      description: cleanSearchText(doc.description),
+      content: cleanSearchText(doc.content),
     });
   };
 
@@ -79,41 +91,38 @@ export function buildSearchIndex(): SearchDocument[] {
     }
   }
 
-  /* ── 2. INDIVIDUAL COURSE PAGES ── */
-  const courseParams = getAllCourseParams();
-  for (const { schoolSlug, courseSlug } of courseParams) {
-    const course = getCourseBySlugSync(schoolSlug, courseSlug);
-    if (course) {
-      const href = `/programs/${schoolSlug}/${courseSlug}`;
-      const title = course.hero?.title || course.seo.title;
-      const description = course.hero?.description || course.seo.description || course.overview?.paragraphs?.[0] || "";
-      
-      const contentParts = [
-        course.overview?.paragraphs?.join(" "),
-        course.quickInfo?.program,
-        course.quickInfo?.degree,
-        course.quickInfo?.eligibility,
-        course.quickInfo?.duration,
-        course.takeaways?.join(" "),
-        course.subjects?.join(" "),
-        course.learningOutcomes?.join(" "),
-        course.admission?.eligibility,
-        course.career?.govtRoles?.map((r) => `${r.title} ${r.description || ""}`).join(" "),
-        course.career?.privateRoles?.map((r) => `${r.title} ${r.description || ""}`).join(" "),
-        course.faqs?.map((f) => `${f.question} ${f.answer}`).join(" "),
-      ].filter(Boolean);
+  /* ── 2. INDIVIDUAL CANONICAL COURSE PAGES ── */
+  // Only iterate through canonical courses to prevent alias duplication
+  for (const course of courses) {
+    const href = `/programs/${course.schoolSlug}/${course.slug}`;
+    const title = course.hero?.title || course.seo.title;
+    const description = course.hero?.description || course.seo.description || course.overview?.paragraphs?.[0] || "";
 
-      addDoc({
-        id: `course-${schoolSlug}-${courseSlug}`,
-        title,
-        description,
-        content: contentParts.join(" "),
-        href,
-        category: "Courses",
-        subcategory: course.quickInfo?.program || "Academic Course",
-        keywords: course.seo.keywords || [title, course.quickInfo?.degree || "", "course", "degree", "program"],
-      });
-    }
+    const contentParts = [
+      course.overview?.paragraphs?.join(" "),
+      course.quickInfo?.program,
+      course.quickInfo?.degree,
+      course.quickInfo?.eligibility,
+      course.quickInfo?.duration,
+      course.takeaways?.join(" "),
+      course.subjects?.join(" "),
+      course.learningOutcomes?.join(" "),
+      course.admission?.eligibility,
+      course.career?.govtRoles?.map((r) => `${r.title} ${r.description || ""}`).join(" "),
+      course.career?.privateRoles?.map((r) => `${r.title} ${r.description || ""}`).join(" "),
+      course.faqs?.map((f) => `${f.question} ${f.answer}`).join(" "),
+    ].filter(Boolean);
+
+    addDoc({
+      id: `course-${course.schoolSlug}-${course.slug}`,
+      title,
+      description,
+      content: contentParts.join(" "),
+      href,
+      category: "Courses",
+      subcategory: course.quickInfo?.program || "Academic Course",
+      keywords: course.seo.keywords || [title, course.quickInfo?.degree || "", "course", "degree", "program"],
+    });
   }
 
   /* ── 3. GU EDGE PAGES ── */
@@ -238,6 +247,21 @@ export function buildSearchIndex(): SearchDocument[] {
     subcategory: "University Overview",
     keywords: ["about us", "geeta university", "vision", "mission", "recognitions", "panipat", "haryana"],
   });
+
+  /* ── 5.1 NESTED INSTITUTIONAL AWARDS & CERTIFICATE OF EXCELLENCE ── */
+  // Nested content displayed inside /about-us#awards-ranking
+  for (const award of awards) {
+    addDoc({
+      id: `award-${award.id}`,
+      title: award.title,
+      description: `Awarded to Geeta University: ${award.title}, presented by ${award.presentedBy} (${award.designation}).`,
+      content: `${award.title} ${award.presentedBy} ${award.designation} Geeta University awards rankings excellence distinction honors.`,
+      href: "/about-us#awards-ranking",
+      category: "About",
+      subcategory: "Awards & Rankings",
+      keywords: ["award", "recognition", "certificate of excellence", award.title, award.presentedBy, "excellence"],
+    });
+  }
 
   addDoc({
     id: "ugc-approvals",

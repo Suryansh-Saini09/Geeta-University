@@ -7,11 +7,11 @@ export const dynamic = "force-dynamic";
 export default async function AdminGuEdgePage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; section?: string }>;
 }) {
-  const { page: requestedPageSlug } = await searchParams;
+  const { page: requestedPageSlug, section: requestedSectionKey } = await searchParams;
 
-  // Fetch sections and SEO for all 7 GU Edge pages in parallel
+  // Fetch sections, SEO, and page records for all 7 GU Edge pages in parallel
   const pageAdminDataList = await Promise.all(
     GU_EDGE_PAGES_OPTIONS.map(async (opt) => {
       const data = await getPageSectionsAdmin(opt.slug);
@@ -19,19 +19,24 @@ export default async function AdminGuEdgePage({
     })
   );
 
-  const adminDataBySlug: Record<string, { sections: Record<string, any>; seo: any }> = {};
+  const adminDataBySlug: Record<
+    string,
+    { sections: Record<string, any>; seo: any; page?: any }
+  > = {};
   pageAdminDataList.forEach((item) => {
     adminDataBySlug[item.slug] = item.data;
   });
 
-  const initialSlug =
+  // If a valid page slug was requested, pass it; otherwise undefined to open View A
+  const initialPageSlug =
     requestedPageSlug && GU_EDGE_PAGES_OPTIONS.some((o) => o.slug === requestedPageSlug)
       ? requestedPageSlug
-      : "dyod";
+      : undefined;
 
   return (
     <GuEdgeCmsDashboard
-      initialPageSlug={initialSlug}
+      initialPageSlug={initialPageSlug}
+      initialSectionKey={requestedSectionKey}
       adminDataBySlug={adminDataBySlug}
     />
   );

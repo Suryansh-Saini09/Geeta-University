@@ -1,108 +1,306 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { updatePageSectionAction, updatePageSeoAction } from "@/features/admin/pages/actions";
+import {
+  updatePageSectionAction,
+  updatePageSeoAction,
+  updatePageStatusAction,
+} from "@/features/admin/pages/actions";
 import { getSectionSuccessMessage } from "@/lib/cms/sectionLabels";
 import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
-import { CmsActionButton } from "@/components/admin/CmsActionButton";
 import {
   CmsImagePreviewInput,
   CmsAutoTextarea,
   CmsStringRepeater,
 } from "./CmsFieldHelpers";
 import {
-  CheckCircle,
+  CheckCircle2,
   AlertCircle,
   ExternalLink,
   Plus,
   Trash2,
-  Edit,
   Save,
-  GraduationCap,
   FileText,
-  HelpCircle,
-  ArrowUp,
-  ArrowDown,
+  ArrowRight,
+  ArrowLeft,
+  ChevronRight,
+  Search,
+  X,
+  Sparkles,
+  TrendingUp,
+  Globe,
+  BookOpen,
+  Award,
+  CheckCircle,
+  Layers,
+  Loader2,
 } from "lucide-react";
-import { GU_EDGE_PAGES_OPTIONS } from "../guEdgeConfig";
+import {
+  GU_EDGE_PAGES_OPTIONS,
+  type GuEdgePageOption,
+  type GuEdgeSectionItem,
+} from "../guEdgeConfig";
+
+/* =========================================================================
+   TYPES & PROPS
+========================================================================= */
+
+export type PagePublicationStatus = "PUBLISHED" | "DRAFT" | "ARCHIVED";
+
+export interface GuEdgePageData {
+  sections: Record<
+    string,
+    {
+      id?: string;
+      title?: string;
+      body: any;
+      status?: string;
+      updatedAt?: string | Date;
+    }
+  >;
+  seo: {
+    title?: string;
+    description?: string;
+    keywords?: string[] | string;
+    canonical?: string | null;
+    ogTitle?: string | null;
+    ogImage?: string | null;
+    noIndex?: boolean;
+  } | null;
+  page?: {
+    id?: string;
+    slug?: string;
+    title?: string;
+    status?: PagePublicationStatus;
+    updatedAt?: string | Date;
+    publishedAt?: string | Date | null;
+  } | null;
+}
 
 interface GuEdgeCmsDashboardProps {
   initialPageSlug?: string;
-  adminDataBySlug: Record<string, { sections: Record<string, any>; seo: any }>;
+  initialSectionKey?: string;
+  adminDataBySlug: Record<string, GuEdgePageData>;
 }
 
+/* =========================================================================
+   PAGE ICON HELPER
+========================================================================= */
+
+function PageIcon({ name, className }: { name: string; className?: string }) {
+  switch (name) {
+    case "Sparkles":
+      return <Sparkles className={className} />;
+    case "TrendingUp":
+      return <TrendingUp className={className} />;
+    case "Globe":
+      return <Globe className={className} />;
+    case "BookOpen":
+      return <BookOpen className={className} />;
+    case "Award":
+      return <Award className={className} />;
+    case "CheckCircle2":
+      return <CheckCircle className={className} />;
+    case "Layers":
+      return <Layers className={className} />;
+    default:
+      return <Sparkles className={className} />;
+  }
+}
+
+/* =========================================================================
+   SECTION SUMMARY HELPER
+========================================================================= */
+
+function getSectionFieldsSummary(body: any): string | null {
+  if (!body) return null;
+  if (Array.isArray(body)) {
+    return `${body.length} block items configured`;
+  }
+  if (typeof body !== "object") return null;
+
+  const parts: string[] = [];
+  if (body.title) parts.push(`"${body.title}"`);
+  else if (body.heading) parts.push(`"${body.heading}"`);
+
+  if (Array.isArray(body.features)) parts.push(`${body.features.length} cards`);
+  if (Array.isArray(body.steps)) parts.push(`${body.steps.length} timeline steps`);
+  if (Array.isArray(body.stages)) parts.push(`${body.stages.length} stages`);
+  if (Array.isArray(body.mentors)) parts.push(`${body.mentors.length} mentors`);
+  if (Array.isArray(body.stats)) parts.push(`${body.stats.length} metrics`);
+  if (Array.isArray(body.playlist)) parts.push(`${body.playlist.length} videos`);
+  if (Array.isArray(body.items)) parts.push(`${body.items.length} items`);
+  if (Array.isArray(body.testimonials)) parts.push(`${body.testimonials.length} testimonials`);
+
+  return parts.length > 0 ? parts.join(" • ") : null;
+}
+
+/* =========================================================================
+   MAIN DASHBOARD COMPONENT
+========================================================================= */
+
 export function GuEdgeCmsDashboard({
-  initialPageSlug = "dyod",
-  adminDataBySlug,
+  initialPageSlug,
+  initialSectionKey,
+  adminDataBySlug: initialAdminData,
 }: GuEdgeCmsDashboardProps) {
-  const [selectedPageSlug, setSelectedPageSlug] = useState<string>(initialPageSlug);
+  // Local mutable cache of admin data to immediately reflect saves
+  const [dataCache, setDataCache] = useState<Record<string, GuEdgePageData>>(initialAdminData);
 
-  const currentPageOption =
-    GU_EDGE_PAGES_OPTIONS.find((p) => p.slug === selectedPageSlug) || GU_EDGE_PAGES_OPTIONS[0];
-
-  const currentAdminData = adminDataBySlug[selectedPageSlug] || { sections: {}, seo: null };
-  const sections = currentAdminData.sections || {};
-  const pageSeo = currentAdminData.seo || {};
-
-  const [activeSectionKey, setActiveSectionKey] = useState<string>(
-    currentPageOption.sectionsList[0]?.key || "hero"
+  // Selected page & section state
+  const [selectedPageSlug, setSelectedPageSlug] = useState<string | null>(
+    initialPageSlug && GU_EDGE_PAGES_OPTIONS.some((p) => p.slug === initialPageSlug)
+      ? initialPageSlug
+      : null
   );
 
-  const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [activeSectionKey, setActiveSectionKey] = useState<string | null>(
+    initialSectionKey || null
+  );
+
+  // Helper to extract clean section body (handling direct vs nested { body: ... })
+  const extractCleanBody = (slug: string, secKey: string, sourceData?: Record<string, GuEdgePageData>) => {
+    const source = sourceData || dataCache || initialAdminData;
+    const rawSec = source?.[slug]?.sections?.[secKey]?.body;
+    if (
+      rawSec &&
+      typeof rawSec === "object" &&
+      rawSec.body &&
+      typeof rawSec.body === "object" &&
+      !Array.isArray(rawSec.body)
+    ) {
+      return rawSec.body;
+    }
+    return rawSec || {};
+  };
+
+  // Active form editing state for View C (eagerly initialized from initial props)
+  const [activeBodyState, setActiveBodyState] = useState<any>(() => {
+    if (initialPageSlug && initialSectionKey && initialSectionKey !== "seo") {
+      const clean = extractCleanBody(initialPageSlug, initialSectionKey, initialAdminData);
+      return clean ? JSON.parse(JSON.stringify(clean)) : {};
+    }
+    return {};
+  });
+  const [isDirty, setIsDirty] = useState(false);
+
+  // Unsaved changes confirmation modal state
+  const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null);
+
+  // Global feedback notification
+  const [feedback, setFeedback] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Dynamic Section Body State (handles clean un-nesting of DB bodies)
-  const getSectionBody = (key: string) => {
-    const raw = sections[key]?.body;
-    if (raw && typeof raw === "object" && raw.body && typeof raw.body === "object" && !Array.isArray(raw.body)) {
-      return raw.body;
-    }
-    return raw || {};
+
+  // Sync state with browser URL search parameters & history popstate
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const page = params.get("page");
+      const section = params.get("section");
+
+      if (page && GU_EDGE_PAGES_OPTIONS.some((p) => p.slug === page)) {
+        setSelectedPageSlug(page);
+        setActiveSectionKey(section || null);
+      } else {
+        setSelectedPageSlug(null);
+        setActiveSectionKey(null);
+      }
+      setIsDirty(false);
+      setFeedback(null);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  // Update URL helper
+  const updateUrl = (page: string | null, section: string | null) => {
+    const params = new URLSearchParams();
+    if (page) params.set("page", page);
+    if (section) params.set("section", section);
+    const queryString = params.toString();
+    const targetUrl = queryString ? `/admin/gu-edge?${queryString}` : "/admin/gu-edge";
+    window.history.pushState(null, "", targetUrl);
   };
 
-  const [activeBodyState, setActiveBodyState] = useState<any>(
-    getSectionBody(currentPageOption.sectionsList[0]?.key || "hero")
-  );
+  // Safe navigation with unsaved changes guard
+  const requestNavigation = (navAction: () => void) => {
+    if (isDirty) {
+      setPendingNavigation(() => navAction);
+    } else {
+      navAction();
+    }
+  };
 
-  // Handle Page Switching
-  const handlePageSelect = (slug: string) => {
-    setSelectedPageSlug(slug);
-    const targetOpt = GU_EDGE_PAGES_OPTIONS.find((p) => p.slug === slug) || GU_EDGE_PAGES_OPTIONS[0];
-    const firstSecKey = targetOpt.sectionsList[0]?.key || "hero";
-    setActiveSectionKey(firstSecKey);
-    const targetData = adminDataBySlug[slug] || { sections: {}, seo: null };
-    const rawFirst = targetData.sections?.[firstSecKey]?.body;
-    const cleanFirst =
-      rawFirst && typeof rawFirst === "object" && rawFirst.body && typeof rawFirst.body === "object" && !Array.isArray(rawFirst.body)
-        ? rawFirst.body
-        : rawFirst || {};
-    setActiveBodyState(cleanFirst);
-    setSeoState({
-      title: targetData.seo?.title || "",
-      description: targetData.seo?.description || "",
-      keywords: Array.isArray(targetData.seo?.keywords)
-        ? targetData.seo.keywords.join(", ")
-        : targetData.seo?.keywords || "",
-      canonical: targetData.seo?.canonical || "",
-      ogTitle: targetData.seo?.ogTitle || "",
-      ogImage: targetData.seo?.ogImage || "",
-      noIndex: targetData.seo?.noIndex || false,
+  // Navigate to View A (GU Edge Overview)
+  const handleNavigateToPages = () => {
+    requestNavigation(() => {
+      setSelectedPageSlug(null);
+      setActiveSectionKey(null);
+      setIsDirty(false);
+      setFeedback(null);
+      updateUrl(null, null);
     });
-    setFeedback(null);
   };
 
-  // Handle Section Tab Switching
-  const handleSectionSelect = (key: string) => {
-    setActiveSectionKey(key);
-    if (key !== "seo") {
-      setActiveBodyState(getSectionBody(key));
+  // Navigate to View B (Page Section Overview)
+  const handleSelectPage = (slug: string) => {
+    requestNavigation(() => {
+      setSelectedPageSlug(slug);
+      setActiveSectionKey(null);
+      setIsDirty(false);
+      setFeedback(null);
+      updateUrl(slug, null);
+    });
+  };
+
+  // Navigate to View C (Focused Section Editor)
+  const handleSelectSection = (secKey: string) => {
+    requestNavigation(() => {
+      if (!selectedPageSlug) return;
+      setActiveSectionKey(secKey);
+      setFeedback(null);
+
+      if (secKey !== "seo") {
+        const cleanBody = extractCleanBody(selectedPageSlug, secKey);
+        // Deep clone so unsaved changes can be cleanly isolated
+        setActiveBodyState(cleanBody ? JSON.parse(JSON.stringify(cleanBody)) : {});
+      }
+      setIsDirty(false);
+      updateUrl(selectedPageSlug, secKey);
+    });
+  };
+
+  // Initialize activeBodyState when entering View C
+  useEffect(() => {
+    if (selectedPageSlug && activeSectionKey && activeSectionKey !== "seo") {
+      const cleanBody = extractCleanBody(selectedPageSlug, activeSectionKey);
+      setActiveBodyState(cleanBody ? JSON.parse(JSON.stringify(cleanBody)) : {});
+      setIsDirty(false);
     }
-    setFeedback(null);
-  };
+  }, [selectedPageSlug, activeSectionKey]);
 
-  // Save Section Action Handler
+  // Current selected page option from config
+  const currentPageOption = useMemo(() => {
+    if (!selectedPageSlug) return null;
+    return GU_EDGE_PAGES_OPTIONS.find((p) => p.slug === selectedPageSlug) || null;
+  }, [selectedPageSlug]);
+
+  // Current page data from local cache
+  const currentPageData = useMemo(() => {
+    if (!selectedPageSlug) return null;
+    return dataCache[selectedPageSlug] || { sections: {}, seo: null, page: null };
+  }, [selectedPageSlug, dataCache]);
+
+  // Save Current Section Handler
   const handleSaveSection = async () => {
+    if (!selectedPageSlug || !activeSectionKey || activeSectionKey === "seo") return;
+
     try {
       setIsSaving(true);
       setFeedback(null);
@@ -112,35 +310,90 @@ export function GuEdgeCmsDashboard({
       if (res.success) {
         setFeedback({
           type: "success",
-          text: res.message || getSectionSuccessMessage(activeSectionKey, selectedPageSlug, "saved"),
+          text: res.message || getSectionSuccessMessage(activeSectionKey, selectedPageSlug, "updated"),
         });
-        if (sections[activeSectionKey]) {
-          sections[activeSectionKey].body = activeBodyState;
-        } else {
-          sections[activeSectionKey] = { body: activeBodyState };
-        }
+        setIsDirty(false);
+
+        // Update local memory cache
+        setDataCache((prev) => {
+          const pageData = prev[selectedPageSlug] || { sections: {}, seo: null, page: null };
+          const updatedSections = {
+            ...pageData.sections,
+            [activeSectionKey]: {
+              ...pageData.sections[activeSectionKey],
+              body: activeBodyState,
+              status: "PUBLISHED",
+              updatedAt: new Date().toISOString(),
+            },
+          };
+          return {
+            ...prev,
+            [selectedPageSlug]: {
+              ...pageData,
+              sections: updatedSections,
+            },
+          };
+        });
       } else {
-        setFeedback({ type: "error", text: res.error || "Failed to update section." });
+        setFeedback({
+          type: "error",
+          text: res.error || "Unable to save changes. Please try again.",
+        });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", text: sanitizeErrorMessage(err, "An unexpected error occurred.") });
+      setFeedback({
+        type: "error",
+        text: sanitizeErrorMessage(err, "Unable to save changes. Please try again."),
+      });
     } finally {
       setIsSaving(false);
     }
   };
 
   // SEO Form State & Handler
+  const currentSeo = currentPageData?.seo;
   const [seoState, setSeoState] = useState({
-    title: pageSeo?.title || "",
-    description: pageSeo?.description || "",
-    keywords: Array.isArray(pageSeo?.keywords) ? pageSeo.keywords.join(", ") : pageSeo?.keywords || "",
-    canonical: pageSeo?.canonical || "",
-    ogTitle: pageSeo?.ogTitle || "",
-    ogImage: pageSeo?.ogImage || "",
-    noIndex: pageSeo?.noIndex || false,
+    title: currentSeo?.title || "",
+    description: currentSeo?.description || "",
+    keywords: Array.isArray(currentSeo?.keywords)
+      ? currentSeo.keywords.join(", ")
+      : currentSeo?.keywords || "",
+    canonical: currentSeo?.canonical || "",
+    ogTitle: currentSeo?.ogTitle || "",
+    ogImage: currentSeo?.ogImage || "",
+    noIndex: currentSeo?.noIndex || false,
   });
 
+  // Re-sync SEO form when switching page
+  useEffect(() => {
+    if (currentPageData?.seo) {
+      const seo = currentPageData.seo;
+      setSeoState({
+        title: seo.title || "",
+        description: seo.description || "",
+        keywords: Array.isArray(seo.keywords) ? seo.keywords.join(", ") : seo.keywords || "",
+        canonical: seo.canonical || "",
+        ogTitle: seo.ogTitle || "",
+        ogImage: seo.ogImage || "",
+        noIndex: seo.noIndex || false,
+      });
+    } else {
+      setSeoState({
+        title: "",
+        description: "",
+        keywords: "",
+        canonical: "",
+        ogTitle: "",
+        ogImage: "",
+        noIndex: false,
+      });
+    }
+    setIsDirty(false);
+  }, [selectedPageSlug]);
+
   const handleSaveSeo = async () => {
+    if (!selectedPageSlug) return;
+
     try {
       setIsSaving(true);
       setFeedback(null);
@@ -148,7 +401,10 @@ export function GuEdgeCmsDashboard({
       const payload = {
         title: seoState.title,
         description: seoState.description,
-        keywords: typeof seoState.keywords === "string" ? seoState.keywords.split(",").map((k) => k.trim()).filter(Boolean) : seoState.keywords,
+        keywords:
+          typeof seoState.keywords === "string"
+            ? seoState.keywords.split(",").map((k) => k.trim()).filter(Boolean)
+            : seoState.keywords,
         canonical: seoState.canonical || null,
         ogTitle: seoState.ogTitle || null,
         ogImage: seoState.ogImage || null,
@@ -158,341 +414,668 @@ export function GuEdgeCmsDashboard({
       const res = await updatePageSeoAction(selectedPageSlug, payload);
 
       if (res.success) {
-        setFeedback({ type: "success", text: "SEO Metadata saved successfully!" });
+        setFeedback({ type: "success", text: "SEO metadata saved successfully." });
+        setIsDirty(false);
+
+        // Update local memory cache
+        setDataCache((prev) => {
+          const pageData = prev[selectedPageSlug] || { sections: {}, seo: null, page: null };
+          return {
+            ...prev,
+            [selectedPageSlug]: {
+              ...pageData,
+              seo: payload,
+            },
+          };
+        });
       } else {
-        setFeedback({ type: "error", text: res.error || "Failed to save SEO metadata." });
+        setFeedback({
+          type: "error",
+          text: res.error || "Unable to save SEO metadata. Please try again.",
+        });
       }
     } catch (err: any) {
-      setFeedback({ type: "error", text: sanitizeErrorMessage(err, "Failed to save SEO metadata.") });
+      setFeedback({
+        type: "error",
+        text: sanitizeErrorMessage(err, "Unable to save SEO metadata. Please try again."),
+      });
     } finally {
       setIsSaving(false);
     }
   };
 
-  // Accurate Status Calculator (COMPLETE, PARTIAL, NOT CONFIGURED)
-  const computeSectionStatus = (key: string): "COMPLETE" | "PARTIAL" | "NOT CONFIGURED" => {
-    if (key === "seo") {
-      return pageSeo && pageSeo.title && pageSeo.description ? "COMPLETE" : pageSeo ? "PARTIAL" : "NOT CONFIGURED";
-    }
-    const sec = sections[key];
-    if (!sec || !sec.body) return "NOT CONFIGURED";
-    const body = sec.body && typeof sec.body === "object" && sec.body.body ? sec.body.body : sec.body;
-
-    if (Array.isArray(body)) {
-      return body.length > 0 ? "COMPLETE" : "NOT CONFIGURED";
-    }
-    if (typeof body === "object" && body !== null) {
-      const keys = Object.keys(body);
-      if (keys.length === 0) return "NOT CONFIGURED";
-      const hasValue = keys.some((k) => {
-        const v = body[k];
-        if (Array.isArray(v)) return v.length > 0;
-        if (typeof v === "object" && v !== null) return Object.keys(v).length > 0;
-        return v !== undefined && v !== null && String(v).trim() !== "";
+  // Page Status toggle handler
+  const handleUpdatePageStatus = async (newStatus: PagePublicationStatus) => {
+    if (!selectedPageSlug) return;
+    try {
+      setIsSaving(true);
+      setFeedback(null);
+      const res = await updatePageStatusAction(selectedPageSlug, newStatus as any);
+      if (res.success) {
+        setFeedback({
+          type: "success",
+          text: `Page status updated to ${newStatus.toLowerCase()}.`,
+        });
+        setDataCache((prev) => {
+          const pageData = prev[selectedPageSlug] || { sections: {}, seo: null, page: null };
+          return {
+            ...prev,
+            [selectedPageSlug]: {
+              ...pageData,
+              page: {
+                ...(pageData.page || {}),
+                status: newStatus,
+                updatedAt: new Date().toISOString(),
+              },
+            },
+          };
+        });
+      } else {
+        setFeedback({
+          type: "error",
+          text: res.error || "Unable to update page status.",
+        });
+      }
+    } catch (err: any) {
+      setFeedback({
+        type: "error",
+        text: sanitizeErrorMessage(err, "Unable to update page status."),
       });
-      return hasValue ? "COMPLETE" : "PARTIAL";
+    } finally {
+      setIsSaving(false);
     }
-    return "NOT CONFIGURED";
   };
 
+  // Determine current view mode
+  const currentView: "pages" | "sections" | "editor" = useMemo(() => {
+    if (!selectedPageSlug) return "pages";
+    if (!activeSectionKey) return "sections";
+    return "editor";
+  }, [selectedPageSlug, activeSectionKey]);
+
   return (
-    <div className="space-y-6">
-      {/* Header Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
-        <div>
-          <h1 className="font-serif text-2xl font-bold text-slate-900">GU Edge Content</h1>
-          <p className="mt-0.5 text-xs text-slate-500">
-            Manage GU Edge initiative pages, mentors, curriculum tracks, and media.
-          </p>
-        </div>
+    <div className="w-full min-h-screen pb-16">
+      {/* Unsaved Changes Confirmation Modal */}
+      {pendingNavigation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl border border-slate-200 space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="rounded-full bg-amber-100 p-2 text-amber-700">
+                <AlertCircle className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900">Unsaved Changes</h3>
+                <p className="mt-1 text-sm text-slate-600">
+                  You have unsaved changes in this section. If you leave now, your edits will be discarded.
+                </p>
+              </div>
+            </div>
 
-        <Link
-          href={currentPageOption.publicRoute}
-          target="_blank"
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-[#0A1F44] shadow-xs hover:border-slate-300 hover:text-slate-700"
-        >
-          <span>View Public Page</span>
-          <ExternalLink className="h-4 w-4" />
-        </Link>
-      </div>
-
-      {/* Feedback Alert Banner */}
-      {feedback && (
-        <div
-          className={`flex items-center justify-between rounded-xl border p-4 text-sm font-semibold shadow-xs ${
-            feedback.type === "success"
-              ? "border-emerald-200 bg-emerald-50 text-emerald-900"
-              : "border-rose-200 bg-rose-50 text-rose-900"
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            {feedback.type === "success" ? (
-              <CheckCircle className="h-5 w-5 text-emerald-600 shrink-0" />
-            ) : (
-              <AlertCircle className="h-5 w-5 text-rose-600 shrink-0" />
-            )}
-            <span>{feedback.text}</span>
+            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-2">
+              <button
+                type="button"
+                onClick={() => setPendingNavigation(null)}
+                className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+              >
+                Keep Editing
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const nav = pendingNavigation;
+                  setPendingNavigation(null);
+                  setIsDirty(false);
+                  if (nav) nav();
+                }}
+                className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700 transition-colors"
+              >
+                Discard &amp; Proceed
+              </button>
+            </div>
           </div>
-          <button
-            type="button"
-            onClick={() => setFeedback(null)}
-            className="text-xs uppercase font-bold text-slate-500 hover:text-slate-800"
-          >
-            Dismiss
-          </button>
         </div>
       )}
 
-      {/* Select GU Edge Page Selector */}
-      <div>
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
-          Select GU Edge Page to Edit
-        </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-          {GU_EDGE_PAGES_OPTIONS.map((pageOpt) => {
-            const isSelected = pageOpt.slug === selectedPageSlug;
+      {/* Global Feedback Banner */}
+      {feedback && (
+        <div className="mb-6">
+          <div
+            className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium shadow-xs border ${
+              feedback.type === "success"
+                ? "border-emerald-200 bg-emerald-50 text-emerald-900"
+                : "border-rose-200 bg-rose-50 text-rose-900"
+            }`}
+          >
+            <div className="flex items-center gap-2.5">
+              {feedback.type === "success" ? (
+                <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+              ) : (
+                <AlertCircle className="h-5 w-5 text-rose-600 shrink-0" />
+              )}
+              <span>{feedback.text}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setFeedback(null)}
+              className="text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-700 ml-4"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
 
+      {/* VIEW A: GU Edge Overview (Grid of Page Cards) */}
+      {currentView === "pages" && (
+        <GuEdgeOverviewView
+          adminDataBySlug={dataCache}
+          onSelectPage={handleSelectPage}
+        />
+      )}
+
+      {/* VIEW B: Selected Page's Section Overview */}
+      {currentView === "sections" && currentPageOption && (
+        <GuEdgeSectionsOverviewView
+          pageOption={currentPageOption}
+          pageData={currentPageData || { sections: {}, seo: null, page: null }}
+          onBack={handleNavigateToPages}
+          onSelectSection={handleSelectSection}
+          onUpdatePageStatus={handleUpdatePageStatus}
+          isSaving={isSaving}
+        />
+      )}
+
+      {/* VIEW C: Focused, Full-Width Section Editor */}
+      {currentView === "editor" && currentPageOption && activeSectionKey && (
+        <FocusedGuEdgeSectionEditorView
+          pageOption={currentPageOption}
+          sectionKey={activeSectionKey}
+          bodyState={activeBodyState}
+          seoState={seoState}
+          isDirty={isDirty}
+          isSaving={isSaving}
+          onBodyChange={(newBody) => {
+            setActiveBodyState(newBody);
+            setIsDirty(true);
+          }}
+          onSeoChange={(newSeo) => {
+            setSeoState(newSeo);
+            setIsDirty(true);
+          }}
+          onSave={activeSectionKey === "seo" ? handleSaveSeo : handleSaveSection}
+          onBackToSections={() => {
+            requestNavigation(() => {
+              setActiveSectionKey(null);
+              setIsDirty(false);
+              setFeedback(null);
+              if (selectedPageSlug) updateUrl(selectedPageSlug, null);
+            });
+          }}
+          onBackToGuEdge={handleNavigateToPages}
+          onSwitchSection={handleSelectSection}
+        />
+      )}
+    </div>
+  );
+}
+
+/* =========================================================================
+   VIEW A: GU EDGE OVERVIEW
+========================================================================= */
+
+function GuEdgeOverviewView({
+  adminDataBySlug,
+  onSelectPage,
+}: {
+  adminDataBySlug: Record<string, GuEdgePageData>;
+  onSelectPage: (slug: string) => void;
+}) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("ALL");
+
+  // Filter pages by search query and publication status
+  const filteredPages = useMemo(() => {
+    return GU_EDGE_PAGES_OPTIONS.filter((page) => {
+      const pageInfo = adminDataBySlug[page.slug]?.page;
+      const actualStatus = pageInfo?.status || "PUBLISHED";
+
+      // Status filter
+      if (statusFilter !== "ALL" && actualStatus !== statusFilter) {
+        return false;
+      }
+
+      // Search query
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchesTitle = page.title.toLowerCase().includes(q);
+        const matchesRoute = page.publicRoute.toLowerCase().includes(q);
+        const matchesDesc = page.description.toLowerCase().includes(q);
+        return matchesTitle || matchesRoute || matchesDesc;
+      }
+
+      return true;
+    });
+  }, [searchQuery, statusFilter, adminDataBySlug]);
+
+  return (
+    <div className="space-y-8">
+      {/* Overview Header */}
+      <div className="border-b border-slate-200 pb-6">
+        <h1 className="font-serif text-3xl font-bold tracking-tight text-slate-900">
+          GU Edge
+        </h1>
+        <p className="mt-2 text-sm text-slate-600 max-w-2xl leading-relaxed">
+          Manage GU Edge initiative pages, mentors, curriculum tracks, specialized learning models, and media.
+        </p>
+      </div>
+
+      {/* Search & Filter Toolbar */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+        {/* Search Field */}
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search GU Edge pages by title or URL..."
+            className="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-9 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 transition-all"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-slate-400 hover:text-slate-700"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Publication Status Filter */}
+        <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-100 p-1 rounded-xl">
+          {(["ALL", "PUBLISHED", "DRAFT", "ARCHIVED"] as const).map((st) => {
+            const isSelected = statusFilter === st;
             return (
               <button
-                key={pageOpt.slug}
+                key={st}
                 type="button"
-                onClick={() => handlePageSelect(pageOpt.slug)}
-                className={`flex flex-col items-start justify-center rounded-xl p-3.5 text-left transition-all border ${
+                onClick={() => setStatusFilter(st)}
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
                   isSelected
-                    ? "border-[#0A1F44] bg-[#0A1F44] text-white shadow-md ring-2 ring-[#E8871A]/40"
-                    : "border-slate-200 bg-white text-slate-800 hover:border-slate-300 hover:bg-slate-50"
+                    ? "bg-white text-slate-900 shadow-xs"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                <div>
-                  <p className="text-xs font-bold leading-snug">{pageOpt.title}</p>
-                  <p className={`text-[10px] ${isSelected ? "text-slate-300" : "text-slate-500"}`}>
-                    {pageOpt.publicRoute}
-                  </p>
-                </div>
+                {st === "ALL" ? "All pages" : st.charAt(0) + st.slice(1).toLowerCase()}
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Main CMS Editor Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Sidebar: Page Sections List */}
-        <div className="lg:col-span-4 space-y-4">
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-            <h4 className="font-serif text-lg font-bold text-[#0A1F44] mb-1">
-              {currentPageOption.title}
-            </h4>
-            <p className="text-xs text-slate-500 mb-4">
-              {currentPageOption.sectionsList.length} Public Sections + SEO
-            </p>
+      {/* Pages Grid */}
+      {filteredPages.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredPages.map((page) => {
+            const pageData = adminDataBySlug[page.slug];
+            const pageStatus = pageData?.page?.status || "PUBLISHED";
+            const sectionCount = page.sectionsList.length;
 
-            <div className="space-y-2">
-              {currentPageOption.sectionsList.map((secOpt) => {
-                const isActive = secOpt.key === activeSectionKey;
-                const status = computeSectionStatus(secOpt.key);
-
-                return (
-                  <button
-                    key={secOpt.key}
-                    type="button"
-                    onClick={() => handleSectionSelect(secOpt.key)}
-                    className={`flex items-center justify-between w-full rounded-lg p-3 text-left text-sm font-semibold transition-all border ${
-                      isActive
-                        ? "border-slate-300 bg-[#0A1F44] text-white shadow-sm"
-                        : "border-slate-100 bg-slate-50 text-slate-700 hover:bg-slate-100"
-                    }`}
-                  >
-                    <span>{secOpt.label}</span>
+            return (
+              <div
+                key={page.slug}
+                className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-300 hover:shadow-md transition-all"
+              >
+                <div>
+                  {/* Top Row: Icon & Status Badge */}
+                  <div className="flex items-center justify-between gap-3 mb-4">
+                    <div className="rounded-xl bg-slate-100 p-2.5 text-slate-700 group-hover:bg-slate-200 transition-colors">
+                      <PageIcon name={page.iconName} className="h-5 w-5" />
+                    </div>
                     <span
-                      className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                        isActive
-                          ? "bg-white/20 text-white"
-                          : status === "COMPLETE"
-                          ? "bg-emerald-100 text-emerald-800"
-                          : status === "PARTIAL"
-                          ? "bg-amber-100 text-amber-800"
-                          : "bg-slate-200 text-slate-600"
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                        pageStatus === "PUBLISHED"
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                          : pageStatus === "DRAFT"
+                          ? "bg-amber-50 text-amber-700 border-amber-200"
+                          : "bg-slate-100 text-slate-700 border-slate-200"
                       }`}
                     >
-                      {status}
+                      {pageStatus.charAt(0) + pageStatus.slice(1).toLowerCase()}
                     </span>
-                  </button>
-                );
-              })}
-
-              {/* SEO Tab Option */}
-              <button
-                type="button"
-                onClick={() => handleSectionSelect("seo")}
-                className={`flex items-center justify-between w-full rounded-lg p-3 text-left text-sm font-semibold transition-all border ${
-                  activeSectionKey === "seo"
-                    ? "border-slate-300 bg-[#0A1F44] text-white shadow-sm"
-                    : "border-slate-100 bg-slate-50 text-slate-700 hover:bg-slate-100"
-                }`}
-              >
-                <span>SEO &amp; Social Metadata</span>
-                <span
-                  className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                    activeSectionKey === "seo"
-                      ? "bg-white/20 text-white"
-                      : computeSectionStatus("seo") === "COMPLETE"
-                      ? "bg-emerald-100 text-emerald-800"
-                      : "bg-slate-200 text-slate-600"
-                  }`}
-                >
-                  {computeSectionStatus("seo")}
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Section Content Editor */}
-        <div className="lg:col-span-8">
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs space-y-6">
-            {/* Editor Action Header */}
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
-              <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
-                {activeSectionKey === "seo"
-                  ? "Page SEO & Social Sharing Metadata"
-                  : currentPageOption.sectionsList.find((s) => s.key === activeSectionKey)?.label ||
-                    activeSectionKey}
-              </h3>
-
-              <CmsActionButton
-                label="Save Section"
-                loadingLabel="Saving Section..."
-                iconType="save"
-                onClick={activeSectionKey === "seo" ? handleSaveSeo : handleSaveSection}
-              />
-            </div>
-
-            {/* Render Form Editor based on Active Section */}
-            {activeSectionKey === "seo" ? (
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                    Meta Title Tag
-                  </label>
-                  <input
-                    type="text"
-                    value={seoState.title}
-                    onChange={(e) => setSeoState({ ...seoState, title: e.target.value })}
-                    className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm focus:border-slate-300 focus:outline-none"
-                    placeholder="e.g. Design Your Own Degree | Geeta University"
-                  />
-                </div>
-
-                <div>
-                  <CmsAutoTextarea
-                    label="Meta Description"
-                    value={seoState.description}
-                    onChange={(val) => setSeoState({ ...seoState, description: val })}
-                    placeholder="Compelling search result description..."
-                    rows={3}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                    Keywords (comma separated)
-                  </label>
-                  <input
-                    type="text"
-                    value={seoState.keywords}
-                    onChange={(e) => setSeoState({ ...seoState, keywords: e.target.value })}
-                    className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm focus:border-slate-300 focus:outline-none"
-                    placeholder="dyod, geeta university, flexible learning"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                      Canonical URL
-                    </label>
-                    <input
-                      type="text"
-                      value={seoState.canonical}
-                      onChange={(e) => setSeoState({ ...seoState, canonical: e.target.value })}
-                      className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm focus:border-slate-300 focus:outline-none"
-                      placeholder="https://geetauniversity.edu.in/edge/dyod"
-                    />
                   </div>
 
-                  <CmsImagePreviewInput
-                    label="OG Social Image"
-                    value={seoState.ogImage}
-                    onChange={(val) => setSeoState({ ...seoState, ogImage: val })}
-                  />
+                  {/* Title & Description */}
+                  <h2 className="text-lg font-bold text-slate-900 group-hover:text-slate-800 transition-colors">
+                    {page.title}
+                  </h2>
+                  <p className="mt-1.5 text-xs text-slate-500 leading-relaxed line-clamp-2">
+                    {page.description}
+                  </p>
+
+                  {/* Public Path & Metadata */}
+                  <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <span className="font-mono text-[11px] text-slate-500 truncate max-w-[180px]">
+                      {page.publicRoute}
+                    </span>
+                    <span className="font-medium text-slate-700">
+                      {sectionCount} sections + SEO
+                    </span>
+                  </div>
+                </div>
+
+                {/* Actions Footer */}
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                  <button
+                    type="button"
+                    onClick={() => onSelectPage(page.slug)}
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-800 transition-colors shadow-xs"
+                  >
+                    <span>Edit page</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+
+                  <Link
+                    href={page.publicRoute}
+                    target="_blank"
+                    className="inline-flex items-center justify-center p-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                    title="View public page in new tab"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                  </Link>
                 </div>
               </div>
-            ) : (
-              <div className="space-y-6">
-                {/* 1. Feature Grid Cards Renderer (Handles Array of Grids OR Single Grid) */}
-                {(Array.isArray(activeBodyState) ||
-                  activeSectionKey === "features" ||
-                  activeSectionKey.startsWith("featureGrid")) ? (
-                  <FeatureGridSectionEditor
-                    state={activeBodyState}
-                    onChange={(newState) => setActiveBodyState(newState)}
-                  />
-                ) : activeSectionKey.includes("accordion") ? (
-                  <AccordionSectionEditor
-                    state={activeBodyState}
-                    onChange={(newState) => setActiveBodyState(newState)}
-                  />
-                ) : activeSectionKey === "timeline" ? (
-                  <TimelineSectionEditor
-                    state={activeBodyState}
-                    onChange={(newState) => setActiveBodyState(newState)}
-                  />
-                ) : activeSectionKey.includes("training") ? (
-                  <TrainingModelSectionEditor
-                    state={activeBodyState}
-                    onChange={(newState) => setActiveBodyState(newState)}
-                  />
-                ) : activeSectionKey === "videos" ? (
-                  <VideoSectionEditor
-                    state={activeBodyState}
-                    onChange={(newState) => setActiveBodyState(newState)}
-                  />
-                ) : activeSectionKey === "mentors" ? (
-                  <MentorsSectionEditor
-                    state={activeBodyState}
-                    onChange={(newState) => setActiveBodyState(newState)}
-                  />
-                ) : activeSectionKey === "testimonials" ? (
-                  <TestimonialsSectionEditor
-                    state={activeBodyState}
-                    onChange={(newState) => setActiveBodyState(newState)}
-                  />
-                ) : activeSectionKey === "gallery" ? (
-                  <GallerySectionEditor
-                    state={activeBodyState}
-                    onChange={(newState) => setActiveBodyState(newState)}
-                  />
-                ) : activeSectionKey === "stats" ? (
-                  <StatsSectionEditor
-                    state={activeBodyState}
-                    onChange={(newState) => setActiveBodyState(newState)}
-                  />
-                ) : activeSectionKey === "cta" ? (
-                  <CtaSectionEditor
-                    state={activeBodyState}
-                    onChange={(newState) => setActiveBodyState(newState)}
-                  />
-                ) : (
-                  /* Universal Fallback Editor for Hero & Custom Sections */
-                  <UniversalSectionEditor
-                    state={activeBodyState}
-                    onChange={(newState) => setActiveBodyState(newState)}
-                    activeSectionKey={activeSectionKey}
-                  />
+            );
+          })}
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center space-y-3">
+          <p className="text-sm font-semibold text-slate-900">
+            No GU Edge pages matched your search.
+          </p>
+          <p className="text-xs text-slate-500">
+            Try adjusting your search terms or publication filter to locate GU Edge content.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setSearchQuery("");
+              setStatusFilter("ALL");
+            }}
+            className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors mt-2"
+          >
+            Reset filters
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* =========================================================================
+   VIEW B: SELECTED PAGE'S SECTION OVERVIEW
+========================================================================= */
+
+function GuEdgeSectionsOverviewView({
+  pageOption,
+  pageData,
+  onBack,
+  onSelectSection,
+  onUpdatePageStatus,
+  isSaving,
+}: {
+  pageOption: GuEdgePageOption;
+  pageData: GuEdgePageData;
+  onBack: () => void;
+  onSelectSection: (secKey: string) => void;
+  onUpdatePageStatus: (newStatus: PagePublicationStatus) => void;
+  isSaving: boolean;
+}) {
+  const [sectionSearch, setSectionSearch] = useState("");
+  const sections = pageData.sections || {};
+  const pageStatus = pageData?.page?.status || "PUBLISHED";
+
+  // Filter sections by search query
+  const filteredSections = useMemo(() => {
+    if (!sectionSearch.trim()) return pageOption.sectionsList;
+    const q = sectionSearch.toLowerCase();
+    return pageOption.sectionsList.filter(
+      (sec) =>
+        sec.label.toLowerCase().includes(q) ||
+        sec.key.toLowerCase().includes(q) ||
+        sec.description.toLowerCase().includes(q)
+    );
+  }, [pageOption.sectionsList, sectionSearch]);
+
+  const hasSeo = Boolean(pageData?.seo?.title || pageData?.seo?.description);
+
+  return (
+    <div className="space-y-8">
+      {/* Breadcrumb Navigation */}
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-medium text-slate-500">
+        <button
+          type="button"
+          onClick={onBack}
+          className="hover:text-slate-900 transition-colors font-semibold"
+        >
+          GU Edge
+        </button>
+        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+        <span className="text-slate-900 font-semibold">{pageOption.title}</span>
+      </nav>
+
+      {/* Page Header Banner */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+          <div className="space-y-2 flex-1">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="font-serif text-2xl md:text-3xl font-bold text-slate-900">
+                {pageOption.title}
+              </h1>
+
+              {/* Publication Status Selector */}
+              <div className="relative inline-flex items-center">
+                <select
+                  value={pageStatus}
+                  onChange={(e) => onUpdatePageStatus(e.target.value as PagePublicationStatus)}
+                  disabled={isSaving}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold border cursor-pointer focus:outline-none focus:ring-1 focus:ring-slate-400 transition-all ${
+                    pageStatus === "PUBLISHED"
+                      ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                      : pageStatus === "DRAFT"
+                      ? "bg-amber-50 text-amber-700 border-amber-200"
+                      : "bg-slate-100 text-slate-700 border-slate-200"
+                  }`}
+                >
+                  <option value="PUBLISHED">Status: Published</option>
+                  <option value="DRAFT">Status: Draft</option>
+                  <option value="ARCHIVED">Status: Archived</option>
+                </select>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
+              {pageOption.description}
+            </p>
+
+            <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-slate-500">
+              <span className="font-mono bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100">
+                {pageOption.publicRoute}
+              </span>
+              <span>•</span>
+              <span>{pageOption.sectionsList.length} content sections</span>
+            </div>
+          </div>
+
+          {/* Header Action Buttons */}
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <button
+              type="button"
+              onClick={onBack}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>Back to GU Edge</span>
+            </button>
+
+            <Link
+              href={pageOption.publicRoute}
+              target="_blank"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-100 transition-colors"
+            >
+              <span>View public page</span>
+              <ExternalLink className="h-3.5 w-3.5 text-slate-500" />
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Sections Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-base font-bold text-slate-900">Page sections</h2>
+          <p className="text-xs text-slate-500">
+            Select a section card below to open the dedicated full-width editor.
+          </p>
+        </div>
+
+        {/* Section Search input */}
+        {pageOption.sectionsList.length > 4 && (
+          <div className="relative w-full sm:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+            <input
+              type="text"
+              value={sectionSearch}
+              onChange={(e) => setSectionSearch(e.target.value)}
+              placeholder="Search sections..."
+              className="w-full rounded-xl border border-slate-200 bg-white pl-9 pr-8 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none transition-all"
+            />
+            {sectionSearch && (
+              <button
+                type="button"
+                onClick={() => setSectionSearch("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Responsive Grid of Independent Section Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {filteredSections.map((sec, idx) => {
+          const rawSec = sections[sec.key]?.body;
+          const cleanBody =
+            rawSec && typeof rawSec === "object" && rawSec.body && typeof rawSec.body === "object" && !Array.isArray(rawSec.body)
+              ? rawSec.body
+              : rawSec;
+          const isConfigured = Boolean(cleanBody && (Array.isArray(cleanBody) ? cleanBody.length > 0 : Object.keys(cleanBody).length > 0));
+          const fieldsSummary = getSectionFieldsSummary(cleanBody);
+
+          return (
+            <div
+              key={sec.key}
+              className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs hover:border-slate-300 hover:shadow-sm transition-all"
+            >
+              <div>
+                {/* Card Top: Position & Config Status */}
+                <div className="flex items-center justify-between text-xs text-slate-500 mb-2.5">
+                  <span className="font-semibold text-slate-400">
+                    Section {idx + 1} of {pageOption.sectionsList.length}
+                  </span>
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-semibold ${
+                      isConfigured
+                        ? "bg-emerald-50 text-emerald-700"
+                        : "bg-slate-100 text-slate-600"
+                    }`}
+                  >
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${
+                        isConfigured ? "bg-emerald-500" : "bg-slate-400"
+                      }`}
+                    />
+                    {isConfigured ? "Configured" : "Not configured"}
+                  </span>
+                </div>
+
+                {/* Section Title & Description */}
+                <h3 className="text-base font-bold text-slate-900">{sec.label}</h3>
+                <p className="mt-1 text-xs text-slate-500 leading-relaxed">
+                  {sec.description}
+                </p>
+
+                {/* Content summary */}
+                {fieldsSummary && (
+                  <div className="mt-3.5 rounded-lg bg-slate-50 p-2.5 text-[11px] text-slate-600 border border-slate-100">
+                    <span className="font-semibold text-slate-700">Content preview: </span>
+                    <span>{fieldsSummary}</span>
+                  </div>
                 )}
               </div>
+
+              {/* Action Button */}
+              <div className="mt-5 pt-3.5 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => onSelectSection(sec.key)}
+                  className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-800 transition-colors shadow-xs"
+                >
+                  <span>Edit section</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Dedicated SEO & Meta Tags Card */}
+        <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50/70 p-5 shadow-xs hover:border-slate-300 transition-all">
+          <div>
+            <div className="flex items-center justify-between text-xs text-slate-500 mb-2.5">
+              <span className="font-semibold text-slate-500">Search Engine Settings</span>
+              <span
+                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-semibold ${
+                  hasSeo ? "bg-emerald-50 text-emerald-700" : "bg-slate-200 text-slate-600"
+                }`}
+              >
+                <span
+                  className={`h-1.5 w-1.5 rounded-full ${
+                    hasSeo ? "bg-emerald-500" : "bg-slate-400"
+                  }`}
+                />
+                {hasSeo ? "Configured" : "Defaults"}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <FileText className="h-4 w-4 text-slate-700" />
+              <h3 className="text-base font-bold text-slate-900">SEO &amp; Meta Tags</h3>
+            </div>
+            <p className="mt-1 text-xs text-slate-500 leading-relaxed">
+              Manage search engine title, meta description, keywords, canonical link, and social sharing image.
+            </p>
+
+            {hasSeo && (
+              <div className="mt-3.5 rounded-lg bg-white p-2.5 text-[11px] text-slate-600 border border-slate-200">
+                <span className="font-semibold text-slate-700">Title: </span>
+                <span className="truncate block">{pageData?.seo?.title || "Default"}</span>
+              </div>
             )}
+          </div>
+
+          <div className="mt-5 pt-3.5 border-t border-slate-200">
+            <button
+              type="button"
+              onClick={() => onSelectSection("seo")}
+              className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-100 transition-colors shadow-2xs"
+            >
+              <span>Edit SEO metadata</span>
+              <ArrowRight className="h-3.5 w-3.5 text-slate-500" />
+            </button>
           </div>
         </div>
       </div>
@@ -500,9 +1083,392 @@ export function GuEdgeCmsDashboard({
   );
 }
 
-/* =========================================================
-   SUB-EDITORS FOR ALL SECTION TYPES
-========================================================= */
+/* =========================================================================
+   VIEW C: FOCUSED, FULL-WIDTH SECTION EDITOR
+========================================================================= */
+
+function FocusedGuEdgeSectionEditorView({
+  pageOption,
+  sectionKey,
+  bodyState,
+  seoState,
+  isDirty,
+  isSaving,
+  onBodyChange,
+  onSeoChange,
+  onSave,
+  onBackToSections,
+  onBackToGuEdge,
+  onSwitchSection,
+}: {
+  pageOption: GuEdgePageOption;
+  sectionKey: string;
+  bodyState: any;
+  seoState: any;
+  isDirty: boolean;
+  isSaving: boolean;
+  onBodyChange: (newBody: any) => void;
+  onSeoChange: (newSeo: any) => void;
+  onSave: () => void;
+  onBackToSections: () => void;
+  onBackToGuEdge: () => void;
+  onSwitchSection: (secKey: string) => void;
+}) {
+  const isSeo = sectionKey === "seo";
+
+  // Section metadata from config
+  const sectionConfig = pageOption.sectionsList.find((s) => s.key === sectionKey);
+  const sectionIndex = pageOption.sectionsList.findIndex((s) => s.key === sectionKey);
+  const totalSections = pageOption.sectionsList.length;
+
+  const previousSection =
+    sectionIndex > 0 ? pageOption.sectionsList[sectionIndex - 1] : null;
+  const nextSection =
+    sectionIndex >= 0 && sectionIndex < totalSections - 1
+      ? pageOption.sectionsList[sectionIndex + 1]
+      : sectionIndex === totalSections - 1 && !isSeo
+      ? { key: "seo", label: "SEO & Meta Tags" }
+      : null;
+
+  return (
+    <div className="space-y-6 max-w-5xl mx-auto">
+      {/* Breadcrumb Navigation */}
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-medium text-slate-500">
+        <button
+          type="button"
+          onClick={onBackToGuEdge}
+          className="hover:text-slate-900 transition-colors font-semibold"
+        >
+          GU Edge
+        </button>
+        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+        <button
+          type="button"
+          onClick={onBackToSections}
+          className="hover:text-slate-900 transition-colors font-semibold"
+        >
+          {pageOption.title}
+        </button>
+        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+        <span className="text-slate-900 font-semibold truncate max-w-[240px]">
+          {isSeo ? "SEO & Meta Tags" : sectionConfig?.label || sectionKey}
+        </span>
+      </nav>
+
+      {/* Focused Editor Top Header */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-slate-400">
+                {isSeo ? "SEO Settings" : `Section ${sectionIndex + 1} of ${totalSections}`}
+              </span>
+              {isDirty && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                  Unsaved edits
+                </span>
+              )}
+            </div>
+            <h1 className="font-serif text-2xl font-bold text-slate-900">
+              {isSeo ? `SEO Metadata — ${pageOption.title}` : sectionConfig?.label || sectionKey}
+            </h1>
+            <p className="text-xs text-slate-500 max-w-2xl">
+              {isSeo
+                ? "Configure search engine titles, open-graph image, and metadata tags for this GU Edge page."
+                : sectionConfig?.description || "Update the text, imagery, and structured items for this section."}
+            </p>
+          </div>
+
+          {/* Primary Top Save Action */}
+          <div className="flex items-center gap-3 self-end sm:self-auto">
+            <button
+              type="button"
+              onClick={onBackToSections}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>Back to sections</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={onSave}
+              disabled={isSaving}
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2 text-xs font-semibold text-white hover:bg-slate-800 disabled:opacity-50 transition-colors shadow-xs"
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Saving changes...</span>
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4" />
+                  <span>Save changes</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Previous & Next Section Quick Jump Navigation */}
+        <div className="flex items-center justify-between text-xs pt-1">
+          {previousSection ? (
+            <button
+              type="button"
+              onClick={() => onSwitchSection(previousSection.key)}
+              className="inline-flex items-center gap-1 text-slate-600 hover:text-slate-900 font-medium"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>Previous: {previousSection.label}</span>
+            </button>
+          ) : (
+            <span />
+          )}
+
+          {nextSection ? (
+            <button
+              type="button"
+              onClick={() => onSwitchSection(nextSection.key)}
+              className="inline-flex items-center gap-1 text-slate-600 hover:text-slate-900 font-medium"
+            >
+              <span>Next: {nextSection.label}</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          ) : (
+            <span />
+          )}
+        </div>
+      </div>
+
+      {/* Editor Body */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-xs">
+        {isSeo ? (
+          <div className="space-y-6">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                Meta Title Tag
+              </label>
+              <input
+                type="text"
+                value={seoState.title}
+                onChange={(e) => onSeoChange({ ...seoState, title: e.target.value })}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none transition-all"
+                placeholder={`e.g. ${pageOption.title} | Geeta University`}
+              />
+            </div>
+
+            <div>
+              <CmsAutoTextarea
+                label="Meta Description"
+                value={seoState.description}
+                onChange={(val) => onSeoChange({ ...seoState, description: val })}
+                placeholder="Compelling search result description summarizing the page..."
+                rows={3}
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                Keywords (comma separated)
+              </label>
+              <input
+                type="text"
+                value={seoState.keywords}
+                onChange={(e) => onSeoChange({ ...seoState, keywords: e.target.value })}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none transition-all"
+                placeholder="geeta university, gu edge, higher education"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Canonical URL
+                </label>
+                <input
+                  type="text"
+                  value={seoState.canonical}
+                  onChange={(e) => onSeoChange({ ...seoState, canonical: e.target.value })}
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none transition-all"
+                  placeholder={`https://geetauniversity.edu.in${pageOption.publicRoute}`}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Open Graph Social Title
+                </label>
+                <input
+                  type="text"
+                  value={seoState.ogTitle}
+                  onChange={(e) => onSeoChange({ ...seoState, ogTitle: e.target.value })}
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none transition-all"
+                  placeholder={pageOption.title}
+                />
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <CmsImagePreviewInput
+                label="OG Social Image"
+                value={seoState.ogImage}
+                onChange={(val) => onSeoChange({ ...seoState, ogImage: val })}
+              />
+            </div>
+
+            <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
+              <input
+                type="checkbox"
+                id="noIndexToggle"
+                checked={seoState.noIndex}
+                onChange={(e) => onSeoChange({ ...seoState, noIndex: e.target.checked })}
+                className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
+              />
+              <label htmlFor="noIndexToggle" className="text-xs font-semibold text-slate-700 cursor-pointer">
+                Instruct search engines not to index this page (no-index)
+              </label>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {/* Safe Normalized Body Editor Switcher */}
+            {(() => {
+              const safeBody = bodyState || {};
+              if (
+                Array.isArray(safeBody) ||
+                sectionKey === "features" ||
+                sectionKey.startsWith("featureGrid")
+              ) {
+                return (
+                  <FeatureGridSectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
+              if (sectionKey.includes("accordion")) {
+                return (
+                  <AccordionSectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
+              if (sectionKey === "timeline") {
+                return (
+                  <TimelineSectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
+              if (sectionKey.includes("training")) {
+                return (
+                  <TrainingModelSectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
+              if (sectionKey === "videos") {
+                return (
+                  <VideoSectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
+              if (sectionKey === "mentors") {
+                return (
+                  <MentorsSectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
+              if (sectionKey === "testimonials") {
+                return (
+                  <TestimonialsSectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
+              if (sectionKey === "gallery") {
+                return (
+                  <GallerySectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
+              if (sectionKey === "stats") {
+                return (
+                  <StatsSectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
+              if (sectionKey === "cta") {
+                return (
+                  <CtaSectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
+              return (
+                <UniversalSectionEditor
+                  state={safeBody}
+                  onChange={onBodyChange}
+                  activeSectionKey={sectionKey}
+                />
+              );
+            })()}
+          </div>
+        )}
+
+
+        {/* Bottom Save Changes Action Bar */}
+        <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={onBackToSections}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>Back to sections</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={isSaving}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 py-2.5 text-xs font-semibold text-white hover:bg-slate-800 disabled:opacity-50 transition-colors shadow-xs"
+          >
+            {isSaving ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Saving changes...</span>
+              </>
+            ) : (
+              <>
+                <Save className="h-4 w-4" />
+                <span>Save changes</span>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================================
+   SUB-EDITORS FOR SPECIALISED SECTION TYPES
+========================================================================= */
 
 function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (val: any) => void }) {
   // Normalize array vs object
@@ -548,11 +1514,11 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-        <h4 className="text-sm font-bold text-[#0A1F44]">Feature Grid Cards ({gridList.length})</h4>
+        <h4 className="text-sm font-bold text-slate-900">Feature Grid Cards ({gridList.length})</h4>
         <button
           type="button"
           onClick={addGridCard}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Grid Block</span>
@@ -562,7 +1528,7 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
       {gridList.map((grid, gridIdx) => (
         <div key={gridIdx} className="rounded-xl border border-slate-200 bg-slate-50/70 p-5 space-y-4 relative">
           <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-            <span className="text-xs font-bold uppercase text-[#0A1F44]">
+            <span className="text-xs font-bold uppercase text-slate-800">
               Grid Block #{gridIdx + 1}: {grid.title || "Feature Grid"}
             </span>
             {gridList.length > 1 && (
@@ -584,7 +1550,7 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
                 type="text"
                 value={grid.title || ""}
                 onChange={(e) => updateGridItem(gridIdx, { ...grid, title: e.target.value })}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-[#0A1F44]"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
               />
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -593,7 +1559,7 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
                 <select
                   value={grid.columns || 3}
                   onChange={(e) => updateGridItem(gridIdx, { ...grid, columns: Number(e.target.value) })}
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:border-slate-400"
                 >
                   <option value={2}>2 Columns</option>
                   <option value={3}>3 Columns</option>
@@ -606,7 +1572,7 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
                 <select
                   value={grid.layoutStyle || "cards"}
                   onChange={(e) => updateGridItem(gridIdx, { ...grid, layoutStyle: e.target.value })}
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:border-slate-400"
                 >
                   <option value="cards">Cards</option>
                   <option value="numbered">Numbered</option>
@@ -630,7 +1596,7 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
           {/* Features Repeater */}
           <div className="space-y-3 pt-2">
             <div className="flex items-center justify-between">
-              <label className="block text-xs font-bold uppercase text-[#0A1F44]">
+              <label className="block text-xs font-bold uppercase text-slate-800">
                 Feature Items (Cards) ({grid.features?.length || 0})
               </label>
               <button
@@ -640,7 +1606,7 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
                   const newFeat = { title: "New Feature Title", description: "" };
                   updateGridItem(gridIdx, { ...grid, features: [...currentFeatures, newFeat] });
                 }}
-                className="inline-flex items-center gap-1 rounded bg-slate-800 px-2.5 py-1 text-xs font-bold text-white hover:bg-slate-900"
+                className="inline-flex items-center gap-1 rounded bg-slate-800 px-2.5 py-1 text-xs font-bold text-white hover:bg-slate-900 transition-colors"
               >
                 <Plus className="h-3 w-3" />
                 <span>Add Card</span>
@@ -678,7 +1644,7 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
                           updatedFeats[featIdx] = { ...updatedFeats[featIdx], title: e.target.value };
                           updateGridItem(gridIdx, { ...grid, features: updatedFeats });
                         }}
-                        className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold"
+                        className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-slate-400"
                       />
                     </div>
                     {feat.subtitle !== undefined && (
@@ -692,7 +1658,7 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
                             updatedFeats[featIdx] = { ...updatedFeats[featIdx], subtitle: e.target.value };
                             updateGridItem(gridIdx, { ...grid, features: updatedFeats });
                           }}
-                          className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+                          className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
                         />
                       </div>
                     )}
@@ -768,7 +1734,7 @@ function AccordionSectionEditor({ state, onChange }: { state: any; onChange: (va
                 type="text"
                 value={acc.title || ""}
                 onChange={(e) => updateAcc(accIdx, { ...acc, title: e.target.value })}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold focus:outline-none focus:border-slate-400"
               />
             </div>
             {acc.subtitle !== undefined && (
@@ -778,7 +1744,7 @@ function AccordionSectionEditor({ state, onChange }: { state: any; onChange: (va
                   type="text"
                   value={acc.subtitle || ""}
                   onChange={(e) => updateAcc(accIdx, { ...acc, subtitle: e.target.value })}
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:border-slate-400"
                 />
               </div>
             )}
@@ -786,7 +1752,7 @@ function AccordionSectionEditor({ state, onChange }: { state: any; onChange: (va
 
           <div className="space-y-3 pt-2">
             <div className="flex items-center justify-between">
-              <label className="block text-xs font-bold uppercase text-[#0A1F44]">
+              <label className="block text-xs font-bold uppercase text-slate-800">
                 Accordion Program Items ({acc.items?.length || 0})
               </label>
               <button
@@ -796,7 +1762,7 @@ function AccordionSectionEditor({ state, onChange }: { state: any; onChange: (va
                   const newItem = { id: `item-${Date.now()}`, title: "New Academic Course Program", duration: "3-4 Years", eligibility: "10+2", description: "" };
                   updateAcc(accIdx, { ...acc, items: [...currentItems, newItem] });
                 }}
-                className="inline-flex items-center gap-1 rounded bg-[#0A1F44] px-2.5 py-1 text-xs font-bold text-white hover:bg-[#1A3A6B]"
+                className="inline-flex items-center gap-1 rounded bg-slate-900 px-2.5 py-1 text-xs font-bold text-white hover:bg-slate-800 transition-colors"
               >
                 <Plus className="h-3 w-3" />
                 <span>Add Accordion Item</span>
@@ -834,7 +1800,7 @@ function AccordionSectionEditor({ state, onChange }: { state: any; onChange: (va
                           updated[itemIdx] = { ...updated[itemIdx], title: e.target.value };
                           updateAcc(accIdx, { ...acc, items: updated });
                         }}
-                        className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold"
+                        className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-slate-400"
                       />
                     </div>
                     <div>
@@ -847,7 +1813,7 @@ function AccordionSectionEditor({ state, onChange }: { state: any; onChange: (va
                           updated[itemIdx] = { ...updated[itemIdx], duration: e.target.value };
                           updateAcc(accIdx, { ...acc, items: updated });
                         }}
-                        className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+                        className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
                       />
                     </div>
                   </div>
@@ -887,7 +1853,8 @@ function AccordionSectionEditor({ state, onChange }: { state: any; onChange: (va
 }
 
 function TimelineSectionEditor({ state, onChange }: { state: any; onChange: (val: any) => void }) {
-  const steps = state.steps || [];
+  const safeState = state || {};
+  const steps = safeState.steps || [];
 
   return (
     <div className="space-y-4">
@@ -895,23 +1862,23 @@ function TimelineSectionEditor({ state, onChange }: { state: any; onChange: (val
         <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Timeline Heading</label>
         <input
           type="text"
-          value={state.title || ""}
-          onChange={(e) => onChange({ ...state, title: e.target.value })}
-          className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-semibold text-[#0A1F44]"
+          value={safeState.title || ""}
+          onChange={(e) => onChange({ ...safeState, title: e.target.value })}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
         />
       </div>
 
       <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-        <label className="block text-xs font-bold uppercase text-[#0A1F44]">
+        <label className="block text-xs font-bold uppercase text-slate-800">
           Timeline Process Steps ({steps.length})
         </label>
         <button
           type="button"
           onClick={() => {
             const newStep = { stepNumber: steps.length + 1, title: "New Step Title", category: "Core", description: "", points: [], expandedDetails: "" };
-            onChange({ ...state, steps: [...steps, newStep] });
+            onChange({ ...safeState, steps: [...steps, newStep] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Step</span>
@@ -928,7 +1895,7 @@ function TimelineSectionEditor({ state, onChange }: { state: any; onChange: (val
               <button
                 type="button"
                 onClick={() => {
-                  onChange({ ...state, steps: steps.filter((_: any, i: number) => i !== idx) });
+                  onChange({ ...safeState, steps: steps.filter((_: any, i: number) => i !== idx) });
                 }}
                 className="text-xs font-bold text-rose-600 hover:text-rose-800 inline-flex items-center gap-1"
               >
@@ -946,9 +1913,9 @@ function TimelineSectionEditor({ state, onChange }: { state: any; onChange: (val
                   onChange={(e) => {
                     const copy = [...steps];
                     copy[idx] = { ...copy[idx], stepNumber: Number(e.target.value) };
-                    onChange({ ...state, steps: copy });
+                    onChange({ ...safeState, steps: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+                  className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
                 />
               </div>
               <div>
@@ -959,9 +1926,9 @@ function TimelineSectionEditor({ state, onChange }: { state: any; onChange: (val
                   onChange={(e) => {
                     const copy = [...steps];
                     copy[idx] = { ...copy[idx], title: e.target.value };
-                    onChange({ ...state, steps: copy });
+                    onChange({ ...safeState, steps: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold"
+                  className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-slate-400"
                 />
               </div>
               <div>
@@ -972,9 +1939,9 @@ function TimelineSectionEditor({ state, onChange }: { state: any; onChange: (val
                   onChange={(e) => {
                     const copy = [...steps];
                     copy[idx] = { ...copy[idx], category: e.target.value };
-                    onChange({ ...state, steps: copy });
+                    onChange({ ...safeState, steps: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+                  className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
                 />
               </div>
             </div>
@@ -985,7 +1952,7 @@ function TimelineSectionEditor({ state, onChange }: { state: any; onChange: (val
               onChange={(val) => {
                 const copy = [...steps];
                 copy[idx] = { ...copy[idx], description: val };
-                onChange({ ...state, steps: copy });
+                onChange({ ...safeState, steps: copy });
               }}
               rows={2}
             />
@@ -996,7 +1963,7 @@ function TimelineSectionEditor({ state, onChange }: { state: any; onChange: (val
               onChange={(newPoints) => {
                 const copy = [...steps];
                 copy[idx] = { ...copy[idx], points: newPoints };
-                onChange({ ...state, steps: copy });
+                onChange({ ...safeState, steps: copy });
               }}
             />
 
@@ -1006,7 +1973,7 @@ function TimelineSectionEditor({ state, onChange }: { state: any; onChange: (val
               onChange={(val) => {
                 const copy = [...steps];
                 copy[idx] = { ...copy[idx], expandedDetails: val };
-                onChange({ ...state, steps: copy });
+                onChange({ ...safeState, steps: copy });
               }}
               rows={2}
             />
@@ -1017,8 +1984,10 @@ function TimelineSectionEditor({ state, onChange }: { state: any; onChange: (val
   );
 }
 
+
 function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange: (val: any) => void }) {
-  const stages = state.stages || [];
+  const safeState = state || {};
+  const stages = safeState.stages || [];
 
   return (
     <div className="space-y-4">
@@ -1026,23 +1995,23 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
         <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Model Heading</label>
         <input
           type="text"
-          value={state.title || ""}
-          onChange={(e) => onChange({ ...state, title: e.target.value })}
-          className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-semibold text-[#0A1F44]"
+          value={safeState.title || ""}
+          onChange={(e) => onChange({ ...safeState, title: e.target.value })}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
         />
       </div>
 
       <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-        <label className="block text-xs font-bold uppercase text-[#0A1F44]">
+        <label className="block text-xs font-bold uppercase text-slate-800">
           Training Stages ({stages.length})
         </label>
         <button
           type="button"
           onClick={() => {
             const newStage = { stageNumber: stages.length + 1, stageName: `Stage ${stages.length + 1}`, title: "New Training Stage", description: "", focusAreas: [] };
-            onChange({ ...state, stages: [...stages, newStage] });
+            onChange({ ...safeState, stages: [...stages, newStage] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Stage</span>
@@ -1059,7 +2028,7 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
               <button
                 type="button"
                 onClick={() => {
-                  onChange({ ...state, stages: stages.filter((_: any, i: number) => i !== idx) });
+                  onChange({ ...safeState, stages: stages.filter((_: any, i: number) => i !== idx) });
                 }}
                 className="text-xs font-bold text-rose-600 hover:text-rose-800 inline-flex items-center gap-1"
               >
@@ -1077,9 +2046,9 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
                   onChange={(e) => {
                     const copy = [...stages];
                     copy[idx] = { ...copy[idx], stageName: e.target.value };
-                    onChange({ ...state, stages: copy });
+                    onChange({ ...safeState, stages: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+                  className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
                 />
               </div>
               <div>
@@ -1090,9 +2059,9 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
                   onChange={(e) => {
                     const copy = [...stages];
                     copy[idx] = { ...copy[idx], title: e.target.value };
-                    onChange({ ...state, stages: copy });
+                    onChange({ ...safeState, stages: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold"
+                  className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-slate-400"
                 />
               </div>
             </div>
@@ -1103,7 +2072,7 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
               onChange={(val) => {
                 const copy = [...stages];
                 copy[idx] = { ...copy[idx], description: val };
-                onChange({ ...state, stages: copy });
+                onChange({ ...safeState, stages: copy });
               }}
               rows={2}
             />
@@ -1115,7 +2084,7 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
                 onChange={(newAreas) => {
                   const copy = [...stages];
                   copy[idx] = { ...copy[idx], focusAreas: newAreas };
-                  onChange({ ...state, stages: copy });
+                  onChange({ ...safeState, stages: copy });
                 }}
               />
             )}
@@ -1127,8 +2096,9 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
 }
 
 function VideoSectionEditor({ state, onChange }: { state: any; onChange: (val: any) => void }) {
-  const playlist = state.playlist || [];
-  const featured = state.featuredVideo || {};
+  const safeState = state || {};
+  const playlist = safeState.playlist || [];
+  const featured = safeState.featuredVideo || {};
 
   return (
     <div className="space-y-5">
@@ -1136,23 +2106,23 @@ function VideoSectionEditor({ state, onChange }: { state: any; onChange: (val: a
         <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Video Section Title</label>
         <input
           type="text"
-          value={state.title || ""}
-          onChange={(e) => onChange({ ...state, title: e.target.value })}
-          className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-semibold text-[#0A1F44]"
+          value={safeState.title || ""}
+          onChange={(e) => onChange({ ...safeState, title: e.target.value })}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
         />
       </div>
 
       {/* Featured Video */}
       <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-3">
-        <h4 className="font-bold text-xs uppercase text-[#0A1F44]">Featured Hero Video Spotlight</h4>
+        <h4 className="font-bold text-xs uppercase text-slate-800">Featured Hero Video Spotlight</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div>
             <label className="block font-bold text-slate-600 mb-0.5">Video Title</label>
             <input
               type="text"
               value={featured.title || ""}
-              onChange={(e) => onChange({ ...state, featuredVideo: { ...featured, title: e.target.value } })}
-              className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold"
+              onChange={(e) => onChange({ ...safeState, featuredVideo: { ...featured, title: e.target.value } })}
+              className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-slate-400"
             />
           </div>
           <div>
@@ -1160,36 +2130,37 @@ function VideoSectionEditor({ state, onChange }: { state: any; onChange: (val: a
             <input
               type="text"
               value={featured.videoUrl || ""}
-              onChange={(e) => onChange({ ...state, featuredVideo: { ...featured, videoUrl: e.target.value } })}
-              className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+              onChange={(e) => onChange({ ...safeState, featuredVideo: { ...featured, videoUrl: e.target.value } })}
+              className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
             />
           </div>
         </div>
         <CmsImagePreviewInput
           label="Featured Video Poster / Thumbnail"
           value={featured.thumbnail || ""}
-          onChange={(val) => onChange({ ...state, featuredVideo: { ...featured, thumbnail: val } })}
+          onChange={(val) => onChange({ ...safeState, featuredVideo: { ...featured, thumbnail: val } })}
         />
       </div>
 
       {/* Playlist */}
       <div className="space-y-3">
         <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-          <label className="block text-xs font-bold uppercase text-[#0A1F44]">
+          <label className="block text-xs font-bold uppercase text-slate-800">
             Playlist Videos ({playlist.length})
           </label>
           <button
             type="button"
             onClick={() => {
               const newVid = { title: "New Video Story", videoUrl: "", thumbnail: "" };
-              onChange({ ...state, playlist: [...playlist, newVid] });
+              onChange({ ...safeState, playlist: [...playlist, newVid] });
             }}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Add Video</span>
           </button>
         </div>
+
 
         {playlist.map((vid: any, idx: number) => (
           <div key={idx} className="rounded-lg border border-slate-200 bg-white p-3.5 space-y-3">
@@ -1220,7 +2191,7 @@ function VideoSectionEditor({ state, onChange }: { state: any; onChange: (val: a
                     copy[idx] = { ...copy[idx], title: e.target.value };
                     onChange({ ...state, playlist: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold"
+                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-slate-400"
                 />
               </div>
               <div>
@@ -1233,7 +2204,7 @@ function VideoSectionEditor({ state, onChange }: { state: any; onChange: (val: a
                     copy[idx] = { ...copy[idx], videoUrl: e.target.value };
                     onChange({ ...state, playlist: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
                 />
               </div>
             </div>
@@ -1255,7 +2226,8 @@ function VideoSectionEditor({ state, onChange }: { state: any; onChange: (val: a
 }
 
 function MentorsSectionEditor({ state, onChange }: { state: any; onChange: (val: any) => void }) {
-  const mentors = state.mentors || [];
+  const safeState = state || {};
+  const mentors = safeState.mentors || [];
 
   return (
     <div className="space-y-4">
@@ -1263,23 +2235,23 @@ function MentorsSectionEditor({ state, onChange }: { state: any; onChange: (val:
         <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Section Title</label>
         <input
           type="text"
-          value={state.title || ""}
-          onChange={(e) => onChange({ ...state, title: e.target.value })}
-          className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-semibold text-[#0A1F44]"
+          value={safeState.title || ""}
+          onChange={(e) => onChange({ ...safeState, title: e.target.value })}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
         />
       </div>
 
       <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-        <label className="block text-xs font-bold uppercase text-[#0A1F44]">
+        <label className="block text-xs font-bold uppercase text-slate-800">
           Corporate Mentors &amp; Faculty ({mentors.length})
         </label>
         <button
           type="button"
           onClick={() => {
             const newMentor = { name: "Mentor Name", designation: "Designation / Title", role: "Industry Expert", description: "", image: "" };
-            onChange({ ...state, mentors: [...mentors, newMentor] });
+            onChange({ ...safeState, mentors: [...mentors, newMentor] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Mentor</span>
@@ -1296,7 +2268,7 @@ function MentorsSectionEditor({ state, onChange }: { state: any; onChange: (val:
               <button
                 type="button"
                 onClick={() => {
-                  onChange({ ...state, mentors: mentors.filter((_: any, i: number) => i !== idx) });
+                  onChange({ ...safeState, mentors: mentors.filter((_: any, i: number) => i !== idx) });
                 }}
                 className="text-xs font-bold text-rose-600 hover:text-rose-800 inline-flex items-center gap-1"
               >
@@ -1314,9 +2286,9 @@ function MentorsSectionEditor({ state, onChange }: { state: any; onChange: (val:
                   onChange={(e) => {
                     const copy = [...mentors];
                     copy[idx] = { ...copy[idx], name: e.target.value };
-                    onChange({ ...state, mentors: copy });
+                    onChange({ ...safeState, mentors: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold"
+                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-slate-400"
                 />
               </div>
               <div>
@@ -1327,9 +2299,9 @@ function MentorsSectionEditor({ state, onChange }: { state: any; onChange: (val:
                   onChange={(e) => {
                     const copy = [...mentors];
                     copy[idx] = { ...copy[idx], designation: e.target.value };
-                    onChange({ ...state, mentors: copy });
+                    onChange({ ...safeState, mentors: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
                 />
               </div>
               <div>
@@ -1340,9 +2312,9 @@ function MentorsSectionEditor({ state, onChange }: { state: any; onChange: (val:
                   onChange={(e) => {
                     const copy = [...mentors];
                     copy[idx] = { ...copy[idx], role: e.target.value };
-                    onChange({ ...state, mentors: copy });
+                    onChange({ ...safeState, mentors: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
                 />
               </div>
             </div>
@@ -1353,7 +2325,7 @@ function MentorsSectionEditor({ state, onChange }: { state: any; onChange: (val:
               onChange={(val) => {
                 const copy = [...mentors];
                 copy[idx] = { ...copy[idx], image: val };
-                onChange({ ...state, mentors: copy });
+                onChange({ ...safeState, mentors: copy });
               }}
             />
 
@@ -1363,7 +2335,7 @@ function MentorsSectionEditor({ state, onChange }: { state: any; onChange: (val:
               onChange={(val) => {
                 const copy = [...mentors];
                 copy[idx] = { ...copy[idx], description: val };
-                onChange({ ...state, mentors: copy });
+                onChange({ ...safeState, mentors: copy });
               }}
               rows={2}
             />
@@ -1374,8 +2346,10 @@ function MentorsSectionEditor({ state, onChange }: { state: any; onChange: (val:
   );
 }
 
+
 function TestimonialsSectionEditor({ state, onChange }: { state: any; onChange: (val: any) => void }) {
-  const items = state.testimonials || [];
+  const safeState = state || {};
+  const items = safeState.testimonials || [];
 
   return (
     <div className="space-y-4">
@@ -1383,23 +2357,23 @@ function TestimonialsSectionEditor({ state, onChange }: { state: any; onChange: 
         <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Section Title</label>
         <input
           type="text"
-          value={state.title || ""}
-          onChange={(e) => onChange({ ...state, title: e.target.value })}
-          className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-semibold text-[#0A1F44]"
+          value={safeState.title || ""}
+          onChange={(e) => onChange({ ...safeState, title: e.target.value })}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
         />
       </div>
 
       <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-        <label className="block text-xs font-bold uppercase text-[#0A1F44]">
+        <label className="block text-xs font-bold uppercase text-slate-800">
           Student Testimonials ({items.length})
         </label>
         <button
           type="button"
           onClick={() => {
             const newItem = { name: "Student Name", programOrRole: "B.Tech CSE", quote: "Geeta University empowered me...", image: "" };
-            onChange({ ...state, testimonials: [...items, newItem] });
+            onChange({ ...safeState, testimonials: [...items, newItem] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Testimonial</span>
@@ -1416,7 +2390,7 @@ function TestimonialsSectionEditor({ state, onChange }: { state: any; onChange: 
               <button
                 type="button"
                 onClick={() => {
-                  onChange({ ...state, testimonials: items.filter((_: any, i: number) => i !== idx) });
+                  onChange({ ...safeState, testimonials: items.filter((_: any, i: number) => i !== idx) });
                 }}
                 className="text-xs font-bold text-rose-600 hover:text-rose-800 inline-flex items-center gap-1"
               >
@@ -1434,9 +2408,9 @@ function TestimonialsSectionEditor({ state, onChange }: { state: any; onChange: 
                   onChange={(e) => {
                     const copy = [...items];
                     copy[idx] = { ...copy[idx], name: e.target.value };
-                    onChange({ ...state, testimonials: copy });
+                    onChange({ ...safeState, testimonials: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold"
+                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-slate-400"
                 />
               </div>
               <div>
@@ -1447,9 +2421,9 @@ function TestimonialsSectionEditor({ state, onChange }: { state: any; onChange: 
                   onChange={(e) => {
                     const copy = [...items];
                     copy[idx] = { ...copy[idx], programOrRole: e.target.value };
-                    onChange({ ...state, testimonials: copy });
+                    onChange({ ...safeState, testimonials: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
                 />
               </div>
             </div>
@@ -1460,7 +2434,7 @@ function TestimonialsSectionEditor({ state, onChange }: { state: any; onChange: 
               onChange={(val) => {
                 const copy = [...items];
                 copy[idx] = { ...copy[idx], image: val };
-                onChange({ ...state, testimonials: copy });
+                onChange({ ...safeState, testimonials: copy });
               }}
             />
 
@@ -1470,7 +2444,7 @@ function TestimonialsSectionEditor({ state, onChange }: { state: any; onChange: 
               onChange={(val) => {
                 const copy = [...items];
                 copy[idx] = { ...copy[idx], quote: val };
-                onChange({ ...state, testimonials: copy });
+                onChange({ ...safeState, testimonials: copy });
               }}
               rows={3}
             />
@@ -1482,7 +2456,8 @@ function TestimonialsSectionEditor({ state, onChange }: { state: any; onChange: 
 }
 
 function GallerySectionEditor({ state, onChange }: { state: any; onChange: (val: any) => void }) {
-  const items = state.items || [];
+  const safeState = state || {};
+  const items = safeState.items || [];
 
   return (
     <div className="space-y-4">
@@ -1490,23 +2465,23 @@ function GallerySectionEditor({ state, onChange }: { state: any; onChange: (val:
         <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Gallery Section Title</label>
         <input
           type="text"
-          value={state.title || ""}
-          onChange={(e) => onChange({ ...state, title: e.target.value })}
-          className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-semibold text-[#0A1F44]"
+          value={safeState.title || ""}
+          onChange={(e) => onChange({ ...safeState, title: e.target.value })}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
         />
       </div>
 
       <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-        <label className="block text-xs font-bold uppercase text-[#0A1F44]">
+        <label className="block text-xs font-bold uppercase text-slate-800">
           Gallery Images ({items.length})
         </label>
         <button
           type="button"
           onClick={() => {
             const newItem = { src: "", title: "", caption: "" };
-            onChange({ ...state, items: [...items, newItem] });
+            onChange({ ...safeState, items: [...items, newItem] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Photo</span>
@@ -1521,7 +2496,7 @@ function GallerySectionEditor({ state, onChange }: { state: any; onChange: (val:
               <button
                 type="button"
                 onClick={() => {
-                  onChange({ ...state, items: items.filter((_: any, i: number) => i !== idx) });
+                  onChange({ ...safeState, items: items.filter((_: any, i: number) => i !== idx) });
                 }}
                 className="text-xs font-bold text-rose-600 hover:text-rose-800 inline-flex items-center gap-1"
               >
@@ -1536,7 +2511,7 @@ function GallerySectionEditor({ state, onChange }: { state: any; onChange: (val:
               onChange={(val) => {
                 const copy = [...items];
                 copy[idx] = { ...copy[idx], src: val };
-                onChange({ ...state, items: copy });
+                onChange({ ...safeState, items: copy });
               }}
             />
 
@@ -1547,9 +2522,9 @@ function GallerySectionEditor({ state, onChange }: { state: any; onChange: (val:
               onChange={(e) => {
                 const copy = [...items];
                 copy[idx] = { ...copy[idx], title: e.target.value };
-                onChange({ ...state, items: copy });
+                onChange({ ...safeState, items: copy });
               }}
-              className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+              className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
             />
           </div>
         ))}
@@ -1559,7 +2534,8 @@ function GallerySectionEditor({ state, onChange }: { state: any; onChange: (val:
 }
 
 function StatsSectionEditor({ state, onChange }: { state: any; onChange: (val: any) => void }) {
-  const stats = state.stats || [];
+  const safeState = state || {};
+  const stats = safeState.stats || [];
 
   return (
     <div className="space-y-4">
@@ -1567,23 +2543,23 @@ function StatsSectionEditor({ state, onChange }: { state: any; onChange: (val: a
         <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Section Title</label>
         <input
           type="text"
-          value={state.title || ""}
-          onChange={(e) => onChange({ ...state, title: e.target.value })}
-          className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-semibold text-[#0A1F44]"
+          value={safeState.title || ""}
+          onChange={(e) => onChange({ ...safeState, title: e.target.value })}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
         />
       </div>
 
       <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-        <label className="block text-xs font-bold uppercase text-[#0A1F44]">
+        <label className="block text-xs font-bold uppercase text-slate-800">
           Key Statistics Counters ({stats.length})
         </label>
         <button
           type="button"
           onClick={() => {
             const newStat = { label: "New Metric", value: "100%", sublabel: "" };
-            onChange({ ...state, stats: [...stats, newStat] });
+            onChange({ ...safeState, stats: [...stats, newStat] });
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Stat</span>
@@ -1598,7 +2574,7 @@ function StatsSectionEditor({ state, onChange }: { state: any; onChange: (val: a
               <button
                 type="button"
                 onClick={() => {
-                  onChange({ ...state, stats: stats.filter((_: any, i: number) => i !== idx) });
+                  onChange({ ...safeState, stats: stats.filter((_: any, i: number) => i !== idx) });
                 }}
                 className="text-xs font-bold text-rose-600 hover:text-rose-800"
               >
@@ -1614,9 +2590,9 @@ function StatsSectionEditor({ state, onChange }: { state: any; onChange: (val: a
                   onChange={(e) => {
                     const copy = [...stats];
                     copy[idx] = { ...copy[idx], value: e.target.value };
-                    onChange({ ...state, stats: copy });
+                    onChange({ ...safeState, stats: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold text-slate-700"
+                  className="w-full rounded border border-slate-300 bg-white px-2 py-1 text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-400"
                 />
               </div>
               <div>
@@ -1627,9 +2603,9 @@ function StatsSectionEditor({ state, onChange }: { state: any; onChange: (val: a
                   onChange={(e) => {
                     const copy = [...stats];
                     copy[idx] = { ...copy[idx], label: e.target.value };
-                    onChange({ ...state, stats: copy });
+                    onChange({ ...safeState, stats: copy });
                   }}
-                  className="w-full rounded border border-slate-300 px-2 py-1 text-xs"
+                  className="w-full rounded border border-slate-300 bg-white px-2 py-1 text-xs focus:outline-none focus:border-slate-400"
                 />
               </div>
             </div>
@@ -1641,22 +2617,23 @@ function StatsSectionEditor({ state, onChange }: { state: any; onChange: (val: a
 }
 
 function CtaSectionEditor({ state, onChange }: { state: any; onChange: (val: any) => void }) {
+  const safeState = state || {};
   return (
     <div className="space-y-4">
       <div>
         <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Banner Heading</label>
         <input
           type="text"
-          value={state.heading || state.title || ""}
-          onChange={(e) => onChange({ ...state, heading: e.target.value })}
-          className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-semibold text-[#0A1F44]"
+          value={safeState.heading || safeState.title || ""}
+          onChange={(e) => onChange({ ...safeState, heading: e.target.value })}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
         />
       </div>
 
       <CmsAutoTextarea
         label="Description / Supporting Text"
-        value={state.description || state.subtitle || ""}
-        onChange={(val) => onChange({ ...state, description: val })}
+        value={safeState.description || safeState.subtitle || ""}
+        onChange={(val) => onChange({ ...safeState, description: val })}
         rows={3}
       />
 
@@ -1665,24 +2642,25 @@ function CtaSectionEditor({ state, onChange }: { state: any; onChange: (val: any
           <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Primary Button Text</label>
           <input
             type="text"
-            value={state.buttonText || "Apply Now"}
-            onChange={(e) => onChange({ ...state, buttonText: e.target.value })}
-            className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
+            value={safeState.buttonText || "Apply Now"}
+            onChange={(e) => onChange({ ...safeState, buttonText: e.target.value })}
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:outline-none focus:border-slate-400"
           />
         </div>
         <div>
           <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Primary Button Link</label>
           <input
             type="text"
-            value={state.buttonLink || ""}
-            onChange={(e) => onChange({ ...state, buttonLink: e.target.value })}
-            className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
+            value={safeState.buttonLink || ""}
+            onChange={(e) => onChange({ ...safeState, buttonLink: e.target.value })}
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:outline-none focus:border-slate-400"
           />
         </div>
       </div>
     </div>
   );
 }
+
 
 function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: any; onChange: (val: any) => void; activeSectionKey: string }) {
   if (!state || typeof state !== "object") {
@@ -1705,7 +2683,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
             type="text"
             value={state.title || ""}
             onChange={(e) => onChange({ ...state, title: e.target.value })}
-            className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-semibold text-[#0A1F44] focus:border-slate-300 focus:outline-none"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:border-slate-400 focus:outline-none"
           />
         </div>
       )}
@@ -1719,7 +2697,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
             type="text"
             value={state.eyebrow || ""}
             onChange={(e) => onChange({ ...state, eyebrow: e.target.value })}
-            className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-slate-400 focus:outline-none"
           />
         </div>
       )}
@@ -1733,7 +2711,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
             type="text"
             value={state.subtitle || ""}
             onChange={(e) => onChange({ ...state, subtitle: e.target.value })}
-            className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-slate-400 focus:outline-none"
           />
         </div>
       )}
@@ -1765,7 +2743,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
               type="text"
               value={state.videoUrl || ""}
               onChange={(e) => onChange({ ...state, videoUrl: e.target.value })}
-              className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-slate-400 focus:outline-none"
             />
           </div>
           <CmsImagePreviewInput
@@ -1787,7 +2765,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
               type="text"
               value={state.ctaText || "Apply Now"}
               onChange={(e) => onChange({ ...state, ctaText: e.target.value })}
-              className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-slate-400 focus:outline-none"
             />
           </div>
           <div>
@@ -1798,7 +2776,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
               type="text"
               value={state.ctaLink || ""}
               onChange={(e) => onChange({ ...state, ctaLink: e.target.value })}
-              className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-slate-400 focus:outline-none"
             />
           </div>
         </div>
@@ -1807,14 +2785,14 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
       {/* Custom NEP main_content section editor */}
       {activeSectionKey === "main_content" && (
         <div className="space-y-4 rounded-xl border border-slate-200 p-4 bg-slate-50">
-          <h4 className="font-bold text-sm text-[#0A1F44]">NEP Main Content &amp; Bullet Points</h4>
+          <h4 className="font-bold text-sm text-slate-900">NEP Main Content &amp; Bullet Points</h4>
           <div>
             <label className="block text-xs font-bold uppercase text-slate-700 mb-1">First University Heading</label>
             <input
               type="text"
               value={state.firstUniversityHeading || ""}
               onChange={(e) => onChange({ ...state, firstUniversityHeading: e.target.value })}
-              className="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm focus:border-slate-400 focus:outline-none"
             />
           </div>
           <CmsStringRepeater
@@ -1843,7 +2821,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
           return (
             <div key={propKey} className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#0A1F44]">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-800">
                   {propKey} ({val.length})
                 </label>
                 <button
@@ -1852,7 +2830,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
                     const newItem = typeof val[0] === "object" ? { title: "New Item" } : "New Item";
                     onChange({ ...state, [propKey]: [...val, newItem] });
                   }}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   <span>Add Item</span>
@@ -1896,7 +2874,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
                                     updatedArr[idx] = { ...updatedArr[idx], [itemKey]: e.target.value };
                                     onChange({ ...state, [propKey]: updatedArr });
                                   }}
-                                  className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs"
+                                  className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
                                 />
                               </div>
                             );

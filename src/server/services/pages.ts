@@ -240,12 +240,23 @@ export async function getPageSectionsAdmin(pageSlug: string) {
     return {
       sections: sectionMap,
       seo: pageRecord?.seo || null,
+      page: pageRecord
+        ? {
+            id: pageRecord.id,
+            slug: pageRecord.slug,
+            title: pageRecord.title,
+            status: pageRecord.status,
+            updatedAt: pageRecord.updatedAt,
+            publishedAt: pageRecord.publishedAt,
+          }
+        : null,
     };
   } catch (err: any) {
     serverLogger.error(`[CMS DB ERROR] getPageSectionsAdmin('${pageSlug}') failed`, err, { module: "pages", action: "getPageSectionsAdmin", pageSlug });
     return {
       sections: {},
       seo: null,
+      page: null,
     };
   }
 }

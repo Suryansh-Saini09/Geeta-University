@@ -182,7 +182,7 @@ export default function TopRecruitersSection({
               className="flex w-full overflow-x-auto scroll-smooth cursor-grab active:cursor-grabbing select-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               <div className="flex w-max items-center py-2">
-                {items.map((recruiter) => {
+                {items.map((recruiter, idx) => {
                   const logoUrl = recruiter.logo;
                   const isExternal =
                     logoUrl?.startsWith("http://") || logoUrl?.startsWith("https://");
@@ -195,7 +195,7 @@ export default function TopRecruitersSection({
 
                   return (
                     <div
-                      key={recruiter.id}
+                      key={recruiter.id || `${recruiter.name}-${idx}`}
                       className="group/card mx-3 flex h-24 w-52 shrink-0 items-center justify-center rounded-2xl border bg-white px-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:mx-4 sm:h-28 sm:w-60 md:h-32 md:w-64 pointer-events-auto"
                       style={{
                         borderColor: "rgba(6, 53, 95, 0.08)",
