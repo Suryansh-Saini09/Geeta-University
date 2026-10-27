@@ -77,7 +77,7 @@ export function SeoSectionEditor({
           <div className="grid gap-5">
             <div>
               <label className="mb-1.5 block text-sm font-bold text-[#0A1F44]">
-                Page Title Tag (&lt;title&gt;)
+                Page Title Tag
               </label>
               <input
                 type="text"
