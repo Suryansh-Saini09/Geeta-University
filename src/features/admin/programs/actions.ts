@@ -7,6 +7,8 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/server/db/client";
 import { assertPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
+import { serverLogger } from "@/lib/security/logger";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import {
   programCreateSchema,
   programUpdateSchema,
@@ -97,26 +99,32 @@ export async function createProgramAction(formData: FormData) {
     },
   };
 
-  const program = await prisma.program.create({
-    data: {
-      ...toProgramWriteData(parsed.data),
-      overview: initialOverview,
-    },
-  });
+  try {
+    const program = await prisma.program.create({
+      data: {
+        ...toProgramWriteData(parsed.data),
+        overview: initialOverview,
+      },
+    });
 
-  await prisma.auditLog.create({
-    data: {
-      actorId: session.user.id,
-      action: AuditAction.CREATE,
-      entityType: "Program",
-      entityId: program.id,
-      after: program,
-    },
-  });
+    await prisma.auditLog.create({
+      data: {
+        actorId: session.user.id,
+        action: AuditAction.CREATE,
+        entityType: "Program",
+        entityId: program.id,
+        after: program,
+      },
+    });
 
-  revalidatePath("/admin");
-  revalidatePath("/admin/programs");
-  redirect("/admin/programs?created=1");
+    revalidatePath("/admin");
+    revalidatePath("/admin/programs");
+    redirect("/admin/programs?created=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to create program", error, { module: "programs", action: "createProgram" });
+    redirect(`/admin/programs/new?error=${encodeURIComponent(sanitizeErrorMessage(error))}`);
+  }
 }
 
 export async function updateProgramAction(formData: FormData) {

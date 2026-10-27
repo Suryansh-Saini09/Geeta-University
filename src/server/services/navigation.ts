@@ -1,5 +1,6 @@
 import { prisma } from "@/server/db/client";
 import { DEFAULT_LOCALE, getLocalizedField } from "@/lib/i18n/localization";
+import { serverLogger } from "@/lib/security/logger";
 
 export interface MegaCol {
   heading?: string;
@@ -309,7 +310,7 @@ export async function getHeaderNavigation(
       announcements,
     };
   } catch (err) {
-    console.error("Failed to fetch header navigation from DB, using fallback:", err);
+    serverLogger.error("Failed to fetch header navigation from DB, using fallback", err, { module: "navigation", action: "getHeaderNavigation" });
     return {
       primaryNav: DEFAULT_PRIMARY_NAV,
       topBarLinks: DEFAULT_TOPBAR_LINKS,

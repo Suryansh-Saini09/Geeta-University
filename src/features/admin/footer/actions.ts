@@ -10,6 +10,7 @@ import { prisma } from "@/server/db/client";
 import { detectMediaFormat, MAX_MEDIA_BYTES, removeMedia, saveMedia } from "@/server/media/storage";
 import { FOOTER_SETTINGS_KEY, getFooterSettings } from "@/server/services/footer";
 import { safeActionError } from "@/lib/cms/errorSanitizer";
+import { serverLogger } from "@/lib/security/logger";
 import {
   footerBannerSchema,
   footerBrandingSchema,
@@ -40,7 +41,7 @@ function revalidateSharedFooterRoutes() {
     revalidatePath("/how-to-reach-us");
     revalidatePath("/admin/footer");
   } catch (err) {
-    console.error("Error during footer cache revalidation:", err);
+    serverLogger.error("Failed to revalidate footer cache", err, { module: "FooterCMS", action: "revalidateCache" });
   }
 }
 
@@ -884,7 +885,7 @@ export async function deleteFooterDocumentAction(documentId: string): Promise<
 
     // Remove file from disk storage (ignore error if file already removed or missing)
     await removeMedia(asset.storageKey).catch((error) => {
-      console.error("Failed to remove media file from storage:", error);
+      serverLogger.error("Failed to remove media file from storage", error, { module: "FooterCMS", action: "removeMedia" });
     });
 
     revalidateSharedFooterRoutes();

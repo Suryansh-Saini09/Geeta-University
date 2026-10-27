@@ -1,6 +1,7 @@
 import { getPageSectionsAdmin, getPublishedHomePage } from "@/server/services/pages";
 import { HomeCmsDashboard } from "@/features/admin/pages/components/HomeCmsDashboard";
 import { prisma } from "@/server/db/client";
+import { serverLogger } from "@/lib/security/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,7 @@ export default async function AdminHomePage() {
     prisma.recruiter
       .findMany({ orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }] })
       .catch((e) => {
-        console.warn("[AdminHomePage] recruiter query failed:", e?.message);
+        serverLogger.warn("[AdminHomePage] recruiter query failed", e, { module: "AdminHomePage", action: "queryRecruiters" });
         return [];
       }),
   ]);

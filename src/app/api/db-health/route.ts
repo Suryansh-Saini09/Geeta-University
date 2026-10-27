@@ -3,6 +3,7 @@ import dns from "dns/promises";
 import net from "net";
 import { prisma } from "@/server/db/client";
 import { getAdminSession } from "@/server/auth/session";
+import { serverLogger } from "@/lib/security/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -29,11 +30,11 @@ export async function GET() {
     }
   }
 
-  const result: Record<string, any> = {
+  const result: Record<string, unknown> = {
     timestamp: new Date().toISOString(),
     hasDbUrl: Boolean(rawUrl),
     host: null,
-    port: 19619,
+    port: null,
     region: process.env.VERCEL_REGION || "local",
     dnsResolved: false,
     resolvedAddresses: [],
@@ -53,18 +54,24 @@ export async function GET() {
     return NextResponse.json(result, { status: 500 });
   }
 
-  let host = "mysql-2f0aea32-geetauniversity-5907.k.aivencloud.com";
-  let port = 19619;
+  let host = "";
+  let port = 3306;
 
   try {
     const parsed = new URL(rawUrl);
-    host = parsed.hostname || host;
-    port = parsed.port ? parseInt(parsed.port, 10) : port;
+    host = parsed.hostname || "";
+    port = parsed.port ? parseInt(parsed.port, 10) : 3306;
     result.host = host;
     result.port = port;
-  } catch (err: any) {
-    result.host = host;
-    result.port = port;
+  } catch (err: unknown) {
+    result.errorClassification = "Invalid DATABASE_URL format";
+    result.errorMessage = err instanceof Error ? err.message : String(err);
+    return NextResponse.json(result, { status: 500 });
+  }
+
+  if (!host) {
+    result.errorClassification = "Database host could not be determined from DATABASE_URL";
+    return NextResponse.json(result, { status: 500 });
   }
 
   // Step 1: DNS Resolution
@@ -72,9 +79,9 @@ export async function GET() {
     const addresses = await dns.resolve4(host);
     result.dnsResolved = true;
     result.resolvedAddresses = addresses;
-  } catch (dnsErr: any) {
+  } catch (dnsErr: unknown) {
     result.dnsResolved = false;
-    result.dnsError = dnsErr?.message || String(dnsErr);
+    result.dnsError = dnsErr instanceof Error ? dnsErr.message : String(dnsErr);
     result.errorClassification = "DNS resolution failed";
     return NextResponse.json(result, { status: 500 });
   }
@@ -117,17 +124,25 @@ export async function GET() {
     result.pageCount = pageCount;
 
     result.errorClassification = "NONE";
-  } catch (err: any) {
-    const errMsg = err?.message ? String(err.message) : String(err);
-    const sanitizedMsg = errMsg.replace(/:[^:@]+@/, ":****@");
-    result.errorMessage = sanitizedMsg;
+  } catch (err: unknown) {
+    const correlationId = serverLogger.error("Database health check failed", err, { module: "API", action: "db-health" });
+    const errMsg = err instanceof Error ? err.message : String(err);
+    
+    if (process.env.NODE_ENV === "production") {
+      result.errorMessage = "Database service error occurred.";
+      result.host = "[REDACTED]";
+      result.resolvedAddresses = [];
+      result.correlationId = correlationId;
+    } else {
+      result.errorMessage = errMsg.replace(/:[^:@]+@/, ":****@");
+    }
 
     if (errMsg.includes("sslcert") || errMsg.includes("ca.pem") || errMsg.includes("Can't reach database server")) {
-      result.errorClassification = "Prisma SSL/CA path or connection error";
+      result.errorClassification = "Database SSL/TLS or connection error";
     } else if (errMsg.includes("Access denied") || errMsg.includes("1045")) {
-      result.errorClassification = "MySQL Authentication failed";
+      result.errorClassification = "Database Authentication failed";
     } else {
-      result.errorClassification = "Prisma execution error";
+      result.errorClassification = "Database execution error";
     }
   }
 

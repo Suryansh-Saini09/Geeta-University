@@ -12,7 +12,12 @@ export default function AdminError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Admin portal route error:", error);
+    // Safely record error reference without dumping raw stack or database details to browser console
+    if (error.digest) {
+      console.error(`[Notice] Admin portal route failure (Ref: ${error.digest})`);
+    } else {
+      console.error("[Notice] Admin portal route failure");
+    }
   }, [error]);
 
   return (

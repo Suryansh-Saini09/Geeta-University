@@ -8,6 +8,8 @@ import { assertPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
 import { prisma } from "@/server/db/client";
 import { facultySchema, type FacultyInput } from "@/validations/faculty";
+import { serverLogger } from "@/lib/security/logger";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 
 function payload(formData: FormData) {
   return {
@@ -53,15 +55,22 @@ export async function createFacultyAction(formData: FormData) {
   const linkError = await validateLinks(parsed.data);
   if (linkError) redirect(errorUrl("/admin/faculty/new", linkError));
   if (await prisma.facultyMember.findUnique({ where: { slug: parsed.data.slug }, select: { id: true } })) redirect(errorUrl("/admin/faculty/new", "This slug is already in use."));
-  const faculty = await prisma.$transaction(async (tx) => {
-    const created = await tx.facultyMember.create({ data: { ...writeData(parsed.data), programs: { create: [...new Set(parsed.data.programIds)].map((programId) => ({ program: { connect: { id: programId } } })) } } });
-    await tx.auditLog.create({ data: { actorId: session.user.id, action: AuditAction.CREATE, entityType: "FacultyMember", entityId: created.id, after: created } });
-    return created;
-  });
-  revalidatePath("/admin/faculty");
-  revalidatePath("/admin/programs");
-  revalidatePath("/admin");
-  redirect(`/admin/faculty?created=${faculty.id}`);
+
+  try {
+    const faculty = await prisma.$transaction(async (tx) => {
+      const created = await tx.facultyMember.create({ data: { ...writeData(parsed.data), programs: { create: [...new Set(parsed.data.programIds)].map((programId) => ({ program: { connect: { id: programId } } })) } } });
+      await tx.auditLog.create({ data: { actorId: session.user.id, action: AuditAction.CREATE, entityType: "FacultyMember", entityId: created.id, after: created } });
+      return created;
+    });
+    revalidatePath("/admin/faculty");
+    revalidatePath("/admin/programs");
+    revalidatePath("/admin");
+    redirect(`/admin/faculty?created=${faculty.id}`);
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to create faculty member", error, { module: "faculty", action: "createFaculty" });
+    redirect(errorUrl("/admin/faculty/new", sanitizeErrorMessage(error)));
+  }
 }
 
 export async function updateFacultyAction(formData: FormData) {
@@ -77,14 +86,21 @@ export async function updateFacultyAction(formData: FormData) {
   if (linkError) redirect(errorUrl(path, linkError));
   const owner = await prisma.facultyMember.findUnique({ where: { slug: parsed.data.slug }, select: { id: true } });
   if (owner && owner.id !== id) redirect(errorUrl(path, "This slug is already in use."));
-  await prisma.$transaction(async (tx) => {
-    const updated = await tx.facultyMember.update({ where: { id }, data: { ...writeData(parsed.data), programs: { deleteMany: {}, create: [...new Set(parsed.data.programIds)].map((programId) => ({ program: { connect: { id: programId } } })) } } });
-    await tx.auditLog.create({ data: { actorId: session.user.id, action: AuditAction.UPDATE, entityType: "FacultyMember", entityId: id, before: existing, after: updated } });
-  });
-  revalidatePath("/admin/faculty");
-  revalidatePath("/admin/programs");
-  revalidatePath("/admin");
-  redirect("/admin/faculty?updated=1");
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      const updated = await tx.facultyMember.update({ where: { id }, data: { ...writeData(parsed.data), programs: { deleteMany: {}, create: [...new Set(parsed.data.programIds)].map((programId) => ({ program: { connect: { id: programId } } })) } } });
+      await tx.auditLog.create({ data: { actorId: session.user.id, action: AuditAction.UPDATE, entityType: "FacultyMember", entityId: id, before: existing, after: updated } });
+    });
+    revalidatePath("/admin/faculty");
+    revalidatePath("/admin/programs");
+    revalidatePath("/admin");
+    redirect("/admin/faculty?updated=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to update faculty member", error, { module: "faculty", action: "updateFaculty", id });
+    redirect(errorUrl(path, sanitizeErrorMessage(error)));
+  }
 }
 
 export async function archiveFacultyAction(formData: FormData) {
@@ -93,13 +109,20 @@ export async function archiveFacultyAction(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   const existing = await prisma.facultyMember.findUnique({ where: { id } });
   if (!existing) redirect("/admin/faculty?error=not-found");
-  await prisma.$transaction(async (tx) => {
-    const updated = await tx.facultyMember.update({ where: { id }, data: { status: ContentStatus.ARCHIVED } });
-    await tx.auditLog.create({ data: { actorId: session.user.id, action: AuditAction.UPDATE, entityType: "FacultyMember", entityId: id, before: existing, after: updated } });
-  });
-  revalidatePath("/admin/faculty");
-  revalidatePath("/admin");
-  redirect("/admin/faculty?archived=1");
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      const updated = await tx.facultyMember.update({ where: { id }, data: { status: ContentStatus.ARCHIVED } });
+      await tx.auditLog.create({ data: { actorId: session.user.id, action: AuditAction.UPDATE, entityType: "FacultyMember", entityId: id, before: existing, after: updated } });
+    });
+    revalidatePath("/admin/faculty");
+    revalidatePath("/admin");
+    redirect("/admin/faculty?archived=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to archive faculty member", error, { module: "faculty", action: "archiveFaculty", id });
+    redirect(`/admin/faculty?error=${encodeURIComponent(sanitizeErrorMessage(error))}`);
+  }
 }
 
 export async function reorderFacultyAction(formData: FormData) {

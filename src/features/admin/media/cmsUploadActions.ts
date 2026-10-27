@@ -7,8 +7,12 @@ import {
   saveCmsAsset,
   type SaveCmsMediaResult,
 } from "@/server/media/cmsUploadService";
+import { safeActionError, sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
+import { serverLogger } from "@/lib/security/logger";
 
-export interface UploadCmsAssetResponse extends SaveCmsMediaResult {}
+export interface UploadCmsAssetResponse extends SaveCmsMediaResult {
+  correlationId?: string;
+}
 
 export interface MediaLibraryItem {
   id: string;
@@ -29,6 +33,7 @@ export interface MediaLibraryResponse {
   page: number;
   totalPages: number;
   error?: string;
+  correlationId?: string;
 }
 
 /**
@@ -65,11 +70,15 @@ export async function uploadCmsAssetAction(formData: FormData): Promise<UploadCm
     });
 
     return result;
-  } catch (error: any) {
-    console.error("uploadCmsAssetAction error:", error);
+  } catch (error: unknown) {
+    const correlationId = serverLogger.error("Failed to upload CMS asset", error, {
+      module: "MediaCMS",
+      action: "uploadCmsAsset",
+    });
     return {
       success: false,
-      error: error?.message || "Failed to upload asset. Please try again.",
+      error: sanitizeErrorMessage(error, "Failed to upload asset. Please try again."),
+      correlationId,
     };
   }
 }
@@ -86,7 +95,10 @@ export async function checkMediaUsageAction(url: string): Promise<{
     await requireAdminSession();
     return await checkMediaAssetUsage(url);
   } catch (error) {
-    console.error("checkMediaUsageAction error:", error);
+    serverLogger.error("Failed to check media asset usage", error, {
+      module: "MediaCMS",
+      action: "checkMediaUsage",
+    });
     return { isShared: false, totalUsageCount: 0, referencingEntities: [] };
   }
 }
@@ -138,15 +150,19 @@ export async function getMediaLibraryItemsAction(
       page: result.page,
       totalPages: result.totalPages,
     };
-  } catch (error: any) {
-    console.error("getMediaLibraryItemsAction error:", error);
+  } catch (error: unknown) {
+    const correlationId = serverLogger.error("Failed to load media assets", error, {
+      module: "MediaCMS",
+      action: "getMediaLibraryItems",
+    });
     return {
       success: false,
       items: [],
       totalCount: 0,
       page: 1,
       totalPages: 1,
-      error: error?.message || "Failed to load media assets.",
+      error: sanitizeErrorMessage(error, "Failed to load media assets."),
+      correlationId,
     };
   }
 }

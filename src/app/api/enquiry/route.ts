@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/server/db/client";
+import { getClientIp } from "@/server/auth/clientIp";
 import { checkRateLimit } from "@/server/auth/rateLimiter";
 import { admissionEnquirySchema } from "@/validations/admissionEnquiry";
 import { env } from "@/lib/env";
+import { serverLogger } from "@/lib/security/logger";
+import { createSafeApiResponse } from "@/lib/cms/errorSanitizer";
 
 export async function POST(request: Request) {
   if (!request.headers.get("content-type")?.includes("application/json")) {
@@ -13,13 +16,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, message: "Enquiry is too large." }, { status: 413 });
   }
 
-  const ipAddress =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    null;
+  const clientIp = getClientIp(request.headers);
+  const ipAddress = clientIp !== "unknown-ip" ? clientIp : null;
 
   // Rate limit: 10 submissions per hour per IP
-  const clientIp = ipAddress || "unknown-ip";
   const rateLimit = checkRateLimit(`enquiry_ip_${clientIp}`, 10, 3600);
   if (!rateLimit.success) {
     return NextResponse.json(
@@ -102,10 +102,10 @@ export async function POST(request: Request) {
           body: leadPayload,
           signal: AbortSignal.timeout(5000),
         }).catch((err) => {
-          console.error("[Meritto Relay Error]: Failed to push lead to CRM relay:", err);
+          serverLogger.error("Failed to push lead to CRM relay", err, { module: "API", action: "merittoRelay" });
         });
       } catch (relayErr) {
-        console.error("[Meritto Relay Exception]:", relayErr);
+        serverLogger.error("Meritto relay exception", relayErr, { module: "API", action: "merittoRelay" });
       }
     }
 
@@ -114,10 +114,10 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Failed to save admission enquiry:", error);
-    return NextResponse.json(
-      { success: false, message: "We could not submit your enquiry. Please try again." },
-      { status: 500 }
-    );
+    return createSafeApiResponse(error, {
+      status: 500,
+      fallbackMessage: "We could not submit your enquiry. Please try again.",
+      context: { module: "API", action: "submitEnquiry" },
+    });
   }
 }

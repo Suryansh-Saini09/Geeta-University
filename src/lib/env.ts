@@ -27,6 +27,10 @@ const envSchema = z.object({
     emptyStringToUndefined,
     z.string().optional()
   ),
+  TRUSTED_PROXY_PROVIDER: z.preprocess(
+    emptyStringToUndefined,
+    z.enum(["cloudflare", "hostinger", "vercel", "none"]).optional()
+  ),
 });
 
 export const env = envSchema.parse({
@@ -36,6 +40,7 @@ export const env = envSchema.parse({
   GEETA_LEAD_API_URL: process.env.GEETA_LEAD_API_URL,
   GEETA_LEAD_API_KEY: process.env.GEETA_LEAD_API_KEY,
   MEDIA_STORAGE_DIR: process.env.MEDIA_STORAGE_DIR,
+  TRUSTED_PROXY_PROVIDER: process.env.TRUSTED_PROXY_PROVIDER,
 });
 
 export function requireDatabaseUrl(): string {

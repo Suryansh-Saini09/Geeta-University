@@ -11,6 +11,7 @@ import {
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { serverLogger } from "@/lib/security/logger";
 
 function createPrismaClient(): PrismaClient {
   const dbUrl = process.env.DATABASE_URL;
@@ -22,18 +23,24 @@ function createPrismaClient(): PrismaClient {
 
   try {
     const url = new URL(dbUrl);
-    let sslConfig: any = { rejectUnauthorized: false };
+    let sslConfig: { ca?: Buffer | string; rejectUnauthorized: boolean } = { rejectUnauthorized: true };
     const caPath = resolve(process.cwd(), "prisma/ca.pem");
-    if (existsSync(caPath)) {
+    const rootCaPath = resolve(process.cwd(), "ca.pem");
+    const activeCaPath = existsSync(caPath) ? caPath : existsSync(rootCaPath) ? rootCaPath : null;
+
+    if (activeCaPath) {
       try {
         sslConfig = {
-          ca: readFileSync(caPath),
-          rejectUnauthorized: false,
+          ca: readFileSync(activeCaPath),
+          rejectUnauthorized: true,
         };
-      } catch {
-        sslConfig = { rejectUnauthorized: false };
+      } catch (e) {
+        serverLogger.error("Failed to read CA certificate from path", e, { module: "database", action: "loadCaCert" });
+        sslConfig = { rejectUnauthorized: true };
       }
     }
+
+    const connectionLimit = Number(url.searchParams.get("connection_limit") || 5);
 
     const adapter = new PrismaMariaDb({
       host: url.hostname,
@@ -42,6 +49,7 @@ function createPrismaClient(): PrismaClient {
       password: decodeURIComponent(url.password),
       database: url.pathname.slice(1),
       connectTimeout: 15000,
+      connectionLimit,
       ssl: sslConfig,
     });
 
@@ -50,7 +58,7 @@ function createPrismaClient(): PrismaClient {
       log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
     });
   } catch (err) {
-    console.error("Failed to initialize PrismaMariaDb adapter, falling back to default PrismaClient:", err);
+    serverLogger.error("Failed to initialize PrismaMariaDb adapter, falling back to default PrismaClient", err, { module: "database", action: "initPrismaMariaDb" });
     return new PrismaClient({
       log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
     });
@@ -63,9 +71,8 @@ const globalForPrisma = globalThis as unknown as {
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+// Always preserve client in globalThis to avoid leaking connection pools across re-evaluations
+globalForPrisma.prisma = prisma;
 
 export {
   PrismaClient,

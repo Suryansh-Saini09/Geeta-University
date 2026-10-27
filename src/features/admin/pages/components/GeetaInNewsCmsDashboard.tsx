@@ -44,7 +44,7 @@ import {
   updateGeetaInNewsSeoAction,
   type GeetaNewsItem,
 } from "@/features/admin/pages/geetaInNewsActions";
-import { slugify } from "@/lib/cms/htmlSanitizer";
+import { slugify, sanitizeHtml } from "@/lib/cms/htmlSanitizer";
 
 interface GeetaInNewsCmsDashboardProps {
   initialData: {
@@ -1565,7 +1565,7 @@ export function GeetaInNewsCmsDashboard({ initialData }: GeetaInNewsCmsDashboard
                   {contentPreviewMode ? (
                     <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 min-h-[220px] max-h-[300px] overflow-auto prose prose-sm">
                       {formValues.content ? (
-                        <div dangerouslySetInnerHTML={{ __html: formValues.content }} />
+                        <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(formValues.content) }} />
                       ) : (
                         <span className="text-slate-400 italic">No content written yet.</span>
                       )}

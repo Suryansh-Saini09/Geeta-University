@@ -11,6 +11,8 @@ import {
   updateUnifiedMediaAssetMetadata,
 } from "@/server/services/unifiedMediaCatalog";
 import { mediaMetadataSchema } from "@/validations/media";
+import { serverLogger } from "@/lib/security/logger";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 
 function errorUrl(pathname: string, message: string) {
   return `${pathname}?error=${encodeURIComponent(message)}`;
@@ -32,21 +34,27 @@ export async function uploadMediaAction(formData: FormData) {
   if (!parsed.success) redirect(errorUrl(pathname, parsed.error.issues[0]?.message ?? "Invalid media details."));
   if (!(file instanceof File) || file.size === 0) redirect(errorUrl(pathname, "Choose a file to upload."));
 
-  const bytes = Buffer.from(await file.arrayBuffer());
-  const res = await saveCmsAsset(bytes, file.name, {
-    contentArea: "media",
-    section: "library",
-    altText: parsed.data.altText,
-    caption: parsed.data.caption,
-    userId: session.user.id,
-  });
+  try {
+    const bytes = Buffer.from(await file.arrayBuffer());
+    const res = await saveCmsAsset(bytes, file.name, {
+      contentArea: "media",
+      section: "library",
+      altText: parsed.data.altText,
+      caption: parsed.data.caption,
+      userId: session.user.id,
+    });
 
-  if (!res.success) {
-    redirect(errorUrl(pathname, res.error || "Failed to upload file."));
+    if (!res.success) {
+      redirect(errorUrl(pathname, res.error || "Failed to upload file."));
+    }
+
+    revalidatePath("/admin/media");
+    redirect("/admin/media?uploaded=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to upload media asset", error, { module: "media", action: "uploadMedia" });
+    redirect(errorUrl(pathname, sanitizeErrorMessage(error)));
   }
-
-  revalidatePath("/admin/media");
-  redirect("/admin/media?uploaded=1");
 }
 
 export async function updateMediaAction(formData: FormData) {
@@ -58,19 +66,25 @@ export async function updateMediaAction(formData: FormData) {
   const parsed = metadata(formData);
   if (!parsed.success) redirect(errorUrl(pathname, parsed.error.issues[0]?.message ?? "Invalid media details."));
 
-  const res = await updateUnifiedMediaAssetMetadata({
-    idOrUrl: id,
-    altText: parsed.data.altText,
-    caption: parsed.data.caption,
-    userId: session.user.id,
-  });
+  try {
+    const res = await updateUnifiedMediaAssetMetadata({
+      idOrUrl: id,
+      altText: parsed.data.altText,
+      caption: parsed.data.caption,
+      userId: session.user.id,
+    });
 
-  if (!res.success) {
-    redirect(errorUrl(pathname, res.error || "Failed to update media details."));
+    if (!res.success) {
+      redirect(errorUrl(pathname, res.error || "Failed to update media details."));
+    }
+
+    revalidatePath("/admin/media");
+    redirect("/admin/media?updated=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to update media asset", error, { module: "media", action: "updateMedia", id });
+    redirect(errorUrl(pathname, sanitizeErrorMessage(error)));
   }
-
-  revalidatePath("/admin/media");
-  redirect("/admin/media?updated=1");
 }
 
 export async function deleteMediaAction(formData: FormData) {
@@ -79,15 +93,21 @@ export async function deleteMediaAction(formData: FormData) {
   const rawId = String(formData.get("id") ?? "");
   const id = decodeURIComponent(rawId);
 
-  const res = await deleteUnifiedMediaAssetSafe({
-    idOrUrl: id,
-    userId: session.user.id,
-  });
+  try {
+    const res = await deleteUnifiedMediaAssetSafe({
+      idOrUrl: id,
+      userId: session.user.id,
+    });
 
-  if (!res.success) {
-    redirect(errorUrl("/admin/media", res.error || "Cannot delete this file."));
+    if (!res.success) {
+      redirect(errorUrl("/admin/media", res.error || "Cannot delete this file."));
+    }
+
+    revalidatePath("/admin/media");
+    redirect("/admin/media?deleted=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to delete media asset", error, { module: "media", action: "deleteMedia", id });
+    redirect(errorUrl("/admin/media", sanitizeErrorMessage(error)));
   }
-
-  revalidatePath("/admin/media");
-  redirect("/admin/media?deleted=1");
 }

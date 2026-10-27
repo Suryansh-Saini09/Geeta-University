@@ -23,7 +23,6 @@ export interface InternationalTestimonialsProps {
 
 export default function InternationalTestimonials({ data }: InternationalTestimonialsProps = {}) {
   const list = data?.items && data.items.length > 0 ? data.items : INTERNATIONAL_TESTIMONIALS;
-  if (data && list.length === 0) return null;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -49,6 +48,8 @@ export default function InternationalTestimonials({ data }: InternationalTestimo
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
   };
+
+  if (data && list.length === 0) return null;
 
   return (
     <section className="py-10 md:py-14 bg-[#0A1F44] text-white overflow-hidden relative">

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/server/db/client";
 import { HARDCODED_SOCIAL_LINKS, HARDCODED_SOCIAL_PROFILE } from "@/lib/socialLinks";
+import { serverLogger } from "@/lib/security/logger";
 
 export async function GET() {
   try {
@@ -20,7 +21,7 @@ export async function GET() {
       });
     }
   } catch (error) {
-    console.error("Error fetching social data from DB:", error);
+    serverLogger.error("Error fetching social data from DB", error, { module: "API", action: "social-links" });
   }
 
   return NextResponse.json({

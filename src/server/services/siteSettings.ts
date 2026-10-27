@@ -69,6 +69,8 @@ export const DEFAULT_SITE_METADATA_SETTINGS: SiteMetadataSettings = {
 
 import { getLocalizedBody, getLocalizedField, DEFAULT_LOCALE } from "@/lib/i18n/localization";
 
+import { serverLogger } from "@/lib/security/logger";
+
 export async function getContactSettings(locale: string = DEFAULT_LOCALE): Promise<ContactSettings> {
   try {
     const setting = await prisma.siteSetting.findUnique({
@@ -80,7 +82,7 @@ export async function getContactSettings(locale: string = DEFAULT_LOCALE): Promi
     const parsed = contactSettingsSchema.safeParse(body);
     return parsed.success ? parsed.data : DEFAULT_CONTACT_SETTINGS;
   } catch (err) {
-    console.error("Failed to fetch contact settings from DB:", err);
+    serverLogger.error("Failed to fetch contact settings from DB", err, { module: "siteSettings", action: "getContactSettings" });
     return DEFAULT_CONTACT_SETTINGS;
   }
 }
@@ -96,7 +98,7 @@ export async function getAnnouncementSettings(locale: string = DEFAULT_LOCALE): 
     const parsed = announcementSettingsSchema.safeParse(body);
     return parsed.success ? parsed.data : DEFAULT_ANNOUNCEMENT_SETTINGS;
   } catch (err) {
-    console.error("Failed to fetch announcement settings from DB:", err);
+    serverLogger.error("Failed to fetch announcement settings from DB", err, { module: "siteSettings", action: "getAnnouncementSettings" });
     return DEFAULT_ANNOUNCEMENT_SETTINGS;
   }
 }
@@ -112,7 +114,7 @@ export async function getAdmissionCtaSettings(locale: string = DEFAULT_LOCALE): 
     const parsed = admissionCtaSettingsSchema.safeParse(body);
     return parsed.success ? parsed.data : DEFAULT_ADMISSION_CTA_SETTINGS;
   } catch (err) {
-    console.error("Failed to fetch admission CTA settings from DB:", err);
+    serverLogger.error("Failed to fetch admission CTA settings from DB", err, { module: "siteSettings", action: "getAdmissionCtaSettings" });
     return DEFAULT_ADMISSION_CTA_SETTINGS;
   }
 }
@@ -127,7 +129,7 @@ export async function getSocialLinksSettings(): Promise<SocialLinksSettings> {
     const parsed = socialLinksSettingsSchema.safeParse(setting.value);
     return parsed.success ? parsed.data : DEFAULT_SOCIAL_LINKS_SETTINGS;
   } catch (err) {
-    console.error("Failed to fetch social links settings from DB:", err);
+    serverLogger.error("Failed to fetch social links settings from DB", err, { module: "siteSettings", action: "getSocialLinksSettings" });
     return DEFAULT_SOCIAL_LINKS_SETTINGS;
   }
 }
@@ -143,7 +145,7 @@ export async function getSiteMetadataSettings(locale: string = DEFAULT_LOCALE): 
     const parsed = siteMetadataSettingsSchema.safeParse(body);
     return parsed.success ? parsed.data : DEFAULT_SITE_METADATA_SETTINGS;
   } catch (err) {
-    console.error("Failed to fetch site metadata settings from DB:", err);
+    serverLogger.error("Failed to fetch site metadata settings from DB", err, { module: "siteSettings", action: "getSiteMetadataSettings" });
     return DEFAULT_SITE_METADATA_SETTINGS;
   }
 }
@@ -165,7 +167,7 @@ export async function getNavigationSettings(menuKey = "main_nav", locale: string
       label: getLocalizedField(item, "label", locale),
     }));
   } catch (err) {
-    console.error(`Failed to fetch navigation menu '${menuKey}' from DB:`, err);
+    serverLogger.error(`Failed to fetch navigation menu '${menuKey}' from DB`, err, { module: "siteSettings", action: "getNavigationSettings", menuKey });
     return [];
   }
 }

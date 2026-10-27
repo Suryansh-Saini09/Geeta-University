@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { fetchSocialData, SocialLink, SocialProfile } from "@/lib/socialLinks";
 import { ChevronRight, Star, Globe, MessageCircle, Radio, GraduationCap, Compass } from "lucide-react";
+import { serverLogger } from "@/lib/security/logger";
 
 export const metadata: Metadata = {
   title: "Connect with Geeta University",
@@ -126,7 +127,7 @@ export default async function SocialLinksPage() {
       }
     }
   } catch (err) {
-    console.error("Error loading social links page:", err);
+    serverLogger.error("Failed to load social links from API", err, { module: "SocialLinks", action: "loadPage" });
   }
 
   // Group links by category (defaulting to "Official Social Media" & "Reviews & Platforms")

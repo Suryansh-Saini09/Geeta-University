@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -60,26 +60,7 @@ function Counter({ value, duration = 1.5 }: CounterProps) {
   const nodeRef = useRef<HTMLSpanElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
 
-  useEffect(() => {
-    const node = nodeRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (entry.isIntersecting && !hasAnimated) {
-          setHasAnimated(true);
-          startCounting();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [value, hasAnimated]);
-
-  const startCounting = () => {
+  const startCounting = useCallback(() => {
     let prefix = "";
     let suffix = "";
     let numberStr = value;
@@ -137,7 +118,26 @@ function Counter({ value, duration = 1.5 }: CounterProps) {
     };
 
     requestAnimationFrame(updateCount);
-  };
+  }, [value, duration]);
+
+  useEffect(() => {
+    const node = nodeRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          startCounting();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [value, hasAnimated, startCounting]);
 
   return <span ref={nodeRef}>{displayValue}</span>;
 }

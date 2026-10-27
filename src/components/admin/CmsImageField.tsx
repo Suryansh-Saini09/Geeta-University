@@ -107,8 +107,8 @@ export function CmsImageField({
           });
           return;
         }
-      } catch (err) {
-        console.warn("Usage check skipped:", err);
+      } catch {
+        // Continue to direct upload on transient check failure without leaking error to browser
       }
     }
 

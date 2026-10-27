@@ -136,8 +136,7 @@ export default function AlumniFeedbackPage() {
       setIsSubmitted(true);
       setFormData(initialFormData);
       setStep(1);
-    } catch (err) {
-      console.error("Submission error:", err);
+    } catch {
       setErrorMsg("Failed to submit feedback. Please check your connection and try again.");
     } finally {
       setIsSubmitting(false);

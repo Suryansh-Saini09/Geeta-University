@@ -53,7 +53,6 @@ export default function TopRecruitersSection({
   title = "Our Top Recruiters",
 }: TopRecruitersSectionProps = {}) {
   const items = data !== undefined ? (data || []) : defaultRecruiters;
-  if (!items || items.length === 0) return null;
 
   const {
     containerRef,
@@ -74,6 +73,8 @@ export default function TopRecruitersSection({
     autoplayInterval: 2500,
     enableAutoplay: true,
   });
+
+  if (!items || items.length === 0) return null;
 
   return (
     <section

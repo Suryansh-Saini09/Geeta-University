@@ -25,7 +25,6 @@ export interface StudentSuccessStoriesProps {
 
 export default function StudentSuccessStories({ data }: StudentSuccessStoriesProps = {}) {
   const items = data?.stories !== undefined ? (data.stories || []) : homeFeedback;
-  if (data && items.length === 0) return null;
 
   const {
     containerRef,
@@ -48,6 +47,8 @@ export default function StudentSuccessStories({ data }: StudentSuccessStoriesPro
     autoplayInterval: 3000,
     enableAutoplay: true,
   });
+
+  if (data && items.length === 0) return null;
 
   return (
     <section className="relative overflow-hidden bg-[#F5F8FB] pt-8 md:pt-10 pb-16 md:pb-20">

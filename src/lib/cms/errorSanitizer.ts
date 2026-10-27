@@ -1,10 +1,13 @@
 /**
- * Centralized CMS Error Sanitizer & Server Diagnostic Logger
+ * Centralized Application & CMS Error Sanitizer & Information Disclosure Prevention
  * 
  * Prevents internal database details, stack traces, SQL syntax, Prisma schemas,
  * connection strings, or system paths from ever reaching the browser while
- * ensuring robust server-side diagnostics for authorized engineers.
+ * ensuring robust server-side diagnostics with correlation IDs for authorized engineers.
  */
+
+import { NextResponse } from "next/server";
+import { serverLogger, generateCorrelationId, redactSensitiveData, type LogContext } from "@/lib/security/logger";
 
 export interface DiagnosticContext {
   module: string;
@@ -13,6 +16,30 @@ export interface DiagnosticContext {
   sectionKey?: string;
   recordId?: string;
   entityType?: string;
+  correlationId?: string;
+  [key: string]: unknown;
+}
+
+export interface SafeActionResponse<T = unknown> {
+  success: false;
+  data?: T;
+  error: string;
+  message: string;
+  code?: string;
+  correlationId?: string;
+}
+
+export interface SafeApiErrorOptions {
+  status?: number;
+  code?: string;
+  fallbackMessage?: string;
+  context?: DiagnosticContext;
+}
+
+export interface ErrorDetail {
+  message: string;
+  correlationId?: string;
+  code?: string;
 }
 
 const TECHNICAL_PATTERNS = [
@@ -20,6 +47,7 @@ const TECHNICAL_PATTERNS = [
   /mysql/i,
   /mariadb/i,
   /postgres/i,
+  /sqlite/i,
   /aiven/i,
   /database_url/i,
   /select\s+/i,
@@ -46,63 +74,44 @@ const TECHNICAL_PATTERNS = [
   /node_modules/i,
   /\.tsx?:\d+:\d+/i,
   /at\s+[a-z0-9_.]+\s+\(/i,
+  /\/Users\/|\/var\/|\/home\/|[A-Za-z]:\\/i,
 ];
 
 /**
  * Strips credentials, tokens, or connection strings from logs.
  */
-function redactSensitiveInfo(text: string): string {
-  return text
-    .replace(/(?:mysql|postgresql|postgres):\/\/[^:\s]+:[^@\s]+@[^\s/]+/gi, "mysql://[REDACTED_CREDENTIALS]@[REDACTED_HOST]")
-    .replace(/(?:bearer\s+)[a-zA-Z0-9._-]+/gi, "Bearer [REDACTED_TOKEN]")
-    .replace(/(?:password|secret|key)=[^&\s]+/gi, "$1=[REDACTED]");
+export function redactSensitiveInfo(text: string): string {
+  return String(redactSensitiveData(text));
 }
 
 /**
  * Logs structured diagnostic information strictly server-side.
  */
-export function logServerDiagnostic(context: DiagnosticContext, error: unknown): void {
-  const errObj = error instanceof Error ? error : new Error(String(error));
-  const cleanStack = errObj.stack ? redactSensitiveInfo(errObj.stack) : undefined;
-  const cleanMessage = redactSensitiveInfo(errObj.message || "Unknown error");
-
-  console.error(
-    `[CMS DIAGNOSTIC] [${context.module}:${context.action}]`,
-    JSON.stringify({
-      timestamp: new Date().toISOString(),
-      module: context.module,
-      action: context.action,
-      pageSlug: context.pageSlug,
-      sectionKey: context.sectionKey,
-      recordId: context.recordId,
-      entityType: context.entityType,
-      errorName: errObj.name,
-      errorMessage: cleanMessage,
-      prismaCode: (error as any)?.code,
-      meta: (error as any)?.meta,
-    })
-  );
-
-  if (cleanStack && process.env.NODE_ENV !== "production") {
-    console.error(`[CMS STACK TRACE] [${context.module}:${context.action}]:\n`, cleanStack);
-  }
+export function logServerDiagnostic(context: DiagnosticContext, error: unknown): string {
+  const correlationId = context.correlationId || generateCorrelationId();
+  serverLogger.error(`[${context.module}:${context.action}] Failure occurred`, error, {
+    ...context,
+    correlationId,
+  });
+  return correlationId;
 }
 
 /**
- * Sanitizes an error to produce a safe, user-facing error message.
- * Never leaks database details, Prisma exception codes, or stack traces.
+ * Sanitizes an error to produce a safe, user-facing error message with detailed metadata.
  */
-export function sanitizeErrorMessage(
+export function sanitizeErrorDetail(
   error: unknown,
-  fallbackMessage = "Unable to save these changes. Please try again. If the problem persists, contact the site administrator.",
+  fallbackMessage = "Something went wrong. Please try again. If the problem persists, contact the site administrator.",
   context?: DiagnosticContext
-): string {
+): ErrorDetail {
+  let correlationId: string | undefined;
+
   if (context) {
-    logServerDiagnostic(context, error);
+    correlationId = logServerDiagnostic(context, error);
   }
 
   if (!error) {
-    return fallbackMessage;
+    return { message: fallbackMessage, correlationId };
   }
 
   // 1. Check for Prisma Known Request Errors
@@ -110,19 +119,35 @@ export function sanitizeErrorMessage(
   if (typeof prismaCode === "string") {
     switch (prismaCode) {
       case "P2002":
-        return "A record with this identifier or unique detail already exists. Please choose a different value.";
+        return {
+          message: "A record with this identifier or unique detail already exists. Please choose a different value.",
+          correlationId,
+          code: "DUPLICATE_RECORD",
+        };
       case "P2025":
-        return "The requested record could not be found.";
+        return {
+          message: "The requested record could not be found.",
+          correlationId,
+          code: "NOT_FOUND",
+        };
       case "P2003":
-        return "This item cannot be modified or deleted because it is linked to other content.";
+        return {
+          message: "This item cannot be modified or deleted because it is linked to other content.",
+          correlationId,
+          code: "RELATION_CONSTRAINT",
+        };
       case "P1000":
       case "P1001":
       case "P1002":
       case "P1008":
       case "P1017":
-        return "Database service is temporarily unavailable. Please try again shortly.";
+        return {
+          message: "Database service is temporarily unavailable. Please try again shortly.",
+          correlationId,
+          code: "DATABASE_UNAVAILABLE",
+        };
       default:
-        return fallbackMessage;
+        return { message: fallbackMessage, correlationId, code: "DATABASE_ERROR" };
     }
   }
 
@@ -132,13 +157,16 @@ export function sanitizeErrorMessage(
     const firstIssue = (error as any)?.issues?.[0];
     if (firstIssue && typeof firstIssue.message === "string") {
       const msg = firstIssue.message;
-      // Confirm issue message itself does not contain technical jargon
       const isDangerous = TECHNICAL_PATTERNS.some((pat) => pat.test(msg));
       if (!isDangerous && msg.length < 150) {
-        return msg;
+        return { message: msg, correlationId, code: "VALIDATION_FAILED" };
       }
     }
-    return "Some fields need attention. Review the highlighted fields and try again.";
+    return {
+      message: "Some fields need attention. Review the highlighted fields and try again.",
+      correlationId,
+      code: "VALIDATION_FAILED",
+    };
   }
 
   // 3. Inspect standard Error message
@@ -148,10 +176,10 @@ export function sanitizeErrorMessage(
     // Check if the message contains technical identifiers or SQL terms
     const hasTechnicalKeywords = TECHNICAL_PATTERNS.some((pattern) => pattern.test(rawMsg));
     if (hasTechnicalKeywords) {
-      return fallbackMessage;
+      return { message: fallbackMessage, correlationId, code: "INTERNAL_ERROR" };
     }
 
-    // Explicitly recognized safe application errors
+    // Explicitly recognized safe application error phrases
     const safeKnownPhrases = [
       "unauthorized",
       "forbidden",
@@ -174,25 +202,80 @@ export function sanitizeErrorMessage(
     const lower = rawMsg.toLowerCase();
     const isSafeKnown = safeKnownPhrases.some((phrase) => lower.includes(phrase));
     if (isSafeKnown && rawMsg.length < 150) {
-      return rawMsg;
+      return { message: rawMsg, correlationId };
     }
   }
 
-  return fallbackMessage;
+  return { message: fallbackMessage, correlationId, code: "INTERNAL_ERROR" };
 }
 
 /**
- * Returns a standardized safe action failure payload.
+ * Sanitizes an error to produce a safe, user-facing error message string.
+ * Never leaks database details, Prisma exception codes, or stack traces.
+ */
+export function sanitizeErrorMessage(
+  error: unknown,
+  fallbackMessage = "Unable to save these changes. Please try again. If the problem persists, contact the site administrator.",
+  context?: DiagnosticContext
+): string {
+  const detail = sanitizeErrorDetail(error, fallbackMessage, context);
+  return detail.message;
+}
+
+/**
+ * Returns a standardized safe action failure payload for Server Actions.
  */
 export function safeActionError(
   error: unknown,
   fallbackMessage?: string,
   context?: DiagnosticContext
-): { success: false; error: string; message: string } {
-  const errText = sanitizeErrorMessage(error, fallbackMessage, context);
+): SafeActionResponse<never> {
+  const detail = sanitizeErrorDetail(error, fallbackMessage, context);
   return {
     success: false,
-    error: errText,
-    message: errText,
+    error: detail.message,
+    message: detail.message,
+    code: detail.code,
+    correlationId: detail.correlationId,
+  };
+}
+
+/**
+ * Returns a standardized safe JSON error response for API routes.
+ */
+export function createSafeApiResponse(
+  error: unknown,
+  options?: SafeApiErrorOptions
+): NextResponse {
+  const status = options?.status || 500;
+  const context = options?.context || { module: "API", action: "handleRequest" };
+  const detail = sanitizeErrorDetail(error, options?.fallbackMessage, context);
+
+  return NextResponse.json(
+    {
+      success: false,
+      error: detail.message,
+      message: detail.message,
+      code: options?.code || detail.code || "REQUEST_FAILED",
+      correlationId: detail.correlationId,
+    },
+    {
+      status,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Content-Type-Options": "nosniff",
+      },
+    }
+  );
+}
+
+/**
+ * Generic authentication failure response to prevent account enumeration.
+ */
+export function safeAuthError(): { success: false; error: string; code: string } {
+  return {
+    success: false,
+    error: "The email or password entered is incorrect.",
+    code: "INVALID_CREDENTIALS",
   };
 }

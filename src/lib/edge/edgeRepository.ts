@@ -1,6 +1,7 @@
 import type { EdgePageData } from "@/data/edge/types";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
 import { getEdgePageBySlug } from "./edgeStatic";
+import { serverLogger } from "@/lib/security/logger";
 
 export * from "./edgeStatic";
 
@@ -108,7 +109,7 @@ export async function getEdgePageDataAsync(slug: string): Promise<EdgePageData |
 
     return merged;
   } catch (err) {
-    console.error(`[EDGE REPO] Error fetching DB data for "${slug}":`, err);
+    serverLogger.error(`[EDGE REPO] Error fetching DB data for "${slug}"`, err, { module: "edgeRepository", action: "getEdgePageDataAsync", slug });
     return fallback;
   }
 }

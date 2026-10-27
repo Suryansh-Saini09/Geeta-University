@@ -1,6 +1,7 @@
 import type { CoursePageData } from "@/data/programs/courses/types";
 import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/server/db/client";
+import { serverLogger } from "@/lib/security/logger";
 import {
   courses,
   normalizeSchoolSlug,
@@ -41,7 +42,7 @@ export async function getCourseBySlug(
       return transformProgramToCoursePageData(program, normSchool, normCourse);
     }
   } catch (error) {
-    console.warn(`[courseRepository] Failed to fetch program from database for ${courseSlug}, falling back to static files:`, error);
+    serverLogger.warn(`[courseRepository] Failed to fetch program from database for ${courseSlug}, falling back to static files`, error, { module: "courseRepository", action: "getCourseBySlug", courseSlug });
   }
 
   return getCourseBySlugSync(schoolSlug, courseSlug);
@@ -74,7 +75,7 @@ export async function getCourseByDirectSlug(
       return transformProgramToCoursePageData(program);
     }
   } catch (error) {
-    console.warn(`[courseRepository] Failed to fetch program directly from database for ${courseSlug}:`, error);
+    serverLogger.warn(`[courseRepository] Failed to fetch program directly from database for ${courseSlug}`, error, { module: "courseRepository", action: "getCourseByDirectSlug", courseSlug });
   }
 
   return getCourseByDirectSlugSync(courseSlug);
@@ -108,7 +109,7 @@ export async function getCoursesBySchool(schoolSlug: string): Promise<CoursePage
         .map((p) => transformProgramToCoursePageData(p, normSchool));
     }
   } catch (error) {
-    console.warn(`[courseRepository] Failed to fetch school programs from database:`, error);
+    serverLogger.warn(`[courseRepository] Failed to fetch school programs from database`, error, { module: "courseRepository", action: "getCoursesBySchool", schoolSlug });
   }
 
   return courses.filter((c) => normalizeSchoolSlug(c.schoolSlug) === normSchool);
@@ -137,7 +138,7 @@ export async function getAllCourses(): Promise<CoursePageData[]> {
         .map((p) => transformProgramToCoursePageData(p));
     }
   } catch (error) {
-    console.warn(`[courseRepository] Failed to fetch all programs from database:`, error);
+    serverLogger.warn(`[courseRepository] Failed to fetch all programs from database`, error, { module: "courseRepository", action: "getAllCourses" });
   }
 
   return courses;

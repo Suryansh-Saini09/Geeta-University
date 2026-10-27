@@ -1,6 +1,7 @@
 import { prisma, ContentStatus, AuditAction, AdminRole, AdminUserStatus } from "../src/server/db/client";
 import { assertPermission, hasPermission } from "../src/server/auth/permissions";
 import { checkRateLimit, resetRateLimit } from "../src/server/auth/rateLimiter";
+import { getClientIp, normalizeIp } from "../src/server/auth/clientIp";
 import { detectMediaFormat, MAX_MEDIA_BYTES } from "../src/server/media/storage";
 import { pageSchema } from "../src/validations/page";
 import { RecruiterSchema, AwardRankingSchema, TestimonialSchema, LeadershipMemberSchema, PageSeoSchema } from "../src/validations/pages";
@@ -148,6 +149,72 @@ async function runTestSuite() {
       status: "FAIL",
       reproductionSteps: "Test proxy tokenRegex",
       relevantRoute: "src/proxy.ts",
+    });
+  }
+
+  // --- 2b. TRUSTED CLIENT IP EXTRACTION & ANTI-SPOOFING ---
+  try {
+    let ipTestPassed = true;
+
+    // 1. Valid IPv4 normalization
+    if (normalizeIp("203.0.113.1") !== "203.0.113.1") ipTestPassed = false;
+    // 2. Valid IPv6 normalization (lowercase)
+    if (normalizeIp("2001:0DB8::1") !== "2001:0db8::1") ipTestPassed = false;
+    // 3. Port stripping on IPv4
+    if (normalizeIp("192.168.1.5:44321") !== "192.168.1.5") ipTestPassed = false;
+    // 4. Bracketed IPv6 unwrapping
+    if (normalizeIp("[::1]") !== "::1") ipTestPassed = false;
+    // 5. Malformed / injection rejection
+    if (normalizeIp("<script>alert(1)</script>") !== null) ipTestPassed = false;
+    if (normalizeIp("1.2.3.4.5") !== null) ipTestPassed = false;
+
+    // 6. Anti-Spoofing: Hostinger mode must parse rightmost hop from X-Forwarded-For
+    const spoofedHeaders = {
+      "x-forwarded-for": "1.1.1.1, 10.0.0.1, 198.51.100.5",
+    };
+    const extractedHostinger = getClientIp(spoofedHeaders, "hostinger");
+    if (extractedHostinger !== "198.51.100.5") ipTestPassed = false;
+
+    // 7. Cloudflare mode: trusts CF-Connecting-IP, ignores spoofed XFF
+    const cfHeaders = {
+      "cf-connecting-ip": "198.51.100.42",
+      "x-forwarded-for": "1.1.1.1",
+    };
+    if (getClientIp(cfHeaders, "cloudflare") !== "198.51.100.42") ipTestPassed = false;
+
+    // 8. Missing headers returns safe fallback "unknown-ip"
+    if (getClientIp(null, "hostinger") !== "unknown-ip") ipTestPassed = false;
+
+    // 9. Attacker cannot inject arbitrary string as rate limit identity
+    const injectionHeaders = {
+      "x-real-ip": "attacker-spoofed-string' OR 1=1--",
+    };
+    if (getClientIp(injectionHeaders, "hostinger") !== "unknown-ip") ipTestPassed = false;
+
+    recordTest({
+      id: "TC-AUTH-003",
+      phase: "Phase 4: Admin Panel",
+      module: "Rate Limiting & Network Identity",
+      testCase: "Trusted client IP extraction rejects spoofed X-Forwarded-For and validates IPv4/IPv6",
+      expectedResult: "Rightmost trusted hop parsed; Cloudflare CF-Connecting-IP enforced; arbitrary strings sanitized to unknown-ip",
+      actualResult: ipTestPassed
+        ? "Anti-spoofing logic verified across Hostinger, Cloudflare, and direct configurations"
+        : "Client IP extraction test failure",
+      status: ipTestPassed ? "PASS" : "FAIL",
+      reproductionSteps: "Assert normalizeIp and getClientIp against spoofed and legitimate headers",
+      relevantRoute: "src/server/auth/clientIp.ts",
+    });
+  } catch (err: any) {
+    recordTest({
+      id: "TC-AUTH-003",
+      phase: "Phase 4: Admin Panel",
+      module: "Rate Limiting & Network Identity",
+      testCase: "Trusted client IP extraction rejects spoofed X-Forwarded-For and validates IPv4/IPv6",
+      expectedResult: "Anti-spoofing verified",
+      actualResult: `Error: ${err.message}`,
+      status: "FAIL",
+      reproductionSteps: "Run getClientIp test assertions",
+      relevantRoute: "src/server/auth/clientIp.ts",
     });
   }
 

@@ -99,8 +99,9 @@ export default function FooterCmsDashboard({
     let docs = 0;
     let internal = 0;
     let external = 0;
+    const distribution = [];
 
-    const distribution = settings.columns.map((col) => {
+    for (const col of settings.columns) {
       const colTotal = col.links.length;
       const colEnabled = col.links.filter((l) => l.enabled).length;
       const colDocs = col.links.filter((l) => l.isDocument).length;
@@ -111,14 +112,14 @@ export default function FooterCmsDashboard({
       internal += col.links.filter((l) => l.isInternal).length;
       external += col.links.filter((l) => !l.isInternal && !l.isDocument).length;
 
-      return {
+      distribution.push({
         id: col.id,
         title: col.title,
         total: colTotal,
         enabled: colEnabled,
         docs: colDocs,
-      };
-    });
+      });
+    }
 
     return { total, enabled, docs, internal, external, distribution };
   }, [settings]);

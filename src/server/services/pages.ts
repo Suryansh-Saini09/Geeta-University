@@ -1,5 +1,6 @@
 import { prisma, ContentStatus, type Prisma } from "@/server/db/client";
 import { getLocalizedBody, getLocalizedField, DEFAULT_LOCALE } from "@/lib/i18n/localization";
+import { serverLogger } from "@/lib/security/logger";
 
 export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
   let sections: any[] = [];
@@ -50,8 +51,7 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
       }),
     ]);
   } catch (err: any) {
-    const errorMsg = err?.message ? String(err.message).replace(/:[^:@]+@/, ":****@") : String(err);
-    console.error(`[CMS DB ERROR] getPublishedHomePage failed: ${errorMsg} (code: ${err?.code || "UNKNOWN"})`);
+    serverLogger.error("[CMS DB ERROR] getPublishedHomePage failed", err, { module: "pages", action: "getPublishedHomePage" });
   }
 
   const sectionMap: Record<string, any> = {};
@@ -242,8 +242,7 @@ export async function getPageSectionsAdmin(pageSlug: string) {
       seo: pageRecord?.seo || null,
     };
   } catch (err: any) {
-    const errorMsg = err?.message ? String(err.message).replace(/:[^:@]+@/, ":****@") : String(err);
-    console.error(`[CMS DB ERROR] getPageSectionsAdmin('${pageSlug}') failed: ${errorMsg}`);
+    serverLogger.error(`[CMS DB ERROR] getPageSectionsAdmin('${pageSlug}') failed`, err, { module: "pages", action: "getPageSectionsAdmin", pageSlug });
     return {
       sections: {},
       seo: null,
@@ -351,9 +350,7 @@ export async function getPublishedAdmissionsPage(pageSlug: string, locale: strin
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error(`[CMS DB ERROR] getPublishedAdmissionsPage("${pageSlug}") failed:`, {
-      message: err?.message ? String(err.message).replace(/:[^:@]+@/, ":****@") : String(err),
-    });
+    serverLogger.error(`[CMS DB ERROR] getPublishedAdmissionsPage("${pageSlug}") failed`, err, { module: "pages", action: "getPublishedAdmissionsPage", pageSlug });
     return {
       page: null,
       sections: {},
@@ -394,7 +391,7 @@ export async function getPublishedCampusLifePage(locale: string = DEFAULT_LOCALE
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedCampusLifePage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedCampusLifePage failed", err, { module: "pages", action: "getPublishedCampusLifePage" });
     return { sections: {}, seo: null };
   }
 }
@@ -431,7 +428,7 @@ export async function getPublishedPlacementsPage(locale: string = DEFAULT_LOCALE
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedPlacementsPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedPlacementsPage failed", err, { module: "pages", action: "getPublishedPlacementsPage" });
     return { sections: {}, seo: null };
   }
 }
@@ -475,7 +472,7 @@ export async function getPublishedLibraryPage(locale: string = DEFAULT_LOCALE) {
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedLibraryPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedLibraryPage failed", err, { module: "pages", action: "getPublishedLibraryPage" });
     return {
       sections: {},
       hero: null,
@@ -524,7 +521,7 @@ export async function getPublishedAdvisoryBoardPage(locale: string = DEFAULT_LOC
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedAdvisoryBoardPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedAdvisoryBoardPage failed", err, { module: "pages", action: "getPublishedAdvisoryBoardPage" });
     return {
       sections: {},
       hero: null,
@@ -572,7 +569,7 @@ export async function getPublishedMedalPolicyPage(locale: string = DEFAULT_LOCAL
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedMedalPolicyPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedMedalPolicyPage failed", err, { module: "pages", action: "getPublishedMedalPolicyPage" });
     return {
       sections: {},
       hero: null,
@@ -622,7 +619,7 @@ export async function getPublishedCareersPage(locale: string = DEFAULT_LOCALE) {
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedCareersPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedCareersPage failed", err, { module: "pages", action: "getPublishedCareersPage" });
     return {
       sections: {},
       hero: null,
@@ -670,7 +667,7 @@ export async function getPublishedContactPage(locale: string = DEFAULT_LOCALE) {
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedContactPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedContactPage failed", err, { module: "pages", action: "getPublishedContactPage" });
     return {
       sections: {},
       hero: null,
@@ -718,7 +715,7 @@ export async function getPublishedUgcPage(locale: string = DEFAULT_LOCALE) {
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedUgcPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedUgcPage failed", err, { module: "pages", action: "getPublishedUgcPage" });
     return {
       sections: {},
       hero: null,
@@ -767,7 +764,7 @@ export async function getPublishedTeachingPage(locale: string = DEFAULT_LOCALE) 
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedTeachingPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedTeachingPage failed", err, { module: "pages", action: "getPublishedTeachingPage" });
     return {
       sections: {},
       hero: null,
@@ -825,7 +822,7 @@ export async function getPublishedGeetaInNewsPage(locale: string = DEFAULT_LOCAL
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedGeetaInNewsPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedGeetaInNewsPage failed", err, { module: "pages", action: "getPublishedGeetaInNewsPage" });
     return {
       sections: {},
       hero: null,
@@ -872,7 +869,7 @@ export async function getPublishedHowToReachUsPage(locale: string = DEFAULT_LOCA
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedHowToReachUsPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedHowToReachUsPage failed", err, { module: "pages", action: "getPublishedHowToReachUsPage" });
     return {
       sections: {},
       hero: null,
@@ -920,7 +917,7 @@ export async function getPublishedAboutPanipatPage(locale: string = DEFAULT_LOCA
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedAboutPanipatPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedAboutPanipatPage failed", err, { module: "pages", action: "getPublishedAboutPanipatPage" });
     return {
       sections: {},
       hero: null,
@@ -971,7 +968,7 @@ export async function getPublishedAntiRaggingPage(locale: string = DEFAULT_LOCAL
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedAntiRaggingPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedAntiRaggingPage failed", err, { module: "pages", action: "getPublishedAntiRaggingPage" });
     return {
       sections: {},
       hero: null,

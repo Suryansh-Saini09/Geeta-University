@@ -68,6 +68,48 @@ const SECTORS_DATA: SectorSlice[] = [
   },
 ];
 
+function computePieSlices() {
+  const cx = 220;
+  const cy = 200;
+  const radius = 120;
+  let currentAngle = -Math.PI / 2;
+
+  return SECTORS_DATA.map((sector) => {
+    const angleSpan = (sector.percentage / 100) * (2 * Math.PI);
+    const startAngle = currentAngle;
+    const endAngle = currentAngle + angleSpan;
+    const midAngle = startAngle + angleSpan / 2;
+
+    const x1 = cx + radius * Math.cos(startAngle);
+    const y1 = cy + radius * Math.sin(startAngle);
+    const x2 = cx + radius * Math.cos(endAngle);
+    const y2 = cy + radius * Math.sin(endAngle);
+
+    const riseDistance = 14;
+    const riseX = Math.cos(midAngle) * riseDistance;
+    const riseY = Math.sin(midAngle) * riseDistance;
+
+    const textRadiusMultiplier = sector.percentage < 4 ? 0.76 : 0.65;
+    const xPercent = cx + (radius * textRadiusMultiplier) * Math.cos(midAngle);
+    const yPercent = cy + (radius * textRadiusMultiplier) * Math.sin(midAngle);
+
+    const largeArc = angleSpan > Math.PI ? 1 : 0;
+    const pathData = `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+
+    currentAngle = endAngle;
+
+    return {
+      ...sector,
+      pathData,
+      midAngle,
+      riseX,
+      riseY,
+      xPercent,
+      yPercent,
+    };
+  });
+}
+
 export interface PlacementSnapshotSectionProps {
   data?: {
     title?: string;
@@ -95,51 +137,8 @@ export default function PlacementSnapshotSection({ data }: PlacementSnapshotSect
     );
   }, [searchTerm]);
 
-  // Compute SVG paths for all pie slices with clean radial angles
-  const pieSlices = useMemo(() => {
-    const cx = 220;
-    const cy = 200;
-    const radius = 120;
-    let currentAngle = -Math.PI / 2; // Start from 12 o'clock
-
-    return SECTORS_DATA.map((sector) => {
-      const angleSpan = (sector.percentage / 100) * (2 * Math.PI);
-      const startAngle = currentAngle;
-      const endAngle = currentAngle + angleSpan;
-      const midAngle = startAngle + angleSpan / 2;
-
-      // Slice arc perimeter coordinates
-      const x1 = cx + radius * Math.cos(startAngle);
-      const y1 = cy + radius * Math.sin(startAngle);
-      const x2 = cx + radius * Math.cos(endAngle);
-      const y2 = cy + radius * Math.sin(endAngle);
-
-      // Radial displacement when rising on click/hover (14px outward along slice midpoint)
-      const riseDistance = 14;
-      const riseX = Math.cos(midAngle) * riseDistance;
-      const riseY = Math.sin(midAngle) * riseDistance;
-
-      // Inner percentage text location
-      const textRadiusMultiplier = sector.percentage < 4 ? 0.76 : 0.65;
-      const xPercent = cx + (radius * textRadiusMultiplier) * Math.cos(midAngle);
-      const yPercent = cy + (radius * textRadiusMultiplier) * Math.sin(midAngle);
-
-      const largeArc = angleSpan > Math.PI ? 1 : 0;
-      const pathData = `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
-
-      currentAngle = endAngle;
-
-      return {
-        ...sector,
-        pathData,
-        midAngle,
-        riseX,
-        riseY,
-        xPercent,
-        yPercent,
-      };
-    });
-  }, []);
+  // Memoize static pie slice calculations
+  const pieSlices = useMemo(() => computePieSlices(), []);
 
   return (
     <section id="snapshot" className="scroll-mt-[190px] bg-white py-12 md:py-16 border-t border-[#E2E8F0]">

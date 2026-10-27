@@ -7,6 +7,8 @@ import path from "node:path";
 import { AuditAction } from "@prisma/client";
 import { prisma } from "@/server/db/client";
 import { checkMediaAssetUsage } from "@/server/media/cmsUploadService";
+import { serverLogger } from "@/lib/security/logger";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 
 export type MediaCategory = "ALL" | "IMAGE" | "PDF" | "VIDEO";
 export type MediaSortOption = "newest" | "oldest" | "name_asc" | "name_desc" | "size_desc" | "size_asc";
@@ -79,7 +81,7 @@ function getStaticManifest() {
         return cachedStaticManifest;
       }
     } catch (err) {
-      console.warn("Could not parse publicMediaManifest.json:", err);
+      serverLogger.warn("Could not parse publicMediaManifest.json", err, { module: "mediaCatalog", action: "loadStaticManifest" });
     }
   }
 
@@ -427,8 +429,8 @@ export async function updateUnifiedMediaAssetMetadata(params: {
 
     return { success: true, asset: target };
   } catch (err: any) {
-    console.error("Error updating media asset metadata:", err);
-    return { success: false, error: err?.message || "Failed to update asset metadata." };
+    serverLogger.error("Error updating media asset metadata", err, { module: "mediaCatalog", action: "updateMetadata", idOrUrl: params.idOrUrl });
+    return { success: false, error: sanitizeErrorMessage(err, "Failed to update asset metadata.") };
   }
 }
 
@@ -550,14 +552,14 @@ export async function deleteUnifiedMediaAssetSafe(params: {
         try {
           fs.unlinkSync(diskPath);
         } catch (err) {
-          console.warn("Could not remove file on disk:", err);
+          serverLogger.warn("Could not remove file on disk", err, { module: "mediaCatalog", action: "deletePhysicalFile" });
         }
       }
     }
 
     return { success: true };
   } catch (err: any) {
-    console.error("Error deleting media asset:", err);
-    return { success: false, error: err?.message || "Failed to delete media asset." };
+    serverLogger.error("Error deleting media asset", err, { module: "mediaCatalog", action: "deleteAsset", idOrUrl: params.idOrUrl });
+    return { success: false, error: sanitizeErrorMessage(err, "Failed to delete media asset.") };
   }
 }

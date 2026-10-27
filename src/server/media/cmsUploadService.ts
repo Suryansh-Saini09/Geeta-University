@@ -6,6 +6,7 @@ import { mkdir, writeFile, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { AuditAction } from "@prisma/client";
 import { prisma } from "@/server/db/client";
+import { serverLogger } from "@/lib/security/logger";
 
 export const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10 MB
 export const MAX_DOCUMENT_BYTES = 25 * 1024 * 1024; // 25 MB
@@ -231,7 +232,7 @@ export async function checkMediaAssetUsage(url: string): Promise<{
       referencingEntities: entities,
     };
   } catch (err) {
-    console.error("Error inspecting media asset usage:", err);
+    serverLogger.error("Error inspecting media asset usage", err, { module: "cmsUpload", action: "inspectUsage", url: normalizedUrl });
     return { isShared: false, totalUsageCount: 0, referencingEntities: [] };
   }
 }
@@ -415,7 +416,7 @@ export async function saveCmsAsset(
       }
     });
   } catch (dbError) {
-    console.error("Database upsert failed for MediaAsset:", dbError);
+    serverLogger.error("Database upsert failed for MediaAsset", dbError, { module: "cmsUpload", action: "upsertMediaAsset", storageKey });
     // Note: If DB fails, we do NOT delete the physical file silently if it was an intentional write,
     // but we report error so the caller does not update the published record.
     return {

@@ -4,6 +4,8 @@ import {
   getProgramBySlugSync,
 } from "./programStatic";
 
+import { serverLogger } from "@/lib/security/logger";
+
 export * from "./programStatic";
 
 export async function getProgramBySlug(
@@ -81,9 +83,9 @@ export async function getProgramBySlug(
       return data;
     }
     
-    console.warn(`[CMS FALLBACK WARNING] Department for slug '${slug}' not resolved from MySQL. Using static TS fallback.`);
+    serverLogger.warn(`[CMS FALLBACK WARNING] Department for slug '${slug}' not resolved from MySQL. Using static TS fallback.`, undefined, { module: "programRepository", action: "getProgramBySlug", slug });
   } catch (err) {
-    console.error(`[CMS ERROR] DB query failed for school slug '${slug}', using static fallback:`, err);
+    serverLogger.error(`[CMS ERROR] DB query failed for school slug '${slug}', using static fallback`, err, { module: "programRepository", action: "getProgramBySlug", slug });
   }
 
   return staticFallback;

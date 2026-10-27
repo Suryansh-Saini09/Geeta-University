@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { assertPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
 import { prisma, AuditAction, type Prisma } from "@/server/db/client";
+import { serverLogger } from "@/lib/security/logger";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import {
   ADMISSION_CTA_SETTINGS_KEY,
   ANNOUNCEMENT_SETTINGS_KEY,
@@ -50,27 +52,33 @@ export async function updateContactSettingsAction(formData: FormData) {
     redirect(`/admin/settings?tab=contact&error=${encodeURIComponent(errorMsg)}`);
   }
 
-  await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-    const previous = await tx.siteSetting.findUnique({ where: { key: CONTACT_SETTINGS_KEY } });
-    const setting = await tx.siteSetting.upsert({
-      where: { key: CONTACT_SETTINGS_KEY },
-      create: { key: CONTACT_SETTINGS_KEY, value: parsed.data, description: "Public contact details" },
-      update: { value: parsed.data },
+  try {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      const previous = await tx.siteSetting.findUnique({ where: { key: CONTACT_SETTINGS_KEY } });
+      const setting = await tx.siteSetting.upsert({
+        where: { key: CONTACT_SETTINGS_KEY },
+        create: { key: CONTACT_SETTINGS_KEY, value: parsed.data, description: "Public contact details" },
+        update: { value: parsed.data },
+      });
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: previous ? AuditAction.UPDATE : AuditAction.CREATE,
+          entityType: "SiteSetting",
+          entityId: setting.id,
+          before: previous?.value ?? undefined,
+          after: parsed.data,
+        },
+      });
     });
-    await tx.auditLog.create({
-      data: {
-        actorId: session.user.id,
-        action: previous ? AuditAction.UPDATE : AuditAction.CREATE,
-        entityType: "SiteSetting",
-        entityId: setting.id,
-        before: previous?.value ?? undefined,
-        after: parsed.data,
-      },
-    });
-  });
 
-  revalidateGlobalRoutes();
-  redirect("/admin/settings?tab=contact&saved=1");
+    revalidateGlobalRoutes();
+    redirect("/admin/settings?tab=contact&saved=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to update contact settings", error, { module: "settings", action: "updateContactSettings" });
+    redirect(`/admin/settings?tab=contact&error=${encodeURIComponent(sanitizeErrorMessage(error))}`);
+  }
 }
 
 export async function updateAnnouncementSettingsAction(formData: FormData) {
@@ -90,27 +98,33 @@ export async function updateAnnouncementSettingsAction(formData: FormData) {
     redirect(`/admin/settings?tab=announcement&error=${encodeURIComponent(errorMsg)}`);
   }
 
-  await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-    const previous = await tx.siteSetting.findUnique({ where: { key: ANNOUNCEMENT_SETTINGS_KEY } });
-    const setting = await tx.siteSetting.upsert({
-      where: { key: ANNOUNCEMENT_SETTINGS_KEY },
-      create: { key: ANNOUNCEMENT_SETTINGS_KEY, value: parsed.data, description: "Top announcement bar settings" },
-      update: { value: parsed.data },
+  try {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      const previous = await tx.siteSetting.findUnique({ where: { key: ANNOUNCEMENT_SETTINGS_KEY } });
+      const setting = await tx.siteSetting.upsert({
+        where: { key: ANNOUNCEMENT_SETTINGS_KEY },
+        create: { key: ANNOUNCEMENT_SETTINGS_KEY, value: parsed.data, description: "Top announcement bar settings" },
+        update: { value: parsed.data },
+      });
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: previous ? AuditAction.UPDATE : AuditAction.CREATE,
+          entityType: "SiteSetting",
+          entityId: setting.id,
+          before: previous?.value ?? undefined,
+          after: parsed.data,
+        },
+      });
     });
-    await tx.auditLog.create({
-      data: {
-        actorId: session.user.id,
-        action: previous ? AuditAction.UPDATE : AuditAction.CREATE,
-        entityType: "SiteSetting",
-        entityId: setting.id,
-        before: previous?.value ?? undefined,
-        after: parsed.data,
-      },
-    });
-  });
 
-  revalidateGlobalRoutes();
-  redirect("/admin/settings?tab=announcement&saved=1");
+    revalidateGlobalRoutes();
+    redirect("/admin/settings?tab=announcement&saved=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to update announcement settings", error, { module: "settings", action: "updateAnnouncementSettings" });
+    redirect(`/admin/settings?tab=announcement&error=${encodeURIComponent(sanitizeErrorMessage(error))}`);
+  }
 }
 
 export async function updateAdmissionCtaAction(formData: FormData) {
@@ -130,27 +144,33 @@ export async function updateAdmissionCtaAction(formData: FormData) {
     redirect(`/admin/settings?tab=cta&error=${encodeURIComponent(errorMsg)}`);
   }
 
-  await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-    const previous = await tx.siteSetting.findUnique({ where: { key: ADMISSION_CTA_SETTINGS_KEY } });
-    const setting = await tx.siteSetting.upsert({
-      where: { key: ADMISSION_CTA_SETTINGS_KEY },
-      create: { key: ADMISSION_CTA_SETTINGS_KEY, value: parsed.data, description: "Global admission CTA settings" },
-      update: { value: parsed.data },
+  try {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      const previous = await tx.siteSetting.findUnique({ where: { key: ADMISSION_CTA_SETTINGS_KEY } });
+      const setting = await tx.siteSetting.upsert({
+        where: { key: ADMISSION_CTA_SETTINGS_KEY },
+        create: { key: ADMISSION_CTA_SETTINGS_KEY, value: parsed.data, description: "Global admission CTA settings" },
+        update: { value: parsed.data },
+      });
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: previous ? AuditAction.UPDATE : AuditAction.CREATE,
+          entityType: "SiteSetting",
+          entityId: setting.id,
+          before: previous?.value ?? undefined,
+          after: parsed.data,
+        },
+      });
     });
-    await tx.auditLog.create({
-      data: {
-        actorId: session.user.id,
-        action: previous ? AuditAction.UPDATE : AuditAction.CREATE,
-        entityType: "SiteSetting",
-        entityId: setting.id,
-        before: previous?.value ?? undefined,
-        after: parsed.data,
-      },
-    });
-  });
 
-  revalidateGlobalRoutes();
-  redirect("/admin/settings?tab=cta&saved=1");
+    revalidateGlobalRoutes();
+    redirect("/admin/settings?tab=cta&saved=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to update admission CTA settings", error, { module: "settings", action: "updateAdmissionCta" });
+    redirect(`/admin/settings?tab=cta&error=${encodeURIComponent(sanitizeErrorMessage(error))}`);
+  }
 }
 
 export async function updateSocialLinksAction(formData: FormData) {
@@ -171,27 +191,33 @@ export async function updateSocialLinksAction(formData: FormData) {
     redirect(`/admin/settings?tab=social&error=${encodeURIComponent(errorMsg)}`);
   }
 
-  await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-    const previous = await tx.siteSetting.findUnique({ where: { key: SOCIAL_LINKS_SETTINGS_KEY } });
-    const setting = await tx.siteSetting.upsert({
-      where: { key: SOCIAL_LINKS_SETTINGS_KEY },
-      create: { key: SOCIAL_LINKS_SETTINGS_KEY, value: parsed.data, description: "Official social media channels" },
-      update: { value: parsed.data },
+  try {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      const previous = await tx.siteSetting.findUnique({ where: { key: SOCIAL_LINKS_SETTINGS_KEY } });
+      const setting = await tx.siteSetting.upsert({
+        where: { key: SOCIAL_LINKS_SETTINGS_KEY },
+        create: { key: SOCIAL_LINKS_SETTINGS_KEY, value: parsed.data, description: "Official social media channels" },
+        update: { value: parsed.data },
+      });
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: previous ? AuditAction.UPDATE : AuditAction.CREATE,
+          entityType: "SiteSetting",
+          entityId: setting.id,
+          before: previous?.value ?? undefined,
+          after: parsed.data,
+        },
+      });
     });
-    await tx.auditLog.create({
-      data: {
-        actorId: session.user.id,
-        action: previous ? AuditAction.UPDATE : AuditAction.CREATE,
-        entityType: "SiteSetting",
-        entityId: setting.id,
-        before: previous?.value ?? undefined,
-        after: parsed.data,
-      },
-    });
-  });
 
-  revalidateGlobalRoutes();
-  redirect("/admin/settings?tab=social&saved=1");
+    revalidateGlobalRoutes();
+    redirect("/admin/settings?tab=social&saved=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to update social links settings", error, { module: "settings", action: "updateSocialLinks" });
+    redirect(`/admin/settings?tab=social&error=${encodeURIComponent(sanitizeErrorMessage(error))}`);
+  }
 }
 
 export async function updateSiteMetadataAction(formData: FormData) {
@@ -215,26 +241,32 @@ export async function updateSiteMetadataAction(formData: FormData) {
     redirect(`/admin/settings?tab=metadata&error=${encodeURIComponent(errorMsg)}`);
   }
 
-  await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-    const previous = await tx.siteSetting.findUnique({ where: { key: SITE_METADATA_SETTINGS_KEY } });
-    const setting = await tx.siteSetting.upsert({
-      where: { key: SITE_METADATA_SETTINGS_KEY },
-      create: { key: SITE_METADATA_SETTINGS_KEY, value: parsed.data, description: "Site general metadata" },
-      update: { value: parsed.data },
+  try {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      const previous = await tx.siteSetting.findUnique({ where: { key: SITE_METADATA_SETTINGS_KEY } });
+      const setting = await tx.siteSetting.upsert({
+        where: { key: SITE_METADATA_SETTINGS_KEY },
+        create: { key: SITE_METADATA_SETTINGS_KEY, value: parsed.data, description: "Site general metadata" },
+        update: { value: parsed.data },
+      });
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: previous ? AuditAction.UPDATE : AuditAction.CREATE,
+          entityType: "SiteSetting",
+          entityId: setting.id,
+          before: previous?.value ?? undefined,
+          after: parsed.data,
+        },
+      });
     });
-    await tx.auditLog.create({
-      data: {
-        actorId: session.user.id,
-        action: previous ? AuditAction.UPDATE : AuditAction.CREATE,
-        entityType: "SiteSetting",
-        entityId: setting.id,
-        before: previous?.value ?? undefined,
-        after: parsed.data,
-      },
-    });
-  });
 
-  revalidateGlobalRoutes();
-  redirect("/admin/settings?tab=metadata&saved=1");
+    revalidateGlobalRoutes();
+    redirect("/admin/settings?tab=metadata&saved=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to update site metadata settings", error, { module: "settings", action: "updateSiteMetadata" });
+    redirect(`/admin/settings?tab=metadata&error=${encodeURIComponent(sanitizeErrorMessage(error))}`);
+  }
 }
 

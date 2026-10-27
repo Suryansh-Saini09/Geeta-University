@@ -1,3 +1,5 @@
+import { serverLogger } from "@/lib/security/logger";
+
 export interface SocialLink {
   id: number;
   name: string;
@@ -141,7 +143,7 @@ export async function fetchSocialData(): Promise<SocialApiResponse> {
       };
     }
   } catch (err) {
-    console.warn("DB read for socialLinks failed, checking external/hardcoded:", err);
+    serverLogger.warn("DB read for socialLinks failed, checking external/hardcoded", err, { module: "socialLinks", action: "fetchSocialData" });
   }
 
   if (SOCIAL_API_URL) {
@@ -157,7 +159,7 @@ export async function fetchSocialData(): Promise<SocialApiResponse> {
         }
       }
     } catch (err) {
-      console.error("Error fetching external social data:", err);
+      serverLogger.error("Error fetching external social data", err, { module: "socialLinks", action: "fetchSocialDataExternal" });
     }
   }
 

@@ -1,6 +1,4 @@
-// Server-side translation service for Next.js and scripts
-
-import { env } from "@/lib/env";
+import { serverLogger } from "@/lib/security/logger";
 
 export interface TranslationOptions {
   sourceLocale?: string;
@@ -56,7 +54,7 @@ export async function translateText(
         }
       }
     } catch (err) {
-      console.warn("[TranslationService] Google API translation failed, attempting fallback:", err);
+      serverLogger.warn("[TranslationService] Google API translation failed, attempting fallback", err, { module: "translation", action: "translateText" });
     }
   }
 

@@ -1,6 +1,7 @@
 import { ContentStatus, type Prisma } from "@prisma/client";
 
 import { prisma } from "@/server/db/client";
+import { serverLogger } from "@/lib/security/logger";
 
 export async function getAdminEvents(filters: { query?: string; status?: ContentStatus | "ALL"; page?: number } = {}) {
   const where: Prisma.EventWhereInput = {};
@@ -51,7 +52,7 @@ export async function getHomepageEvents() {
       select: { title: true, slug: true, startsAt: true, endsAt: true },
     });
   } catch (error) {
-    console.error("Failed to fetch homepage events:", error);
+    serverLogger.error("Failed to fetch homepage events", error, { module: "events", action: "getHomepageEvents" });
     return [];
   }
 }

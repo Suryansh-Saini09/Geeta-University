@@ -6,6 +6,7 @@ import type { ProgramPageData } from "@/data/programs/types";
 import VisionMissionSection from "./VisionMissionSection";
 import DeanNoteCard from "./DeanNoteCard";
 import AdmissionFormWrapper from "./AdmissionFormWrapper";
+import { sanitizeRichText } from "@/lib/security/htmlSanitizer";
 
 interface ProgramAboutProps {
   about?: ProgramPageData["about"];
@@ -75,7 +76,7 @@ export default function ProgramAbout({ about, intro, visionMission, dean, school
                     fontWeight: 450,
                     marginBottom: idx < data.paragraphs.length - 1 ? 16 : 0,
                   }}
-                  dangerouslySetInnerHTML={{ __html: p }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeRichText(p) }}
                 />
               ))}
 

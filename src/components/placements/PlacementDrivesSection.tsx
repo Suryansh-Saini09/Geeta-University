@@ -21,7 +21,6 @@ interface PlacementDrivesProps {
 
 export default function PlacementDrivesSection({ onOpenVideoModal, data }: PlacementDrivesProps) {
   const snapshots = data?.drives !== undefined ? (data.drives || []) : defaultSnapshots;
-  if (data && snapshots.length === 0) return null;
 
   const [activeSlide, setActiveSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -67,6 +66,8 @@ export default function PlacementDrivesSection({ onOpenVideoModal, data }: Place
     touchStartX.current = null;
     touchEndX.current = null;
   };
+
+  if (data && snapshots.length === 0) return null;
 
   return (
     <section id="drives" className="scroll-mt-[190px] bg-white py-12 md:py-16 border-t border-[#E2E8F0]">

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
 import { newsData as fallbackNews, publicationsList as fallbackPublications, NewsItem } from "@/data/geetaInNewsData";
+import { sanitizeRichText } from "@/lib/security/htmlSanitizer";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -433,7 +434,7 @@ export default function GeetaInNewsClient({
                 <div className="w-full max-w-2xl mt-4 rounded-xl bg-white p-5 text-slate-800 text-sm shadow-xl leading-relaxed">
                   <div
                     className="prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ __html: selectedImage.content }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeRichText(selectedImage.content) }}
                   />
                 </div>
               )}

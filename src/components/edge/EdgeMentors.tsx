@@ -41,7 +41,6 @@ export default function EdgeMentors({
     mentorsSection?.mentors ||
     faculty ||
     [];
-  if (rawMentors.length === 0) return null;
   const mentors = rawMentors;
 
   const isCarousel = mentors.length > 4;
@@ -269,6 +268,8 @@ export default function EdgeMentors({
       </div>
     </div>
   );
+
+  if (mentors.length === 0) return null;
 
   return (
     <section id="Mentors" style={{ padding: "52px 0 48px", background: "#FFFFFF", overflow: "hidden" }}>
