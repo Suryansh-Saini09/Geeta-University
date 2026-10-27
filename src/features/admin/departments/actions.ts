@@ -536,14 +536,6 @@ export async function updateDepartmentSectionAction(formData: FormData) {
       break;
     }
 
-    case "advancedJson": {
-      if (session.user.role !== "SUPER_ADMIN" && session.user.role !== "ADMIN") {
-        redirect(`/admin/departments/${id}/edit?section=${section}&error=${encodeURIComponent("Only Super Admins can save raw JSON.")}`);
-      }
-      updatedBody = sectionPayload;
-      break;
-    }
-
     default:
       redirect(`/admin/departments/${id}/edit?error=${encodeURIComponent("The requested section could not be found.")}`);
   }
