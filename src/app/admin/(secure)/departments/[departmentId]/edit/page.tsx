@@ -14,6 +14,7 @@ interface EditDepartmentPageProps {
     saved?: string;
     error?: string;
     updated?: string;
+    reordered?: string;
   }>;
 }
 

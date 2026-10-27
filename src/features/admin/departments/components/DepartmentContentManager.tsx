@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CmsSubmitButton } from "@/components/admin/CmsSubmitButton";
 import {
   ArrowLeft,
+  ArrowRight,
   ExternalLink,
   ImageIcon,
   BookOpen,
@@ -26,10 +27,12 @@ import {
   HelpCircle,
   Globe,
   CheckCircle,
-  Code,
-  Save,
+  CheckCircle2,
+  AlertCircle,
   Search,
   X,
+  ChevronRight,
+  Clock,
 } from "lucide-react";
 import { ContentStatus } from "@prisma/client";
 
@@ -54,8 +57,17 @@ import { UspsSectionEditor } from "./UspsSectionEditor";
 import { FaqSectionEditor } from "./FaqSectionEditor";
 import { SeoSectionEditor } from "./SeoSectionEditor";
 import { CtaSectionEditor } from "./CtaSectionEditor";
-import { AdvancedJsonSectionEditor } from "./AdvancedJsonSectionEditor";
 import { updateDepartmentAction } from "@/features/admin/departments/actions";
+import {
+  DEPARTMENT_SECTIONS_CONFIG,
+  DEPARTMENT_CATEGORIES,
+  DepartmentSectionStatus,
+  calculateDepartmentCompleteness,
+} from "../departmentConfig";
+
+/* =========================================================================
+   TYPES & PROPS
+========================================================================= */
 
 export interface DepartmentDataProps {
   id: string;
@@ -77,6 +89,70 @@ interface DepartmentContentManagerProps {
   searchParams?: { section?: string; saved?: string; error?: string; updated?: string; reordered?: string };
 }
 
+const statusBadgeStyles: Record<DepartmentSectionStatus, { badge: string; dot: string }> = {
+  Complete: {
+    badge: "border-emerald-200 bg-emerald-50 text-emerald-800",
+    dot: "bg-emerald-600",
+  },
+  Partial: {
+    badge: "border-amber-200 bg-amber-50 text-amber-800",
+    dot: "bg-amber-600",
+  },
+  "Not Configured": {
+    badge: "border-slate-200 bg-slate-100 text-slate-600",
+    dot: "bg-slate-400",
+  },
+};
+
+function getDepartmentSectionIcon(iconName: string) {
+  switch (iconName) {
+    case "ImageIcon":
+      return <ImageIcon className="h-4 w-4" />;
+    case "BookOpen":
+      return <BookOpen className="h-4 w-4" />;
+    case "Compass":
+      return <Compass className="h-4 w-4" />;
+    case "UserCheck":
+      return <UserCheck className="h-4 w-4" />;
+    case "GraduationCap":
+      return <GraduationCap className="h-4 w-4" />;
+    case "Award":
+      return <Award className="h-4 w-4" />;
+    case "Users":
+      return <Users className="h-4 w-4" />;
+    case "Layers":
+      return <Layers className="h-4 w-4" />;
+    case "MapPin":
+      return <MapPin className="h-4 w-4" />;
+    case "Building2":
+      return <Building2 className="h-4 w-4" />;
+    case "Video":
+      return <Video className="h-4 w-4" />;
+    case "Sparkles":
+      return <Sparkles className="h-4 w-4" />;
+    case "MessageSquare":
+      return <MessageSquare className="h-4 w-4" />;
+    case "FileText":
+      return <FileText className="h-4 w-4" />;
+    case "TrendingUp":
+      return <TrendingUp className="h-4 w-4" />;
+    case "ShieldCheck":
+      return <ShieldCheck className="h-4 w-4" />;
+    case "HelpCircle":
+      return <HelpCircle className="h-4 w-4" />;
+    case "Globe":
+      return <Globe className="h-4 w-4" />;
+    case "CheckCircle":
+      return <CheckCircle className="h-4 w-4" />;
+    default:
+      return <FileText className="h-4 w-4" />;
+  }
+}
+
+/* =========================================================================
+   MAIN COMPONENT
+========================================================================= */
+
 export function DepartmentContentManager({
   department,
   mediaAssets = [],
@@ -86,622 +162,751 @@ export function DepartmentContentManager({
   const router = useRouter();
   const currentSearchParams = useSearchParams();
 
-  const activeSection = currentSearchParams.get("section") || searchParams.section || "overview";
+  // Active section: defaults to "overview" if absent or explicitly requested
+  const rawSection = currentSearchParams.get("section") || searchParams.section || "overview";
+  const [activeSection, setActiveSection] = useState<string>(rawSection);
+  const [sectionQuery, setSectionQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
+
   const saved = currentSearchParams.get("saved") === "1" || searchParams.saved === "1";
   const reordered = currentSearchParams.get("reordered") === "1" || searchParams.reordered === "1";
   const error = currentSearchParams.get("error") || searchParams.error;
   const updated = currentSearchParams.get("updated") === "1" || searchParams.updated === "1";
 
-  const body = (department.body && typeof department.body === "object" ? department.body : {}) as Record<string, any>;
-  const [sectionQuery, setSectionQuery] = useState("");
+  const body = useMemo(() => {
+    return (department.body && typeof department.body === "object" ? department.body : {}) as Record<string, any>;
+  }, [department.body]);
 
-  // Helper to compute section completeness status
-  const getSectionStatus = (
-    hasFull: boolean,
-    hasPartial: boolean
-  ): { label: "Complete" | "Partial" | "Not Configured"; color: string } => {
-    if (hasFull) return { label: "Complete", color: "bg-emerald-100 text-emerald-800" };
-    if (hasPartial) return { label: "Partial", color: "bg-amber-100 text-amber-800" };
-    return { label: "Not Configured", color: "bg-slate-100 text-slate-500" };
+  const publicUrl = `/programs/${department.slug}`;
+
+  // Synchronize browser history (popstate)
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const sec = params.get("section") || "overview";
+      setActiveSection(sec);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  // Synchronize URL query parameter updates from server redirects
+  useEffect(() => {
+    const sec = currentSearchParams.get("section") || searchParams.section || "overview";
+    setActiveSection(sec);
+  }, [currentSearchParams, searchParams.section]);
+
+  // Update browser URL query params
+  const updateUrl = (sectionKey: string) => {
+    const url = new URL(window.location.href);
+    if (sectionKey && sectionKey !== "overview") {
+      url.searchParams.set("section", sectionKey);
+    } else {
+      url.searchParams.set("section", "overview");
+    }
+    url.searchParams.delete("saved");
+    url.searchParams.delete("updated");
+    url.searchParams.delete("reordered");
+    url.searchParams.delete("error");
+    window.history.pushState({}, "", url.pathname + url.search);
   };
-
-  const sectionCards = [
-    {
-      id: "hero",
-      title: "Hero Banner & Slides",
-      desc: "Banner title, description, image, eyebrow & student placement slides",
-      icon: ImageIcon,
-      status: getSectionStatus(
-        !!(body.hero?.title && body.hero?.image && body.hero?.slides?.length > 0),
-        !!(body.hero?.title || body.hero?.image)
-      ),
-    },
-    {
-      id: "about",
-      title: "About & Introduction",
-      desc: "Overview paragraphs, subtitle, section image & feature badges",
-      icon: BookOpen,
-      status: getSectionStatus(
-        !!(body.about?.title && body.about?.paragraphs?.length >= 2),
-        !!(body.about?.title || body.about?.paragraphs?.length > 0)
-      ),
-    },
-    {
-      id: "visionMission",
-      title: "Vision & Mission",
-      desc: "School vision statement and strategic mission objectives list",
-      icon: Compass,
-      status: getSectionStatus(
-        !!(body.visionMission?.vision && body.visionMission?.mission?.length > 0),
-        !!(body.visionMission?.vision || body.visionMission?.mission?.length > 0)
-      ),
-    },
-    {
-      id: "dean",
-      title: "Dean's Message",
-      desc: "Dean name, designation, school name, portrait photo & welcome message",
-      icon: UserCheck,
-      status: getSectionStatus(
-        !!(body.dean?.name && body.dean?.designation && body.dean?.message),
-        !!(body.dean?.name || body.dean?.message)
-      ),
-    },
-    {
-      id: "courses",
-      title: "Programs Offered",
-      desc: "Undergraduate, Postgraduate & Doctoral degree offerings, duration, eligibility & specialisations",
-      icon: GraduationCap,
-      status: getSectionStatus(
-        !!(body.courses && body.courses.length > 0),
-        !!(body.courses && body.courses.length > 0)
-      ),
-    },
-    {
-      id: "specialisations",
-      title: "Specialisations & Tracks",
-      desc: "Specialized study tracks, domain focus cards & key points",
-      icon: Award,
-      status: getSectionStatus(
-        !!(body.specialisations?.items && body.specialisations.items.length > 0),
-        !!body.specialisations?.title
-      ),
-    },
-    {
-      id: "faculty",
-      title: "Faculty & Mentors",
-      desc: "Professors, technical trainers, roles, qualifications, full bios & photos",
-      icon: Users,
-      status: getSectionStatus(
-        !!(body.faculty && body.faculty.length > 0),
-        !!(body.mentorsSection?.title)
-      ),
-    },
-    {
-      id: "transformativeTracks",
-      title: "Transformative Tracks",
-      desc: "Certification tracks, drive-ready tracks, coding profiles & milestone actions",
-      icon: Layers,
-      status: getSectionStatus(
-        !!(body.transformativeTracks?.cards && body.transformativeTracks.cards.length > 0),
-        !!body.transformativeTracks?.title
-      ),
-    },
-    {
-      id: "careerPathways",
-      title: "Career Pathways",
-      desc: "Career prospects overview, recruiter roles title & company recruiter logos",
-      icon: MapPin,
-      status: getSectionStatus(
-        !!(body.careerPathways?.description && body.careerPathways?.notableRoles?.length > 0),
-        !!body.careerPathways?.title
-      ),
-    },
-    {
-      id: "learningSpaces",
-      title: "Learning Spaces",
-      desc: "Campus labs, smart classrooms, research centers & facilities imagery",
-      icon: Building2,
-      status: getSectionStatus(
-        !!(body.learningSpaces?.spaces && body.learningSpaces.spaces.length > 0),
-        !!body.learningSpaces?.title
-      ),
-    },
-    {
-      id: "corporateConnect",
-      title: "Corporate Connect",
-      desc: "Industry keynote talks, YouTube video session IDs & summit titles",
-      icon: Video,
-      status: getSectionStatus(
-        !!(body.corporateConnect?.videos && body.corporateConnect.videos.length > 0),
-        !!body.corporateConnect?.title
-      ),
-    },
-    {
-      id: "centerOfExcellence",
-      title: "Centre of Excellence",
-      desc: "Specialized research center badges, computing labs & title descriptions",
-      icon: Award,
-      status: getSectionStatus(
-        !!(body.centerOfExcellence?.title || typeof body.centerOfExcellence === "string"),
-        !!body.centerOfExcellence
-      ),
-    },
-    {
-      id: "departmentHighlights",
-      title: "Department Highlights",
-      desc: "Highlight feature cards, smart labs imagery & descriptive cards",
-      icon: Sparkles,
-      status: getSectionStatus(
-        !!(body.departmentHighlights && body.departmentHighlights.length > 0),
-        !!body.departmentHighlightsTitle
-      ),
-    },
-    {
-      id: "testimonials",
-      title: "Alumni Testimonials",
-      desc: "Alumni success stories, company placements, package figures & photos",
-      icon: MessageSquare,
-      status: getSectionStatus(
-        !!(body.testimonials && body.testimonials.length > 0),
-        !!body.testimonials
-      ),
-    },
-    {
-      id: "brochure",
-      title: "Brochure Download",
-      desc: "Official school brochure title, description, PDF file URL & filename",
-      icon: FileText,
-      status: getSectionStatus(
-        !!(body.brochure?.fileUrl && body.brochure?.fileName),
-        !!body.brochure?.title
-      ),
-    },
-    {
-      id: "placement",
-      title: "Placement Statistics",
-      desc: "Highest & avg package figures, recruiter lists & placement stats",
-      icon: TrendingUp,
-      status: getSectionStatus(
-        !!(body.placement?.highestPackage && body.placement?.avgPackage),
-        !!(body.placement?.highestPackage || body.placement?.avgPackage)
-      ),
-    },
-    {
-      id: "usps",
-      title: "USPs & Pillars",
-      desc: "Institutional strengths, unique differentiators & pillar cards",
-      icon: ShieldCheck,
-      status: getSectionStatus(
-        !!(body.usps?.cards && body.usps.cards.length > 0),
-        !!body.usps?.title
-      ),
-    },
-    {
-      id: "faqs",
-      title: "Categorized FAQs",
-      desc: "Admissions, eligibility, fee structure & course Q&As list",
-      icon: HelpCircle,
-      status: getSectionStatus(
-        !!(body.faqs && body.faqs.length >= 3),
-        !!(body.faqs && body.faqs.length > 0)
-      ),
-    },
-    {
-      id: "seo",
-      title: "SEO Metadata",
-      desc: "Search engine title tag, meta description & indexing keywords",
-      icon: Globe,
-      status: getSectionStatus(
-        !!(body.seo?.title && body.seo?.description),
-        !!(body.seo?.title || body.seo?.description)
-      ),
-    },
-    {
-      id: "cta",
-      title: "Final Call To Action",
-      desc: "Bottom page banner, apply link, helpline & campus address",
-      icon: CheckCircle,
-      status: getSectionStatus(
-        !!(body.cta?.heading && body.cta?.applyLink),
-        !!(body.cta?.heading || body.cta?.applyLink)
-      ),
-    },
-    {
-      id: "advancedJson",
-      title: "Advanced JSON",
-      desc: "Technical safety net payload editor for emergency structural edits",
-      icon: Code,
-      status: { label: "Complete", color: "bg-[#0A1F44] text-white" },
-    },
-  ];
-
-  const filteredSectionCards = sectionCards.filter((card) => {
-    if (!sectionQuery.trim()) return true;
-    const q = sectionQuery.toLowerCase();
-    return (
-      card.title.toLowerCase().includes(q) ||
-      card.desc.toLowerCase().includes(q) ||
-      card.id.toLowerCase().includes(q)
-    );
-  });
-
-  const formattedUpdatedAt = new Date(department.updatedAt).toLocaleDateString("en-US", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 
   const navigateToSection = (sectionId: string) => {
-    router.push(`/admin/departments/${department.id}/edit?section=${sectionId}`);
+    setActiveSection(sectionId);
+    updateUrl(sectionId);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleBackToSections = () => {
+    navigateToSection("overview");
+  };
+
+  // Truthful completeness metrics
+  const completeness = useMemo(() => {
+    return calculateDepartmentCompleteness(department, body);
+  }, [department, body]);
+
+  // Current active section configuration item (if in Stage C)
+  const currentSectionConfig = useMemo(() => {
+    if (activeSection === "overview") return null;
+    return DEPARTMENT_SECTIONS_CONFIG.find((s) => s.id === activeSection) || null;
+  }, [activeSection]);
+
+  const currentSectionIndex = useMemo(() => {
+    if (activeSection === "overview") return -1;
+    return DEPARTMENT_SECTIONS_CONFIG.findIndex((s) => s.id === activeSection);
+  }, [activeSection]);
+
+  const prevSection = useMemo(() => {
+    if (currentSectionIndex > 0) {
+      return DEPARTMENT_SECTIONS_CONFIG[currentSectionIndex - 1];
+    }
+    return null;
+  }, [currentSectionIndex]);
+
+  const nextSection = useMemo(() => {
+    if (currentSectionIndex >= 0 && currentSectionIndex < DEPARTMENT_SECTIONS_CONFIG.length - 1) {
+      return DEPARTMENT_SECTIONS_CONFIG[currentSectionIndex + 1];
+    }
+    return null;
+  }, [currentSectionIndex]);
+
+  // Filtered sections for Stage B Section Overview Grid
+  const filteredSectionCards = useMemo(() => {
+    return DEPARTMENT_SECTIONS_CONFIG.filter((section) => {
+      // Category filter
+      if (selectedCategory !== "ALL" && section.category !== selectedCategory) {
+        return false;
+      }
+      // Text search
+      if (!sectionQuery.trim()) return true;
+      const q = sectionQuery.toLowerCase();
+      return (
+        section.title.toLowerCase().includes(q) ||
+        section.description.toLowerCase().includes(q) ||
+        section.shortTitle.toLowerCase().includes(q) ||
+        section.searchKeywords.toLowerCase().includes(q) ||
+        section.id.toLowerCase().includes(q)
+      );
+    });
+  }, [selectedCategory, sectionQuery]);
+
+  const formattedUpdatedAt = useMemo(() => {
+    try {
+      return new Date(department.updatedAt).toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return "Recently";
+    }
+  }, [department.updatedAt]);
+
+  const isOverview = activeSection === "overview" || !currentSectionConfig;
+
   return (
-    <div className="space-y-6">
-      {/* Top Header Bar */}
-      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <Link
-              href="/admin/departments"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 transition hover:text-slate-800"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Back to Departments
-            </Link>
-            <div className="mt-2.5 flex items-center gap-2.5">
-              <span
-                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold ${
-                  department.status === ContentStatus.PUBLISHED
-                    ? "bg-emerald-100 text-emerald-800"
-                    : department.status === ContentStatus.DRAFT
-                    ? "bg-amber-100 text-amber-800"
-                    : "bg-slate-100 text-slate-700"
-                }`}
-              >
-                {department.status}
-              </span>
-            </div>
-            <h2 className="mt-1.5 font-serif text-2xl sm:text-3xl font-bold text-slate-900">
-              {department.name}
-            </h2>
-            <p className="mt-1 text-xs text-slate-400">
-              Last updated: {formattedUpdatedAt} | Slug: <code className="text-slate-600">{department.slug}</code>
-            </p>
-          </div>
+    <div className="space-y-6 max-w-[1400px] mx-auto pb-16">
+      {/* ===================================================================
+          STAGE B: DEPARTMENT SECTION OVERVIEW (When section=overview)
+      =================================================================== */}
+      {isOverview ? (
+        <div className="space-y-6">
+          {/* Top Header Card */}
+          <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <Link
+                  href="/admin/departments"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 transition hover:text-slate-800"
+                >
+                  <ArrowLeft className="h-3.5 w-3.5" />
+                  Back to Departments
+                </Link>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href={`/programs/${department.slug}`}
-              target="_blank"
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-2xs transition hover:bg-slate-50 hover:text-slate-900"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-              View Live Page
-            </Link>
-          </div>
-        </div>
+                <div className="mt-2.5 flex items-center gap-2.5">
+                  <span
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold ${
+                      department.status === ContentStatus.PUBLISHED
+                        ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                        : department.status === ContentStatus.DRAFT
+                        ? "bg-amber-50 text-amber-800 border border-amber-200"
+                        : "bg-slate-100 text-slate-700 border border-slate-200"
+                    }`}
+                  >
+                    {department.status}
+                  </span>
+                </div>
 
-        {/* General Settings Bar */}
-        <div className="mt-6 border-t border-slate-100 pt-4 flex flex-wrap items-center justify-between gap-4">
-          <form action={updateDepartmentAction} className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
-            <input type="hidden" name="id" value={department.id} />
-            <input type="hidden" name="name" value={department.name} />
-            <input type="hidden" name="slug" value={department.slug} />
-            <input type="hidden" name="section" value={activeSection} />
+                <h1 className="mt-1.5 font-serif text-2xl sm:text-3xl font-bold text-slate-900">
+                  {department.name}
+                </h1>
 
-            <div className="flex items-center gap-2">
-              <label htmlFor="status" className="text-xs font-bold text-slate-800">
-                Publishing Status:
-              </label>
-              <select
-                id="status"
-                name="status"
-                defaultValue={department.status}
-                className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-800 outline-none focus:border-slate-400"
-              >
-                <option value={ContentStatus.DRAFT}>Draft</option>
-                <option value={ContentStatus.PUBLISHED}>Published</option>
-                <option value={ContentStatus.ARCHIVED}>Archived</option>
-              </select>
+                <div className="mt-1 flex flex-wrap items-center gap-y-1 text-xs text-slate-500">
+                  <span>
+                    Slug:{" "}
+                    <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-slate-700 border border-slate-200">
+                      /{department.slug}
+                    </code>
+                  </span>
+                  <span className="mx-2 text-slate-300">|</span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3 w-3 text-slate-400" />
+                    Updated {formattedUpdatedAt}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  href={publicUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 hover:text-slate-900"
+                >
+                  <ExternalLink className="h-3.5 w-3.5 text-slate-400" />
+                  View Live Page
+                </Link>
+              </div>
             </div>
 
-            <CmsSubmitButton
-              label="Update Status"
-              loadingLabel="Updating..."
-              iconType="save"
-              className="px-3 py-1.5 text-xs"
-              variant="secondary"
-            />
-          </form>
+            {/* Publishing Status Bar */}
+            <div className="mt-6 border-t border-slate-100 pt-4 flex flex-wrap items-center justify-between gap-4">
+              <form action={updateDepartmentAction} className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                <input type="hidden" name="id" value={department.id} />
+                <input type="hidden" name="name" value={department.name} />
+                <input type="hidden" name="slug" value={department.slug} />
+                <input type="hidden" name="section" value="overview" />
 
-          {updated && (
-            <span className="text-xs font-bold text-emerald-600">
-              ✓ Department status updated
-            </span>
+                <div className="flex items-center gap-2">
+                  <label htmlFor="status" className="text-xs font-bold text-slate-700">
+                    Publishing Status:
+                  </label>
+                  <select
+                    id="status"
+                    name="status"
+                    defaultValue={department.status}
+                    className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-800 outline-none focus:border-slate-400 focus:bg-white transition"
+                  >
+                    <option value={ContentStatus.DRAFT}>Draft</option>
+                    <option value={ContentStatus.PUBLISHED}>Published</option>
+                    <option value={ContentStatus.ARCHIVED}>Archived</option>
+                  </select>
+                </div>
+
+                <CmsSubmitButton
+                  label="Update Status"
+                  loadingLabel="Updating..."
+                  iconType="save"
+                  className="px-3 py-1.5 text-xs"
+                  variant="secondary"
+                />
+              </form>
+
+              {updated && (
+                <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  Department status updated successfully
+                </span>
+              )}
+            </div>
+
+            {/* Completeness Progress Bar */}
+            <div className="mt-6 border-t border-slate-100 pt-4">
+              <div className="flex items-center justify-between text-xs mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-white bg-slate-800 px-2 py-0.5 rounded text-[11px] tracking-wide">
+                    Course Page Completeness:
+                  </span>
+                  <span className="font-bold text-slate-900">
+                    {completeness.completedCount} of {completeness.totalSections} Sections Complete
+                  </span>
+                </div>
+                <span className="font-bold text-slate-900 tracking-wide">
+                  {completeness.percentage}% Complete
+                </span>
+              </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+                <div
+                  className="h-full rounded-full bg-slate-900 transition-all duration-500"
+                  style={{ width: `${completeness.percentage}%` }}
+                />
+              </div>
+            </div>
+          </section>
+
+          {/* Global Alert Messages */}
+          {error && (
+            <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800 shadow-xs">
+              <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
+              {error}
+            </div>
           )}
-        </div>
-      </section>
 
-      {/* Section Navigation Tabs */}
-      <nav className="flex items-center gap-1.5 overflow-x-auto rounded-xl border border-slate-200 bg-white p-1.5 shadow-2xs">
-        <button
-          type="button"
-          onClick={() => navigateToSection("overview")}
-          className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold transition whitespace-nowrap ${
-            activeSection === "overview"
-              ? "bg-slate-900 text-white shadow-2xs"
-              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-          }`}
-        >
-          All Content Sections Overview
-        </button>
-
-        {sectionCards.map((sec) => {
-          const IconComponent = sec.icon;
-          const isActive = activeSection === sec.id;
-          return (
-            <button
-              key={sec.id}
-              type="button"
-              onClick={() => navigateToSection(sec.id)}
-              className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold transition whitespace-nowrap ${
-                isActive
-                  ? "bg-slate-900 text-white shadow-2xs"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
-            >
-              <IconComponent className="h-3.5 w-3.5" />
-              {sec.title}
-            </button>
-          );
-        })}
-      </nav>
-
-      {/* Active Editor Pane or Overview Grid */}
-      {activeSection === "overview" ? (
-        <section className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h3 className="font-serif text-xl font-bold text-slate-900">
-                Editable Content Sections ({filteredSectionCards.length} of {sectionCards.length})
-              </h3>
-              <p className="text-xs text-slate-500">
-                Select a section below to edit its content independently.
-              </p>
-            </div>
-
-            {/* Quick Section Search/Filter */}
-            <div className="relative w-full sm:w-72">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+          {/* Search & Category Filter Toolbar */}
+          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 value={sectionQuery}
                 onChange={(e) => setSectionQuery(e.target.value)}
-                placeholder="Search sections (e.g. Faculty, Hero, Dean)..."
-                className="w-full rounded-lg border border-slate-200 bg-white pl-8.5 pr-8 py-1.5 text-xs text-slate-800 placeholder-slate-400 outline-none transition focus:border-slate-400 focus:ring-1 focus:ring-slate-400"
+                placeholder="Search sections (e.g. Faculty, Hero, Dean, Placement)..."
+                className="w-full rounded-lg border border-slate-200 bg-slate-50/50 py-2 pl-10 pr-9 text-sm text-slate-900 outline-none transition-colors focus:border-slate-400 focus:bg-white"
               />
               {sectionQuery && (
                 <button
                   type="button"
                   onClick={() => setSectionQuery("")}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                   aria-label="Clear section search"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <X className="h-4 w-4" />
                 </button>
               )}
             </div>
+
+            {/* Category Filter Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs font-semibold">
+              {DEPARTMENT_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`rounded-lg px-2.5 py-1.5 transition-colors shrink-0 cursor-pointer ${
+                    selectedCategory === cat.id
+                      ? "bg-slate-900 text-white"
+                      : "bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200"
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {filteredSectionCards.length === 0 ? (
-            <div className="rounded-xl border border-slate-200 bg-white p-8 text-center">
-              <p className="text-sm font-medium text-slate-600">
-                No sections found matching &ldquo;{sectionQuery}&rdquo;
+          {/* 4-Column Responsive Grid of All 20 Section Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredSectionCards.map((section, idx) => {
+              const statusInfo = completeness.sectionStatuses[section.id] || { status: "Not Configured" };
+              const badgeStyle = statusBadgeStyles[statusInfo.status];
+
+              return (
+                <div
+                  key={section.id}
+                  onClick={() => navigateToSection(section.id)}
+                  className="group rounded-xl border border-slate-200 bg-white p-5 shadow-xs hover:border-slate-400 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-start justify-between gap-2.5 mb-3">
+                      <div className="flex items-center gap-2">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-700 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+                          {getDepartmentSectionIcon(section.iconName)}
+                        </div>
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                          Section {idx + 1}
+                        </span>
+                      </div>
+
+                      <span
+                        className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-bold ${badgeStyle.badge}`}
+                      >
+                        <span className={`h-1.5 w-1.5 rounded-full ${badgeStyle.dot}`} />
+                        {statusInfo.status}
+                      </span>
+                    </div>
+
+                    <h3 className="font-serif text-base font-bold text-slate-900 group-hover:text-slate-950 transition-colors">
+                      {section.title}
+                    </h3>
+
+                    <p className="mt-1.5 text-xs text-slate-500 leading-relaxed line-clamp-2">
+                      {section.description}
+                    </p>
+                  </div>
+
+                  <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-medium truncate max-w-[140px]">
+                      {statusInfo.detail || "Ready for editing"}
+                    </span>
+                    <span className="inline-flex items-center gap-1 font-bold text-slate-700 group-hover:text-slate-950 group-hover:translate-x-0.5 transition-all">
+                      Edit Section
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Empty Search State */}
+          {filteredSectionCards.length === 0 && (
+            <div className="rounded-xl border border-slate-200 bg-white p-12 text-center shadow-xs">
+              <Search className="mx-auto h-8 w-8 text-slate-300" />
+              <h3 className="mt-3 text-base font-bold text-slate-900">
+                No matching sections found
+              </h3>
+              <p className="mt-1 text-xs text-slate-500">
+                No department sections match &ldquo;{sectionQuery}&rdquo;. Try another search term or reset filters.
               </p>
               <button
                 type="button"
-                onClick={() => setSectionQuery("")}
-                className="mt-2 text-xs font-semibold text-slate-900 underline hover:text-slate-700"
+                onClick={() => {
+                  setSectionQuery("");
+                  setSelectedCategory("ALL");
+                }}
+                className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
               >
-                Clear search
+                Reset Search &amp; Filters
               </button>
             </div>
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filteredSectionCards.map((card) => {
-                return (
-                  <button
-                    key={card.id}
-                    type="button"
-                    onClick={() => navigateToSection(card.id)}
-                    className="group flex flex-col gap-2.5 rounded-xl border border-slate-200 bg-white p-5 text-left shadow-2xs transition hover:border-slate-400 hover:shadow-md"
+          )}
+        </div>
+      ) : (
+        /* ===================================================================
+            STAGE C: DEDICATED FULL-WIDTH SECTION EDITOR
+        =================================================================== */
+        <div className="space-y-6">
+          {/* Breadcrumb Navigation */}
+          <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+            <Link
+              href="/admin/departments"
+              className="hover:text-slate-900 transition-colors"
+            >
+              Departments
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
+            <button
+              type="button"
+              onClick={handleBackToSections}
+              className="hover:text-slate-900 transition-colors truncate max-w-[220px] cursor-pointer"
+            >
+              {department.name}
+            </button>
+            <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
+            <span className="text-slate-900 font-bold truncate">
+              {currentSectionConfig.title}
+            </span>
+          </nav>
+
+          {/* Focused Editor Header Card */}
+          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-100 pb-4 mb-4">
+              <button
+                type="button"
+                onClick={handleBackToSections}
+                className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-slate-900 transition-colors self-start cursor-pointer"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to Sections Overview
+              </button>
+
+              <div className="flex items-center gap-3">
+                <Link
+                  href={publicUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900"
+                >
+                  <ExternalLink className="h-3.5 w-3.5 text-slate-400" />
+                  View Live Page
+                </Link>
+              </div>
+            </div>
+
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2.5 mb-1.5">
+                  <span className="rounded bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-600 uppercase tracking-wide border border-slate-200">
+                    Section {currentSectionIndex + 1} of 20
+                  </span>
+                  <span
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-bold ${
+                      statusBadgeStyles[
+                        completeness.sectionStatuses[currentSectionConfig.id]?.status || "Not Configured"
+                      ].badge
+                    }`}
                   >
-                    <div className="flex w-full items-start justify-between gap-3">
-                      <h4 className="font-serif text-base font-bold text-slate-900 transition group-hover:text-slate-700">
-                        {card.title}
-                      </h4>
-                      <span
-                        className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${card.status.color}`}
-                      >
-                        {card.status.label}
-                      </span>
-                    </div>
-                    <p className="text-xs leading-relaxed text-slate-500 line-clamp-2">
-                      {card.desc}
-                    </p>
-                  </button>
-                );
-              })}
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${
+                        statusBadgeStyles[
+                          completeness.sectionStatuses[currentSectionConfig.id]?.status || "Not Configured"
+                        ].dot
+                      }`}
+                    />
+                    {completeness.sectionStatuses[currentSectionConfig.id]?.status || "Not Configured"}
+                  </span>
+                </div>
+
+                <h2 className="font-serif text-2xl font-bold text-slate-900">
+                  {currentSectionConfig.title}
+                </h2>
+                <p className="mt-1 text-xs text-slate-500 max-w-3xl leading-relaxed">
+                  {currentSectionConfig.description}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2.5 self-start md:self-auto shrink-0">
+                <span className="text-xs font-semibold text-slate-500">
+                  Department:
+                </span>
+                <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-800 border border-slate-200">
+                  {department.shortName || department.name}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Feedback Messages */}
+          {saved && (
+            <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 shadow-xs">
+              <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+              {currentSectionConfig.title} saved successfully. Live page revalidated.
             </div>
           )}
-        </section>
-      ) : activeSection === "hero" ? (
-        <HeroSectionEditor
-          departmentId={department.id}
-          departmentName={department.name}
-          heroData={body.hero || {}}
-          mediaAssets={mediaAssets}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "about" ? (
-        <AboutSectionEditor
-          departmentId={department.id}
-          aboutData={body.about || body.intro || {}}
-          mediaAssets={mediaAssets}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "visionMission" ? (
-        <VisionMissionSectionEditor
-          departmentId={department.id}
-          visionMissionData={body.visionMission || {}}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "dean" ? (
-        <DeanSectionEditor
-          departmentId={department.id}
-          deanData={body.dean || {}}
-          mediaAssets={mediaAssets}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "courses" ? (
-        <ProgramsOfferedSectionEditor
-          departmentId={department.id}
-          coursesData={body.courses || []}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "specialisations" ? (
-        <SpecialisationsSectionEditor
-          departmentId={department.id}
-          specialisationsData={body.specialisations || {}}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "faculty" ? (
-        <FacultySectionEditor
-          departmentId={department.id}
-          facultyData={body.faculty || body.mentorsSection?.faculty || []}
-          mentorsTitle={body.mentorsSection?.title}
-          mentorsEyebrow={body.mentorsSection?.eyebrow}
-          mediaAssets={mediaAssets}
-          saved={saved}
-          reordered={reordered}
-          error={error}
-        />
-      ) : activeSection === "transformativeTracks" ? (
-        <TransformativeTracksSectionEditor
-          departmentId={department.id}
-          tracksData={body.transformativeTracks || {}}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "careerPathways" ? (
-        <CareerPathwaysSectionEditor
-          departmentId={department.id}
-          careerPathwaysData={body.careerPathways || {}}
-          mediaAssets={mediaAssets}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "learningSpaces" ? (
-        <LearningSpacesSectionEditor
-          departmentId={department.id}
-          spacesData={body.learningSpaces || {}}
-          mediaAssets={mediaAssets}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "corporateConnect" ? (
-        <CorporateConnectSectionEditor
-          departmentId={department.id}
-          corporateConnectData={body.corporateConnect || {}}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "centerOfExcellence" ? (
-        <CenterOfExcellenceSectionEditor
-          departmentId={department.id}
-          centerData={body.centerOfExcellence || {}}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "departmentHighlights" ? (
-        <DepartmentHighlightsSectionEditor
-          departmentId={department.id}
-          highlightsData={body.departmentHighlights || []}
-          highlightsTitle={body.departmentHighlightsTitle}
-          highlightsSubtitle={body.departmentHighlightsSubtitle}
-          mediaAssets={mediaAssets}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "testimonials" ? (
-        <TestimonialsSectionEditor
-          departmentId={department.id}
-          testimonialsData={body.testimonials || []}
-          mediaAssets={mediaAssets}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "brochure" ? (
-        <BrochureSectionEditor
-          departmentId={department.id}
-          brochureData={body.brochure || {}}
-          mediaAssets={mediaAssets}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "placement" ? (
-        <PlacementSectionEditor
-          departmentId={department.id}
-          placementData={body.placement || body.career || {}}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "usps" ? (
-        <UspsSectionEditor
-          departmentId={department.id}
-          uspsData={body.usps || body.gth || {}}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "faqs" ? (
-        <FaqSectionEditor
-          departmentId={department.id}
-          faqsData={body.faqs || []}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "seo" ? (
-        <SeoSectionEditor
-          departmentId={department.id}
-          departmentName={department.name}
-          seoData={body.seo || {}}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "cta" ? (
-        <CtaSectionEditor
-          departmentId={department.id}
-          ctaData={body.cta || {}}
-          saved={saved}
-          error={error}
-        />
-      ) : activeSection === "advancedJson" ? (
-        <AdvancedJsonSectionEditor
-          departmentId={department.id}
-          bodyData={body}
-          userRole={userRole}
-          saved={saved}
-          error={error}
-        />
-      ) : null}
+
+          {reordered && (
+            <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 shadow-xs">
+              <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+              Faculty display order updated successfully and synchronized to database.
+            </div>
+          )}
+
+          {updated && (
+            <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 shadow-xs">
+              <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+              Department status updated successfully.
+            </div>
+          )}
+
+          {error && (
+            <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800 shadow-xs">
+              <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
+              {error}
+            </div>
+          )}
+
+          {/* Full-Width Workspace Canvas for Active Specialized Section Editor */}
+          <div className="min-w-0">
+            {activeSection === "hero" && (
+              <HeroSectionEditor
+                departmentId={department.id}
+                departmentName={department.name}
+                heroData={body.hero || {}}
+                mediaAssets={mediaAssets}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "about" && (
+              <AboutSectionEditor
+                departmentId={department.id}
+                aboutData={body.about || body.intro || {}}
+                mediaAssets={mediaAssets}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "visionMission" && (
+              <VisionMissionSectionEditor
+                departmentId={department.id}
+                visionMissionData={body.visionMission || {}}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "dean" && (
+              <DeanSectionEditor
+                departmentId={department.id}
+                deanData={body.dean || {}}
+                mediaAssets={mediaAssets}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "courses" && (
+              <ProgramsOfferedSectionEditor
+                departmentId={department.id}
+                coursesData={body.courses || []}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "specialisations" && (
+              <SpecialisationsSectionEditor
+                departmentId={department.id}
+                specialisationsData={body.specialisations || {}}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "faculty" && (
+              <FacultySectionEditor
+                departmentId={department.id}
+                facultyData={body.faculty || body.mentorsSection?.faculty || []}
+                mentorsTitle={body.mentorsSection?.title}
+                mentorsEyebrow={body.mentorsSection?.eyebrow}
+                mediaAssets={mediaAssets}
+                saved={saved}
+                reordered={reordered}
+                error={error}
+              />
+            )}
+
+            {activeSection === "transformativeTracks" && (
+              <TransformativeTracksSectionEditor
+                departmentId={department.id}
+                tracksData={body.transformativeTracks || {}}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "careerPathways" && (
+              <CareerPathwaysSectionEditor
+                departmentId={department.id}
+                careerPathwaysData={body.careerPathways || {}}
+                mediaAssets={mediaAssets}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "learningSpaces" && (
+              <LearningSpacesSectionEditor
+                departmentId={department.id}
+                spacesData={body.learningSpaces || {}}
+                mediaAssets={mediaAssets}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "corporateConnect" && (
+              <CorporateConnectSectionEditor
+                departmentId={department.id}
+                corporateConnectData={body.corporateConnect || {}}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "centerOfExcellence" && (
+              <CenterOfExcellenceSectionEditor
+                departmentId={department.id}
+                centerData={body.centerOfExcellence || {}}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "departmentHighlights" && (
+              <DepartmentHighlightsSectionEditor
+                departmentId={department.id}
+                highlightsData={body.departmentHighlights || []}
+                highlightsTitle={body.departmentHighlightsTitle}
+                highlightsSubtitle={body.departmentHighlightsSubtitle}
+                mediaAssets={mediaAssets}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "testimonials" && (
+              <TestimonialsSectionEditor
+                departmentId={department.id}
+                testimonialsData={body.testimonials || []}
+                mediaAssets={mediaAssets}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "brochure" && (
+              <BrochureSectionEditor
+                departmentId={department.id}
+                brochureData={body.brochure || {}}
+                mediaAssets={mediaAssets}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "placement" && (
+              <PlacementSectionEditor
+                departmentId={department.id}
+                placementData={body.placement || body.career || {}}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "usps" && (
+              <UspsSectionEditor
+                departmentId={department.id}
+                uspsData={body.usps || body.gth || {}}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "faqs" && (
+              <FaqSectionEditor
+                departmentId={department.id}
+                faqsData={body.faqs || []}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "seo" && (
+              <SeoSectionEditor
+                departmentId={department.id}
+                departmentName={department.name}
+                seoData={body.seo || {}}
+                saved={saved}
+                error={error}
+              />
+            )}
+
+            {activeSection === "cta" && (
+              <CtaSectionEditor
+                departmentId={department.id}
+                ctaData={body.cta || {}}
+                saved={saved}
+                error={error}
+              />
+            )}
+          </div>
+
+          {/* Bottom Quick-Jump Section Navigation Bar */}
+          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 mt-8">
+            {prevSection ? (
+              <button
+                type="button"
+                onClick={() => navigateToSection(prevSection.id)}
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors w-full sm:w-auto justify-center cursor-pointer"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                Previous: {prevSection.shortTitle}
+              </button>
+            ) : (
+              <div className="hidden sm:block" />
+            )}
+
+            <button
+              type="button"
+              onClick={handleBackToSections}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+            >
+              <Layers className="h-3.5 w-3.5" />
+              All Content Sections ({completeness.totalSections})
+            </button>
+
+            {nextSection ? (
+              <button
+                type="button"
+                onClick={() => navigateToSection(nextSection.id)}
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors w-full sm:w-auto justify-center cursor-pointer"
+              >
+                Next: {nextSection.shortTitle}
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            ) : (
+              <div className="hidden sm:block" />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

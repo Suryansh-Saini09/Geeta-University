@@ -172,7 +172,6 @@ export default async function AdminDepartmentsPage({
                   <th className="px-5 py-3 font-bold">Slug</th>
                   <th className="px-5 py-3 font-bold">Status</th>
                   <th className="px-5 py-3 font-bold">Programs</th>
-                  <th className="px-5 py-3 font-bold">Faculty</th>
                   <th className="px-5 py-3 font-bold">Updated</th>
                   <th className="px-5 py-3 font-bold">Actions</th>
                 </tr>
@@ -204,9 +203,6 @@ export default async function AdminDepartmentsPage({
                     </td>
                     <td className="px-5 py-4 font-semibold text-slate-700">
                       {department._count.programs}
-                    </td>
-                    <td className="px-5 py-4 font-semibold text-slate-700">
-                      {department._count.faculty}
                     </td>
                     <td className="px-5 py-4 text-slate-500">
                       {department.updatedAt.toLocaleDateString("en-IN", {
