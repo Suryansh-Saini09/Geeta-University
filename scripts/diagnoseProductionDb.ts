@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 
 async function diagnose() {
@@ -47,12 +48,12 @@ async function diagnose() {
 
   let tcpPass = false;
   let prismaPass = false;
+  let jsonPass = false;
   let connectionError: Error | null = null;
   let errorClassification = "";
 
-  const prisma = new PrismaClient({
-    log: ["error"],
-  });
+  // Test using the actual application environment Prisma client
+  const { prisma } = await import("../src/server/db/client");
 
   try {
     await prisma.$queryRawUnsafe("SELECT 1");
@@ -72,29 +73,47 @@ async function diagnose() {
     }
   }
 
+  if (prismaPass) {
+    try {
+      const setting = await prisma.siteSetting.findFirst();
+      if (setting && typeof setting.value === "object") {
+        jsonPass = true;
+      } else {
+        jsonPass = true; // null or object both valid
+      }
+    } catch (err: any) {
+      if (!connectionError) {
+        connectionError = err;
+      }
+    }
+  }
+
   console.log("\nCONNECTIVITY");
   console.log("------------");
   console.log(`TCP/DB connection: ${tcpPass ? "PASS" : "FAIL"}`);
   console.log(`Prisma query: ${prismaPass ? "PASS" : "FAIL"}`);
+  console.log(`JSON column deserialization: ${jsonPass ? "PASS" : "FAIL"}`);
 
   console.log("\nERROR CLASSIFICATION");
   console.log("--------------------");
 
-  if (tcpPass && prismaPass) {
+  if (tcpPass && prismaPass && jsonPass) {
     console.log("NONE");
   } else {
     const errMsg = connectionError ? connectionError.message || String(connectionError) : "Unknown error";
 
     if (errMsg.includes("ENOTFOUND") || errMsg.includes("getaddrinfo")) {
       errorClassification = "DNS error";
-    } else if (errMsg.includes("CERT_") || errMsg.includes("TLS") || errMsg.includes("SSL") || errMsg.includes("self-signed certificate")) {
+    } else if (errMsg.includes("CERT_") || errMsg.includes("TLS") || errMsg.includes("SSL") || errMsg.includes("self-signed certificate") || errMsg.includes("unable to get local issuer certificate")) {
       errorClassification = "TLS/certificate error";
     } else if (errMsg.includes("Access denied") || errMsg.includes("Authentication failed") || errMsg.includes("1045")) {
       errorClassification = "Authentication error";
     } else if (errMsg.includes("ECONNREFUSED")) {
       errorClassification = "Connection refused";
-    } else if (errMsg.includes("ETIMEDOUT") || errMsg.includes("timeout")) {
-      errorClassification = "Connection timeout";
+    } else if (errMsg.includes("ETIMEDOUT") || errMsg.includes("timeout") || errMsg.includes("45028")) {
+      errorClassification = "Connection timeout / Pool error (45028)";
+    } else if (errMsg.includes("Inconsistent column data") || errMsg.includes("Could not convert value")) {
+      errorClassification = "Column data mismatch (Driver adapter JSON bug)";
     } else if (errMsg.includes("PrismaClientInitializationError") || errMsg.includes("Initialization")) {
       errorClassification = "Prisma initialization error";
     } else if (errMsg.includes("Table") && errMsg.includes("doesn't exist")) {
@@ -111,7 +130,7 @@ async function diagnose() {
 
   await prisma.$disconnect();
 
-  if (!tcpPass || !prismaPass) {
+  if (!tcpPass || !prismaPass || !jsonPass) {
     process.exit(1);
   }
 }

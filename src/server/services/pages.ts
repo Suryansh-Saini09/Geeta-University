@@ -119,39 +119,50 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
 }
 
 export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
-  const [
-    sections,
-    recognitions,
-    awards,
-    leadership,
-    governanceDocs,
-    aboutPageRecord,
-  ] = await Promise.all([
-    prisma.pageSection.findMany({
-      where: { pageSlug: "about", status: "PUBLISHED" },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.recognition.findMany({
-      where: { status: "PUBLISHED" },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.awardRanking.findMany({
-      where: { status: "PUBLISHED" },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.leadershipMember.findMany({
-      where: { status: "PUBLISHED" },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.governanceDocument.findMany({
-      where: { status: "PUBLISHED" },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.page.findUnique({
-      where: { slug: "about" },
-      include: { seo: true },
-    }),
-  ]);
+  let sections: any[] = [];
+  let recognitions: any[] = [];
+  let awards: any[] = [];
+  let leadership: any[] = [];
+  let governanceDocs: any[] = [];
+  let aboutPageRecord: any = null;
+
+  try {
+    [
+      sections,
+      recognitions,
+      awards,
+      leadership,
+      governanceDocs,
+      aboutPageRecord,
+    ] = await Promise.all([
+      prisma.pageSection.findMany({
+        where: { pageSlug: "about", status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.recognition.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.awardRanking.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.leadershipMember.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.governanceDocument.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.page.findUnique({
+        where: { slug: "about" },
+        include: { seo: true },
+      }),
+    ]);
+  } catch (err: any) {
+    serverLogger.error("[CMS DB ERROR] getPublishedAboutPage failed", err, { module: "pages", action: "getPublishedAboutPage" });
+  }
 
   const sectionMap: Record<string, any> = {};
   sections.forEach((sec: any) => {
