@@ -5,7 +5,13 @@ import { serverLogger } from "@/lib/security/logger";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminHomePage() {
+export default async function AdminHomePage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ section?: string }>;
+}) {
+  const { section: requestedSectionKey } = (await searchParams) || {};
+
   const [adminData, homeData, allRecruiters] = await Promise.all([
     getPageSectionsAdmin("home"),
     getPublishedHomePage(),
@@ -19,6 +25,7 @@ export default async function AdminHomePage() {
 
   return (
     <HomeCmsDashboard
+      initialSectionKey={requestedSectionKey}
       sections={adminData.sections}
       seo={adminData.seo}
       recruiters={allRecruiters.length > 0 ? allRecruiters : homeData.recruiters}
