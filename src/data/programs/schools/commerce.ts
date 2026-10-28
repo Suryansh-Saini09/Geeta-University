@@ -809,7 +809,6 @@ export const commerceSchool: ProgramPageData = {
         {
           name: "M.Com. (Master of Commerce)",
           program: "M.Com. (Master of Commerce)",
-          href: "/programs/school-of-commerce-and-business-management/mcom",
           duration: "2 years",
           eligibility:
             "Passed B.Com. with a minimum of 50% marks in the qualifying exam",

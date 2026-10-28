@@ -614,9 +614,9 @@ export const agricultureSchool: ProgramPageData = {
     heroNoteText:
       "Comprehensive 1-year RAWE & ELP program ensuring 100% field readiness and direct recruiter attachments.",
     stats: [
-      { value: "40 LPA", label: "Highest Package", iconName: "Award" },
-      { value: "150+", label: "Agri Recruiter Partners", iconName: "Building2" },
-      { value: "100%", label: "Placement & RAWE Assistance", iconName: "BriefcaseBusiness" },
+      { value: "550+", label: "Recruiters", iconName: "Building2" },
+      { value: "3500+", label: "Job Offers", iconName: "BriefcaseBusiness" },
+      { value: "100%", label: "Placement & RAWE Assistance", iconName: "Award" },
     ],
     recruiters: [
       { name: "IFFCO", color: "#E51B24", logo: "/programs/agriculture/recruiters/iffco.svg" },

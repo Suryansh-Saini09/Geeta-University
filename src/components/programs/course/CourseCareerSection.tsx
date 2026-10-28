@@ -333,10 +333,30 @@ export default function CourseCareerSection({
     ...(career?.privateRoles || []),
   ];
 
-  const statsList = career?.stats && career.stats.length > 0 ? career.stats : [
-    { value: "550+", label: "Recruiters" },
-    { value: "3500+", label: "Job Offers" },
-  ];
+  const rawStats =
+    career?.stats && career.stats.length > 0
+      ? career.stats
+      : [
+          { value: "550+", label: "Recruiters" },
+          { value: "3500+", label: "Job Offers" },
+        ];
+
+  const filteredStats = rawStats.filter((stat) => {
+    const text = `${stat.value || ""} ${stat.label || ""}`.toLowerCase();
+    return !(
+      text.includes("40") ||
+      text.includes("40lpa") ||
+      text.includes("40 lpa")
+    );
+  });
+
+  const statsList =
+    filteredStats.length > 0
+      ? filteredStats
+      : [
+          { value: "550+", label: "Recruiters" },
+          { value: "3500+", label: "Job Offers" },
+        ];
 
   return (
     <section
@@ -356,6 +376,7 @@ export default function CourseCareerSection({
             {/* ── 1. Section Header matching School Pages ── */}
             <div className="text-center max-w-4xl mx-auto mb-10">
               <h2
+              
                 style={{
                   fontFamily: "var(--font-serif), Georgia, serif",
                   fontSize: "clamp(28px, 3.8vw, 42px)",
@@ -629,7 +650,6 @@ export default function CourseCareerSection({
                       fontWeight: 800,
                       color: "#FFFFFF",
                       letterSpacing: "0.5px",
-                      textTransform: "uppercase",
                     }}
                   >
                     {stat.label}

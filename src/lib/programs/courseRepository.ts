@@ -304,6 +304,13 @@ export function transformProgramToCoursePageData(
     curriculum: overviewData.curriculum,
     research: overviewData.research,
     collaborations: overviewData.collaborations,
+    thrustAreas: overviewData.thrustAreas,
+    collaborationsSection: overviewData.collaborationsSection,
+    subjectsSection: overviewData.subjectsSection,
+    researchAchievements: overviewData.researchAchievements,
+    facultyProfilesTable: overviewData.facultyProfilesTable,
+    whatWeOffer: overviewData.whatWeOffer,
+    additionalStrengths: overviewData.additionalStrengths,
   };
 }
 

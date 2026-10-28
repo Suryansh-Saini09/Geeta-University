@@ -121,7 +121,10 @@ export default function ProgramMentors({
   const scrollLeft = () => scrollCarousel(-1);
   const scrollRight = () => scrollCarousel(1);
 
-  const getMentorRole = (m: FacultyMember) => m.role || m.designation || "Faculty Member";
+  const getMentorRole = (m: FacultyMember) =>
+    m.role ||
+    (m.qualification ? `${m.designation || "Assistant Professor"}, ${m.qualification}` : m.designation) ||
+    "Faculty Member";
 
   const getMentorDesc = (m: FacultyMember) => {
     if (m.desc) return m.desc;

@@ -1,0 +1,37 @@
+
+
+<!-- SCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  // Show popup after 45 sec
+  setTimeout(() => {
+    document.getElementById("enqPopupOverlay").style.display = "flex";
+
+    // Load widget script only when popup opens
+    const s = document.createElement("script");
+    s.src = "https://widgets.in6.nopaperforms.com/emwgts.js";
+    s.async = true;
+    document.body.appendChild(s);
+
+  }, 90000);
+
+});
+
+// Close popup
+function closePopup() {
+  document.getElementById("enqPopupOverlay").style.display = "none";
+}
+
+// Tracking script (unchanged)
+setTimeout(function() {
+  var s = document.createElement("script");
+  s.src = "https://track.nopaperforms.com/js/track.js";
+  s.async = true;
+  document.body.appendChild(s);
+}, 90000);
+</script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"eeb871ce5375422abfe93ac820806122","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
+
+</html>
+

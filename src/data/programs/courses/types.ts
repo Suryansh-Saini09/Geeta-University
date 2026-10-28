@@ -259,6 +259,74 @@ export interface CourseAdmissions {
   process: string[];
 }
 
+export interface CourseThrustResearchArea {
+  number?: number;
+  title: string;
+  description: string;
+}
+
+export interface CourseThrustAreas {
+  title: string;
+  intro?: string;
+  items: CourseThrustResearchArea[];
+}
+
+export interface CourseCollaborationItem {
+  title: string;
+  description: string;
+}
+
+export interface CourseCollaborationsSection {
+  title: string;
+  intro?: string;
+  items: CourseCollaborationItem[];
+  outro?: string;
+}
+
+export interface CourseSubjectsSection {
+  title: string;
+  intro?: string;
+  items: string[];
+}
+
+export interface ResearchAchievementCategory {
+  title: string;
+  items: string[];
+}
+
+export interface CourseResearchAchievements {
+  title: string;
+  categories: ResearchAchievementCategory[];
+}
+
+export interface FacultyResearchProfileItem {
+  name: string;
+  profileName?: string;
+  profileUrl?: string;
+  profileDetails?: string[];
+  publications: string[];
+}
+
+export interface FacultyResearchProfilesData {
+  title: string;
+  table: FacultyResearchProfileItem[];
+  afterText?: string;
+  afterBullets?: {
+    text: string;
+    subItems?: string[];
+  }[];
+}
+
+export interface NestedListItem {
+  text: string;
+  subItems?: string[];
+}
+
+export interface NestedListSection {
+  title: string;
+  items: NestedListItem[];
+}
+
 export interface CoursePageData {
   id: string;
   schoolSlug: string;
@@ -270,7 +338,7 @@ export interface CoursePageData {
   whatIs?: CourseWhatIs;
   takeawaysTitle?: string;
   takeaways?: string[];
-  subjects: string[];
+  subjects?: string[];
   subjectsTitle?: string;
   subjectsParagraphs?: string[];
   learningOutcomes?: string[];
@@ -287,4 +355,11 @@ export interface CoursePageData {
   curriculum?: CourseCurriculum;
   research?: CourseResearch;
   collaborations?: CourseCollaborations;
+  thrustAreas?: CourseThrustAreas;
+  collaborationsSection?: CourseCollaborationsSection;
+  subjectsSection?: CourseSubjectsSection;
+  researchAchievements?: CourseResearchAchievements;
+  facultyProfilesTable?: FacultyResearchProfilesData;
+  whatWeOffer?: NestedListSection;
+  additionalStrengths?: NestedListSection;
 }

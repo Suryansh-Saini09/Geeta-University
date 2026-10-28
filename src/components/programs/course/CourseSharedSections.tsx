@@ -7,6 +7,7 @@ import type {
 } from "@/data/programs/courses/types";
 import type { ProgramPageData } from "@/data/programs/types";
 import { computerScienceSchool } from "@/data/programs/schools/computerScience";
+import { agricultureSchool } from "@/data/programs/schools/agriculture";
 
 import ProgramMentors from "../ProgramMentors";
 import CourseVirtualCampus from "./CourseVirtualCampus";
@@ -35,41 +36,43 @@ export default function CourseSharedSections({
   // Resolve associated school data fallback
   const resolvedSchool =
     school ||
-    (course.schoolSlug?.includes("computer") ? computerScienceSchool : undefined);
+    (course.schoolSlug?.includes("agri")
+      ? agricultureSchool
+      : computerScienceSchool);
 
   const schoolName =
     resolvedSchool?.name || resolvedSchool?.shortName || "Geeta University";
 
   // 1. Meet Our Mentors: Directly imported and shared from the main program page
   const faculty =
-    course.faculty !== undefined
+    course.faculty && course.faculty.length > 0
       ? course.faculty
       : resolvedSchool?.faculty && resolvedSchool.faculty.length > 0
       ? resolvedSchool.faculty
       : resolvedSchool?.mentorsSection?.faculty && resolvedSchool.mentorsSection.faculty.length > 0
       ? resolvedSchool.mentorsSection.faculty
-      : computerScienceSchool.faculty;
+      : agricultureSchool.mentorsSection?.faculty || computerScienceSchool.faculty;
 
   // 2. Highlights of Our Learning Spaces: Shared from department spaces
   const learningSpaces =
     course.learningSpaces?.spaces && course.learningSpaces.spaces.length > 0
       ? course.learningSpaces.spaces
-      : resolvedSchool?.learningSpaces?.spaces ||
-        computerScienceSchool.learningSpaces?.spaces ||
-        [];
+      : resolvedSchool?.learningSpaces?.spaces && resolvedSchool.learningSpaces.spaces.length > 0
+      ? resolvedSchool.learningSpaces.spaces
+      : agricultureSchool.learningSpaces?.spaces || computerScienceSchool.learningSpaces?.spaces || [];
 
   // 3. Testimonials: Shared student graduate stories normalized to CourseTestimonial format
   const rawTestimonials =
-    course.testimonials !== undefined
+    course.testimonials && course.testimonials.length > 0
       ? course.testimonials
-      : resolvedSchool?.testimonials ||
-        computerScienceSchool.testimonials ||
-        [];
+      : resolvedSchool?.testimonials && resolvedSchool.testimonials.length > 0
+      ? resolvedSchool.testimonials
+      : computerScienceSchool.testimonials || [];
 
   const testimonials: CourseTestimonial[] = rawTestimonials.map((t: any) => ({
     name: t.name || t.studentName || "GU Graduate",
-    role: t.role || t.program || t.course || "B.Tech CSE",
-    company: t.company || t.pkg || "Top Tech Partner",
+    role: t.role || t.program || t.course || "Geeta University",
+    company: t.company || t.pkg || "Top Corporate Partner",
     text: t.text || t.quote || t.message || "",
     image: t.image || t.avatar || "/student_vaibhav.png",
     quote: t.quote || t.text,
@@ -79,7 +82,9 @@ export default function CourseSharedSections({
   const faqs =
     course.faqs && course.faqs.length > 0
       ? course.faqs
-      : resolvedSchool?.faqs || computerScienceSchool.faqs || [];
+      : resolvedSchool?.faqs && resolvedSchool.faqs.length > 0
+      ? resolvedSchool.faqs
+      : computerScienceSchool.faqs || [];
 
   return (
     <>
@@ -132,10 +137,27 @@ export default function CourseSharedSections({
       )}
 
       {/* 8. Legacy & Integrated University Ecosystem */}
-      <LegacyEcosystem contextText="Students benefit from the integrated ecosystem of:" />
+      <LegacyEcosystem
+        contextText="Students benefit from the integrated ecosystem of:"
+      />
 
       {/* 9. Final CTA & Admissions Footer */}
-      <ProgramFinalCTA cta={course.cta} schoolName={schoolName} />
+      <ProgramFinalCTA
+        cta={
+          course.cta && course.cta.title
+            ? course.cta
+            : {
+                title: `Ready to pursue ${course.hero?.title || course.quickInfo?.program || "your program"}?`,
+                description:
+                  "Take the next step towards academic and professional excellence at Geeta University.",
+                applyUrl: "https://admissions.geetauniversity.edu.in/",
+                brochureUrl:
+                  "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+                helpline: "+91 92787 68000",
+              }
+        }
+        schoolName={schoolName}
+      />
     </>
   );
 }

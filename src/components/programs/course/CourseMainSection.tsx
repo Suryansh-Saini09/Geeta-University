@@ -6,6 +6,12 @@ import type {
   CourseOverview,
   CourseAdmissionProcess,
   CourseWhatIs,
+  CourseThrustAreas,
+  CourseCollaborationsSection,
+  CourseSubjectsSection,
+  CourseResearchAchievements,
+  FacultyResearchProfilesData,
+  NestedListSection,
 } from "@/data/programs/courses/types";
 import AdmissionFormWrapper from "../AdmissionFormWrapper";
 
@@ -21,6 +27,13 @@ interface CourseMainSectionProps {
   programName?: string;
   discipline?: string;
   whatIs?: CourseWhatIs;
+  thrustAreas?: CourseThrustAreas;
+  collaborationsSection?: CourseCollaborationsSection;
+  subjectsSection?: CourseSubjectsSection;
+  researchAchievements?: CourseResearchAchievements;
+  facultyProfilesTable?: FacultyResearchProfilesData;
+  whatWeOffer?: NestedListSection;
+  additionalStrengths?: NestedListSection;
 }
 
 function renderBulletText(text: string) {
@@ -50,6 +63,13 @@ export default function CourseMainSection({
   programName,
   discipline,
   whatIs,
+  thrustAreas,
+  collaborationsSection,
+  subjectsSection,
+  researchAchievements,
+  facultyProfilesTable,
+  whatWeOffer,
+  additionalStrengths,
 }: CourseMainSectionProps) {
   const title = overview?.title || programName || "Course Overview";
   const [isExpanded, setIsExpanded] = useState(false);
@@ -60,7 +80,11 @@ export default function CourseMainSection({
     Boolean(admission?.whyChooseHeading) ||
     Boolean(admission?.whyChooseParagraphs?.length) ||
     Boolean(admission?.title) ||
-    Boolean(admission?.whyPreferTitle);
+    Boolean(admission?.whyPreferTitle) ||
+    Boolean(researchAchievements?.categories?.length) ||
+    Boolean(facultyProfilesTable?.table?.length) ||
+    Boolean(whatWeOffer?.items?.length) ||
+    Boolean(additionalStrengths?.items?.length);
 
   return (
     <section className="w-full bg-[#FFFFFF] py-8 md:py-12 border-b border-slate-200/80">
@@ -177,7 +201,7 @@ export default function CourseMainSection({
             )}
 
             {/* 3. Program Structure / Key Subjects Covered */}
-            {subjects.length > 0 && (
+            {subjects.length > 0 && !subjectsSection && (
               <div
                 style={{
                   background: "#FFFFFF",
@@ -216,6 +240,149 @@ export default function CourseMainSection({
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-[#E8871A] shrink-0" />
                       <span className="leading-snug">{renderBulletText(sub)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Thrust Research Areas */}
+            {thrustAreas && (
+              <div
+                style={{
+                  background: "#FFFFFF",
+                  borderRadius: 14,
+                  padding: "18px 20px",
+                  border: "1px solid #E2E8F0",
+                  boxShadow: "0 2px 12px rgba(0, 0, 0, 0.02)",
+                }}
+              >
+                <div className="flex items-center gap-2 mb-3 pb-2.5 border-b border-slate-100">
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-serif), Georgia, serif",
+                      fontSize: 18,
+                      fontWeight: 800,
+                      color: "#0A1F44",
+                      margin: 0,
+                    }}
+                  >
+                    {thrustAreas.title}
+                  </h3>
+                </div>
+                {thrustAreas.intro && (
+                  <p className="text-[14.5px] text-[#334155] leading-relaxed text-justify mb-3.5">
+                    {thrustAreas.intro}
+                  </p>
+                )}
+                <div className="space-y-2.5">
+                  {thrustAreas.items.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-3 p-3 rounded-xl bg-[#F8FAFC] border border-slate-200/80 text-[13.5px] sm:text-[14px] leading-relaxed"
+                    >
+                      <span className="w-5 h-5 rounded-full bg-[#0A1F44] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+                        {item.number || idx + 1}
+                      </span>
+                      <div className="text-[#334155]">
+                        <b className="font-bold text-[#0A1F44]">{item.title}: </b>
+                        <span>{item.description}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* National & International Collaborations */}
+            {collaborationsSection && (
+              <div
+                style={{
+                  background: "#FFFFFF",
+                  borderRadius: 14,
+                  padding: "18px 20px",
+                  border: "1px solid #E2E8F0",
+                  boxShadow: "0 2px 12px rgba(0, 0, 0, 0.02)",
+                }}
+              >
+                <div className="flex items-center gap-2 mb-3 pb-2.5 border-b border-slate-100">
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-serif), Georgia, serif",
+                      fontSize: 18,
+                      fontWeight: 800,
+                      color: "#0A1F44",
+                      margin: 0,
+                    }}
+                  >
+                    {collaborationsSection.title}
+                  </h3>
+                </div>
+                {collaborationsSection.intro && (
+                  <p className="text-[14.5px] text-[#334155] leading-relaxed text-justify mb-3.5">
+                    {collaborationsSection.intro}
+                  </p>
+                )}
+                <div className="space-y-2.5">
+                  {collaborationsSection.items.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-3 p-3 rounded-xl bg-[#F8FAFC] border border-slate-200/80 text-[13.5px] sm:text-[14px] leading-relaxed"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-[#E8871A] shrink-0 mt-2" />
+                      <div className="text-[#334155]">
+                        <b className="font-bold text-[#0A1F44]">{item.title}: </b>
+                        <span>{item.description}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {collaborationsSection.outro && (
+                  <p className="text-[14.5px] text-[#334155] leading-relaxed text-justify mt-3.5">
+                    {collaborationsSection.outro}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* PhD in Agriculture – Subjects (or custom subjectsSection) */}
+            {subjectsSection && (
+              <div
+                style={{
+                  background: "#FFFFFF",
+                  borderRadius: 14,
+                  padding: "18px 20px",
+                  border: "1px solid #E2E8F0",
+                  boxShadow: "0 2px 12px rgba(0, 0, 0, 0.02)",
+                }}
+              >
+                <div className="flex items-center gap-2 mb-3 pb-2.5 border-b border-slate-100">
+                  <BookOpen size={18} className="text-[#0A1F44]" />
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-serif), Georgia, serif",
+                      fontSize: 18,
+                      fontWeight: 800,
+                      color: "#0A1F44",
+                      margin: 0,
+                    }}
+                  >
+                    {subjectsSection.title}
+                  </h3>
+                </div>
+                {subjectsSection.intro && (
+                  <p className="text-[14.5px] text-[#334155] leading-relaxed text-justify mb-3">
+                    {subjectsSection.intro}
+                  </p>
+                )}
+                <div className="space-y-2">
+                  {subjectsSection.items.map((sub, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-2.5 py-2 px-3 rounded-lg bg-[#F8FAFC] border border-slate-200/80 text-[#1E293B] text-[13.5px] font-semibold transition-all hover:bg-amber-50/60 hover:border-[#E8871A]/40 min-h-[38px]"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E8871A] shrink-0" />
+                      <span className="leading-snug">{sub}</span>
                     </div>
                   ))}
                 </div>
@@ -333,7 +500,7 @@ export default function CourseMainSection({
                           margin: 0,
                         }}
                       >
-                        {admission.whyChooseHeading || admission.title || "Admission Process"}
+                        {admission.title || admission.whyChooseHeading || "Admission Process"}
                       </h3>
                     </div>
 
@@ -354,19 +521,38 @@ export default function CourseMainSection({
                       </div>
                     )}
 
+                    {admission.whyChooseHeading && admission.title && (
+                      <div className="pt-2">
+                        <h4
+                          style={{
+                            fontFamily: "var(--font-serif), Georgia, serif",
+                            fontSize: 16,
+                            fontWeight: 800,
+                            color: "#0A1F44",
+                            marginBottom: 8,
+                          }}
+                        >
+                          {admission.whyChooseHeading}
+                        </h4>
+                      </div>
+                    )}
+
                     {admission.whyChooseParagraphs &&
                       admission.whyChooseParagraphs.length > 0 && (
-                        <div className="space-y-2 pt-0.5">
+                        <div className="space-y-3 pt-0.5">
                           {admission.whyChooseParagraphs.map((step, idx) => (
-                            <div
+                            <p
                               key={idx}
-                              className="flex items-start gap-2.5 p-3 rounded-lg bg-[#F8FAFC] border border-slate-200 text-[#334155] text-[13.5px] sm:text-[14px] leading-relaxed transition-all hover:border-[#E8871A]/40"
+                              style={{
+                                fontSize: "14.5px",
+                                color: "#334155",
+                                lineHeight: 1.7,
+                                fontWeight: 400,
+                              }}
+                              className="text-justify"
                             >
-                              <div className="w-5 h-5 rounded-full bg-[#0A1F44] text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
-                                {idx + 1}
-                              </div>
-                              <div className="font-medium">{renderBulletText(step)}</div>
-                            </div>
+                              {step}
+                            </p>
                           ))}
                         </div>
                       )}
@@ -414,6 +600,250 @@ export default function CourseMainSection({
                           ))}
                         </div>
                       )}
+                  </div>
+                )}
+
+                {/* 5d. Research Achievements */}
+                {researchAchievements && (
+                  <div
+                    style={{
+                      background: "#FFFFFF",
+                      borderRadius: 14,
+                      padding: "20px 22px",
+                      border: "1px solid #E2E8F0",
+                      boxShadow: "0 2px 12px rgba(0, 0, 0, 0.02)",
+                    }}
+                    className="space-y-4"
+                  >
+                    <div className="flex items-center gap-2 pb-2.5 border-b border-slate-100">
+                      <h3
+                        style={{
+                          fontFamily: "var(--font-serif), Georgia, serif",
+                          fontSize: 18,
+                          fontWeight: 800,
+                          color: "#0A1F44",
+                          margin: 0,
+                        }}
+                      >
+                        {researchAchievements.title}
+                      </h3>
+                    </div>
+                    {researchAchievements.categories.map((cat, cIdx) => (
+                      <div key={cIdx} className="space-y-2">
+                        <h4 className="font-bold text-[#0A1F44] text-[15px]">
+                          {cat.title}
+                        </h4>
+                        <div className="space-y-2 pl-2">
+                          {cat.items.map((item, iIdx) => (
+                            <div
+                              key={iIdx}
+                              className="flex items-start gap-2.5 p-2 rounded-lg bg-[#F8FAFC] border border-slate-100 text-[#334155] text-[13.5px] sm:text-[14px] leading-relaxed"
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#E8871A] shrink-0 mt-2" />
+                              <span>{renderBulletText(item)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* 5e. Faculty Research Profiles */}
+                {facultyProfilesTable && (
+                  <div
+                    style={{
+                      background: "#FFFFFF",
+                      borderRadius: 14,
+                      padding: "20px 22px",
+                      border: "1px solid #E2E8F0",
+                      boxShadow: "0 2px 12px rgba(0, 0, 0, 0.02)",
+                    }}
+                    className="space-y-4"
+                  >
+                    <div className="flex items-center gap-2 pb-2.5 border-b border-slate-100">
+                      <h3
+                        style={{
+                          fontFamily: "var(--font-serif), Georgia, serif",
+                          fontSize: 18,
+                          fontWeight: 800,
+                          color: "#0A1F44",
+                          margin: 0,
+                        }}
+                      >
+                        {facultyProfilesTable.title}
+                      </h3>
+                    </div>
+
+                    <div className="overflow-x-auto rounded-xl border border-slate-200">
+                      <table className="min-w-full text-left text-sm text-[#334155]">
+                        <thead className="bg-[#0A1F44] text-white text-[13px] uppercase tracking-wider font-semibold">
+                          <tr>
+                            <th className="px-4 py-3 border-b border-slate-200">Name</th>
+                            <th className="px-4 py-3 border-b border-slate-200">Profile</th>
+                            <th className="px-4 py-3 border-b border-slate-200 whitespace-nowrap">Number of publication</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200 text-[13px] sm:text-[13.5px] bg-white">
+                          {facultyProfilesTable.table.map((row, rIdx) => (
+                            <tr key={rIdx} className="hover:bg-slate-50/80 transition-colors">
+                              <td className="px-4 py-3 align-top font-bold text-[#0A1F44] whitespace-nowrap">
+                                {row.name}
+                              </td>
+                              <td className="px-4 py-3 align-top leading-relaxed">
+                                {row.profileUrl ? (
+                                  <a
+                                    href={row.profileUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[#073d6b] hover:text-[#E8871A] font-semibold underline block mb-1 break-all"
+                                  >
+                                    {row.profileName || row.name}
+                                  </a>
+                                ) : row.profileName ? (
+                                  <div className="font-semibold text-[#0A1F44] mb-1">
+                                    {row.profileName}
+                                  </div>
+                                ) : null}
+                                {row.profileDetails &&
+                                  row.profileDetails.map((det, dIdx) => (
+                                    <div key={dIdx} className="text-[#475569] text-[12.5px] sm:text-[13px]">
+                                      {det}
+                                    </div>
+                                  ))}
+                              </td>
+                              <td className="px-4 py-3 align-top leading-relaxed text-[#1E293B] whitespace-nowrap">
+                                {row.publications.map((pub, pIdx) => (
+                                  <div key={pIdx}>{pub}</div>
+                                ))}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {facultyProfilesTable.afterText && (
+                      <p className="text-[14.5px] text-[#334155] leading-relaxed mt-4 font-medium">
+                        {facultyProfilesTable.afterText}
+                      </p>
+                    )}
+
+                    {facultyProfilesTable.afterBullets && (
+                      <div className="space-y-2 mt-2">
+                        {facultyProfilesTable.afterBullets.map((bullet, bIdx) => (
+                          <div key={bIdx} className="space-y-1.5">
+                            <div className="flex items-start gap-2.5 p-2 rounded-lg bg-[#F8FAFC] border border-slate-100 text-[#334155] text-[13.5px] sm:text-[14px] leading-relaxed">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#E8871A] shrink-0 mt-2" />
+                              <span>{renderBulletText(bullet.text)}</span>
+                            </div>
+                            {bullet.subItems && (
+                              <div className="pl-6 space-y-1.5">
+                                {bullet.subItems.map((sub, sIdx) => (
+                                  <div
+                                    key={sIdx}
+                                    className="flex items-start gap-2 text-[13px] sm:text-[13.5px] text-[#475569] leading-relaxed"
+                                  >
+                                    <span className="w-1 h-1 rounded-full bg-[#0A1F44] shrink-0 mt-2" />
+                                    <span>{sub}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* 5f. What We Offer to Phd in Agriculture Scholars */}
+                {whatWeOffer && (
+                  <div
+                    style={{
+                      background: "#FFFFFF",
+                      borderRadius: 14,
+                      padding: "20px 22px",
+                      border: "1px solid #E2E8F0",
+                      boxShadow: "0 2px 12px rgba(0, 0, 0, 0.02)",
+                    }}
+                    className="space-y-3"
+                  >
+                    <div className="flex items-center gap-2 pb-2.5 border-b border-slate-100">
+                      <h3
+                        style={{
+                          fontFamily: "var(--font-serif), Georgia, serif",
+                          fontSize: 18,
+                          fontWeight: 800,
+                          color: "#0A1F44",
+                          margin: 0,
+                        }}
+                      >
+                        {whatWeOffer.title}
+                      </h3>
+                    </div>
+                    <div className="space-y-2">
+                      {whatWeOffer.items.map((item, idx) => (
+                        <div key={idx} className="space-y-1.5">
+                          <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#F8FAFC] border border-slate-100 text-[#334155] text-[13.5px] sm:text-[14px] leading-relaxed">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#E8871A] shrink-0 mt-2" />
+                            <span>{renderBulletText(item.text)}</span>
+                          </div>
+                          {item.subItems && (
+                            <div className="pl-6 space-y-1.5">
+                              {item.subItems.map((sub, sIdx) => (
+                                <div
+                                  key={sIdx}
+                                  className="flex items-start gap-2 text-[13px] sm:text-[13.5px] text-[#475569] leading-relaxed"
+                                >
+                                  <span className="w-1 h-1 rounded-full bg-[#0A1F44] shrink-0 mt-2" />
+                                  <span>{sub}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 5g. Additional Unique Strengths */}
+                {additionalStrengths && (
+                  <div
+                    style={{
+                      background: "#FFFFFF",
+                      borderRadius: 14,
+                      padding: "20px 22px",
+                      border: "1px solid #E2E8F0",
+                      boxShadow: "0 2px 12px rgba(0, 0, 0, 0.02)",
+                    }}
+                    className="space-y-3"
+                  >
+                    <div className="flex items-center gap-2 pb-2.5 border-b border-slate-100">
+                      <h3
+                        style={{
+                          fontFamily: "var(--font-serif), Georgia, serif",
+                          fontSize: 18,
+                          fontWeight: 800,
+                          color: "#0A1F44",
+                          margin: 0,
+                        }}
+                      >
+                        {additionalStrengths.title}
+                      </h3>
+                    </div>
+                    <div className="space-y-2">
+                      {additionalStrengths.items.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#F8FAFC] border border-slate-100 text-[#334155] text-[13.5px] sm:text-[14px] leading-relaxed"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#E8871A] shrink-0 mt-2" />
+                          <span>{renderBulletText(item.text)}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>

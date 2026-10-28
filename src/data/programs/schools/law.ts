@@ -436,13 +436,11 @@ export const lawSchool: ProgramPageData = {
           name: "B.A. LL.B. (Hons.)",
           duration: "5 years Integrated",
           eligibility: "Passed 10+2 examination with at least 50% marks from a recognized board.",
-          href: "https://geetauniversity.edu.in/programs/geeta-global-law-school/ba-llb",
         },
         {
           name: "B.B.A. LL.B. (Hons.)",
           duration: "5 years Integrated",
           eligibility: "Passed 10+2 examination with at least 50% marks from a recognized board.",
-          href: "https://geetauniversity.edu.in/programs/geeta-global-law-school/bba-llb",
         },
       ],
     },

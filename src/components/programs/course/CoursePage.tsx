@@ -45,6 +45,13 @@ export default function CoursePage({ course, school }: CoursePageProps) {
         programName={course.hero?.title || course.quickInfo?.program}
         discipline={schoolName}
         whatIs={course.whatIs}
+        thrustAreas={course.thrustAreas}
+        collaborationsSection={course.collaborationsSection}
+        subjectsSection={course.subjectsSection}
+        researchAchievements={course.researchAchievements}
+        facultyProfilesTable={course.facultyProfilesTable}
+        whatWeOffer={course.whatWeOffer}
+        additionalStrengths={course.additionalStrengths}
       />
 
       {/* 4. Modular Shared Program Sections Template

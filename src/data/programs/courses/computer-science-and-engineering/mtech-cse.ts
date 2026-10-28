@@ -125,7 +125,7 @@ export const mtechCse: CoursePageData = {
       "Research-Driven Postgraduate Curriculum: Advanced syllabus designed in collaboration with leading academic and technology experts, focusing on contemporary industry needs.",
       "Cutting-Edge Computational Infrastructure: High-speed computing labs, AI/ML clusters, cloud testbeds, and advanced simulation software for hands-on experimentation.",
       "Active Research & Patent Mentorship: Hands-on guidance to author and publish research in prestigious Scopus/IEEE venues and file innovative patents.",
-      "Comprehensive Career & Placement Support: Access to 550+ global recruiting partners, tech giants, research labs, and consulting enterprises offering competitive remuneration packages up to 40 LPA.",
+      "Comprehensive Career & Placement Support: Access to 550+ global recruiting partners, tech giants, research labs, and consulting enterprises offering competitive remuneration packages.",
     ],
   },
   scholarships: {
