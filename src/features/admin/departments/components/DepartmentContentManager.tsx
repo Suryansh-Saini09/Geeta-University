@@ -8,25 +8,7 @@ import {
   ArrowLeft,
   ArrowRight,
   ExternalLink,
-  ImageIcon,
-  BookOpen,
-  Compass,
-  UserCheck,
-  GraduationCap,
-  Award,
-  Users,
   Layers,
-  MapPin,
-  Building2,
-  Video,
-  Sparkles,
-  MessageSquare,
-  FileText,
-  TrendingUp,
-  ShieldCheck,
-  HelpCircle,
-  Globe,
-  CheckCircle,
   CheckCircle2,
   AlertCircle,
   Search,
@@ -104,50 +86,6 @@ const statusBadgeStyles: Record<DepartmentSectionStatus, { badge: string; dot: s
   },
 };
 
-function getDepartmentSectionIcon(iconName: string) {
-  switch (iconName) {
-    case "ImageIcon":
-      return <ImageIcon className="h-4 w-4" />;
-    case "BookOpen":
-      return <BookOpen className="h-4 w-4" />;
-    case "Compass":
-      return <Compass className="h-4 w-4" />;
-    case "UserCheck":
-      return <UserCheck className="h-4 w-4" />;
-    case "GraduationCap":
-      return <GraduationCap className="h-4 w-4" />;
-    case "Award":
-      return <Award className="h-4 w-4" />;
-    case "Users":
-      return <Users className="h-4 w-4" />;
-    case "Layers":
-      return <Layers className="h-4 w-4" />;
-    case "MapPin":
-      return <MapPin className="h-4 w-4" />;
-    case "Building2":
-      return <Building2 className="h-4 w-4" />;
-    case "Video":
-      return <Video className="h-4 w-4" />;
-    case "Sparkles":
-      return <Sparkles className="h-4 w-4" />;
-    case "MessageSquare":
-      return <MessageSquare className="h-4 w-4" />;
-    case "FileText":
-      return <FileText className="h-4 w-4" />;
-    case "TrendingUp":
-      return <TrendingUp className="h-4 w-4" />;
-    case "ShieldCheck":
-      return <ShieldCheck className="h-4 w-4" />;
-    case "HelpCircle":
-      return <HelpCircle className="h-4 w-4" />;
-    case "Globe":
-      return <Globe className="h-4 w-4" />;
-    case "CheckCircle":
-      return <CheckCircle className="h-4 w-4" />;
-    default:
-      return <FileText className="h-4 w-4" />;
-  }
-}
 
 /* =========================================================================
    MAIN COMPONENT
@@ -470,7 +408,7 @@ export function DepartmentContentManager({
 
           {/* 4-Column Responsive Grid of All 20 Section Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filteredSectionCards.map((section, idx) => {
+            {filteredSectionCards.map((section) => {
               const statusInfo = completeness.sectionStatuses[section.id] || { status: "Not Configured" };
               const badgeStyle = statusBadgeStyles[statusInfo.status];
 
@@ -481,15 +419,10 @@ export function DepartmentContentManager({
                   className="group rounded-xl border border-slate-200 bg-white p-5 shadow-xs hover:border-slate-400 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
                 >
                   <div>
-                    <div className="flex items-start justify-between gap-2.5 mb-3">
-                      <div className="flex items-center gap-2">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-700 group-hover:bg-slate-900 group-hover:text-white transition-colors">
-                          {getDepartmentSectionIcon(section.iconName)}
-                        </div>
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                          Section {idx + 1}
-                        </span>
-                      </div>
+                    <div className="flex items-start justify-between gap-2.5 mb-2.5">
+                      <h3 className="font-serif text-base font-bold text-slate-900 group-hover:text-slate-950 transition-colors">
+                        {section.title}
+                      </h3>
 
                       <span
                         className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-bold ${badgeStyle.badge}`}
@@ -499,23 +432,9 @@ export function DepartmentContentManager({
                       </span>
                     </div>
 
-                    <h3 className="font-serif text-base font-bold text-slate-900 group-hover:text-slate-950 transition-colors">
-                      {section.title}
-                    </h3>
-
-                    <p className="mt-1.5 text-xs text-slate-500 leading-relaxed line-clamp-2">
+                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">
                       {section.description}
                     </p>
-                  </div>
-
-                  <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <span className="text-slate-400 font-medium truncate max-w-[140px]">
-                      {statusInfo.detail || "Ready for editing"}
-                    </span>
-                    <span className="inline-flex items-center gap-1 font-bold text-slate-700 group-hover:text-slate-950 group-hover:translate-x-0.5 transition-all">
-                      Edit Section
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </span>
                   </div>
                 </div>
               );
@@ -600,9 +519,6 @@ export function DepartmentContentManager({
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2.5 mb-1.5">
-                  <span className="rounded bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-600 uppercase tracking-wide border border-slate-200">
-                    Section {currentSectionIndex + 1} of 20
-                  </span>
                   <span
                     className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-bold ${
                       statusBadgeStyles[
