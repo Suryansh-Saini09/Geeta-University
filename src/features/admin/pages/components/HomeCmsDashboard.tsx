@@ -30,6 +30,7 @@ import {
 import {
   HOME_SECTIONS_LIST,
   HOME_CATEGORY_FILTERS,
+  resolveHomeSectionKey,
   type HomeSectionItem,
   type HomeCategoryKey,
 } from "../homeConfig";
@@ -80,9 +81,7 @@ export function HomeCmsDashboard({
 }: HomeCmsDashboardProps) {
   // Navigation & section selection state
   const [activeSectionKey, setActiveSectionKey] = useState<string | null>(
-    initialSectionKey && HOME_SECTIONS_LIST.some((s) => s.key === initialSectionKey)
-      ? initialSectionKey
-      : null
+    resolveHomeSectionKey(initialSectionKey)
   );
 
   // Localization state
@@ -354,12 +353,8 @@ export function HomeCmsDashboard({
   useEffect(() => {
     const handlePopState = () => {
       const params = new URLSearchParams(window.location.search);
-      const sec = params.get("section");
-      if (sec && HOME_SECTIONS_LIST.some((s) => s.key === sec)) {
-        setActiveSectionKey(sec);
-      } else {
-        setActiveSectionKey(null);
-      }
+      const sec = resolveHomeSectionKey(params.get("section"));
+      setActiveSectionKey(sec);
       setIsDirty(false);
       setFeedback(null);
     };
@@ -881,14 +876,6 @@ export function HomeCmsDashboard({
                 <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
                   Manage the homepage text, academic highlights, recognitions and media.
                 </p>
-
-                <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-slate-500">
-                  <span className="font-mono bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100">
-                    /
-                  </span>
-                  <span>•</span>
-                  <span>16 Content Sections</span>
-                </div>
               </div>
 
               {/* Action Buttons */}
@@ -901,58 +888,6 @@ export function HomeCmsDashboard({
                   <span>View Live Homepage</span>
                   <ExternalLink className="h-3.5 w-3.5 text-slate-500" />
                 </Link>
-              </div>
-            </div>
-
-            {/* Real Stats Metric Cards Bar */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-6 mt-6 border-t border-slate-100">
-              <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5">
-                <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                  Sections
-                </span>
-                <span className="mt-1 block text-lg font-bold text-[#0A1F44]">
-                  16 Sections
-                </span>
-              </div>
-              <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5">
-                <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                  Recruiters
-                </span>
-                <span className="mt-1 block text-lg font-bold text-[#0A1F44]">
-                  {recruitersList.length} Companies
-                </span>
-              </div>
-              <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5">
-                <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                  Shared Awards
-                </span>
-                <span className="mt-1 block text-lg font-bold text-[#0A1F44]">
-                  {awardsList.length} Records
-                </span>
-              </div>
-              <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5">
-                <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                  Testimonials
-                </span>
-                <span className="mt-1 block text-lg font-bold text-[#0A1F44]">
-                  {testimonialsList.length} Stories
-                </span>
-              </div>
-              <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5">
-                <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                  Partners
-                </span>
-                <span className="mt-1 block text-lg font-bold text-[#0A1F44]">
-                  {partnersList.length} Partners
-                </span>
-              </div>
-              <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5">
-                <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                  Star Performers
-                </span>
-                <span className="mt-1 block text-lg font-bold text-[#0A1F44]">
-                  {starsList.length} Artists
-                </span>
               </div>
             </div>
           </div>
@@ -1035,26 +970,9 @@ export function HomeCmsDashboard({
                         </span>
                       </div>
 
-                      <div className="mb-3">
-                        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                          {sec.categoryLabel}
-                        </span>
-                      </div>
-
                       <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 mb-5">
                         {sec.description}
                       </p>
-                    </div>
-
-                    {/* Bottom Row: Item count info & Edit section button */}
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 mt-auto">
-                      <span className="text-xs font-medium text-slate-500">
-                        {info.count}
-                      </span>
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#0A1F44] group-hover:translate-x-0.5 transition-transform">
-                        <span>Edit section</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </span>
                     </div>
                   </div>
                 );

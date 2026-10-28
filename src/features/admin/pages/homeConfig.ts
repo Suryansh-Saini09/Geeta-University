@@ -155,3 +155,43 @@ export const HOME_SECTIONS_LIST: HomeSectionItem[] = [
     isMultilingual: false,
   },
 ];
+
+export const SECTION_KEY_ALIASES: Record<string, string> = {
+  homeHero: "hero",
+  heroSection: "hero",
+  smartCampusSection: "smartCampus",
+  statistics: "stats",
+  programs: "programsOffered",
+  programOffered: "programsOffered",
+  recruiter: "recruiters",
+  topRecruiters: "recruiters",
+  award: "awards",
+  ranking: "awards",
+  rankings: "awards",
+  awardsRankings: "awards",
+  testimonial: "testimonials",
+  studentTestimonials: "testimonials",
+  globalEdu: "globalEducation",
+  universeOfGu: "universe",
+  eventUpdates: "updates",
+  placementUpdates: "updates",
+  whyJoin: "whyJoinGeeta",
+  scholarship: "scholarships",
+  partners: "industryPartners",
+  industryPartner: "industryPartners",
+  tour: "virtualTour",
+  starPerformers: "starPerformances",
+  starPerformancesCta: "starPerformances",
+  metaSeo: "seo",
+};
+
+export function resolveHomeSectionKey(key?: string | null): string | null {
+  if (!key) return null;
+  const directMatch = HOME_SECTIONS_LIST.find((s) => s.key === key);
+  if (directMatch) return directMatch.key;
+  const alias = SECTION_KEY_ALIASES[key];
+  if (alias && HOME_SECTIONS_LIST.some((s) => s.key === alias)) {
+    return alias;
+  }
+  return null;
+}
