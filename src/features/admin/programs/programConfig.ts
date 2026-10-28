@@ -287,18 +287,6 @@ export const PROGRAM_SECTIONS_CONFIG: ProgramSectionConfigItem[] = [
       return { status: "Not Configured", detail: "No SEO metadata configured" };
     },
   },
-  {
-    id: "advancedJson",
-    title: "Advanced JSON Editor",
-    shortTitle: "Raw JSON",
-    description: "Direct inspection and maintenance of raw structured overview payload. Recommended for technical administrators only.",
-    iconName: "Code",
-    category: "advanced",
-    isAdvanced: true,
-    checkCompleteness: () => {
-      return { status: "Complete", detail: "Maintenance tool" };
-    },
-  },
 ];
 
 /**

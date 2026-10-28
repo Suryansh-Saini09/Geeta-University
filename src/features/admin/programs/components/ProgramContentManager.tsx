@@ -12,21 +12,6 @@ import {
   Search,
   X,
   ChevronRight,
-  FileText,
-  Layout,
-  BookOpen,
-  GraduationCap,
-  Sparkles,
-  Briefcase,
-  Building2,
-  Award,
-  Users,
-  MessageSquareQuote,
-  HelpCircle,
-  Send,
-  Globe,
-  Code,
-  SlidersHorizontal,
   Clock,
   Layers,
 } from "lucide-react";
@@ -45,7 +30,6 @@ import { TestimonialsSectionEditor } from "./TestimonialsSectionEditor";
 import { FaqSectionEditor } from "./FaqSectionEditor";
 import { CtaSectionEditor } from "./CtaSectionEditor";
 import { SeoSectionEditor } from "./SeoSectionEditor";
-import { AdvancedJsonSectionEditor } from "./AdvancedJsonSectionEditor";
 import { ProgramFields, ProgramPublishingPanel } from "./ProgramFormFields";
 import { updateProgramAction } from "@/features/admin/programs/actions";
 import {
@@ -113,40 +97,6 @@ const statusBadgeStyles: Record<ProgramSectionStatus, { badge: string; dot: stri
   },
 };
 
-function getSectionIcon(iconName: string) {
-  switch (iconName) {
-    case "FileText":
-      return <FileText className="h-4 w-4" />;
-    case "Layout":
-      return <Layout className="h-4 w-4" />;
-    case "BookOpen":
-      return <BookOpen className="h-4 w-4" />;
-    case "GraduationCap":
-      return <GraduationCap className="h-4 w-4" />;
-    case "Sparkles":
-      return <Sparkles className="h-4 w-4" />;
-    case "Briefcase":
-      return <Briefcase className="h-4 w-4" />;
-    case "Building2":
-      return <Building2 className="h-4 w-4" />;
-    case "Award":
-      return <Award className="h-4 w-4" />;
-    case "Users":
-      return <Users className="h-4 w-4" />;
-    case "MessageSquareQuote":
-      return <MessageSquareQuote className="h-4 w-4" />;
-    case "HelpCircle":
-      return <HelpCircle className="h-4 w-4" />;
-    case "Send":
-      return <Send className="h-4 w-4" />;
-    case "Globe":
-      return <Globe className="h-4 w-4" />;
-    case "Code":
-      return <Code className="h-4 w-4" />;
-    default:
-      return <FileText className="h-4 w-4" />;
-  }
-}
 
 function parseKeywordsSafely(rawKeywords: any): string[] | undefined {
   if (!rawKeywords) return undefined;
@@ -269,9 +219,7 @@ export function ProgramContentManager({
 
   // Filtered sections for View B catalog
   const filteredContentSections = useMemo(() => {
-    const regularSections = PROGRAM_SECTIONS_CONFIG.filter((s) => !s.isAdvanced);
-
-    return regularSections.filter((section) => {
+    return PROGRAM_SECTIONS_CONFIG.filter((section) => {
       // Category filter
       if (selectedCategory !== "ALL" && section.category !== selectedCategory) {
         return false;
@@ -286,8 +234,6 @@ export function ProgramContentManager({
       );
     });
   }, [selectedCategory, sectionFilter]);
-
-  const advancedSection = PROGRAM_SECTIONS_CONFIG.find((s) => s.isAdvanced);
 
   const formattedUpdatedDate = useMemo(() => {
     try {
@@ -467,7 +413,7 @@ export function ProgramContentManager({
 
           {/* Section Cards Catalogue Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredContentSections.map((section, idx) => {
+            {filteredContentSections.map((section) => {
               const statusInfo = completeness.sectionStatuses[section.id] || { status: "Not Configured" };
               const badgeStyle = statusBadgeStyles[statusInfo.status];
 
@@ -478,41 +424,22 @@ export function ProgramContentManager({
                   className="group rounded-xl border border-slate-200 bg-white p-5 shadow-xs hover:border-slate-400 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
                 >
                   <div>
-                    <div className="flex items-start justify-between gap-3 mb-3">
-                      <div className="flex items-center gap-2.5">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-700 group-hover:bg-slate-900 group-hover:text-white transition-colors">
-                          {getSectionIcon(section.iconName)}
-                        </div>
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                          Section {idx + 1}
-                        </span>
-                      </div>
+                    <div className="flex items-start justify-between gap-3 mb-2.5">
+                      <h3 className="font-serif text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors">
+                        {section.title}
+                      </h3>
 
                       <span
-                        className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-bold ${badgeStyle.badge}`}
+                        className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-bold ${badgeStyle.badge}`}
                       >
                         <span className={`h-1.5 w-1.5 rounded-full ${badgeStyle.dot}`} />
                         {statusInfo.status}
                       </span>
                     </div>
 
-                    <h3 className="font-serif text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors">
-                      {section.title}
-                    </h3>
-
-                    <p className="mt-1.5 text-xs text-slate-500 leading-relaxed line-clamp-3">
+                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">
                       {section.description}
                     </p>
-                  </div>
-
-                  <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-xs text-slate-400 font-medium truncate max-w-[160px]">
-                      {statusInfo.detail || "Ready for editing"}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-700 group-hover:text-slate-950 group-hover:translate-x-0.5 transition-all">
-                      Edit Section
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </span>
                   </div>
                 </div>
               );
@@ -539,52 +466,6 @@ export function ProgramContentManager({
               >
                 Reset Search &amp; Filters
               </button>
-            </div>
-          )}
-
-          {/* Advanced / Developer Maintenance Section */}
-          {advancedSection && (
-            <div className="pt-6 border-t border-slate-200">
-              <div className="mb-4">
-                <h3 className="font-serif text-lg font-bold text-slate-900 flex items-center gap-2">
-                  <Code className="h-4 w-4 text-slate-600" />
-                  Advanced &amp; Maintenance Tools
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Developer utilities for inspecting and repairing raw program overview JSON structures.
-                </p>
-              </div>
-
-              <div
-                onClick={() => handleSelectSection(advancedSection.id)}
-                className="group rounded-xl border border-dashed border-slate-300 bg-slate-50/60 p-5 hover:border-slate-400 hover:bg-white transition-all cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4"
-              >
-                <div className="flex items-start gap-3.5">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-200 text-slate-700 group-hover:bg-slate-900 group-hover:text-white transition-colors">
-                    <Code className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2.5">
-                      <h4 className="font-serif text-base font-bold text-slate-900">
-                        {advancedSection.title}
-                      </h4>
-                      <span className="rounded bg-slate-200/80 px-2 py-0.5 text-[10px] font-bold text-slate-700 tracking-wide uppercase">
-                        Administrative Tool
-                      </span>
-                    </div>
-                    <p className="mt-1 text-xs text-slate-500 max-w-2xl leading-relaxed">
-                      {advancedSection.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-700 group-hover:text-slate-900">
-                    Open Advanced Editor
-                    <ChevronRight className="h-3.5 w-3.5" />
-                  </span>
-                </div>
-              </div>
             </div>
           )}
         </div>
@@ -645,11 +526,6 @@ export function ProgramContentManager({
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2.5 mb-1.5">
-                  <span className="rounded bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-600 uppercase tracking-wide border border-slate-200">
-                    {currentSectionConfig.isAdvanced
-                      ? "Maintenance Tool"
-                      : `Section ${currentSectionIndex + 1} of 13`}
-                  </span>
                   <span
                     className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-bold ${
                       statusBadgeStyles[
@@ -879,16 +755,6 @@ export function ProgramContentManager({
                     : undefined)
                 }
                 mediaAssets={mediaAssets}
-                saved={saved}
-                error={error}
-              />
-            )}
-
-            {activeSection === "advancedJson" && (
-              <AdvancedJsonSectionEditor
-                programId={program.id}
-                programName={program.name}
-                overviewData={overview}
                 saved={saved}
                 error={error}
               />

@@ -517,14 +517,6 @@ export async function updateProgramSectionAction(formData: FormData) {
       break;
     }
 
-    case "advancedJson": {
-      if (session.user.role !== "SUPER_ADMIN" && session.user.role !== "ADMIN") {
-        redirect(`/admin/programs/${id}/edit?section=${section}&error=${encodeURIComponent("Only Administrators can modify raw JSON.")}`);
-      }
-      updatedOverview = sectionPayload;
-      break;
-    }
-
     default:
       redirect(`/admin/programs/${id}/edit?error=${encodeURIComponent("The requested section could not be found.")}`);
   }
