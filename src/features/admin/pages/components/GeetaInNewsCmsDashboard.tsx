@@ -1635,7 +1635,7 @@ export function GeetaInNewsCmsDashboard({ initialData }: GeetaInNewsCmsDashboard
             <p className="text-xs text-slate-600 leading-relaxed">
               Are you sure you want to remove{" "}
               <strong>"{deleteTarget.title || deleteTarget.publication}"</strong>? This will remove
-              the record from Aiven MySQL and the live website.
+              the record from the database and the live website.
             </p>
 
             <div className="flex items-center justify-end gap-3 pt-2">

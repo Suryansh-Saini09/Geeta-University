@@ -49,6 +49,7 @@ const TECHNICAL_PATTERNS = [
   /postgres/i,
   /sqlite/i,
   /aiven/i,
+  /hostinger/i,
   /database_url/i,
   /select\s+/i,
   /insert\s+into/i,
