@@ -15,10 +15,10 @@ export const dynamic = "force-dynamic";
 export default async function AdminInstitutionalPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; section?: string }>;
 }) {
   await requireAdminSession();
-  const { page = "careers" } = await searchParams;
+  const { page = "careers", section } = await searchParams;
 
   // 1. Validate slug against approved list of CMS-managed institutional pages
   if (!isValidInstitutionalSlug(page)) {
@@ -43,6 +43,12 @@ export default async function AdminInstitutionalPage({
     case "geeta-in-news":
       return <GeetaInNewsCmsDashboard initialData={initialData} />;
     default:
-      return <InstitutionalPagesCmsDashboard pageSlug={page} initialData={initialData} />;
+      return (
+        <InstitutionalPagesCmsDashboard
+          pageSlug={page}
+          initialData={initialData}
+          initialSectionKey={section}
+        />
+      );
   }
 }
