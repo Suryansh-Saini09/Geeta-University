@@ -766,14 +766,6 @@ export function AboutCmsDashboard({
                 <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
                   Manage the university's story, leadership, recognitions, and governance information.
                 </p>
-
-                <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-slate-500">
-                  <span className="font-mono bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100">
-                    /about-us
-                  </span>
-                  <span>•</span>
-                  <span>9 Content Sections</span>
-                </div>
               </div>
 
               {/* Action Buttons */}
