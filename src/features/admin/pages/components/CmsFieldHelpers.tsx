@@ -4,8 +4,25 @@ import { useState, useRef, useEffect } from "react";
 import { Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import { CmsImageField, type CmsImageFieldProps } from "@/components/admin/CmsImageField";
 import { CmsDocumentField, type CmsDocumentFieldProps } from "@/components/admin/CmsDocumentField";
+import {
+  CmsSectionVisibilityControl,
+  type CmsSectionVisibilityControlProps,
+} from "@/features/admin/visibility/components/CmsSectionVisibilityControl";
+import {
+  CmsSectionVisibilityBadge,
+  type CmsSectionVisibilityBadgeProps,
+} from "@/features/admin/visibility/components/CmsSectionVisibilityBadge";
 
-export { CmsImageField, type CmsImageFieldProps, CmsDocumentField, type CmsDocumentFieldProps };
+export {
+  CmsImageField,
+  type CmsImageFieldProps,
+  CmsDocumentField,
+  type CmsDocumentFieldProps,
+  CmsSectionVisibilityControl,
+  CmsSectionVisibilityBadge,
+  type CmsSectionVisibilityControlProps,
+  type CmsSectionVisibilityBadgeProps,
+};
 
 export interface CmsImagePreviewInputProps {
   label: string;

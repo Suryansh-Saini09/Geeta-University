@@ -46,6 +46,8 @@ import {
   DepartmentSectionStatus,
   calculateDepartmentCompleteness,
 } from "../departmentConfig";
+import { CmsSectionVisibilityControl } from "@/features/admin/visibility/components/CmsSectionVisibilityControl";
+import { CmsSectionVisibilityBadge } from "@/features/admin/visibility/components/CmsSectionVisibilityBadge";
 
 /* =========================================================================
    TYPES & PROPS
@@ -114,6 +116,22 @@ export function DepartmentContentManager({
   const body = useMemo(() => {
     return (department.body && typeof department.body === "object" ? department.body : {}) as Record<string, any>;
   }, [department.body]);
+
+  const initialVisibilityMap = useMemo(() => {
+    const map = (body._sectionVisibility && typeof body._sectionVisibility === "object")
+      ? { ...(body._sectionVisibility as Record<string, boolean>) }
+      : {};
+    if (body.dean?.isVisible !== undefined && map.dean === undefined) {
+      map.dean = Boolean(body.dean.isVisible);
+    }
+    return map;
+  }, [body]);
+
+  const [visibilityMap, setVisibilityMap] = useState<Record<string, boolean>>(initialVisibilityMap);
+
+  useEffect(() => {
+    setVisibilityMap(initialVisibilityMap);
+  }, [initialVisibilityMap]);
 
   const publicUrl = `/programs/${department.slug}`;
 
@@ -424,12 +442,19 @@ export function DepartmentContentManager({
                         {section.title}
                       </h3>
 
-                      <span
-                        className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-bold ${badgeStyle.badge}`}
-                      >
-                        <span className={`h-1.5 w-1.5 rounded-full ${badgeStyle.dot}`} />
-                        {statusInfo.status}
-                      </span>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {section.id !== "overview" && section.id !== "seo" && (
+                          <CmsSectionVisibilityBadge
+                            isVisible={visibilityMap[section.id] ?? true}
+                          />
+                        )}
+                        <span
+                          className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-bold ${badgeStyle.badge}`}
+                        >
+                          <span className={`h-1.5 w-1.5 rounded-full ${badgeStyle.dot}`} />
+                          {statusInfo.status}
+                        </span>
+                      </div>
                     </div>
 
                     <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">
@@ -583,6 +608,20 @@ export function DepartmentContentManager({
               <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
               {error}
             </div>
+          )}
+
+          {/* Centralized Section Visibility Control */}
+          {currentSectionConfig && currentSectionConfig.id !== "overview" && currentSectionConfig.id !== "seo" && (
+            <CmsSectionVisibilityControl
+              scopeType="department"
+              scopeId={department.id}
+              sectionKey={currentSectionConfig.id}
+              sectionTitle={currentSectionConfig.title}
+              initialVisible={visibilityMap[currentSectionConfig.id] ?? true}
+              onVisibilityChange={(newVal) => {
+                setVisibilityMap((prev) => ({ ...prev, [currentSectionConfig.id]: newVal }));
+              }}
+            />
           )}
 
           {/* Full-Width Workspace Canvas for Active Specialized Section Editor */}

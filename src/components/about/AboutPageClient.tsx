@@ -43,7 +43,29 @@ interface AboutPageClientProps {
 }
 
 export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
-  const [activeSection, setActiveSection] = useState<string>("recognitions");
+  const isVisible = (key: string) => aboutData.visibility?.[key] !== false;
+
+  const recognitions = aboutData.recognitions || [];
+  const featuredRecog = recognitions.find((r: any) => r.isFeatured) || recognitions[0] || {
+    name: "UGC",
+    fullName: "University Grants Commission",
+    image: "/about/19.png",
+  };
+  const otherRecogs = recognitions.filter((r: any) => !r.isFeatured);
+
+  const navItems = NAV_ITEMS.filter((item) => {
+    if (item.id === "recognitions") return isVisible("recognitions") && (recognitions.length > 0 || featuredRecog);
+    if (item.id === "vision-mission") return isVisible("visionMission") && Boolean(aboutData.visionMission);
+    if (item.id === "awards-ranking") return isVisible("awards") && (aboutData.awards?.length > 0);
+    if (item.id === "legacy") return isVisible("legacy") && Boolean(aboutData.legacy);
+    if (item.id === "leadership") return isVisible("leadership") && (aboutData.leadership?.length > 0);
+    if (item.id === "governance") return isVisible("governance") && (aboutData.governance?.length > 0);
+    if (item.id === "policies") return isVisible("policies") && (aboutData.policies?.length > 0);
+    if (item.id === "legacy-ecosystem") return isVisible("legacyEcosystem") && Boolean(aboutData.legacyEcosystem);
+    return true;
+  });
+
+  const [activeSection, setActiveSection] = useState<string>(() => navItems[0]?.id || "recognitions");
   const lenis = useLenis();
 
   const hero = aboutData.hero || {};
@@ -57,19 +79,11 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
   const secondaryCtaUrl = hero.secondaryCtaUrl || "#vision-mission";
   const heroImage = hero.heroImage || "/about/campus.webp";
 
-  const recognitions = aboutData.recognitions || [];
-  const featuredRecog = recognitions.find((r: any) => r.isFeatured) || recognitions[0] || {
-    name: "UGC",
-    fullName: "University Grants Commission",
-    image: "/about/19.png",
-  };
-  const otherRecogs = recognitions.filter((r: any) => !r.isFeatured);
-
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + 220;
-      for (let i = NAV_ITEMS.length - 1; i >= 0; i--) {
-        const item = NAV_ITEMS[i];
+      for (let i = navItems.length - 1; i >= 0; i--) {
+        const item = navItems[i];
         const el = document.getElementById(item.id);
         if (el) {
           const top = el.getBoundingClientRect().top + window.scrollY;
@@ -84,12 +98,12 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [navItems]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const hash = window.location.hash.replace("#", "");
-      if (hash && NAV_ITEMS.some((item) => item.id === hash)) {
+      if (hash && navItems.some((item) => item.id === hash)) {
         setActiveSection(hash);
         const timer = setTimeout(() => {
           if (lenis) {
@@ -219,7 +233,7 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
       <nav className="sticky top-[136px] z-30 w-full border-b border-[#E2E8F0] bg-white/95 shadow-xs backdrop-blur-md">
         <div className="gu-container overflow-x-auto [scrollbar-width:none]">
           <div className="flex min-w-max items-center gap-1 py-2.5 md:justify-center md:gap-3">
-            {NAV_ITEMS.map((item) => {
+            {navItems.map((item) => {
               const isActive = activeSection === item.id;
 
               return (
@@ -250,97 +264,111 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
       </nav>
 
       {/* RECOGNITIONS */}
-      <section
-        id="recognitions"
-        className="scroll-mt-[190px] bg-[#F7F9FC] py-12 md:py-16"
-      >
-        <div className="gu-container">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={fadeUp}
-            className="relative mb-8 overflow-hidden rounded-[18px] border border-[#E2E8F0] bg-white shadow-[0_15px_45px_rgba(10,31,68,0.07)]"
-          >
-            <div className="flex flex-col items-center justify-center text-center p-8 md:p-10">
-              <div className="mb-5 flex h-[140px] w-[140px] items-center justify-center rounded-full bg-[#0A1F44] p-4 shadow-xl">
-                <div className="flex h-full w-full items-center justify-center rounded-full bg-white p-3">
-                  <Image
-                    src={featuredRecog.image}
-                    alt={featuredRecog.fullName || featuredRecog.name}
-                    width={100}
-                    height={100}
-                    className="h-auto max-h-[95px] w-auto object-contain"
-                  />
-                </div>
-              </div>
-
-              <h3 className="text-[28px] font-black tracking-[-0.7px] text-[#0A1F44] md:text-[36px]">
-                {featuredRecog.fullName || featuredRecog.name}
-              </h3>
-            </div>
-          </motion.div>
-
-          <div className="grid min-w-0 grid-cols-1 gap-5 md:grid-cols-3">
-            {otherRecogs.map((recognition: any, index: number) => (
-              <motion.div
-                key={recognition.name}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
-                variants={{
-                  hidden: { opacity: 0, y: 25 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                      duration: 0.6,
-                      delay: index * 0.08,
-                      ease: "easeOut",
-                    },
-                  },
-                }}
-                className="group flex flex-col items-center justify-center text-center min-w-0 overflow-hidden rounded-[16px] border border-[#E2E8F0] bg-white p-7 shadow-[0_8px_25px_rgba(10,31,68,0.035)] transition-all duration-300 hover:-translate-y-2 hover:border-[#E8871A]/30 hover:shadow-[0_18px_35px_rgba(232,135,26,0.08)]"
-              >
-                <div className="flex h-[82px] w-[82px] items-center justify-center rounded-[12px] bg-[#F8FAFC] p-3">
-                  <Image
-                    src={recognition.image}
-                    alt={recognition.name}
-                    width={70}
-                    height={70}
-                    className="h-full w-full object-contain"
-                  />
+      {isVisible("recognitions") && (recognitions.length > 0 || featuredRecog) && (
+        <section
+          id="recognitions"
+          className="scroll-mt-[190px] bg-[#F7F9FC] py-12 md:py-16"
+        >
+          <div className="gu-container">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={fadeUp}
+              className="relative mb-8 overflow-hidden rounded-[18px] border border-[#E2E8F0] bg-white shadow-[0_15px_45px_rgba(10,31,68,0.07)]"
+            >
+              <div className="flex flex-col items-center justify-center text-center p-8 md:p-10">
+                <div className="mb-5 flex h-[140px] w-[140px] items-center justify-center rounded-full bg-[#0A1F44] p-4 shadow-xl">
+                  <div className="flex h-full w-full items-center justify-center rounded-full bg-white p-3">
+                    <Image
+                      src={featuredRecog.image}
+                      alt={featuredRecog.fullName || featuredRecog.name}
+                      width={100}
+                      height={100}
+                      className="h-auto max-h-[95px] w-auto object-contain"
+                    />
+                  </div>
                 </div>
 
-                <h3 className="mt-4 text-[25px] font-black text-[#0A1F44]">
-                  {recognition.name}
+                <h3 className="text-[28px] font-black tracking-[-0.7px] text-[#0A1F44] md:text-[36px]">
+                  {featuredRecog.fullName || featuredRecog.name}
                 </h3>
-              </motion.div>
-            ))}
+              </div>
+            </motion.div>
+
+            <div className="grid min-w-0 grid-cols-1 gap-5 md:grid-cols-3">
+              {otherRecogs.map((recognition: any, index: number) => (
+                <motion.div
+                  key={recognition.name}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.2 }}
+                  variants={{
+                    hidden: { opacity: 0, y: 25 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: {
+                        duration: 0.6,
+                        delay: index * 0.08,
+                        ease: "easeOut",
+                      },
+                    },
+                  }}
+                  className="group flex flex-col items-center justify-center text-center min-w-0 overflow-hidden rounded-[16px] border border-[#E2E8F0] bg-white p-7 shadow-[0_8px_25px_rgba(10,31,68,0.035)] transition-all duration-300 hover:-translate-y-2 hover:border-[#E8871A]/30 hover:shadow-[0_18px_35px_rgba(232,135,26,0.08)]"
+                >
+                  <div className="flex h-[82px] w-[82px] items-center justify-center rounded-[12px] bg-[#F8FAFC] p-3">
+                    <Image
+                      src={recognition.image}
+                      alt={recognition.name}
+                      width={70}
+                      height={70}
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
+
+                  <h3 className="mt-4 text-[25px] font-black text-[#0A1F44]">
+                    {recognition.name}
+                  </h3>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* VISION & MISSION */}
-      <AboutVisionMission data={aboutData.visionMission} />
+      {isVisible("visionMission") && aboutData.visionMission && (
+        <AboutVisionMission data={aboutData.visionMission} />
+      )}
 
       {/* AWARDS & RANKINGS */}
-      <AwardsRankingsSection data={aboutData.awards} />
+      {isVisible("awards") && aboutData.awards && aboutData.awards.length > 0 && (
+        <AwardsRankingsSection data={aboutData.awards} />
+      )}
 
       {/* LEGACY */}
-      <LegacySection data={aboutData.legacy} />
+      {isVisible("legacy") && aboutData.legacy && (
+        <LegacySection data={aboutData.legacy} />
+      )}
 
       {/* LEADERSHIP */}
-      <LeadershipSection data={aboutData.leadership} />
+      {isVisible("leadership") && aboutData.leadership && aboutData.leadership.length > 0 && (
+        <LeadershipSection data={aboutData.leadership} />
+      )}
 
       {/* GOVERNANCE & POLICIES */}
-      <GovernancePoliciesSection
-        governanceData={aboutData.governance}
-        policiesData={aboutData.policies}
-      />
+      {(isVisible("governance") || isVisible("policies")) && (
+        <GovernancePoliciesSection
+          governanceData={isVisible("governance") ? aboutData.governance : []}
+          policiesData={isVisible("policies") ? aboutData.policies : []}
+        />
+      )}
 
       {/* LEGACY ECOSYSTEM */}
-      <LegacyEcosystem data={aboutData.legacyEcosystem} />
+      {isVisible("legacyEcosystem") && aboutData.legacyEcosystem && (
+        <LegacyEcosystem data={aboutData.legacyEcosystem} />
+      )}
     </div>
   );
 }
