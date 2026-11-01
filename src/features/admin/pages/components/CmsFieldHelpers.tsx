@@ -3,8 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import { CmsImageField, type CmsImageFieldProps } from "@/components/admin/CmsImageField";
+import { CmsDocumentField, type CmsDocumentFieldProps } from "@/components/admin/CmsDocumentField";
 
-export { CmsImageField, type CmsImageFieldProps };
+export { CmsImageField, type CmsImageFieldProps, CmsDocumentField, type CmsDocumentFieldProps };
 
 export interface CmsImagePreviewInputProps {
   label: string;
