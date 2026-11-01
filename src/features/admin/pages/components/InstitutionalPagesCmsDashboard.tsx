@@ -20,6 +20,8 @@ import {
 import { InstitutionalFieldRenderer } from "./InstitutionalFieldRenderer";
 import { InstitutionalSeoEditor } from "./InstitutionalSeoEditor";
 import { getSpecializedEditor } from "./institutional-editors";
+import { CmsSectionVisibilityControl } from "@/features/admin/visibility/components/CmsSectionVisibilityControl";
+import { CmsSectionVisibilityBadge } from "@/features/admin/visibility/components/CmsSectionVisibilityBadge";
 import {
   AlertCircle,
   ArrowLeft,
@@ -625,20 +627,27 @@ export function InstitutionalPagesCmsDashboard({
                         <h3 className="text-base font-bold text-[#0A1F44] group-hover:text-black transition-colors">
                           {sec.label}
                         </h3>
-                        <span
-                          className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
-                            hasContent
-                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                              : "bg-slate-100 text-slate-600 border-slate-200"
-                          }`}
-                        >
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {!isSeo && (
+                            <CmsSectionVisibilityBadge
+                              isVisible={sectionsData[sec.key]?.status !== "DRAFT"}
+                            />
+                          )}
                           <span
-                            className={`h-1.5 w-1.5 rounded-full ${
-                              hasContent ? "bg-emerald-500" : "bg-slate-400"
+                            className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
+                              hasContent
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                : "bg-slate-100 text-slate-600 border-slate-200"
                             }`}
-                          />
-                          {hasContent ? "Configured" : "Empty"}
-                        </span>
+                          >
+                            <span
+                              className={`h-1.5 w-1.5 rounded-full ${
+                                hasContent ? "bg-emerald-500" : "bg-slate-400"
+                              }`}
+                            />
+                            {hasContent ? "Configured" : "Empty"}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Description */}
@@ -762,6 +771,26 @@ export function InstitutionalPagesCmsDashboard({
               </div>
             </div>
           </div>
+
+          {/* Section Visibility Control */}
+          {activeSectionKey && activeSectionKey !== "seo" && (
+            <CmsSectionVisibilityControl
+              scopeType="page"
+              scopeId={pageSlug}
+              sectionKey={activeSectionKey}
+              sectionTitle={activeSectionMeta?.label || activeSectionKey}
+              initialVisible={sectionsData[activeSectionKey]?.status !== "DRAFT"}
+              onVisibilityChange={(newVal) => {
+                setSectionsData((prev) => ({
+                  ...prev,
+                  [activeSectionKey]: {
+                    ...prev[activeSectionKey],
+                    status: newVal ? "PUBLISHED" : "DRAFT",
+                  },
+                }));
+              }}
+            />
+          )}
 
           {/* Section Body Workspace Form: Dispatches Specialized Editor if available, else FieldRenderer */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">

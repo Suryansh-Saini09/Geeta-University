@@ -80,12 +80,31 @@ export async function getProgramBySlug(
         };
       }
 
+      // Dynamic Section Visibility Enforcement
+      const rawDeptBody = (dept.body && typeof dept.body === "object") ? (dept.body as Record<string, any>) : {};
+      const sectionVisibility: Record<string, boolean> = (rawDeptBody._sectionVisibility && typeof rawDeptBody._sectionVisibility === "object")
+        ? { ...rawDeptBody._sectionVisibility }
+        : {};
+
+      const isDeanVisible = sectionVisibility.dean ?? (rawDeptBody.dean?.isVisible ?? true);
+      if (!isDeanVisible) {
+        delete (data as any).dean;
+      }
+
+      (data as any)._sectionVisibility = sectionVisibility;
+
       return data;
     }
     
     serverLogger.warn(`[CMS FALLBACK WARNING] Department for slug '${slug}' not resolved from MySQL. Using static TS fallback.`, undefined, { module: "programRepository", action: "getProgramBySlug", slug });
   } catch (err) {
     serverLogger.error(`[CMS ERROR] DB query failed for school slug '${slug}', using static fallback`, err, { module: "programRepository", action: "getProgramBySlug", slug });
+  }
+
+  if (staticFallback && staticFallback.dean && (staticFallback.dean as any).isVisible === false) {
+    const fallbackCopy = { ...staticFallback };
+    delete (fallbackCopy as any).dean;
+    return fallbackCopy;
   }
 
   return staticFallback;

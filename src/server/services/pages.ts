@@ -10,6 +10,8 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
   let industryPartners: any[] = [];
   let starPerformances: any[] = [];
   let homePageRecord: any = null;
+  let draftSections: any[] = [];
+  let visibilitySetting: any = null;
 
   try {
     [
@@ -20,6 +22,8 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
       industryPartners,
       starPerformances,
       homePageRecord,
+      draftSections,
+      visibilitySetting,
     ] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "home", status: "PUBLISHED" },
@@ -49,44 +53,82 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
         where: { slug: "home" },
         include: { seo: true },
       }),
+      prisma.pageSection.findMany({
+        where: { pageSlug: "home", status: "DRAFT" },
+        select: { sectionKey: true },
+      }).catch(() => []),
+      prisma.siteSetting.findUnique({
+        where: { key: "cms_visibility:page:home" },
+        select: { value: true },
+      }).catch(() => null),
     ]);
   } catch (err: any) {
     serverLogger.error("[CMS DB ERROR] getPublishedHomePage failed", err, { module: "pages", action: "getPublishedHomePage" });
   }
 
-  const sectionMap: Record<string, any> = {};
-  sections.forEach((sec: any) => {
-    sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+  const hiddenKeys = new Set((draftSections || []).map((s: any) => s.sectionKey));
+  if (visibilitySetting && visibilitySetting.value && typeof visibilitySetting.value === "object") {
+    for (const [k, v] of Object.entries(visibilitySetting.value as Record<string, any>)) {
+      if (v === false) hiddenKeys.add(k);
+      if (v === true) hiddenKeys.delete(k);
+    }
+  }
+
+  const visibility: Record<string, boolean> = {};
+  [
+    "hero", "smartCampus", "stats", "programsOffered", "recruiters",
+    "awards", "testimonials", "globalEducation", "universe", "updates",
+    "whyJoinGeeta", "scholarships", "industryPartners", "virtualTour",
+    "starPerformances"
+  ].forEach((k) => {
+    visibility[k] = !hiddenKeys.has(k);
   });
 
-  const localizedRecruiters = recruiters.map((r: any) => ({
-    ...r,
-    name: getLocalizedField(r, "name", locale),
-  }));
+  const sectionMap: Record<string, any> = {};
+  sections.forEach((sec: any) => {
+    if (!hiddenKeys.has(sec.sectionKey)) {
+      sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+    }
+  });
 
-  const localizedAwards = awards.map((a: any) => ({
-    ...a,
-    title: getLocalizedField(a, "title", locale),
-    presentedBy: getLocalizedField(a, "presentedBy", locale),
-    designation: getLocalizedField(a, "designation", locale),
-  }));
+  const localizedRecruiters = hiddenKeys.has("recruiters")
+    ? []
+    : recruiters.map((r: any) => ({
+        ...r,
+        name: getLocalizedField(r, "name", locale),
+      }));
 
-  const localizedTestimonials = testimonials.map((t: any) => ({
-    ...t,
-    name: getLocalizedField(t, "name", locale),
-    testimonial: getLocalizedField(t, "testimonial", locale),
-    package: getLocalizedField(t, "package", locale),
-  }));
+  const localizedAwards = hiddenKeys.has("awards")
+    ? []
+    : awards.map((a: any) => ({
+        ...a,
+        title: getLocalizedField(a, "title", locale),
+        presentedBy: getLocalizedField(a, "presentedBy", locale),
+        designation: getLocalizedField(a, "designation", locale),
+      }));
 
-  const localizedIndustryPartners = industryPartners.map((p: any) => ({
-    ...p,
-    name: getLocalizedField(p, "name", locale),
-  }));
+  const localizedTestimonials = hiddenKeys.has("testimonials")
+    ? []
+    : testimonials.map((t: any) => ({
+        ...t,
+        name: getLocalizedField(t, "name", locale),
+        testimonial: getLocalizedField(t, "testimonial", locale),
+        package: getLocalizedField(t, "package", locale),
+      }));
 
-  const localizedStarPerformances = starPerformances.map((s: any) => ({
-    ...s,
-    name: getLocalizedField(s, "name", locale),
-  }));
+  const localizedIndustryPartners = hiddenKeys.has("industryPartners")
+    ? []
+    : industryPartners.map((p: any) => ({
+        ...p,
+        name: getLocalizedField(p, "name", locale),
+      }));
+
+  const localizedStarPerformances = hiddenKeys.has("starPerformances")
+    ? []
+    : starPerformances.map((s: any) => ({
+        ...s,
+        name: getLocalizedField(s, "name", locale),
+      }));
 
   const localizedSeo = homePageRecord?.seo
     ? {
@@ -114,6 +156,7 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
     testimonials: localizedTestimonials,
     industryPartners: localizedIndustryPartners,
     starPerformances: localizedStarPerformances,
+    visibility,
     seo: localizedSeo,
   };
 }
@@ -125,6 +168,8 @@ export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
   let leadership: any[] = [];
   let governanceDocs: any[] = [];
   let aboutPageRecord: any = null;
+  let draftSections: any[] = [];
+  let visibilitySetting: any = null;
 
   try {
     [
@@ -134,6 +179,8 @@ export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
       leadership,
       governanceDocs,
       aboutPageRecord,
+      draftSections,
+      visibilitySetting,
     ] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "about", status: "PUBLISHED" },
@@ -159,29 +206,59 @@ export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
         where: { slug: "about" },
         include: { seo: true },
       }),
+      prisma.pageSection.findMany({
+        where: { pageSlug: "about", status: "DRAFT" },
+        select: { sectionKey: true },
+      }).catch(() => []),
+      prisma.siteSetting.findUnique({
+        where: { key: "cms_visibility:page:about" },
+        select: { value: true },
+      }).catch(() => null),
     ]);
   } catch (err: any) {
     serverLogger.error("[CMS DB ERROR] getPublishedAboutPage failed", err, { module: "pages", action: "getPublishedAboutPage" });
   }
 
-  const sectionMap: Record<string, any> = {};
-  sections.forEach((sec: any) => {
-    sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+  const hiddenKeys = new Set((draftSections || []).map((s: any) => s.sectionKey));
+  if (visibilitySetting && visibilitySetting.value && typeof visibilitySetting.value === "object") {
+    for (const [k, v] of Object.entries(visibilitySetting.value as Record<string, any>)) {
+      if (v === false) hiddenKeys.add(k);
+      if (v === true) hiddenKeys.delete(k);
+    }
+  }
+
+  const visibility: Record<string, boolean> = {};
+  [
+    "hero", "visionMission", "recognitions", "awards", "legacy",
+    "leadership", "governance", "policies", "legacyEcosystem"
+  ].forEach((k) => {
+    visibility[k] = !hiddenKeys.has(k);
   });
 
-  const localizedRecognitions = recognitions.map((r: any) => ({
-    ...r,
-    name: getLocalizedField(r, "name", locale),
-    fullName: getLocalizedField(r, "fullName", locale),
-  }));
+  const sectionMap: Record<string, any> = {};
+  sections.forEach((sec: any) => {
+    if (!hiddenKeys.has(sec.sectionKey)) {
+      sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+    }
+  });
 
-  const localizedLeadership = leadership.map((l: any) => ({
-    ...l,
-    name: getLocalizedField(l, "name", locale),
-    role: getLocalizedField(l, "role", locale),
-    message: getLocalizedField(l, "message", locale),
-    quote: getLocalizedField(l, "quote", locale),
-  }));
+  const localizedRecognitions = hiddenKeys.has("recognitions")
+    ? []
+    : recognitions.map((r: any) => ({
+        ...r,
+        name: getLocalizedField(r, "name", locale),
+        fullName: getLocalizedField(r, "fullName", locale),
+      }));
+
+  const localizedLeadership = hiddenKeys.has("leadership")
+    ? []
+    : leadership.map((l: any) => ({
+        ...l,
+        name: getLocalizedField(l, "name", locale),
+        role: getLocalizedField(l, "role", locale),
+        message: getLocalizedField(l, "message", locale),
+        quote: getLocalizedField(l, "quote", locale),
+      }));
 
   const localizedGovernance = governanceDocs.map((g: any) => ({
     ...g,
@@ -189,15 +266,22 @@ export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
     description: getLocalizedField(g, "description", locale),
   }));
 
-  const governance = localizedGovernance.filter((d: any) => d.category === "governance");
-  const policies = localizedGovernance.filter((d: any) => d.category === "policy");
+  const governance = hiddenKeys.has("governance")
+    ? []
+    : localizedGovernance.filter((d: any) => d.category === "governance");
 
-  const localizedAwards = awards.map((a: any) => ({
-    ...a,
-    title: getLocalizedField(a, "title", locale),
-    presentedBy: getLocalizedField(a, "presentedBy", locale),
-    designation: getLocalizedField(a, "designation", locale),
-  }));
+  const policies = hiddenKeys.has("policies")
+    ? []
+    : localizedGovernance.filter((d: any) => d.category === "policy");
+
+  const localizedAwards = hiddenKeys.has("awards")
+    ? []
+    : awards.map((a: any) => ({
+        ...a,
+        title: getLocalizedField(a, "title", locale),
+        presentedBy: getLocalizedField(a, "presentedBy", locale),
+        designation: getLocalizedField(a, "designation", locale),
+      }));
 
   const localizedSeo = aboutPageRecord?.seo
     ? {
@@ -219,6 +303,7 @@ export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
     leadership: localizedLeadership,
     governance,
     policies,
+    visibility,
     seo: localizedSeo,
   };
 }

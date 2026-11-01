@@ -63,10 +63,12 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
     (pageData.mentors && pageData.mentors.length > 0)
   );
 
+  const isSecVisible = (key: string) => (pageData as any)._sectionVisibility?.[key] !== false;
+
   return (
     <div style={{ fontFamily: "'Segoe UI', system-ui, sans-serif", color: "#1A1A2E", background: "#F7F9FC", minHeight: "100vh" }}>
       {/* 1. HERO BANNER & ADMISSIONS */}
-      <ProgramHero hero={pageData.hero} />
+      {isSecVisible("hero") && <ProgramHero hero={pageData.hero} />}
 
       {/* 2. TOP RECRUITERS MARQUEE (Commented out) */}
       {/* {!pageData.hideRecruiters && !pageData.hideTopRecruiters && (
@@ -83,18 +85,18 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
       )} */}
 
       {/* 2. ABOUT THE SCHOOL & HEAD OF SCHOOL & VISION/MISSION */}
-      {(pageData.about || pageData.intro) && (
+      {isSecVisible("about") && (pageData.about || pageData.intro) && (
         <ProgramAbout
           about={pageData.about}
           intro={pageData.intro}
-          visionMission={pageData.visionMission}
+          visionMission={isSecVisible("visionMission") ? pageData.visionMission : undefined}
           dean={pageData.dean}
           schoolTitle={schoolTitle}
         />
       )}
 
       {/* 3. MEET OUR MENTORS */}
-      {hasMentors && (
+      {isSecVisible("faculty") && hasMentors && (
         <ProgramMentors
           mentorsSection={pageData.mentorsSection}
           faculty={pageData.faculty || pageData.mentors}
@@ -102,12 +104,12 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
       )}
 
       {/* 4. PROGRAMS / COURSES OFFERED */}
-      {pageData.courses && pageData.courses.length > 0 && (
+      {isSecVisible("courses") && pageData.courses && pageData.courses.length > 0 && (
         <ProgramCourses courses={pageData.courses} title={pageData.coursesSectionTitle} />
       )}
 
       {/* 5. DEPARTMENT HIGHLIGHTS ("Where Learning Meets Achievement") */}
-      {pageData.departmentHighlights && pageData.departmentHighlights.length > 0 && (
+      {isSecVisible("highlights") && pageData.departmentHighlights && pageData.departmentHighlights.length > 0 && (
         <DepartmentHighlights
           title={pageData.departmentHighlightsTitle}
           subtitle={pageData.departmentHighlightsSubtitle}
@@ -121,22 +123,22 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
       )}
 
       {/* 6. SPECIALISATIONS DIRECTORY */}
-      {pageData.specialisations && (
+      {isSecVisible("specialisations") && pageData.specialisations && (
         <ProgramSpecialisations specialisations={pageData.specialisations} />
       )}
 
       {/* 7. CORPORATE CONNECT & WORKSHOPS */}
-      {pageData.corporateConnect && (
+      {isSecVisible("corporateConnect") && pageData.corporateConnect && (
         <ProgramCorporateConnect corporateConnect={pageData.corporateConnect} />
       )}
 
       {/* 8. TRANSFORMATIVE TRACKS ("Leadership Odyssey Program (LOP)") */}
-      {pageData.transformativeTracks && (
+      {isSecVisible("transformativeTracks") && pageData.transformativeTracks && (
         <TransformativeTracks tracks={pageData.transformativeTracks} />
       )}
 
       {/* 9. USPS OF THE INSTITUTE */}
-      {pageData.usps && (
+      {isSecVisible("usps") && pageData.usps && (
         <ProgramUsps usps={pageData.usps} />
       )}
 
@@ -151,7 +153,7 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
       )}
 
       {/* 12. CENTER OF EXCELLENCE BANNER */}
-      {pageData.centerOfExcellence && (
+      {isSecVisible("centerOfExcellence") && pageData.centerOfExcellence && (
         <CenterOfExcellence
           title={typeof pageData.centerOfExcellence === "object" ? pageData.centerOfExcellence.title : undefined}
           bg={typeof pageData.centerOfExcellence === "object" ? pageData.centerOfExcellence.bg : undefined}
@@ -159,7 +161,7 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
       )}
 
       {/* 13. STUDENT TESTIMONIALS & PLACEMENT */}
-      {(pageData.placement || (pageData.testimonials && pageData.testimonials.length > 0)) && (
+      {isSecVisible("placement") && isSecVisible("testimonials") && (pageData.placement || (pageData.testimonials && pageData.testimonials.length > 0)) && (
         <ProgramPlacement
           // placement={pageData.placement}
           testimonials={pageData.testimonials}
@@ -167,7 +169,7 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
       )}
 
       {/* 13B. RANKINGS & ACCREDITATIONS BANNER */}
-      {pageData.rankingBanner && (
+      {isSecVisible("rankingBanner") && pageData.rankingBanner && (
         <section 
           id="Rankings"
           className="w-full py-8 sm:py-12 border-y border-amber-900/10 transition-colors"
@@ -186,7 +188,7 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
       )}
 
       {/* 14. LEARNING SPACES & INFRASTRUCTURE */}
-      {pageData.learningSpaces && (
+      {isSecVisible("learningSpaces") && pageData.learningSpaces && (
         <LearningSpaces
           eyebrow={pageData.learningSpaces?.eyebrow}
           title={pageData.learningSpaces?.title}
@@ -198,7 +200,7 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
       )}
 
       {/* 15. CAREER PATHWAYS */}
-      {pageData.careerPathways && (
+      {isSecVisible("careerPathways") && pageData.careerPathways && (
         <CareerPathways
           eyebrow={pageData.careerPathways?.eyebrow}
           title={pageData.careerPathways?.title}
@@ -213,7 +215,7 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
       )}
 
       {/* 16. BROCHURE DOWNLOAD */}
-      {pageData.brochure && (
+      {isSecVisible("brochure") && pageData.brochure && (
         <BrochureDownload
           title={pageData.brochure?.title}
           description={pageData.brochure?.description}
@@ -223,7 +225,7 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
       )}
 
       {/* 17. FAQS */}
-      {pageData.faqs && pageData.faqs.length > 0 && (
+      {isSecVisible("faq") && pageData.faqs && pageData.faqs.length > 0 && (
         <FAQSection faqs={pageData.faqs} />
       )}
 
@@ -232,7 +234,7 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
 
 
       {/* 18. FINAL CTA & APPLICATION FOOTER */}
-      <ProgramFinalCTA cta={pageData.cta} schoolName={schoolTitle} />
+      {isSecVisible("cta") && <ProgramFinalCTA cta={pageData.cta} schoolName={schoolTitle} />}
     </div>
   );
 }

@@ -34,7 +34,7 @@ export default function DeanNoteCard({ dean, schoolName }: DeanNoteCardProps) {
     }
   }, [showModal]);
 
-  if (!dean || !dean.name || !dean.message) return null;
+  if (!dean || !dean.name || !dean.message || (dean as any).isVisible === false) return null;
 
   const previewLength = 280;
   const isLongMessage = dean.message.length > previewLength;

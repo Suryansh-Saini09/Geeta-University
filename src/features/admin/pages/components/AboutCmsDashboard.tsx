@@ -25,6 +25,8 @@ import {
   CmsAutoTextarea,
   CmsStringRepeater,
   CmsDocumentField,
+  CmsSectionVisibilityControl,
+  CmsSectionVisibilityBadge,
 } from "./CmsFieldHelpers";
 import { GovernanceCommitteeModal } from "./GovernanceCommitteeModal";
 import {
@@ -91,6 +93,15 @@ export function AboutCmsDashboard({
       ? initialSectionKey
       : null
   );
+
+  // Section visibility tracking state
+  const [sectionVisibilityMap, setSectionVisibilityMap] = useState<Record<string, boolean>>(() => {
+    const map: Record<string, boolean> = {};
+    for (const [k, v] of Object.entries(initialSections || {})) {
+      map[k] = (v as any)?.status !== "DRAFT";
+    }
+    return map;
+  });
 
   // Localization state
   const [activeLocale, setActiveLocale] = useState<Locale>("en");
@@ -848,20 +859,27 @@ export function AboutCmsDashboard({
                         <h3 className="text-base font-bold text-[#0A1F44] group-hover:text-black transition-colors">
                           {sec.label}
                         </h3>
-                        <span
-                          className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
-                            info.isConfigured
-                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                              : "bg-slate-100 text-slate-600 border-slate-200"
-                          }`}
-                        >
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {sec.key !== "seo" && (
+                            <CmsSectionVisibilityBadge
+                              isVisible={sectionVisibilityMap[sec.key] ?? true}
+                            />
+                          )}
                           <span
-                            className={`h-1.5 w-1.5 rounded-full ${
-                              info.isConfigured ? "bg-emerald-500" : "bg-slate-400"
+                            className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                              info.isConfigured
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                : "bg-slate-100 text-slate-600 border-slate-200"
                             }`}
-                          />
-                          {info.isConfigured ? "Configured" : "Not configured"}
-                        </span>
+                          >
+                            <span
+                              className={`h-1.5 w-1.5 rounded-full ${
+                                info.isConfigured ? "bg-emerald-500" : "bg-slate-400"
+                              }`}
+                            />
+                            {info.isConfigured ? "Configured" : "Not configured"}
+                          </span>
+                        </div>
                       </div>
 
                       <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 mb-5">
@@ -1024,6 +1042,23 @@ export function AboutCmsDashboard({
               </div>
             )}
           </div>
+
+          {/* Section Visibility Control */}
+          {activeSectionKey && activeSectionKey !== "seo" && (
+            <CmsSectionVisibilityControl
+              scopeType="page"
+              scopeId="about"
+              sectionKey={activeSectionKey}
+              sectionTitle={currentSectionMeta.label}
+              initialVisible={sectionVisibilityMap[activeSectionKey] ?? true}
+              onVisibilityChange={(newVal) => {
+                setSectionVisibilityMap((prev) => ({
+                  ...prev,
+                  [activeSectionKey]: newVal,
+                }));
+              }}
+            />
+          )}
 
           {/* ===================================================================
               SECTION EDITORS

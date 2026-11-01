@@ -128,7 +128,7 @@ export default function ProgramAbout({ about, intro, visionMission, dean, school
         </div>
 
         {/* Leadership Note Card - Full Width */}
-        {dean && <DeanNoteCard dean={dean} schoolName={schoolTitle} />}
+        {dean && (dean as any).isVisible !== false && <DeanNoteCard dean={dean} schoolName={schoolTitle} />}
       </div>
     </section>
   );
