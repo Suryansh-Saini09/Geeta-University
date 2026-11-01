@@ -202,9 +202,9 @@ export function CmsImageField({
       </div>
 
       {/* Main Asset Preview Card */}
-      <div className="flex flex-col sm:flex-row sm:items-stretch gap-4 rounded-lg border border-slate-200 bg-white p-3 shadow-xs">
+      <div className={`flex rounded-lg border border-slate-200 bg-white shadow-2xs ${compact ? "flex-row items-center gap-3 p-2.5" : "flex-col sm:flex-row sm:items-stretch gap-4 p-3 shadow-xs"}`}>
         {/* Thumbnail Box */}
-        <div className="relative group flex h-28 w-40 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
+        <div className={`relative group shrink-0 flex items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-100 ${compact ? "h-14 w-20" : "h-28 w-40"}`}>
           {isValidImageUrl && !imageError ? (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -219,7 +219,7 @@ export function CmsImageField({
                   type="button"
                   onClick={() => setIsPreviewModalOpen(true)}
                   title="Inspect Full Image"
-                  className="rounded-full bg-white/90 p-1.5 text-slate-800 hover:bg-white transition"
+                  className="rounded-full bg-white/90 p-1.5 text-slate-800 hover:bg-white transition cursor-pointer"
                 >
                   <Eye className="h-3.5 w-3.5" />
                 </button>
@@ -227,87 +227,89 @@ export function CmsImageField({
                   type="button"
                   onClick={handleCopyUrl}
                   title="Copy URL"
-                  className="rounded-full bg-white/90 p-1.5 text-slate-800 hover:bg-white transition"
+                  className="rounded-full bg-white/90 p-1.5 text-slate-800 hover:bg-white transition cursor-pointer"
                 >
                   {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
                 </button>
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center gap-1.5 p-3 text-slate-400 text-center">
-              <ImageIcon className="h-7 w-7 text-slate-300" />
-              <span className="text-[11px] font-semibold text-slate-400">
-                {imageError ? "Image failed to load" : "No image selected"}
+            <div className="flex flex-col items-center gap-1 p-2 text-slate-400 text-center">
+              <ImageIcon className={compact ? "h-5 w-5 text-slate-300" : "h-7 w-7 text-slate-300"} />
+              <span className="text-[10px] font-semibold text-slate-400">
+                {imageError ? "Error" : "No image"}
               </span>
             </div>
           )}
 
           {isUploading && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 backdrop-blur-xs gap-1.5">
-              <Loader2 className="h-6 w-6 animate-spin text-[#0A1F44]" />
-              <span className="text-[10px] font-bold text-[#0A1F44]">Uploading...</span>
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 backdrop-blur-xs gap-1">
+              <Loader2 className="h-5 w-5 animate-spin text-[#0A1F44]" />
+              <span className="text-[9px] font-bold text-[#0A1F44]">Uploading...</span>
             </div>
           )}
         </div>
 
         {/* Info & Action Controls */}
-        <div className="flex flex-1 flex-col justify-between space-y-2.5 min-w-0">
+        <div className={`flex flex-1 flex-col justify-between min-w-0 ${compact ? "space-y-1.5" : "space-y-2.5"}`}>
           <div>
             {value ? (
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 <p className="truncate text-xs font-bold text-slate-800" title={fileName}>
                   {fileName}
                 </p>
-                <div className="flex items-center gap-1.5">
-                  <p className="truncate text-[11px] font-mono text-slate-500 max-w-[280px]" title={value}>
-                    {value}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={handleCopyUrl}
-                    className="text-slate-400 hover:text-slate-700 transition"
-                    title="Copy URL"
-                  >
-                    {copied ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
-                  </button>
-                </div>
+                {!compact && (
+                  <div className="flex items-center gap-1.5">
+                    <p className="truncate text-[11px] font-mono text-slate-500 max-w-[280px]" title={value}>
+                      {value}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleCopyUrl}
+                      className="text-slate-400 hover:text-slate-700 transition"
+                      title="Copy URL"
+                    >
+                      {copied ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
-              <p className="text-xs text-slate-500">
-                Select an image from the Media Library or upload a new file from your device.
+              <p className="text-[11px] text-slate-500">
+                {compact ? "No flag image selected" : "Select an image from the Media Library or upload a new file from your device."}
               </p>
             )}
           </div>
 
           {/* Action Button Row */}
-          <div className="flex flex-wrap items-center gap-2 pt-1">
+          <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
             {value ? (
               <button
                 type="button"
                 disabled={isUploading}
                 onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-[#1A3A6B] disabled:opacity-50 transition"
+                className={`inline-flex items-center gap-1 rounded-lg bg-[#0A1F44] text-white shadow-xs hover:bg-[#1A3A6B] disabled:opacity-50 transition cursor-pointer font-bold ${compact ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-xs"}`}
               >
                 {isUploading ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <Loader2 className="h-3 w-3 animate-spin" />
                 ) : (
-                  <RefreshCw className="h-3.5 w-3.5" />
+                  <RefreshCw className="h-3 w-3" />
                 )}
-                Replace Image
+                {compact ? "Replace" : "Replace Image"}
               </button>
             ) : (
               <button
                 type="button"
                 disabled={isUploading}
                 onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-[#1A3A6B] disabled:opacity-50 transition"
+                className={`inline-flex items-center gap-1 rounded-lg bg-[#0A1F44] text-white shadow-xs hover:bg-[#1A3A6B] disabled:opacity-50 transition cursor-pointer font-bold ${compact ? "px-2.5 py-1 text-[11px]" : "px-3.5 py-1.5 text-xs"}`}
               >
                 {isUploading ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <Loader2 className="h-3 w-3 animate-spin" />
                 ) : (
-                  <Upload className="h-3.5 w-3.5" />
+                  <Upload className="h-3 w-3" />
                 )}
-                Upload Image
+                {compact ? "Upload" : "Upload Image"}
               </button>
             )}
 
@@ -315,9 +317,9 @@ export function CmsImageField({
               type="button"
               disabled={isUploading}
               onClick={() => setIsPickerOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 transition"
+              className={`inline-flex items-center gap-1 rounded-lg border border-slate-300 bg-white font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 transition cursor-pointer ${compact ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-xs"}`}
             >
-              <FolderOpen className="h-3.5 w-3.5 text-slate-500" />
+              <FolderOpen className="h-3 w-3 text-slate-500" />
               Media Library
             </button>
 
@@ -326,11 +328,11 @@ export function CmsImageField({
                 type="button"
                 disabled={isUploading}
                 onClick={() => setIsPreviewModalOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 transition"
+                className={`inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 font-semibold text-slate-600 hover:bg-slate-100 transition cursor-pointer ${compact ? "px-2 py-1 text-[11px]" : "px-2.5 py-1.5 text-xs"}`}
                 title="Preview"
               >
-                <Eye className="h-3.5 w-3.5" />
-                Preview
+                <Eye className="h-3 w-3" />
+                {compact ? "" : "Preview"}
               </button>
             )}
 
@@ -339,11 +341,11 @@ export function CmsImageField({
                 type="button"
                 disabled={isUploading}
                 onClick={() => onChange("")}
-                className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50 transition"
+                className={`inline-flex items-center gap-1 rounded-lg border border-red-200 bg-white font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50 transition cursor-pointer ${compact ? "px-2 py-1 text-[11px]" : "px-2.5 py-1.5 text-xs"}`}
                 title="Remove image"
               >
-                <Trash2 className="h-3.5 w-3.5" />
-                Remove
+                <Trash2 className="h-3 w-3" />
+                {compact ? "" : "Remove"}
               </button>
             )}
           </div>

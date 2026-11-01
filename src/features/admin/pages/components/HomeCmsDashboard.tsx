@@ -24,6 +24,7 @@ import { CmsLanguageTabs } from "@/components/admin/CmsLanguageTabs";
 import { Locale, TranslationStatus } from "@/lib/i18n/localization";
 import {
   CmsImagePreviewInput,
+  CmsImageField,
   CmsAutoTextarea,
   CmsStringRepeater,
 } from "./CmsFieldHelpers";
@@ -52,6 +53,8 @@ import {
   X,
   Loader2,
   Info,
+  Sparkles,
+  Eye,
 } from "lucide-react";
 
 /* =========================================================================
@@ -2437,10 +2440,15 @@ export function HomeCmsDashboard({
 
               {/* Flag Items List Repeater */}
               <div className="space-y-4 rounded-xl border border-slate-200 p-5 bg-slate-50/50">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#0A1F44]">
-                    Country Flag Icons ({universeForm.flagItems?.length || 0})
-                  </h4>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/70 pb-3">
+                  <div>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#0A1F44]">
+                      Country Flag Icons ({universeForm.flagItems?.length || 0})
+                    </h4>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Upload flag icons or select from Media Library for each country.
+                    </p>
+                  </div>
                   <button
                     type="button"
                     onClick={() => {
@@ -2448,69 +2456,69 @@ export function HomeCmsDashboard({
                         ...universeForm,
                         flagItems: [
                           ...(universeForm.flagItems || []),
-                          { name: "New Country", image: "/home/universe-flags/4-full.webp" },
+                          { name: "New Country", image: "" },
                         ],
                       });
                       setIsDirty(true);
                     }}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-[#0A1F44] hover:bg-slate-50 cursor-pointer shadow-2xs"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A1F44] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#153468] cursor-pointer shadow-2xs transition"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     <span>Add Flag Item</span>
                   </button>
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-3.5 sm:grid-cols-2">
                   {(universeForm.flagItems || []).map((flag: any, idx: number) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs"
+                      className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs space-y-3 transition-all hover:border-slate-300"
                     >
-                      {flag.image && (
-                        <img
-                          src={flag.image}
-                          alt={flag.name}
-                          className="h-8 w-12 object-cover rounded border border-slate-200 shrink-0"
-                        />
-                      )}
-                      <div className="flex-1 space-y-1 min-w-0">
-                        <input
-                          type="text"
-                          placeholder="Country Name"
-                          value={flag.name || ""}
-                          onChange={(e) => {
-                            const updated = [...universeForm.flagItems];
-                            updated[idx].name = e.target.value;
+                      <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
+                        <div className="flex-1 min-w-0">
+                          <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
+                            Country Name
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Australia, India, Brazil..."
+                            value={flag.name || ""}
+                            onChange={(e) => {
+                              const updated = [...universeForm.flagItems];
+                              updated[idx].name = e.target.value;
+                              setUniverseForm({ ...universeForm, flagItems: updated });
+                              setIsDirty(true);
+                            }}
+                            className="w-full rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-bold text-[#0A1F44] focus:border-slate-400 focus:outline-none"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = universeForm.flagItems.filter((_: any, i: number) => i !== idx);
                             setUniverseForm({ ...universeForm, flagItems: updated });
                             setIsDirty(true);
                           }}
-                          className="w-full rounded-lg border border-slate-200 p-1.5 text-xs font-bold text-[#0A1F44]"
-                        />
-                        <input
-                          type="text"
-                          placeholder="Flag Image URL"
-                          value={flag.image || ""}
-                          onChange={(e) => {
-                            const updated = [...universeForm.flagItems];
-                            updated[idx].image = e.target.value;
-                            setUniverseForm({ ...universeForm, flagItems: updated });
-                            setIsDirty(true);
-                          }}
-                          className="w-full rounded-lg border border-slate-200 p-1.5 text-[11px] text-slate-600"
-                        />
+                          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition cursor-pointer self-end mb-0.5"
+                          title="Remove Flag"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = universeForm.flagItems.filter((_: any, i: number) => i !== idx);
+
+                      <CmsImageField
+                        label="Flag Icon Image"
+                        value={flag.image || ""}
+                        onChange={(newUrl) => {
+                          const updated = [...universeForm.flagItems];
+                          updated[idx].image = newUrl;
                           setUniverseForm({ ...universeForm, flagItems: updated });
                           setIsDirty(true);
                         }}
-                        className="p-1.5 text-rose-600 hover:bg-rose-50 rounded cursor-pointer"
-                        title="Remove Flag"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                        contentArea="universe"
+                        section="flags"
+                        compact={true}
+                      />
                     </div>
                   ))}
                 </div>
@@ -3515,51 +3523,105 @@ export function HomeCmsDashboard({
                 </div>
 
                 {starsList.length > 0 ? (
-                  <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+                  <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {starsList.map((s) => (
                       <div
                         key={s.id}
-                        className="rounded-xl border border-slate-200 p-3 bg-slate-50/70 space-y-2 text-center hover:border-slate-300 transition-all shadow-2xs"
+                        className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs hover:border-[#0A1F44]/25 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                       >
-                        {s.image && (
-                          <img
-                            src={s.image}
-                            alt={s.name}
-                            className="h-28 w-full object-cover rounded-lg border border-slate-200"
-                          />
-                        )}
-                        <h4 className="text-sm font-bold text-[#0A1F44] truncate">{s.name}</h4>
-                        <div className="flex items-center justify-center gap-2 pt-1">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setEditingStar(s);
-                              setStarModalOpen(true);
-                            }}
-                            className="p-1.5 text-slate-600 hover:text-[#0A1F44] cursor-pointer"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setDeleteConfirm({
-                                type: "star",
-                                id: s.id,
-                                name: s.name,
-                              });
-                            }}
-                            className="p-1.5 text-rose-600 hover:bg-rose-50 rounded cursor-pointer"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
+                        {/* Poster Frame with Portrait Aspect Ratio */}
+                        <div className="relative aspect-[3/4.2] w-full overflow-hidden bg-slate-900/5">
+                          {s.image ? (
+                            <>
+                              <img
+                                src={s.image}
+                                alt={s.name}
+                                className="h-full w-full object-cover object-top transition duration-300 group-hover:scale-105"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3">
+                                <span className="text-xs font-bold text-white truncate max-w-[150px]">
+                                  {s.name}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setEditingStar(s);
+                                    setStarModalOpen(true);
+                                  }}
+                                  className="rounded-full bg-white/95 p-1.5 text-[#0A1F44] hover:bg-white transition cursor-pointer shadow-md"
+                                  title="Edit Performer"
+                                >
+                                  <Edit className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="flex h-full flex-col items-center justify-center p-4 text-slate-400">
+                              <Sparkles className="h-8 w-8 text-slate-300 mb-1" />
+                              <span className="text-xs font-semibold">No poster photo</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Card Info & Actions */}
+                        <div className="flex flex-1 flex-col justify-between p-3.5 space-y-2.5">
+                          <h4 className="font-serif text-sm font-bold text-[#0A1F44] truncate text-center" title={s.name}>
+                            {s.name}
+                          </h4>
+
+                          <div className="flex items-center gap-2 pt-1 border-t border-slate-100">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingStar(s);
+                                setStarModalOpen(true);
+                              }}
+                              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#0A1F44] hover:text-white transition cursor-pointer"
+                            >
+                              <Edit className="h-3.5 w-3.5" />
+                              <span>Edit</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setDeleteConfirm({
+                                  type: "star",
+                                  id: s.id,
+                                  name: s.name,
+                                });
+                              }}
+                              className="inline-flex items-center justify-center rounded-lg border border-rose-200 bg-rose-50/60 p-1.5 text-rose-600 hover:bg-rose-600 hover:text-white transition cursor-pointer"
+                              title="Delete Star Performer"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="rounded-xl border border-dashed border-slate-300 p-8 text-center text-xs text-slate-500">
-                    No star performers configured. Click "Add Star Performer" above to add the first artist or performer poster.
+                  <div className="rounded-2xl border-2 border-dashed border-slate-200 p-10 text-center space-y-3">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                      <Sparkles className="h-6 w-6 text-[#E8871A]" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#0A1F44]">No Star Performers Added</h4>
+                      <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                        Add celebrity or student artists with their portrait concert posters to display in the home page carousel.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingStar({ name: "", image: "", sortOrder: starsList.length });
+                        setStarModalOpen(true);
+                      }}
+                      className="inline-flex items-center gap-1.5 rounded-xl bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white hover:bg-[#153468] transition cursor-pointer"
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                      <span>Add Star Performer</span>
+                    </button>
                   </div>
                 )}
               </div>
@@ -4016,15 +4078,19 @@ export function HomeCmsDashboard({
                 <label className="block text-xs font-bold text-slate-500 mb-1">Artist / Student Name</label>
                 <input
                   type="text"
+                  placeholder="e.g. Akhil, Aastha Gill, Raftaar..."
                   value={editingStar.name || ""}
                   onChange={(e) => setEditingStar({ ...editingStar, name: e.target.value })}
-                  className="w-full rounded-xl border border-slate-200 p-2.5 text-sm text-[#0A1F44]"
+                  className="w-full rounded-xl border border-slate-200 p-2.5 text-sm text-[#0A1F44] focus:border-slate-400 focus:outline-none"
                 />
               </div>
               <CmsImagePreviewInput
-                label="Photo / Poster"
+                label="Photo / Concert Poster"
                 value={editingStar.image || ""}
                 onChange={(url) => setEditingStar({ ...editingStar, image: url })}
+                contentArea="home"
+                section="stars"
+                helpText="Recommended: Vertical portrait photo or poster (approx. 3:4 aspect ratio) to fit carousel cards without clipping."
               />
             </div>
             <div className="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
