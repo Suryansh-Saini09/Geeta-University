@@ -161,6 +161,7 @@ export default function WhyJoinGeetaSection({ data }: WhyJoinGeetaSectionProps) 
                   alt="Student representing the Geeta University experience"
                   fill
                   sizes="(max-width: 1024px) 80vw, 500px"
+                  unoptimized={Boolean(imageSrc?.startsWith("/uploads/") || imageSrc?.startsWith("http"))}
                   className="object-cover"
                   priority={false}
                 />

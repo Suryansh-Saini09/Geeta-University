@@ -45,6 +45,7 @@ export default function HomeGlobalEducationSection({ data }: HomeGlobalEducation
               width={1600}
               height={750}
               sizes="100vw"
+              unoptimized={Boolean(image?.startsWith("/uploads/") || image?.startsWith("http"))}
               className="h-auto w-full rounded-2xl object-contain"
               priority={false}
             />

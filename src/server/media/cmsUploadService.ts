@@ -119,15 +119,13 @@ export function checkUploadEnvironment(): {
     };
   }
 
-  const isLocalDev = process.env.NODE_ENV === "development" || !isVercel;
+  const isLocalDev = process.env.NODE_ENV === "development";
 
   return {
     canUpload: true,
     isVercel: false,
     isLocalDev,
-    warning: isLocalDev
-      ? "Note: Asset saved to local storage. Commit or synchronize files before deploying to production."
-      : undefined,
+    warning: undefined,
   };
 }
 
