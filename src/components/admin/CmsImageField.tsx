@@ -140,9 +140,9 @@ export function CmsImageField({
         setImageError(false);
 
         if (res.warning) {
-          showFeedback("info", `Uploaded successfully. ${res.warning}`);
+          showFeedback("info", `Asset uploaded and saved successfully. ${res.warning}`);
         } else {
-          showFeedback("success", `Asset uploaded and saved to ${res.url}`);
+          showFeedback("success", "Asset uploaded and saved successfully.");
         }
       } else {
         showFeedback("error", res.error || "Upload failed. Previous image retained.");

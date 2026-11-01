@@ -186,6 +186,8 @@ export default function TopRecruitersSection({
                   const logoUrl = recruiter.logo;
                   const isExternal =
                     logoUrl?.startsWith("http://") || logoUrl?.startsWith("https://");
+                  const isUpload =
+                    Boolean(logoUrl?.startsWith("/uploads/") || logoUrl?.startsWith("uploads/"));
                   const normalizedLogo =
                     isExternal || !logoUrl
                       ? logoUrl
@@ -209,7 +211,7 @@ export default function TopRecruitersSection({
                           height={90}
                           sizes="(max-width: 640px) 180px, 240px"
                           className="max-h-16 sm:max-h-20 md:max-h-22 w-auto max-w-[85%] object-contain transition-all duration-300 pointer-events-none"
-                          unoptimized={isExternal}
+                          unoptimized={isExternal || isUpload}
                         />
                       ) : (
                         <span className="font-serif text-sm font-bold text-[#0A1F44] truncate px-2 text-center">

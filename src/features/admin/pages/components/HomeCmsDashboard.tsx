@@ -3711,6 +3711,8 @@ export function HomeCmsDashboard({
                 label="Recruiter Logo"
                 value={editingRecruiter.logo || ""}
                 onChange={(url) => setEditingRecruiter({ ...editingRecruiter, logo: url })}
+                contentArea="recruiters"
+                section="logos"
               />
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1">Status</label>
