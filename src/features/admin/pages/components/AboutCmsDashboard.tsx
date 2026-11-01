@@ -24,6 +24,7 @@ import {
   CmsImagePreviewInput,
   CmsAutoTextarea,
   CmsStringRepeater,
+  CmsDocumentField,
 } from "./CmsFieldHelpers";
 import { GovernanceCommitteeModal } from "./GovernanceCommitteeModal";
 import {
@@ -236,6 +237,7 @@ export function AboutCmsDashboard({
 
   const [docModalOpen, setDocModalOpen] = useState(false);
   const [editingDoc, setEditingDoc] = useState<any>(null);
+  const [isSavingDoc, setIsSavingDoc] = useState(false);
 
   const [committeeModalOpen, setCommitteeModalOpen] = useState(false);
   const [editingCommittee, setEditingCommittee] = useState<any>(null);
@@ -2742,58 +2744,85 @@ export function AboutCmsDashboard({
 
       {/* POLICY DOCUMENT MODAL */}
       {docModalOpen && editingDoc && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl border border-slate-200 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-base font-bold text-[#0A1F44]">
-                {editingDoc.id ? "Edit Policy Document" : "Add Policy Document"}
-              </h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="w-full max-w-lg rounded-2xl bg-white p-6 md:p-7 shadow-2xl border border-slate-200 space-y-5 max-h-[92vh] overflow-y-auto">
+            <div className="flex items-start justify-between border-b border-slate-100 pb-3.5">
+              <div>
+                <h3 className="text-base font-bold text-[#0A1F44]">
+                  {editingDoc.id ? "Edit Policy Document" : "Add Policy Document"}
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Attach an official policy document via the Media Library or upload a new PDF.
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setDocModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-slate-700 cursor-pointer"
+                className="p-1 text-slate-400 hover:text-slate-700 cursor-pointer rounded-lg hover:bg-slate-100 transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="space-y-3.5">
+
+            <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-500 mb-1">Document Title</label>
-                <input
-                  type="text"
-                  value={editingDoc.title || ""}
-                  onChange={(e) => setEditingDoc({ ...editingDoc, title: e.target.value })}
-                  className="w-full rounded-xl border border-slate-200 p-2.5 text-sm text-[#0A1F44]"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-500 mb-1">
-                  Document URL / PDF File Path <span className="text-rose-500">*</span>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Document Title <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
-                  value={editingDoc.documentUrl || ""}
-                  onChange={(e) => setEditingDoc({ ...editingDoc, documentUrl: e.target.value })}
-                  placeholder="https://geetauniversity.edu.in/uploads/.../policy.pdf"
-                  className="w-full rounded-xl border border-slate-200 p-2.5 text-sm text-[#0A1F44] font-mono text-xs"
+                  placeholder="e.g. Sports Policy 2025"
+                  value={editingDoc.title || ""}
+                  onChange={(e) => setEditingDoc({ ...editingDoc, title: e.target.value })}
+                  className="w-full rounded-xl border border-slate-200 p-2.5 text-sm text-[#0A1F44] focus:border-slate-400 focus:outline-none transition-colors"
                 />
               </div>
+
+              {/* MEDIA PICKER & PDF UPLOAD FIELD */}
+              <CmsDocumentField
+                label="Policy Document (PDF)"
+                required
+                value={editingDoc.documentUrl || ""}
+                onChange={(url, fileName) => {
+                  setEditingDoc((prev: any) => {
+                    if (!prev) return prev;
+                    const updates: any = { documentUrl: url };
+                    if (!prev.title || prev.title.trim() === "") {
+                      const rawName = fileName || url.split("/").pop() || "";
+                      const cleaned = rawName
+                        .replace(/\.[^/.]+$/, "")
+                        .replace(/[-_]+/g, " ")
+                        .trim();
+                      if (cleaned) {
+                        updates.title = cleaned.replace(/\b\w/g, (c: string) => c.toUpperCase());
+                      }
+                    }
+                    return { ...prev, ...updates };
+                  });
+                }}
+                contentArea="about"
+                section="policies"
+                modalTitle="Select Policy Document (PDF)"
+                helpText="Select an official policy document from the Media Library or upload a new PDF (max 25 MB)."
+              />
+
               <div>
-                <label className="block text-xs font-bold text-slate-500 mb-1">Optional Description</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Optional Description</label>
                 <input
                   type="text"
                   value={editingDoc.description || ""}
                   onChange={(e) => setEditingDoc({ ...editingDoc, description: e.target.value })}
-                  placeholder="Brief description of the policy"
-                  className="w-full rounded-xl border border-slate-200 p-2.5 text-sm text-[#0A1F44]"
+                  placeholder="Brief description of the policy scope or mandate"
+                  className="w-full rounded-xl border border-slate-200 p-2.5 text-sm text-[#0A1F44] focus:border-slate-400 focus:outline-none transition-colors"
                 />
               </div>
+
               <div>
-                <label className="block text-xs font-bold text-slate-500 mb-1">Status</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Status</label>
                 <select
                   value={editingDoc.status || "PUBLISHED"}
                   onChange={(e) => setEditingDoc({ ...editingDoc, status: e.target.value })}
-                  className="w-full rounded-xl border border-slate-200 p-2.5 text-sm bg-white text-[#0A1F44]"
+                  className="w-full rounded-xl border border-slate-200 p-2.5 text-sm bg-white text-[#0A1F44] focus:border-slate-400 focus:outline-none cursor-pointer"
                 >
                   <option value="PUBLISHED">Published</option>
                   <option value="DRAFT">Draft</option>
@@ -2801,38 +2830,57 @@ export function AboutCmsDashboard({
                 </select>
               </div>
             </div>
-            <div className="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+
+            <div className="flex justify-end gap-2.5 pt-3.5 border-t border-slate-100">
               <button
                 type="button"
                 onClick={() => setDocModalOpen(false)}
-                className="rounded-lg border border-slate-300 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                className="rounded-xl border border-slate-300 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
+                disabled={isSavingDoc}
                 onClick={async () => {
-                  const res = await saveGovernanceDocumentAction(editingDoc.id || null, {
-                    ...editingDoc,
-                    category: "policy",
-                  });
-                  if (res.success) {
-                    if (editingDoc.id) {
-                      setPoliciesList((prev) =>
-                        prev.map((p) => (p.id === editingDoc.id ? res.document : p))
-                      );
+                  if (!editingDoc.title || editingDoc.title.trim() === "") {
+                    setFeedback({ type: "error", text: "Please enter a document title." });
+                    return;
+                  }
+                  if (!editingDoc.documentUrl || editingDoc.documentUrl.trim() === "") {
+                    setFeedback({ type: "error", text: "Please select or upload a policy document (PDF)." });
+                    return;
+                  }
+
+                  setIsSavingDoc(true);
+                  try {
+                    const res = await saveGovernanceDocumentAction(editingDoc.id || null, {
+                      ...editingDoc,
+                      category: "policy",
+                    });
+                    if (res.success) {
+                      if (editingDoc.id) {
+                        setPoliciesList((prev) =>
+                          prev.map((p) => (p.id === editingDoc.id ? res.document : p))
+                        );
+                      } else {
+                        setPoliciesList((prev) => [...prev, res.document]);
+                      }
+                      setDocModalOpen(false);
+                      setFeedback({ type: "success", text: "Policy document saved successfully!" });
                     } else {
-                      setPoliciesList((prev) => [...prev, res.document]);
+                      setFeedback({ type: "error", text: sanitizeErrorMessage(res.error || "Failed to save policy document") });
                     }
-                    setDocModalOpen(false);
-                    setFeedback({ type: "success", text: "Policy document saved successfully!" });
-                  } else {
-                    setFeedback({ type: "error", text: sanitizeErrorMessage(res.error || "Failed to save policy document") });
+                  } catch (err: any) {
+                    setFeedback({ type: "error", text: err?.message || "An unexpected error occurred while saving." });
+                  } finally {
+                    setIsSavingDoc(false);
                   }
                 }}
-                className="rounded-lg bg-[#0A1F44] px-4 py-2 text-xs font-bold text-white hover:bg-[#153468] cursor-pointer"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#0A1F44] px-5 py-2 text-xs font-bold text-white hover:bg-[#153468] transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
               >
-                Save Policy
+                {isSavingDoc && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                <span>{isSavingDoc ? "Saving..." : "Save Policy"}</span>
               </button>
             </div>
           </div>

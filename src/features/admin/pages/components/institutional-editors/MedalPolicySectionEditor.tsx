@@ -10,6 +10,7 @@ import {
 import {
   CmsImagePreviewInput,
   CmsStringRepeater,
+  CmsDocumentField,
 } from "@/features/admin/pages/components/CmsFieldHelpers";
 import type { SpecializedSectionEditorProps } from "./types";
 
@@ -619,19 +620,16 @@ export function MedalPolicySectionEditor({
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
-              Download / View Document URL (PDF)
-            </label>
-            <input
-              type="url"
-              value={docData.documentUrl || ""}
-              onChange={(e) => onChange({ ...docData, documentUrl: e.target.value })}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44]"
-              placeholder="https://geetauniversity.edu.in/.../Medal-List.pdf"
-            />
-          </div>
+        <div className="space-y-4">
+          <CmsDocumentField
+            label="Download / View Document URL (PDF)"
+            value={docData.documentUrl || ""}
+            onChange={(url) => onChange({ ...docData, documentUrl: url })}
+            contentArea="medal-policy"
+            section="rankers_document"
+            modalTitle="Select Rankers PDF Document"
+            helpText="Select an official convocation ranker document from the Media Library or upload a new PDF."
+          />
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
               CTA Button Label
