@@ -147,7 +147,7 @@ export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
           priority
           className="object-cover object-[70%_center] md:object-center"
           sizes="100vw"
-          unoptimized={Boolean(poster?.startsWith("/uploads/") || poster?.startsWith("http"))}
+          unoptimized={Boolean(poster?.startsWith("http"))}
         />
 
         {/* Dual Seamless Crossfading Drone Videos */}

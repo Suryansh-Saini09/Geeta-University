@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface VisionMissionProps {
   vision?: string;
   mission?: string[];
@@ -10,9 +12,13 @@ export default function VisionMission({ vision, mission }: VisionMissionProps) {
   return (
     <>
       <section className="w-full">
-        <img
+        <Image
           src="/about/8.webp"
           alt="Powering Education"
+          width={1400}
+          height={640}
+          sizes="100vw"
+          loading="lazy"
           className="h-auto w-full object-cover"
         />
       </section>

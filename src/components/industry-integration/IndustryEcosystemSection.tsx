@@ -1,6 +1,6 @@
-"use client";
 
 import React from "react";
+import Image from "next/image";
 import { legacyEcosystemData } from "@/data/industryIntegration";
 
 interface IndustryEcosystemSectionProps {
@@ -101,11 +101,14 @@ export default function IndustryEcosystemSection({ data }: IndustryEcosystemSect
           {/* Right Column - Campus Image */}
           <div className="lg:col-span-5">
             <div className="relative overflow-hidden rounded-2xl border border-slate-200 shadow-2xl transition-all duration-300 hover:shadow-amber-500/10">
-              <div className="aspect-square w-full">
-                <img
+              <div className="relative aspect-square w-full">
+                <Image
                   src={image}
                   alt="Geeta Group Campus"
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 42vw"
+                  loading="lazy"
+                  className="object-cover"
                 />
               </div>
             </div>

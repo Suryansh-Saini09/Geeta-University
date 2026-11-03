@@ -25,6 +25,7 @@ interface AdminUserProfileProps {
     manageContent?: boolean;
   };
   variant?: "sidebar" | "header";
+  dropdownPosition?: "top" | "bottom";
   isCollapsed?: boolean;
 }
 
@@ -32,6 +33,7 @@ export function AdminUserProfile({
   user,
   userPermissions,
   variant = "sidebar",
+  dropdownPosition = "bottom",
   isCollapsed = false,
 }: AdminUserProfileProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -93,25 +95,28 @@ export function AdminUserProfile({
     });
   };
 
+  const isPositionTop = dropdownPosition === "top";
+
   return (
     <div className="relative" ref={menuRef}>
       {variant === "sidebar" ? (
-        /* Sidebar User Card matching screenshot bottom left */
+        /* Sidebar User Card matching screenshot top right / bottom left */
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
           aria-expanded={isOpen}
           aria-haspopup="menu"
-          className={`flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors hover:bg-slate-100/80 focus:outline-none ${
-            isCollapsed ? "justify-center" : "justify-between"
-          }`}
+          aria-label="User account menu"
+          className={`group flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors focus:outline-none ${
+            isOpen ? "bg-slate-100 ring-1 ring-slate-200" : "hover:bg-slate-100/80"
+          } ${isCollapsed ? "justify-center" : "justify-between"}`}
         >
           <div className="flex items-center gap-3 min-w-0">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-slate-200 to-slate-300 text-slate-700 font-bold text-xs border border-white shadow-2xs">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-slate-200 to-slate-300 text-slate-700 font-bold text-xs border border-white shadow-2xs pointer-events-none">
               {initials}
             </div>
             {!isCollapsed && (
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 flex-1 max-w-[150px] sm:max-w-[220px]">
                 <p className="truncate text-xs font-bold text-slate-900 leading-tight">
                   {user.name}
                 </p>
@@ -125,7 +130,13 @@ export function AdminUserProfile({
             )}
           </div>
           {!isCollapsed && (
-            <MoreVertical className="h-4 w-4 shrink-0 text-slate-400" />
+            <div
+              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                isOpen ? "bg-slate-200/80 text-slate-700" : "text-slate-400 group-hover:text-slate-600"
+              }`}
+            >
+              <MoreVertical className="h-4 w-4 shrink-0 pointer-events-none" />
+            </div>
           )}
         </button>
       ) : (
@@ -135,9 +146,12 @@ export function AdminUserProfile({
           onClick={() => setIsOpen((prev) => !prev)}
           aria-expanded={isOpen}
           aria-haspopup="menu"
-          className="flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white p-1.5 sm:px-2.5 sm:py-1.5 transition-colors hover:border-slate-300 hover:bg-slate-50 focus:outline-none"
+          aria-label="User account menu"
+          className={`flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white p-1.5 sm:px-2.5 sm:py-1.5 transition-colors focus:outline-none ${
+            isOpen ? "border-slate-300 bg-slate-50 ring-1 ring-slate-200" : "hover:border-slate-300 hover:bg-slate-50"
+          }`}
         >
-          <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200">
+          <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200 pointer-events-none">
             {initials}
           </div>
           <div className="hidden sm:flex flex-col text-left">
@@ -145,7 +159,7 @@ export function AdminUserProfile({
             <span className="text-[10px] text-slate-500 font-medium leading-tight">{formattedRole}</span>
           </div>
           <ChevronDown
-            className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${
+            className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 pointer-events-none ${
               isOpen ? "rotate-180" : ""
             }`}
           />
@@ -157,10 +171,10 @@ export function AdminUserProfile({
         <div
           role="menu"
           aria-orientation="vertical"
-          className={`absolute z-50 w-64 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-xl ring-1 ring-black/5 focus:outline-none animate-in fade-in zoom-in-95 duration-100 ${
-            variant === "sidebar"
-              ? "bottom-full left-0 mb-2"
-              : "right-0 mt-2 origin-top-right"
+          className={`absolute z-50 w-64 max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200 bg-white p-1.5 shadow-xl ring-1 ring-black/5 focus:outline-none animate-in fade-in zoom-in-95 duration-100 ${
+            isPositionTop
+              ? "bottom-full left-0 mb-2 origin-bottom-left"
+              : "top-full right-0 mt-2 origin-top-right"
           }`}
         >
           {/* User Details Header */}
@@ -215,12 +229,12 @@ export function AdminUserProfile({
 
           {/* Logout Action */}
           <div className="border-t border-slate-100 pt-1">
-            <form onSubmit={handleLogout}>
+            <form action={logoutAction} onSubmit={handleLogout}>
               <button
                 type="submit"
                 disabled={isPending}
                 role="menuitem"
-                className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors disabled:opacity-50"
+                className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 {isPending ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin text-rose-600" />

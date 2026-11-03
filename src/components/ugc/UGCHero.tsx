@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import { ugcHeroData as fallbackHero } from "@/data/ugcData";
 
@@ -26,10 +27,13 @@ export default function UGCHero({ hero }: UGCHeroProps) {
     <section className="relative w-full overflow-hidden bg-[#0A1F44] text-white">
       {/* Background Campus Overlay */}
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           src={heroImage}
           alt="Geeta University Campus UGC Inspection"
-          className="h-full w-full object-cover object-right opacity-85"
+          fill
+          sizes="100vw"
+          preload
+          className="object-cover object-right opacity-85"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A1F44]/90 via-[#0A1F44]/65 to-[#0A1F44]/20" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A1F44]/75 via-transparent to-black/20" />

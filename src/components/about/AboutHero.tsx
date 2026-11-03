@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const sections = [
   { label: "Recognitions", href: "#recognitions" },
@@ -14,9 +15,13 @@ export default function AboutHero() {
   return (
     <>
       <section className="w-full">
-        <img
+        <Image
           src="/about/1-1.webp"
           alt="Geeta University Campus"
+          width={1400}
+          height={570}
+          sizes="100vw"
+          preload
           className="h-auto w-full object-cover"
         />
       </section>

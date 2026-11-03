@@ -1,3 +1,6 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
+import { CACHE_TAGS, DEFAULT_CACHE_TTL } from "@/server/cache/tags";
 import { prisma } from "@/server/db/client";
 import { DEFAULT_LOCALE, getLocalizedField } from "@/lib/i18n/localization";
 import { serverLogger } from "@/lib/security/logger";
@@ -177,10 +180,12 @@ export const DEFAULT_PRIMARY_NAV: NavEntry[] = [
  * Retrieves the published Header Navigation, TopBar Links, and Announcements
  * from the database with graceful static fallback.
  */
-export async function getHeaderNavigation(
+export const getHeaderNavigation = cache(async function getHeaderNavigation(
   locale: string = DEFAULT_LOCALE
 ): Promise<HeaderNavigationData> {
-  try {
+  return unstable_cache(
+    async () => {
+      try {
     const [mainMenu, topMenu, announcementsSetting] = await Promise.all([
       prisma.navigationMenu.findUnique({
         where: { key: "main_nav" },
@@ -317,4 +322,11 @@ export async function getHeaderNavigation(
       announcements: DEFAULT_ANNOUNCEMENTS,
     };
   }
-}
+    },
+    ["header-navigation", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.navigation],
+    }
+  )();
+});

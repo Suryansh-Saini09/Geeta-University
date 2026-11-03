@@ -7,7 +7,7 @@
  * leaking into browser consoles or unauthorized logs.
  */
 
-import crypto from "crypto";
+
 
 export interface LogContext {
   module: string;
@@ -51,7 +51,17 @@ const SENSITIVE_PATTERNS = [
  */
 export function generateCorrelationId(prefix = "err"): string {
   try {
-    const randomHex = crypto.randomBytes(8).toString("hex");
+    if (typeof globalThis !== "undefined" && globalThis.crypto?.randomUUID) {
+      const uuid = globalThis.crypto.randomUUID().replace(/-/g, "").slice(0, 16);
+      return `${prefix}_${Date.now().toString(36)}_${uuid}`;
+    }
+    const arr = new Uint8Array(8);
+    if (typeof globalThis !== "undefined" && globalThis.crypto?.getRandomValues) {
+      globalThis.crypto.getRandomValues(arr);
+    } else {
+      for (let i = 0; i < 8; i++) arr[i] = Math.floor(Math.random() * 256);
+    }
+    const randomHex = Array.from(arr, (b) => b.toString(16).padStart(2, "0")).join("");
     return `${prefix}_${Date.now().toString(36)}_${randomHex}`;
   } catch {
     return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 10)}`;

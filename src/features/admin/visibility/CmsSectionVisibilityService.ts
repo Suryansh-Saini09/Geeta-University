@@ -1,4 +1,5 @@
 import { revalidatePath } from "next/cache";
+import { CACHE_TAGS, invalidateCacheTag } from "@/server/cache/tags";
 import { prisma, ContentStatus } from "@/server/db/client";
 import { serverLogger } from "@/lib/security/logger";
 import type { CmsScopeType, UpdateVisibilityResponse } from "./types";
@@ -172,6 +173,12 @@ export class CmsSectionVisibilityService {
         revalidatePath(`/departments/${dept.slug}`);
         revalidatePath(`/admin/departments/${dept.id}/edit`);
         revalidatePath(`/admin/departments`);
+        invalidateCacheTag(
+          CACHE_TAGS.department(dept.slug),
+          CACHE_TAGS.departmentsList,
+          CACHE_TAGS.program(dept.slug),
+          CACHE_TAGS.programsList
+        );
 
         return { success: true, isVisible };
       }
@@ -226,19 +233,24 @@ export class CmsSectionVisibilityService {
         if (scopeId === "home") {
           revalidatePath("/");
           revalidatePath("/admin/home");
+          invalidateCacheTag(CACHE_TAGS.home, CACHE_TAGS.pages);
         } else if (scopeId === "about") {
           revalidatePath("/about-us");
           revalidatePath("/about");
           revalidatePath("/admin/about");
+          invalidateCacheTag(CACHE_TAGS.about, CACHE_TAGS.pages);
         } else if (["dyod", "gfs", "gth", "vocational-skills"].includes(scopeId)) {
           revalidatePath(`/edge/${scopeId}`);
           revalidatePath(`/${scopeId}`);
           revalidatePath("/edge/[slug]", "page");
+          invalidateCacheTag(CACHE_TAGS.page(scopeId), CACHE_TAGS.pages);
         } else if (scopeId === "library") {
           revalidatePath("/library");
           revalidatePath("/knowledge-resource-centre-library");
+          invalidateCacheTag(CACHE_TAGS.library, CACHE_TAGS.pages);
         } else {
           revalidatePath(`/${scopeId}`);
+          invalidateCacheTag(CACHE_TAGS.page(scopeId), CACHE_TAGS.pages);
         }
 
         return { success: true, isVisible };

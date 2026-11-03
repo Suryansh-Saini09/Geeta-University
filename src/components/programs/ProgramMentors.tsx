@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { ArrowRight, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { FacultyMember } from "@/data/programs/types";
@@ -163,20 +164,17 @@ export default function ProgramMentors({
           overflow: "hidden",
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={getMentorImage(m)}
           alt={m.name}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
+          loading="lazy"
           style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
             objectPosition: m.imagePosition || "center 25%",
             transform: m.imageScale ? `scale(${m.imageScale})` : undefined,
-            transformOrigin: "center center",
-            transition: "transform 0.3s ease",
-            display: "block",
           }}
+          className="object-cover transition-transform duration-300"
           onError={(e) => {
             e.currentTarget.style.display = "none";
             if (e.currentTarget.parentElement) {
@@ -457,6 +455,7 @@ export default function ProgramMentors({
                   style={{
                     width: 120,
                     height: 120,
+                    position: "relative",
                     borderRadius: "50%",
                     overflow: "hidden",
                     background: "#F1F5F9",
@@ -465,17 +464,16 @@ export default function ProgramMentors({
                     boxShadow: "0 6px 20px rgba(10,31,68,0.1)",
                   }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={getMentorImage(selectedMentor)}
                     alt={selectedMentor.name}
+                    fill
+                    sizes="120px"
+                    loading="lazy"
                     style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
                       objectPosition: "center 15%",
-                      display: "block",
                     }}
+                    className="object-cover"
                   />
                 </div>
 

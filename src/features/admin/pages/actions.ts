@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { CACHE_TAGS, invalidateCacheTag } from "@/server/cache/tags";
 import { redirect } from "next/navigation";
 import { AuditAction, ContentStatus } from "@prisma/client";
 import { prisma } from "@/server/db/client";
@@ -156,6 +157,12 @@ export async function updatePageSectionAction(
     } else {
       revalidatePath(pageSlug === "home" ? "/" : `/${pageSlug}`);
     }
+    invalidateCacheTag(
+      CACHE_TAGS.page(pageSlug),
+      CACHE_TAGS.pages,
+      pageSlug === "home" ? CACHE_TAGS.home : "",
+      pageSlug === "about" || pageSlug === "about-us" ? CACHE_TAGS.about : ""
+    );
     return { success: true as const, message: getSectionSuccessMessage(sectionKey, pageSlug, "updated") };
   } catch (err: any) {
     return safeActionError(err, "Failed to update section", {
@@ -234,6 +241,12 @@ export async function updatePageSeoAction(pageSlug: string, rawData: any) {
     } else {
       revalidatePath(pageSlug === "home" ? "/" : `/${pageSlug}`);
     }
+    invalidateCacheTag(
+      CACHE_TAGS.page(pageSlug),
+      CACHE_TAGS.pages,
+      pageSlug === "home" ? CACHE_TAGS.home : "",
+      pageSlug === "about" || pageSlug === "about-us" ? CACHE_TAGS.about : ""
+    );
     return { success: true as const, message: "SEO Metadata saved successfully" };
   } catch (err: any) {
     return safeActionError(err, "Failed to update SEO", {
@@ -289,6 +302,12 @@ export async function updatePageStatusAction(pageSlug: string, status: ContentSt
     revalidatePath(`/${pageSlug}`);
     revalidatePath("/admin/admissions");
     revalidatePath("/admin/gu-edge");
+    invalidateCacheTag(
+      CACHE_TAGS.page(pageSlug),
+      CACHE_TAGS.pages,
+      pageSlug === "home" ? CACHE_TAGS.home : "",
+      pageSlug === "about" || pageSlug === "about-us" ? CACHE_TAGS.about : ""
+    );
 
     return {
       success: true as const,
@@ -349,6 +368,7 @@ export async function saveRecruiterAction(id: string | null, rawData: any) {
     revalidatePath("/en");
     revalidatePath("/hi");
     revalidatePath("/fr");
+    invalidateCacheTag(CACHE_TAGS.home, CACHE_TAGS.pages);
     return { success: true as const, recruiter: result };
   } catch (err: any) {
     return safeActionError(err, "Failed to save recruiter", {
@@ -382,6 +402,7 @@ export async function deleteRecruiterAction(id: string) {
     revalidatePath("/en");
     revalidatePath("/hi");
     revalidatePath("/fr");
+    invalidateCacheTag(CACHE_TAGS.home, CACHE_TAGS.pages);
     return { success: true as const, message: "Recruiter deleted successfully" };
   } catch (err: any) {
     return safeActionError(err, "Failed to delete recruiter", {
@@ -435,6 +456,7 @@ export async function saveAwardRankingAction(id: string | null, rawData: any) {
     revalidatePath("/");
     revalidatePath("/about");
     revalidatePath("/about-us");
+    invalidateCacheTag(CACHE_TAGS.home, CACHE_TAGS.about, CACHE_TAGS.pages);
     return { success: true as const, awardRanking: result };
   } catch (err: any) {
     return safeActionError(err, "Failed to save award", {
@@ -466,6 +488,7 @@ export async function deleteAwardRankingAction(id: string) {
     revalidatePath("/");
     revalidatePath("/about");
     revalidatePath("/about-us");
+    invalidateCacheTag(CACHE_TAGS.home, CACHE_TAGS.about, CACHE_TAGS.pages);
     return { success: true as const, message: "Award/Ranking deleted successfully" };
   } catch (err: any) {
     return safeActionError(err, "Failed to delete award", {
@@ -517,6 +540,7 @@ export async function saveTestimonialAction(id: string | null, rawData: any) {
     }
 
     revalidatePath("/");
+    invalidateCacheTag(CACHE_TAGS.home, CACHE_TAGS.pages);
     return { success: true as const, testimonial: result };
   } catch (err: any) {
     return safeActionError(err, "Failed to save testimonial", {
@@ -546,6 +570,7 @@ export async function deleteTestimonialAction(id: string) {
     });
 
     revalidatePath("/");
+    invalidateCacheTag(CACHE_TAGS.home, CACHE_TAGS.pages);
     return { success: true as const, message: "Testimonial deleted successfully" };
   } catch (err: any) {
     return safeActionError(err, "Failed to delete testimonial", {
@@ -598,6 +623,7 @@ export async function saveLeadershipMemberAction(id: string | null, rawData: any
 
     revalidatePath("/about");
     revalidatePath("/about-us");
+    invalidateCacheTag(CACHE_TAGS.about, CACHE_TAGS.pages);
     return { success: true as const, leader: result };
   } catch (err: any) {
     return safeActionError(err, "Failed to save leader", {
@@ -628,6 +654,7 @@ export async function deleteLeadershipMemberAction(id: string) {
 
     revalidatePath("/about");
     revalidatePath("/about-us");
+    invalidateCacheTag(CACHE_TAGS.about, CACHE_TAGS.pages);
     return { success: true as const, message: "Leadership member deleted successfully" };
   } catch (err: any) {
     return safeActionError(err, "Failed to delete leader", {
@@ -679,6 +706,7 @@ export async function saveIndustryPartnerAction(id: string | null, rawData: any)
     }
 
     revalidatePath("/");
+    invalidateCacheTag(CACHE_TAGS.home, CACHE_TAGS.pages);
     return { success: true as const, partner: result };
   } catch (err: any) {
     return safeActionError(err, "Failed to save partner", {
@@ -708,6 +736,7 @@ export async function deleteIndustryPartnerAction(id: string) {
     });
 
     revalidatePath("/");
+    invalidateCacheTag(CACHE_TAGS.home, CACHE_TAGS.pages);
     return { success: true as const, message: "Partner deleted successfully" };
   } catch (err: any) {
     return safeActionError(err, "Failed to delete partner", {
@@ -1330,6 +1359,12 @@ export async function updatePageSectionTranslationAction(
     const routePrefix = targetLocale === "en" ? "" : `/${targetLocale}`;
     const targetRoute = pageSlug === "home" ? `${routePrefix}/` : `${routePrefix}/${pageSlug}`;
     revalidatePath(targetRoute);
+    invalidateCacheTag(
+      CACHE_TAGS.page(pageSlug),
+      CACHE_TAGS.pages,
+      pageSlug === "home" ? CACHE_TAGS.home : "",
+      pageSlug === "about" || pageSlug === "about-us" ? CACHE_TAGS.about : ""
+    );
 
     return {
       success: true as const,

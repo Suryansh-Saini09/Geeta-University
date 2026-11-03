@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useFiniteCarousel } from "@/hooks/useFiniteCarousel";
 
@@ -218,19 +219,16 @@ export default function HomeUniverseSection({ data }: HomeUniverseSectionProps) 
                     key={`flag-${item.name}-${index}`}
                     className="group/flag flex h-20 w-36 sm:h-24 sm:w-44 shrink-0 items-center justify-center rounded-xl border border-[#E4EAF0] bg-white p-3 shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:border-[#F28C18]/40 hover:shadow-md"
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      style={{
-                        maxHeight: "56px",
-                        maxWidth: "100%",
-                        width: "auto",
-                        height: "auto",
-                        objectFit: "contain",
-                        pointerEvents: "none",
-                      }}
-                    />
+                    <div className="relative h-12 w-full sm:h-14">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        sizes="(max-width: 640px) 144px, 176px"
+                        loading="lazy"
+                        className="object-contain pointer-events-none"
+                      />
+                    </div>
                   </div>
                 ))}
               </div>

@@ -1,7 +1,7 @@
-"use client";
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import { faqHeroData } from "@/data/faqData";
 
@@ -24,11 +24,13 @@ export default function FAQHero({ data }: FAQHeroProps) {
     <section className="relative w-full overflow-hidden bg-[#0A1F44] text-white">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           src={heroImage}
           alt={title}
+          fill
           sizes="100vw"
-          className="h-full w-full object-cover object-[center_40%]"
+          preload
+          className="object-cover object-[center_40%]"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A1F44]/90 via-[#0A1F44]/60 to-[#0A1F44]/20" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A1F44]/75 via-transparent to-black/20" />

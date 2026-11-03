@@ -1,4 +1,3 @@
-"use client";
 
 import React from "react";
 import { phdImportantDates as defaultDates } from "@/data/phdData";

@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     },
     cpus: 1,
     workerThreads: false,
+    optimizePackageImports: ["lucide-react", "framer-motion"],
   },
   turbopack: {
     root: path.resolve(__dirname),
@@ -18,6 +19,8 @@ const nextConfig: NextConfig = {
     "**/*": ["./public/**/*"],
   },
   images: {
+    formats: ["image/webp"],
+    minimumCacheTTL: 14400,
     remotePatterns: [
       {
         protocol: "https",
@@ -30,6 +33,126 @@ const nextConfig: NextConfig = {
         hostname: "geetauniversity.edu.in",
         port: "",
         pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "spbsb.vercel.app",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+    localPatterns: [
+      {
+        pathname: "/uploads/**",
+        search: "",
+      },
+      {
+        pathname: "/images/**",
+        search: "",
+      },
+      {
+        pathname: "/about/**",
+        search: "",
+      },
+      {
+        pathname: "/campus-life/**",
+        search: "",
+      },
+      {
+        pathname: "/careers/**",
+        search: "",
+      },
+      {
+        pathname: "/contact-us/**",
+        search: "",
+      },
+      {
+        pathname: "/courses/**",
+        search: "",
+      },
+      {
+        pathname: "/edge/**",
+        search: "",
+      },
+      {
+        pathname: "/faculty/**",
+        search: "",
+      },
+      {
+        pathname: "/faq/**",
+        search: "",
+      },
+      {
+        pathname: "/fee-and-scholarship/**",
+        search: "",
+      },
+      {
+        pathname: "/home/**",
+        search: "",
+      },
+      {
+        pathname: "/industry-integration/**",
+        search: "",
+      },
+      {
+        pathname: "/international-admissions/**",
+        search: "",
+      },
+      {
+        pathname: "/library/**",
+        search: "",
+      },
+      {
+        pathname: "/placements/**",
+        search: "",
+      },
+      {
+        pathname: "/programs/**",
+        search: "",
+      },
+      {
+        pathname: "/recruiters/**",
+        search: "",
+      },
+      {
+        pathname: "/recruiters/**",
+        search: "?v=3",
+      },
+      {
+        pathname: "/scholarship-predictor/**",
+        search: "",
+      },
+      {
+        pathname: "/spbsb-**/**",
+        search: "",
+      },
+      {
+        pathname: "/spbsp/**",
+        search: "",
+      },
+      {
+        pathname: "/teaching-learning-practices/**",
+        search: "",
+      },
+      {
+        pathname: "/ugc/**",
+        search: "",
+      },
+      {
+        pathname: "/*",
+        search: "",
       },
     ],
   },

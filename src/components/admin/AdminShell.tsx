@@ -191,7 +191,11 @@ export default function AdminShell({ user, children }: AdminShellProps) {
           </div>
 
           {/* Standardized Administrator Profile & Account Menu */}
-          <AdminUserProfile user={user} userPermissions={userPermissions} />
+          <AdminUserProfile
+            user={user}
+            userPermissions={userPermissions}
+            dropdownPosition="bottom"
+          />
         </header>
 
         {/* Main Route Content (Independent Scroll) */}

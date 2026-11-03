@@ -2,6 +2,7 @@
 
 import { AuditAction, ContentStatus, Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { CACHE_TAGS, invalidateCacheTag } from "@/server/cache/tags";
 import { redirect } from "next/navigation";
 
 import { assertPermission } from "@/server/auth/permissions";
@@ -65,6 +66,7 @@ export async function createFacultyAction(formData: FormData) {
     revalidatePath("/admin/faculty");
     revalidatePath("/admin/programs");
     revalidatePath("/admin");
+    invalidateCacheTag(CACHE_TAGS.facultyList);
     redirect(`/admin/faculty?created=${faculty.id}`);
   } catch (error: any) {
     if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
@@ -95,6 +97,11 @@ export async function updateFacultyAction(formData: FormData) {
     revalidatePath("/admin/faculty");
     revalidatePath("/admin/programs");
     revalidatePath("/admin");
+    invalidateCacheTag(
+      CACHE_TAGS.facultyList,
+      CACHE_TAGS.faculty(parsed.data.slug),
+      CACHE_TAGS.faculty(existing.slug)
+    );
     redirect("/admin/faculty?updated=1");
   } catch (error: any) {
     if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
@@ -117,6 +124,7 @@ export async function archiveFacultyAction(formData: FormData) {
     });
     revalidatePath("/admin/faculty");
     revalidatePath("/admin");
+    invalidateCacheTag(CACHE_TAGS.facultyList, CACHE_TAGS.faculty(existing.slug));
     redirect("/admin/faculty?archived=1");
   } catch (error: any) {
     if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
@@ -180,5 +188,6 @@ export async function reorderFacultyAction(formData: FormData) {
   revalidatePath("/admin/faculty");
   revalidatePath("/admin/departments");
   revalidatePath("/admin");
+  invalidateCacheTag(CACHE_TAGS.facultyList);
   redirect("/admin/faculty?reordered=1");
 }

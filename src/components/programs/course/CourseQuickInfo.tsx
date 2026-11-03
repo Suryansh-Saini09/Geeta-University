@@ -1,4 +1,3 @@
-"use client";
 
 import React from "react";
 import { BookOpen, Clock, Award } from "lucide-react";

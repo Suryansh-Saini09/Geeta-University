@@ -1,4 +1,3 @@
-"use client";
 
 import React from "react";
 import { Calendar, FileCheck2, CheckCircle2, Globe2, Check } from "lucide-react";

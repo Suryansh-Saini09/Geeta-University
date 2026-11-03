@@ -3,6 +3,7 @@ if (typeof window !== "undefined") {
 }
 
 import { mkdir, writeFile, readFile, stat } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { AuditAction } from "@prisma/client";
 import { prisma } from "@/server/db/client";
@@ -148,7 +149,9 @@ export function sanitizePathSegment(segment: string, fallback: string): string {
  */
 export function sanitizeBaseFilename(name: string): string {
   const ext = path.extname(name);
-  const base = path.basename(name, ext);
+  let base = path.basename(name, ext);
+  // Strip previous version tag (e.g., -va1b2c3d or -v1730000000)
+  base = base.replace(/-v[a-f0-9]{8,}$/i, "").replace(/-v\d+$/i, "");
   const cleaned = base
     .toLowerCase()
     .trim()
@@ -327,13 +330,16 @@ export async function saveCmsAsset(
   await mkdir(uploadsCmsDir, { recursive: true });
 
   // Collision handling if not replacing shared
-  let finalFileName = `${targetBaseName}.${format.extension}`;
+  const contentHash = createHash("sha256").update(bytes).digest("hex").slice(0, 8);
+  let finalFileName = options.replaceUrl
+    ? `${targetBaseName}-v${contentHash}.${format.extension}`
+    : `${targetBaseName}.${format.extension}`;
   let finalFilePath = path.join(uploadsCmsDir, finalFileName);
 
   // If replacing existing URL and replaceShared is false, check if we'd overwrite an existing file
-  const shouldOverwrite = Boolean(options.replaceUrl && options.replaceShared);
 
-  if (!shouldOverwrite) {
+
+  if (!options.replaceUrl) {
     let counter = 1;
     while (true) {
       try {
@@ -359,6 +365,23 @@ export async function saveCmsAsset(
     }
     // Rename to final target
     await writeFile(finalFilePath, bytes, { flag: "w" });
+
+    // If replacing an existing shared file, also update the previous target file on disk so legacy references stay valid
+    if (options.replaceShared && options.replaceUrl && options.replaceUrl.startsWith("/uploads/")) {
+      const oldRelativePath = options.replaceUrl.replace(/^\/uploads\//, "");
+      const oldFilePath = path.join(process.cwd(), "public", "uploads", oldRelativePath);
+      if (oldFilePath !== finalFilePath) {
+        try {
+          await writeFile(oldFilePath, bytes, { flag: "w" });
+        } catch (legacyWriteErr) {
+          serverLogger.warn("Failed to update legacy shared asset file on disk", legacyWriteErr, {
+            module: "cmsUpload",
+            action: "legacySharedWrite",
+            oldFilePath,
+          });
+        }
+      }
+    }
   } finally {
     // Clean up staging file
     try {

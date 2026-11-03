@@ -1,4 +1,3 @@
-"use client";
 
 import React from "react";
 import type { CourseWhyGeeta as CourseWhyGeetaType } from "@/data/programs/courses/types";

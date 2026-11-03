@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useFiniteCarousel } from "@/hooks/useFiniteCarousel";
 interface IndustryIntegrationSectionProps {
@@ -110,12 +111,16 @@ export default function IndustryIntegrationSection({ data }: IndustryIntegration
                     key={`${partner.image}-${index}`}
                     className="group/item mx-3 flex h-28 w-44 shrink-0 items-center justify-center rounded-2xl border border-[#E1E8EE] bg-white px-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#F28C18]/40 hover:shadow-lg sm:mx-4 sm:h-32 sm:w-52"
                   >
-                    <img
-                      src={partner.image}
-                      alt={partner.name}
-                      loading="lazy"
-                      className="max-h-20 max-w-[150px] object-contain transition-transform duration-300 group-hover/item:scale-105 sm:max-h-24 sm:max-w-[175px] pointer-events-none"
-                    />
+                    <div className="relative h-16 w-full sm:h-20">
+                      <Image
+                        src={partner.image}
+                        alt={partner.name}
+                        fill
+                        sizes="(max-width: 640px) 150px, 175px"
+                        loading="lazy"
+                        className="object-contain transition-transform duration-300 group-hover/item:scale-105 pointer-events-none"
+                      />
+                    </div>
                   </div>
                 ))}
               </div>

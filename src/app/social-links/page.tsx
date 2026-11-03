@@ -176,7 +176,7 @@ export default async function SocialLinksPage() {
               alt={title}
               width={220}
               height={70}
-              className="h-auto max-w-[200px] sm:max-w-[220px] object-contain"
+              className="h-auto w-auto max-w-[200px] sm:max-w-[220px] object-contain"
               priority
             />
           </div>

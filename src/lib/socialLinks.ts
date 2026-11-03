@@ -1,3 +1,6 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
+import { CACHE_TAGS, DEFAULT_CACHE_TTL } from "@/server/cache/tags";
 import { serverLogger } from "@/lib/security/logger";
 
 export interface SocialLink {
@@ -124,8 +127,10 @@ export const HARDCODED_SOCIAL_LINKS: SocialLink[] = [
 
 export const SOCIAL_API_URL = process.env.NEXT_PUBLIC_SOCIAL_API_URL || "";
 
-export async function fetchSocialData(): Promise<SocialApiResponse> {
-  try {
+export const fetchSocialData = cache(async function fetchSocialData(): Promise<SocialApiResponse> {
+  return unstable_cache(
+    async () => {
+      try {
     const { prisma } = await import("@/server/db/client");
     const setting = await prisma.siteSetting.findUnique({
       where: { key: "social_links" },
@@ -170,7 +175,14 @@ export async function fetchSocialData(): Promise<SocialApiResponse> {
       links: HARDCODED_SOCIAL_LINKS,
     },
   };
-}
+    },
+    ["social-links-data"],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.socialLinks],
+    }
+  )();
+});
 
 export async function getSocialLinks(): Promise<SocialLink[]> {
   const json = await fetchSocialData();

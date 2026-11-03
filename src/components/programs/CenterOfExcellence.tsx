@@ -1,6 +1,6 @@
-"use client";
 
 import React from "react";
+import Image from "next/image";
 
 export interface CenterOfExcellenceProps {
   title?: string;
@@ -47,17 +47,14 @@ export default function CenterOfExcellence({
             width: "100%",
           }}
         >
-          <img
+          <Image
             src="/coe-logos-exact.png"
             alt="Centre of Excellence"
-            style={{
-              width: "100%",
-              maxWidth: 960,
-              height: "auto",
-              display: "block",
-              mixBlendMode: "screen",
-              objectFit: "contain",
-            }}
+            width={1024}
+            height={292}
+            sizes="(max-width: 1024px) 100vw, 960px"
+            loading="lazy"
+            className="w-full max-w-[960px] h-auto block object-contain mix-blend-screen"
           />
         </div>
       </div>

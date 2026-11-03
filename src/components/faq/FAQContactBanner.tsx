@@ -1,4 +1,3 @@
-"use client";
 
 import React from "react";
 import { PhoneCall, Mail, MessageSquare, ArrowRight } from "lucide-react";

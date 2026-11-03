@@ -1,4 +1,3 @@
-"use client";
 
 import React from "react";
 import type { CourseCTAData } from "@/data/programs/courses/types";

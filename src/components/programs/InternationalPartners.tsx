@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Award } from "lucide-react";
 import { BRAND_DATA } from "./TopRecruiters";
@@ -28,20 +29,14 @@ function PartnerLogoCard({ name, brandKey, customLogo }: { name: string; brandKe
       className="gth-partner-card"
     >
       {imageSrc ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={imageSrc}
           alt={brand?.label || name}
-          style={{
-            width: brand?.width || 120,
-            height: brand?.height || 36,
-            maxWidth: "150px",
-            maxHeight: "55px",
-            objectFit: "contain",
-            opacity: 0.85,
-            transition: "all 0.3s ease",
-          }}
-          className="gth-partner-img"
+          width={brand?.width || 120}
+          height={brand?.height || 36}
+          sizes="150px"
+          loading="lazy"
+          className="max-w-[150px] max-h-[55px] w-auto h-auto object-contain opacity-85 transition-all duration-300 gth-partner-img"
         />
       ) : (
         <span

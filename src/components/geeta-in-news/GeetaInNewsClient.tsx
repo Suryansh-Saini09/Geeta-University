@@ -428,7 +428,7 @@ export default function GeetaInNewsClient({
                 alt={selectedImage.altText || selectedImage.publication}
                 width={1000}
                 height={1400}
-                className="max-h-[70vh] w-auto rounded-xl object-contain shadow-2xl"
+                className="max-h-[70vh] w-auto h-auto rounded-xl object-contain shadow-2xl"
               />
               {selectedImage.content && (
                 <div className="w-full max-w-2xl mt-4 rounded-xl bg-white p-5 text-slate-800 text-sm shadow-xl leading-relaxed">

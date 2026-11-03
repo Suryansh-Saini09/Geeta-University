@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { CACHE_TAGS, invalidateCacheTag } from "@/server/cache/tags";
 import { prisma } from "@/server/db/client";
 import { requireAdminSession } from "@/server/auth/session";
 import { recordAuditLog } from "@/server/services/auditLogs";
@@ -172,6 +173,7 @@ export async function saveGeetaNewsItemAction(rawItem: any) {
     // 9. Revalidate cache
     revalidatePath("/geeta-in-news");
     revalidatePath("/admin/pages/institutional");
+    invalidateCacheTag(CACHE_TAGS.geetaInNews, CACHE_TAGS.pages);
 
     return {
       success: true as const,
@@ -247,6 +249,7 @@ export async function deleteGeetaNewsItemAction(itemId: string) {
 
     revalidatePath("/geeta-in-news");
     revalidatePath("/admin/pages/institutional");
+    invalidateCacheTag(CACHE_TAGS.geetaInNews, CACHE_TAGS.pages);
 
     return {
       success: true as const,
@@ -324,6 +327,7 @@ export async function updateGeetaNewsItemStatusAction(
 
     revalidatePath("/geeta-in-news");
     revalidatePath("/admin/pages/institutional");
+    invalidateCacheTag(CACHE_TAGS.geetaInNews, CACHE_TAGS.pages);
 
     return {
       success: true as const,
@@ -410,6 +414,7 @@ export async function reorderGeetaNewsItemAction(
 
     revalidatePath("/geeta-in-news");
     revalidatePath("/admin/pages/institutional");
+    invalidateCacheTag(CACHE_TAGS.geetaInNews, CACHE_TAGS.pages);
 
     return {
       success: true as const,
@@ -472,6 +477,7 @@ export async function updateGeetaInNewsHeroAction(rawHero: any) {
 
     revalidatePath("/geeta-in-news");
     revalidatePath("/admin/pages/institutional");
+    invalidateCacheTag(CACHE_TAGS.geetaInNews, CACHE_TAGS.pages);
 
     return {
       success: true as const,

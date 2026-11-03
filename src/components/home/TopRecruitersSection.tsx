@@ -204,15 +204,16 @@ export default function TopRecruitersSection({
                       }}
                     >
                       {normalizedLogo ? (
-                        <Image
-                          src={normalizedLogo}
-                          alt={`${recruiter.name} logo`}
-                          width={220}
-                          height={90}
-                          sizes="(max-width: 640px) 180px, 240px"
-                          className="max-h-16 sm:max-h-20 md:max-h-22 w-auto max-w-[85%] object-contain transition-all duration-300 pointer-events-none"
-                          unoptimized={isExternal || isUpload}
-                        />
+                        <div className="relative h-16 sm:h-20 md:h-22 w-[85%]">
+                          <Image
+                            src={normalizedLogo}
+                            alt={`${recruiter.name} logo`}
+                            fill
+                            sizes="(max-width: 640px) 180px, 240px"
+                            className="object-contain transition-all duration-300 pointer-events-none"
+                            unoptimized={isExternal}
+                          />
+                        </div>
                       ) : (
                         <span className="font-serif text-sm font-bold text-[#0A1F44] truncate px-2 text-center">
                           {recruiter.name}

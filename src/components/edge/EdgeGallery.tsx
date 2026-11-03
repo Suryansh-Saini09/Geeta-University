@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
 import type { EdgeGallerySection, EdgeGalleryItem } from "@/data/edge/types";
@@ -121,10 +122,12 @@ export default function EdgeGallery({ section }: EdgeGalleryProps) {
                 className="group/card relative flex aspect-[4/3] w-[280px] sm:w-[330px] md:w-[380px] shrink-0 overflow-hidden rounded-3xl border border-[#0A1F44]/10 bg-[#0A1F44] shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer"
               >
                 {/* Background Image */}
-                <img
+                <Image
                   src={item.src}
                   alt={item.title || `Gallery image ${idx + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105 pointer-events-none"
+                  fill
+                  sizes="(max-width: 640px) 280px, (max-width: 768px) 330px, 380px"
+                  className="object-cover transition-transform duration-500 group-hover/card:scale-105 pointer-events-none"
                 />
 
                 {/* Dark Gradient Overlay for Text */}
@@ -176,10 +179,13 @@ export default function EdgeGallery({ section }: EdgeGalleryProps) {
               </button>
 
               <div className="p-4 flex items-center justify-center flex-1 overflow-hidden">
-                <img
+                <Image
                   src={selectedImage.src}
                   alt={selectedImage.title || "Full image"}
-                  className="max-w-full max-h-[75vh] object-contain rounded-lg"
+                  width={1200}
+                  height={800}
+                  sizes="(max-width: 1200px) 100vw, 1200px"
+                  className="max-w-full max-h-[75vh] w-auto h-auto object-contain rounded-lg"
                 />
               </div>
 

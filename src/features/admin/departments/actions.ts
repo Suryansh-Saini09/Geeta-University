@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { CACHE_TAGS, invalidateCacheTag } from "@/server/cache/tags";
 import { redirect } from "next/navigation";
 
 import { prisma, AuditAction, ContentStatus } from "@/server/db/client";
@@ -89,6 +90,7 @@ export async function createDepartmentAction(formData: FormData) {
 
     revalidatePath("/admin");
     revalidatePath("/admin/departments");
+    invalidateCacheTag(CACHE_TAGS.departmentsList, CACHE_TAGS.navigation);
     redirect("/admin/departments?created=1");
   } catch (error: any) {
     if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
@@ -187,6 +189,12 @@ export async function updateDepartmentAction(formData: FormData) {
     for (const slugToRevalidate of Array.from(new Set(affectedSlugs))) {
       revalidatePath(`/programs/${slugToRevalidate}`);
     }
+    invalidateCacheTag(
+      CACHE_TAGS.departmentsList,
+      CACHE_TAGS.department(department.slug),
+      CACHE_TAGS.department(department.id),
+      CACHE_TAGS.navigation
+    );
 
     const section = formData.get("section") ? String(formData.get("section")) : "";
     const sectionQuery = section ? `&section=${encodeURIComponent(section)}` : "";
@@ -567,6 +575,11 @@ export async function updateDepartmentSectionAction(formData: FormData) {
   for (const slugToRevalidate of Array.from(new Set(affectedSlugs))) {
     revalidatePath(`/programs/${slugToRevalidate}`);
   }
+  invalidateCacheTag(
+    CACHE_TAGS.departmentsList,
+    CACHE_TAGS.department(existing.slug),
+    CACHE_TAGS.department(id)
+  );
 
   redirect(`/admin/departments/${id}/edit?section=${section}&saved=1`);
 }
@@ -610,6 +623,12 @@ export async function archiveDepartmentAction(formData: FormData) {
 
   revalidatePath("/admin");
   revalidatePath("/admin/departments");
+  invalidateCacheTag(
+    CACHE_TAGS.departmentsList,
+    CACHE_TAGS.department(department.slug),
+    CACHE_TAGS.department(department.id),
+    CACHE_TAGS.navigation
+  );
   redirect("/admin/departments?archived=1");
 }
 
@@ -735,6 +754,12 @@ export async function reorderDepartmentFacultyAction(formData: FormData) {
   for (const slugToRevalidate of Array.from(new Set(affectedSlugs))) {
     revalidatePath(`/programs/${slugToRevalidate}`);
   }
+  invalidateCacheTag(
+    CACHE_TAGS.departmentsList,
+    CACHE_TAGS.department(existing.slug),
+    CACHE_TAGS.department(departmentId),
+    CACHE_TAGS.facultyList
+  );
 
   redirect(`/admin/departments/${departmentId}/edit?section=faculty&reordered=1`);
 }

@@ -2,6 +2,7 @@
 
 import path from "node:path";
 import { revalidatePath } from "next/cache";
+import { CACHE_TAGS, invalidateCacheTag } from "@/server/cache/tags";
 import { AuditAction } from "@prisma/client";
 
 import { assertPermission } from "@/server/auth/permissions";
@@ -29,6 +30,7 @@ import {
  */
 function revalidateSharedFooterRoutes() {
   try {
+    invalidateCacheTag(CACHE_TAGS.footer);
     revalidatePath("/", "layout");
     revalidatePath("/");
     revalidatePath("/about");

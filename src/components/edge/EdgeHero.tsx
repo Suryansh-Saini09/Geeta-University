@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, X, Check, ArrowRight, Sparkles } from "lucide-react";
@@ -20,9 +21,13 @@ export default function EdgeHero({ hero }: EdgeHeroProps) {
       {/* 1. Full-Width Top Banner (Only if image provided — 100% whole image visible, no height cutoffs) */}
       {hero.image && (
         <div className="w-full bg-slate-900 border-b border-slate-200">
-          <img
+          <Image
             src={hero.image}
             alt={hero.title}
+            width={1600}
+            height={900}
+            preload
+            sizes="100vw"
             className="w-full h-auto block"
           />
         </div>
@@ -200,14 +205,16 @@ export default function EdgeHero({ hero }: EdgeHeroProps) {
                 className="lg:col-span-6 xl:col-span-5 flex justify-center"
               >
                 <div className="relative group w-full max-w-lg aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-slate-900 ring-1 ring-slate-200">
-                  <img
+                  <Image
                     src={
                       hero.videoUrl && hero.videoUrl.includes("youtube")
                         ? `https://img.youtube.com/vi/${hero.videoUrl.match(/(?:embed\/|v\/|watch\?v=|youtu\.be\/|\?v=)([^#&?]*)/)?.[1] || ""}/hqdefault.jpg`
                         : (hero.videoThumb || "/edge/nep/maxresdefault.jpg")
                     }
                     alt={hero.title}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 512px"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-108"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-black/10 to-transparent group-hover:from-slate-950/40 transition-all duration-300" />
                   
