@@ -1,6 +1,6 @@
-"use client";
 
 import React from "react";
+import Image from "next/image";
 import {
   Zap,
   Network,
@@ -83,11 +83,13 @@ export default function TeachingPedagogyGrid({ pedagogy }: TeachingPedagogyGridP
 
                 {/* Optional Image */}
                 {method.image && (
-                  <div className="mb-4 overflow-hidden rounded-xl border border-slate-100 bg-slate-50">
-                    <img
+                  <div className="relative mb-4 h-44 overflow-hidden rounded-xl border border-slate-100 bg-slate-50">
+                    <Image
                       src={method.image}
                       alt={`${method.headingOrange} ${method.headingBlack}`}
-                      className="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                 )}

@@ -157,9 +157,13 @@ export default function CareerDevelopmentCell({ data }: { data?: any }) {
           {/* Right Column: Visual Overview Image (Frameless & Sharp) */}
           <div className="lg:col-span-6">
             <div className="sticky top-36 w-full">
-              <img
+              <Image
                 src={overviewImage}
                 alt="CDC (Career Development Centre) Diagram"
+                width={1080}
+                height={961}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                loading="lazy"
                 className="w-full h-auto block contrast-[1.03] brightness-[1.01]"
               />
             </div>

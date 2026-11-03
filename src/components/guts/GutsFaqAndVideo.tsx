@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { gutsFaqsData } from "@/data/gutsData";
 import { Play, ChevronDown, Phone } from "lucide-react";
-import VideoModal from "@/components/campus-life/VideoModal";
+import dynamic from "next/dynamic";
+
+const VideoModal = dynamic(() => import("@/components/campus-life/VideoModal"), {
+  ssr: false,
+});
 
 export default function GutsFaqAndVideo() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);

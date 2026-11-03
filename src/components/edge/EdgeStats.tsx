@@ -2,8 +2,45 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import * as Icons from "lucide-react";
+import {
+  Mic,
+  FileCheck,
+  Award,
+  GraduationCap,
+  Briefcase,
+  Scale,
+  Globe,
+  Building2,
+  Trophy,
+  Star,
+  TrendingUp,
+  Users,
+  Code2,
+  Terminal,
+  CheckCircle2,
+  Sparkles,
+  type LucideIcon,
+} from "lucide-react";
 import type { EdgeStatsSection } from "@/data/edge/types";
+
+const EDGE_ICON_MAP: Record<string, LucideIcon> = {
+  Mic,
+  FileCheck,
+  Award,
+  GraduationCap,
+  Briefcase,
+  Scale,
+  Globe,
+  Building2,
+  Trophy,
+  Star,
+  TrendingUp,
+  Users,
+  Code2,
+  Terminal,
+  CheckCircle2,
+  Sparkles,
+};
 
 interface EdgeStatsProps {
   section: EdgeStatsSection;
@@ -12,7 +49,7 @@ interface EdgeStatsProps {
 export default function EdgeStats({ section }: EdgeStatsProps) {
   const getIcon = (iconName?: string) => {
     if (!iconName) return null;
-    const IconComponent = (Icons as unknown as Record<string, React.ComponentType<{ size?: number; className?: string }>>)[iconName];
+    const IconComponent = EDGE_ICON_MAP[iconName] || Award;
     return IconComponent ? <IconComponent size={24} className="text-[#E8871A]" /> : null;
   };
 

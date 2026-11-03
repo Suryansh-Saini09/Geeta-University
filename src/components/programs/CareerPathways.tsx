@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Code2,
@@ -185,20 +186,16 @@ function RecruiterGrid({
             className="career-recruiter-card flex h-[110px] w-full items-center justify-center rounded-2xl border bg-white p-3 transition-all duration-300 select-none box-border"
           >
             {recruiter.logo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={recruiter.logo}
-                alt={recruiter.name}
-                style={{
-                  maxHeight: 65,
-                  maxWidth: "85%",
-                  width: "auto",
-                  height: "auto",
-                  objectFit: "contain",
-                }}
-                className="pointer-events-none"
-                loading="lazy"
-              />
+              <div className="relative flex items-center justify-center w-full h-[65px]">
+                <Image
+                  src={recruiter.logo}
+                  alt={recruiter.name}
+                  fill
+                  sizes="(max-width: 640px) 150px, 160px"
+                  loading="lazy"
+                  className="object-contain pointer-events-none"
+                />
+              </div>
             ) : (
               <div style={{ display: "flex", alignItems: "center", gap: 8, textAlign: "center" }}>
                 <div
@@ -388,21 +385,17 @@ function RecruiterCarousel({
               className="career-recruiter-card flex h-[110px] w-[calc((100%-16px)/2)] sm:w-[calc((100%-32px)/3)] md:w-[calc((100%-48px)/4)] lg:w-[calc((100%-80px)/6)] shrink-0 items-center justify-center rounded-2xl border bg-white p-3 transition-all duration-300 select-none box-border"
             >
               {recruiter.logo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={recruiter.logo}
-                  alt={recruiter.name}
-                  style={{
-                    maxHeight: 65,
-                    maxWidth: "85%",
-                    width: "auto",
-                    height: "auto",
-                    objectFit: "contain",
-                  }}
-                  className="pointer-events-none"
-                  loading="lazy"
-                />
-              ) : (
+                  <div className="relative flex items-center justify-center w-full h-[65px]">
+                    <Image
+                      src={recruiter.logo}
+                      alt={recruiter.name}
+                      fill
+                      sizes="(max-width: 640px) 150px, 160px"
+                      loading="lazy"
+                      className="object-contain pointer-events-none"
+                    />
+                  </div>
+                ) : (
                 <div style={{ display: "flex", alignItems: "center", gap: 8, textAlign: "center" }}>
                   <div
                     style={{

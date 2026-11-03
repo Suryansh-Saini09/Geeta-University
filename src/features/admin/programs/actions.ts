@@ -2,6 +2,7 @@
 
 import { AuditAction, ContentStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { CACHE_TAGS, invalidateCacheTag } from "@/server/cache/tags";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/server/db/client";
@@ -119,6 +120,7 @@ export async function createProgramAction(formData: FormData) {
 
     revalidatePath("/admin");
     revalidatePath("/admin/programs");
+    invalidateCacheTag(CACHE_TAGS.programsList, CACHE_TAGS.departmentsList, CACHE_TAGS.navigation);
     redirect("/admin/programs?created=1");
   } catch (error: any) {
     if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
@@ -209,6 +211,14 @@ export async function updateProgramAction(formData: FormData) {
       after: program,
     },
   });
+
+  invalidateCacheTag(
+    CACHE_TAGS.programsList,
+    CACHE_TAGS.departmentsList,
+    CACHE_TAGS.navigation,
+    CACHE_TAGS.program(program.slug),
+    CACHE_TAGS.program(program.id)
+  );
 
   const returnSection = formData.get("section")
     ? `?section=${encodeURIComponent(String(formData.get("section")))}&updated=1`
@@ -618,6 +628,16 @@ function revalidateProgramPaths(
     revalidatePath(`/${slug}`);
     revalidatePath(`/programs/${schoolSlug}/${slug}`);
   }
+
+  invalidateCacheTag(
+    CACHE_TAGS.programsList,
+    CACHE_TAGS.departmentsList,
+    CACHE_TAGS.navigation,
+    CACHE_TAGS.program(oldSlug),
+    CACHE_TAGS.program(newSlug),
+    CACHE_TAGS.program(programId),
+    ...aliases.map((a) => CACHE_TAGS.program(a))
+  );
 }
 
 function getProgramPayload(formData: FormData) {

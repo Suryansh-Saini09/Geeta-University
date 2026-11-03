@@ -14,6 +14,7 @@ export function useFiniteCarousel({
   enableAutoplay = true,
 }: UseFiniteCarouselOptions) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const cardStepRef = useRef<number>(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [maxIndex, setMaxIndex] = useState(0);
   const [visibleItems, setVisibleItems] = useState(1);
@@ -52,6 +53,7 @@ export function useFiniteCarousel({
     }
 
     const cardStep = cardWidth + gap;
+    cardStepRef.current = cardStep;
     const visibleCount = Math.max(1, Math.floor((containerWidth + gap) / (cardStep || 1)));
     const calculatedMaxIndex = Math.max(0, totalItems - visibleCount);
 
@@ -72,11 +74,9 @@ export function useFiniteCarousel({
     });
 
     observer.observe(containerRef.current);
-    window.addEventListener("resize", updateLayout);
 
     return () => {
       observer.disconnect();
-      window.removeEventListener("resize", updateLayout);
     };
   }, [updateLayout]);
 
@@ -85,24 +85,28 @@ export function useFiniteCarousel({
     (index: number, behavior: ScrollBehavior = "smooth") => {
       if (!containerRef.current) return;
       const container = containerRef.current;
-      const track = container.firstElementChild as HTMLElement | null;
-      const firstCard = (track?.firstElementChild || container.firstElementChild) as HTMLElement | null;
+      let cardStep = cardStepRef.current;
 
-      if (!firstCard) return;
+      if (cardStep <= 0) {
+        const track = container.firstElementChild as HTMLElement | null;
+        const firstCard = (track?.firstElementChild || container.firstElementChild) as HTMLElement | null;
+        if (!firstCard) return;
 
-      const cardWidth = firstCard.offsetWidth;
-      let gap = 0;
-      if (track) {
-        const style = window.getComputedStyle(track);
-        const gapVal = parseFloat(style.gap || style.columnGap || "0");
-        if (!isNaN(gapVal) && gapVal > 0) gap = gapVal;
+        const cardWidth = firstCard.offsetWidth;
+        let gap = 0;
+        if (track) {
+          const style = window.getComputedStyle(track);
+          const gapVal = parseFloat(style.gap || style.columnGap || "0");
+          if (!isNaN(gapVal) && gapVal > 0) gap = gapVal;
+        }
+        if (gap === 0) {
+          const cardStyle = window.getComputedStyle(firstCard);
+          gap = parseFloat(cardStyle.marginLeft || "0") + parseFloat(cardStyle.marginRight || "0");
+        }
+        cardStep = cardWidth + gap;
+        cardStepRef.current = cardStep;
       }
-      if (gap === 0) {
-        const cardStyle = window.getComputedStyle(firstCard);
-        gap = parseFloat(cardStyle.marginLeft || "0") + parseFloat(cardStyle.marginRight || "0");
-      }
 
-      const cardStep = cardWidth + gap;
       const maxScroll = container.scrollWidth - container.clientWidth;
       const targetScroll = Math.min(index * cardStep, maxScroll);
 
@@ -159,19 +163,24 @@ export function useFiniteCarousel({
   const handleScroll = useCallback(() => {
     if (!containerRef.current || isDragging) return;
     const container = containerRef.current;
-    const track = container.firstElementChild as HTMLElement | null;
-    const firstCard = (track?.firstElementChild || container.firstElementChild) as HTMLElement | null;
+    let cardStep = cardStepRef.current;
 
-    if (!firstCard) return;
+    if (cardStep <= 0) {
+      const track = container.firstElementChild as HTMLElement | null;
+      const firstCard = (track?.firstElementChild || container.firstElementChild) as HTMLElement | null;
+      if (!firstCard) return;
 
-    const cardWidth = firstCard.offsetWidth;
-    let gap = 0;
-    if (track) {
-      const style = window.getComputedStyle(track);
-      const gapVal = parseFloat(style.gap || style.columnGap || "0");
-      if (!isNaN(gapVal) && gapVal > 0) gap = gapVal;
+      const cardWidth = firstCard.offsetWidth;
+      let gap = 0;
+      if (track) {
+        const style = window.getComputedStyle(track);
+        const gapVal = parseFloat(style.gap || style.columnGap || "0");
+        if (!isNaN(gapVal) && gapVal > 0) gap = gapVal;
+      }
+      cardStep = cardWidth + gap;
+      cardStepRef.current = cardStep;
     }
-    const cardStep = cardWidth + gap;
+
     if (cardStep <= 0) return;
 
     const approxIndex = Math.round(container.scrollLeft / cardStep);

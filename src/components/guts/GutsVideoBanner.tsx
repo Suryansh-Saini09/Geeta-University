@@ -3,7 +3,11 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Phone, ArrowRight } from "lucide-react";
-import VideoModal from "@/components/campus-life/VideoModal";
+import dynamic from "next/dynamic";
+
+const VideoModal = dynamic(() => import("@/components/campus-life/VideoModal"), {
+  ssr: false,
+});
 
 export interface GutsVideoBannerProps {
   data?: {

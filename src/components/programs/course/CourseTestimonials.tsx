@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { CourseTestimonial } from "@/data/programs/courses/types";
 
@@ -77,14 +78,13 @@ export default function CourseTestimonials({
                   scrollSnapAlign: "start",
                 }}
               >
-                {/* Circular Student Avatar with Orange Border */}
                 <div className="relative w-20 h-20 sm:w-22 sm:h-22 rounded-full overflow-hidden border-2 border-[#E8871A] shadow-sm mb-4 bg-slate-100 shrink-0">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.name}
-                    className="w-full h-full object-cover object-top"
-                    loading="lazy"
+                    fill
+                    sizes="88px"
+                    className="object-cover object-top"
                   />
                 </div>
 

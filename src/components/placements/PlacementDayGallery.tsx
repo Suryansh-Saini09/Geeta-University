@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { X } from "lucide-react";
 
 interface CollagePhoto {
@@ -107,10 +108,13 @@ export default function PlacementDayGallery({ data }: PlacementDayGalleryProps =
               className="group absolute top-0 left-[20%] z-10 w-[58%] max-w-[620px] cursor-pointer rounded-[22px] border-[5px] border-white bg-white p-1 shadow-lg transform-gpu transition-all duration-300 ease-out hover:z-50 hover:scale-[1.03] hover:shadow-2xl"
             >
               <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[16px]">
-                <img
+                <Image
                   src={photos[0].src}
                   alt={photos[0].alt}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 620px"
+                  loading="lazy"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
               <span className="absolute -top-3.5 right-8 z-20 h-7 w-16 rotate-12 rounded-xs bg-[#E8871A] shadow-md opacity-95 pointer-events-none" />
@@ -121,11 +125,14 @@ export default function PlacementDayGallery({ data }: PlacementDayGalleryProps =
               onClick={() => setSelectedPhoto(photos[1])}
               className="group absolute left-0 top-[18%] z-30 h-44 w-44 lg:h-52 lg:w-52 cursor-pointer rounded-full border-[6px] border-white bg-white shadow-xl transform-gpu transition-all duration-300 ease-out hover:z-50 hover:scale-110 hover:shadow-2xl"
             >
-              <div className="h-full w-full overflow-hidden rounded-full">
-                <img
+              <div className="relative h-full w-full overflow-hidden rounded-full">
+                <Image
                   src={photos[1].src}
                   alt={photos[1].alt}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 1024px) 176px, 208px"
+                  loading="lazy"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             </div>
@@ -136,10 +143,13 @@ export default function PlacementDayGallery({ data }: PlacementDayGalleryProps =
               className="group absolute left-[23%] top-[28%] z-15 w-[34%] max-w-[360px] cursor-pointer rounded-[20px] border-[5px] border-white bg-white p-1 shadow-lg transform-gpu transition-all duration-300 ease-out hover:z-50 hover:scale-[1.04] hover:shadow-2xl"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[14px]">
-                <img
+                <Image
                   src={photos[2].src}
                   alt={photos[2].alt}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 360px"
+                  loading="lazy"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             </div>
@@ -150,10 +160,13 @@ export default function PlacementDayGallery({ data }: PlacementDayGalleryProps =
               className="group absolute right-0 top-[14%] z-20 w-[30%] max-w-[320px] rotate-[3deg] cursor-pointer rounded-[20px] border-[5px] border-white bg-white p-1 shadow-xl transform-gpu transition-all duration-300 ease-out hover:z-50 hover:rotate-0 hover:scale-[1.04] hover:shadow-2xl"
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[14px]">
-                <img
+                <Image
                   src={photos[3].src}
                   alt={photos[3].alt}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 320px"
+                  loading="lazy"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             </div>
@@ -164,10 +177,13 @@ export default function PlacementDayGallery({ data }: PlacementDayGalleryProps =
               className="group absolute left-0 bottom-[0%] z-25 w-[42%] max-w-[450px] -rotate-[2deg] cursor-pointer rounded-[22px] border-[5px] border-white bg-white p-1 shadow-lg transform-gpu transition-all duration-300 ease-out hover:z-50 hover:rotate-0 hover:scale-[1.04] hover:shadow-2xl"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[16px]">
-                <img
+                <Image
                   src={photos[4].src}
                   alt={photos[4].alt}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 450px"
+                  loading="lazy"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             </div>
@@ -178,10 +194,13 @@ export default function PlacementDayGallery({ data }: PlacementDayGalleryProps =
               className="group absolute left-[40%] bottom-[2%] z-20 w-[36%] max-w-[390px] rotate-[1deg] cursor-pointer rounded-[22px] border-[5px] border-white bg-white p-1 shadow-lg transform-gpu transition-all duration-300 ease-out hover:z-50 hover:rotate-0 hover:scale-[1.04] hover:shadow-2xl"
             >
               <div className="relative aspect-[16/11] w-full overflow-hidden rounded-[16px]">
-                <img
+                <Image
                   src={photos[5].src}
                   alt={photos[5].alt}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 390px"
+                  loading="lazy"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             </div>
@@ -192,10 +211,13 @@ export default function PlacementDayGallery({ data }: PlacementDayGalleryProps =
               className="group absolute right-0 bottom-[0%] z-30 w-[23%] max-w-[240px] rotate-[4deg] cursor-pointer rounded-[18px] border-[5px] border-white bg-white p-1 shadow-xl transform-gpu transition-all duration-300 ease-out hover:z-50 hover:rotate-0 hover:scale-108 hover:shadow-2xl"
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[12px]">
-                <img
+                <Image
                   src={photos[6].src}
                   alt={photos[6].alt}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 240px"
+                  loading="lazy"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             </div>
@@ -208,10 +230,13 @@ export default function PlacementDayGallery({ data }: PlacementDayGalleryProps =
                 onClick={() => setSelectedPhoto(photo)}
                 className="group relative cursor-pointer overflow-hidden rounded-[20px] border-4 border-white bg-white p-1 shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl aspect-[16/10]"
               >
-                <img
+                <Image
                   src={photo.src}
                   alt={photo.alt}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 1024px) 50vw, 33vw"
+                  loading="lazy"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             ))}
@@ -228,10 +253,13 @@ export default function PlacementDayGallery({ data }: PlacementDayGalleryProps =
                 idx === 0 ? "sm:col-span-2 aspect-[16/9]" : "aspect-[4/3]"
               }`}
             >
-              <img
+              <Image
                 src={photo.src}
                 alt={photo.alt}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                fill
+                sizes="(max-width: 640px) 100vw, 50vw"
+                loading="lazy"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
           ))}
@@ -259,10 +287,13 @@ export default function PlacementDayGallery({ data }: PlacementDayGalleryProps =
               </button>
 
               <div className="relative aspect-[16/10] w-full bg-black">
-                <img
+                <Image
                   src={selectedPhoto.src}
                   alt={selectedPhoto.alt}
-                  className="h-full w-full object-contain"
+                  fill
+                  sizes="1024px"
+                  loading="lazy"
+                  className="object-contain"
                 />
               </div>
             </div>

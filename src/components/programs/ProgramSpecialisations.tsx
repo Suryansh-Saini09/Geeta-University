@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -178,14 +179,14 @@ export default function ProgramSpecialisations({ specialisations }: ProgramSpeci
         </div>
 
         {/* 4-Column Cards Grid */}
-        <div className="spec-discipline-grid">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
           {items.map((card, idx) => {
             const accentColor = ACCENT_COLORS[idx % ACCENT_COLORS.length];
 
             return (
               <div
                 key={idx}
-                className="spec-discipline-card"
+                className="group transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-slate-300"
                 style={{
                   background: "#FFFFFF",
                   borderRadius: 14,

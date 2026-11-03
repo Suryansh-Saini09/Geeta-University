@@ -204,17 +204,13 @@ export default function ProgramCorporateConnect({ corporateConnect }: ProgramCor
                     }}
                   >
                     {/* Video Thumbnail */}
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                       src={thumb}
                       alt={vid.title || `Corporate video ${idx + 1}`}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        display: "block",
-                        transition: "transform 0.4s ease",
-                      }}
+                      fill
+                      sizes="280px"
+                      loading="lazy"
+                      className="object-cover transition-transform duration-400"
                     />
 
                     {/* Dark gradient overlay */}

@@ -1,6 +1,6 @@
-"use client";
 
 import React from "react";
+import Image from "next/image";
 
 export default function SPBLLifeGrid() {
   return (
@@ -11,11 +11,13 @@ export default function SPBLLifeGrid() {
           <div className="flex flex-col">
             {/* 1. Student photo */}
             <div className="relative h-[260px] overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="https://spbsb.vercel.app/images/student.webp"
                 alt="Student Classroom Learning"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                loading="lazy"
+                className="object-cover"
               />
             </div>
 
@@ -33,11 +35,13 @@ export default function SPBLLifeGrid() {
 
             {/* 3. Research team photo */}
             <div className="relative h-[260px] overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="https://spbsb.vercel.app/images/research.webp"
                 alt="Students Working on Laptop"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                loading="lazy"
+                className="object-cover"
               />
             </div>
           </div>
@@ -57,12 +61,14 @@ export default function SPBLLifeGrid() {
 
             {/* 2 & 3. Courtroom photo + Beige card combo */}
             <div className="flex flex-col h-[520px]">
-              <div className="h-[340px] w-full overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+              <div className="relative h-[340px] w-full overflow-hidden">
+                <Image
                   src="/uploads/all/2156/corporate.jpg"
                   alt="Case Study and Moot Court Session"
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 33vw"
+                  loading="lazy"
+                  className="object-cover"
                 />
               </div>
               <div className="h-[180px] bg-[#f5e6d3] p-6 sm:p-7 flex flex-col justify-center">
@@ -81,11 +87,13 @@ export default function SPBLLifeGrid() {
           <div className="flex flex-col">
             {/* 1 & 2. Tall card with alumni photo and overlay text */}
             <div className="relative h-[520px] overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="https://spbsb.vercel.app/images/alumni.webp"
                 alt="Students Internship Immersion"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                loading="lazy"
+                className="object-cover"
               />
               <div
                 className="absolute inset-0"
@@ -108,11 +116,13 @@ export default function SPBLLifeGrid() {
 
             {/* 3. Campus outdoor group photo */}
             <div className="relative h-[260px] overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="https://spbsb.vercel.app/images/campusLife.webp"
                 alt="Campus Life Outdoor Community"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                loading="lazy"
+                className="object-cover"
               />
             </div>
           </div>

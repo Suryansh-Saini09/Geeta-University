@@ -186,11 +186,7 @@ export default function LeadershipSection({ data }: LeadershipSectionProps) {
                 src={featuredLeader.image}
                 alt={featuredLeader.name}
                 fill
-                priority
-                sizes="
-                  (max-width: 1023px) 100vw,
-                  430px
-                "
+                sizes="(max-width: 1023px) 100vw, 430px"
                 className="
                   object-cover
                   object-top
@@ -455,11 +451,7 @@ function LeaderCard({
           src={leader.image}
           alt={leader.name}
           fill
-          sizes="
-            (max-width: 639px) 100vw,
-            (max-width: 1023px) 50vw,
-            33vw
-          "
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
           className="
             object-cover
             object-top

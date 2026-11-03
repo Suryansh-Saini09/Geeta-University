@@ -21,7 +21,11 @@ import {
   Search,
 } from "lucide-react";
 
-import SearchOverlay from "@/components/search/SearchOverlay";
+import dynamic from "next/dynamic";
+
+const SearchOverlay = dynamic(() => import("@/components/search/SearchOverlay"), {
+  ssr: false,
+});
 
 export interface MegaCol {
   heading?: string;

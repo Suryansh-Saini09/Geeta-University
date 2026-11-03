@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, X, Sparkles } from "lucide-react";
 import type { EdgeVideoSection as EdgeVideoSectionType } from "@/data/edge/types";
@@ -59,10 +60,12 @@ export default function EdgeVideoSection({ section }: EdgeVideoSectionProps) {
               >
                 {/* Thumbnail with Play Button */}
               <div className="relative aspect-video w-full overflow-hidden bg-slate-800">
-                  <img
-                  src={vid.thumbnail}
+                  <Image
+                    src={vid.thumbnail}
                     alt={vid.title || "Video thumbnail"}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
 

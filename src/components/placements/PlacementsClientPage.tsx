@@ -11,8 +11,12 @@ import PlacementDrivesSection from "@/components/placements/PlacementDrivesSecti
 import RecruiterVoicesSection from "@/components/placements/RecruiterVoicesSection";
 import PlacementDayGallery from "@/components/placements/PlacementDayGallery";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
+import dynamic from "next/dynamic";
 import FAQSection from "@/components/programs/FAQSection";
-import VideoModal from "@/components/campus-life/VideoModal";
+
+const VideoModal = dynamic(() => import("@/components/campus-life/VideoModal"), {
+  ssr: false,
+});
 import { placementFaqs } from "@/data/placements";
 
 interface PlacementsClientPageProps {

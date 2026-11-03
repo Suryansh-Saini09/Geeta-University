@@ -1,6 +1,8 @@
+
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 export interface ImmersionCardItem {
   title: string;
@@ -193,13 +195,14 @@ export default function TransformativeTracks({ tracks }: TransformativeTracksPro
                 key={idx}
                 className="overflow-hidden rounded-2xl border border-[#0A1F44]/15 bg-[#0E395C] shadow-md transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl flex flex-col"
               >
-                {/* Top Image */}
                 <div className="relative w-full h-[210px] sm:h-[240px] overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={card.image}
                     alt={card.title}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    loading="lazy"
+                    className="object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </div>
 

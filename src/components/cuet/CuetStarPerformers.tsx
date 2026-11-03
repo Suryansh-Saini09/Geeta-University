@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { starPerformances } from "@/data/starPerformances";
 import { useFiniteCarousel } from "@/hooks/useFiniteCarousel";
@@ -169,11 +170,13 @@ export default function CuetStarPerformers({ data }: CuetStarPerformersProps = {
                     key={`${star.image}-${index}`}
                     className="star-card group/item relative mx-2 aspect-[3/4.8] w-[190px] shrink-0 overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:mx-3 sm:w-[235px] md:w-[275px]"
                   >
-                    <img
+                    <Image
                       src={star.image}
                       alt={star.name}
+                      fill
+                      sizes="(max-width: 640px) 190px, (max-width: 768px) 235px, 275px"
                       loading="lazy"
-                      className="h-full w-full object-contain pointer-events-none"
+                      className="object-contain pointer-events-none"
                     />
                   </div>
                 ))}

@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import { contactHeroData as fallbackHero } from "@/data/contactUsData";
 
@@ -24,10 +25,13 @@ export default function ContactHero({ hero }: ContactHeroProps) {
     <section className="relative flex min-h-[500px] w-full items-center overflow-hidden bg-[#0A1F44] text-white sm:min-h-[560px] md:min-h-[620px] lg:min-h-[660px]">
       {/* Background Campus Overlay */}
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           src={heroImage}
           alt="Geeta University Main Campus Contact"
-          className="h-full w-full object-cover object-center opacity-80"
+          fill
+          sizes="100vw"
+          preload
+          className="object-cover object-center opacity-80"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A1F44]/95 via-[#0A1F44]/70 to-[#0A1F44]/35" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A1F44]/90 via-transparent to-[#0A1F44]/30" />

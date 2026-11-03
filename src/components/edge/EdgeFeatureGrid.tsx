@@ -1,10 +1,47 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import * as Icons from "lucide-react";
-import { Sparkles, CheckCircle2 } from "lucide-react";
+import {
+  Mic,
+  FileCheck,
+  Award,
+  GraduationCap,
+  Briefcase,
+  Scale,
+  Globe,
+  Building2,
+  Trophy,
+  Star,
+  TrendingUp,
+  Users,
+  Code2,
+  Terminal,
+  CheckCircle2,
+  Sparkles,
+  type LucideIcon,
+} from "lucide-react";
 import type { EdgeFeatureGridSection } from "@/data/edge/types";
+
+const EDGE_ICON_MAP: Record<string, LucideIcon> = {
+  Mic,
+  FileCheck,
+  Award,
+  GraduationCap,
+  Briefcase,
+  Scale,
+  Globe,
+  Building2,
+  Trophy,
+  Star,
+  TrendingUp,
+  Users,
+  Code2,
+  Terminal,
+  CheckCircle2,
+  Sparkles,
+};
 
 interface EdgeFeatureGridProps {
   section: EdgeFeatureGridSection;
@@ -13,8 +50,8 @@ interface EdgeFeatureGridProps {
 export default function EdgeFeatureGrid({ section }: EdgeFeatureGridProps) {
   const getIcon = (iconName?: string) => {
     if (!iconName) return null;
-    const IconComponent = (Icons as unknown as Record<string, React.ComponentType<{ size?: number; className?: string }>>)[iconName];
-    return IconComponent ? <IconComponent size={24} className="text-[#E8871A]" /> : null;
+    const IconComponent = EDGE_ICON_MAP[iconName] || Award;
+    return <IconComponent size={24} className="text-[#E8871A]" />;
   };
 
   const getColClass = (cols?: number) => {
@@ -80,10 +117,12 @@ export default function EdgeFeatureGrid({ section }: EdgeFeatureGridProps) {
                 {/* Feature Image */}
                 {feature.image && (
                   <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-200">
-                    <img
+                    <Image
                       src={feature.image}
                       alt={feature.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
                 )}
@@ -144,8 +183,8 @@ export default function EdgeFeatureGrid({ section }: EdgeFeatureGridProps) {
                 {(feature.image || feature.iconName || feature.tag) && (
                   <div className="mb-5 flex items-center justify-between gap-4">
                     {feature.image ? (
-                      <div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-white p-2">
-                        <img src={feature.image} alt={feature.title} className="h-full w-full object-contain" />
+                      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-white p-2">
+                        <Image src={feature.image} alt={feature.title} fill sizes="56px" className="object-contain p-1" />
                       </div>
                     ) : feature.iconName ? (
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#E8871A]">
@@ -230,10 +269,13 @@ export default function EdgeFeatureGrid({ section }: EdgeFeatureGridProps) {
 
                 {/* Image placed BELOW the heading */}
                 {feature.image && (
-                  <div className="my-2 overflow-hidden rounded-xl">
-                    <img
+                  <div className="relative my-2 overflow-hidden rounded-xl w-full">
+                    <Image
                       src={feature.image}
                       alt={feature.title}
+                      width={800}
+                      height={420}
+                      sizes="(max-width: 768px) 100vw, 800px"
                       className="w-full h-auto object-contain max-h-[420px] block"
                     />
                   </div>

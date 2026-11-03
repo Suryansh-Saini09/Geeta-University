@@ -1,9 +1,14 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
+import { CACHE_TAGS, DEFAULT_CACHE_TTL } from "@/server/cache/tags";
 import { prisma, ContentStatus, type Prisma } from "@/server/db/client";
 import { getLocalizedBody, getLocalizedField, DEFAULT_LOCALE } from "@/lib/i18n/localization";
 import { serverLogger } from "@/lib/security/logger";
 
-export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
-  let sections: any[] = [];
+export const getPublishedHomePage = cache(async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      let sections: any[] = [];
   let recruiters: any[] = [];
   let awards: any[] = [];
   let testimonials: any[] = [];
@@ -159,10 +164,19 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
     visibility,
     seo: localizedSeo,
   };
-}
+    },
+    ["home-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.home, CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
-  let sections: any[] = [];
+export const getPublishedAboutPage = cache(async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      let sections: any[] = [];
   let recognitions: any[] = [];
   let awards: any[] = [];
   let leadership: any[] = [];
@@ -306,7 +320,14 @@ export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
     visibility,
     seo: localizedSeo,
   };
-}
+    },
+    ["about-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.about, CACHE_TAGS.pages],
+    }
+  )();
+});
 
 export async function getPageSectionsAdmin(pageSlug: string) {
   try {
@@ -417,15 +438,25 @@ export async function getAdminPageById(id: string) {
   });
 }
 
-export async function getPublishedPageBySlug(slug: string) {
-  return prisma.page.findFirst({
-    where: { slug, status: "PUBLISHED" },
-    include: { seo: true },
-  });
-}
+export const getPublishedPageBySlug = cache(async function getPublishedPageBySlug(slug: string) {
+  return unstable_cache(
+    async () =>
+      prisma.page.findFirst({
+        where: { slug, status: "PUBLISHED" },
+        include: { seo: true },
+      }),
+    ["page-by-slug", slug],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.page(slug), CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedAdmissionsPage(pageSlug: string, locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedAdmissionsPage = cache(async function getPublishedAdmissionsPage(pageSlug: string, locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug, status: "PUBLISHED" },
@@ -464,10 +495,19 @@ export async function getPublishedAdmissionsPage(pageSlug: string, locale: strin
       seo: null,
     };
   }
-}
+    },
+    ["admissions-page", pageSlug, locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.page(pageSlug), CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedCampusLifePage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedCampusLifePage = cache(async function getPublishedCampusLifePage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "campus-life", status: "PUBLISHED" },
@@ -501,10 +541,19 @@ export async function getPublishedCampusLifePage(locale: string = DEFAULT_LOCALE
     serverLogger.error("[CMS DB ERROR] getPublishedCampusLifePage failed", err, { module: "pages", action: "getPublishedCampusLifePage" });
     return { sections: {}, seo: null };
   }
-}
+    },
+    ["campus-life-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.campusLife, CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedPlacementsPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedPlacementsPage = cache(async function getPublishedPlacementsPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "placements", status: "PUBLISHED" },
@@ -538,10 +587,19 @@ export async function getPublishedPlacementsPage(locale: string = DEFAULT_LOCALE
     serverLogger.error("[CMS DB ERROR] getPublishedPlacementsPage failed", err, { module: "pages", action: "getPublishedPlacementsPage" });
     return { sections: {}, seo: null };
   }
-}
+    },
+    ["placements-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.placements, CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedLibraryPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedLibraryPage = cache(async function getPublishedLibraryPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "library", status: "PUBLISHED" },
@@ -592,10 +650,19 @@ export async function getPublishedLibraryPage(locale: string = DEFAULT_LOCALE) {
       seo: null,
     };
   }
-}
+    },
+    ["library-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.library, CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedAdvisoryBoardPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedAdvisoryBoardPage = cache(async function getPublishedAdvisoryBoardPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "advisory-board", status: "PUBLISHED" },
@@ -636,10 +703,19 @@ export async function getPublishedAdvisoryBoardPage(locale: string = DEFAULT_LOC
       seo: null,
     };
   }
-}
+    },
+    ["advisory-board-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.advisoryBoard, CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedMedalPolicyPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedMedalPolicyPage = cache(async function getPublishedMedalPolicyPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "medal-policy", status: "PUBLISHED" },
@@ -677,21 +753,30 @@ export async function getPublishedMedalPolicyPage(locale: string = DEFAULT_LOCAL
     };
   } catch (err: any) {
     serverLogger.error("[CMS DB ERROR] getPublishedMedalPolicyPage failed", err, { module: "pages", action: "getPublishedMedalPolicyPage" });
-    return {
-      sections: {},
-      hero: null,
-      academicMedals: null,
-      thresholds: null,
-      chancellor: null,
-      chancellorWeightage: null,
-      rankersDocument: null,
-      seo: null,
-    };
+      return {
+        sections: {},
+        hero: null,
+        academicMedals: null,
+        thresholds: null,
+        chancellor: null,
+        chancellorWeightage: null,
+        rankersDocument: null,
+        seo: null,
+      };
+    }
+  },
+  ["medal-policy-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.medalPolicy, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedCareersPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedCareersPage = cache(async function getPublishedCareersPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "careers", status: "PUBLISHED" },
@@ -727,19 +812,28 @@ export async function getPublishedCareersPage(locale: string = DEFAULT_LOCALE) {
     };
   } catch (err: any) {
     serverLogger.error("[CMS DB ERROR] getPublishedCareersPage failed", err, { module: "pages", action: "getPublishedCareersPage" });
-    return {
-      sections: {},
-      hero: null,
-      benefits: null,
-      faqs: null,
-      formConfig: null,
-      seo: null,
-    };
+      return {
+        sections: {},
+        hero: null,
+        benefits: null,
+        faqs: null,
+        formConfig: null,
+        seo: null,
+      };
+    }
+  },
+  ["careers-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.careers, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedContactPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedContactPage = cache(async function getPublishedContactPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "contact-us", status: "PUBLISHED" },
@@ -775,19 +869,28 @@ export async function getPublishedContactPage(locale: string = DEFAULT_LOCALE) {
     };
   } catch (err: any) {
     serverLogger.error("[CMS DB ERROR] getPublishedContactPage failed", err, { module: "pages", action: "getPublishedContactPage" });
-    return {
-      sections: {},
-      hero: null,
-      mainInfo: null,
-      offices: null,
-      map: null,
-      seo: null,
-    };
+      return {
+        sections: {},
+        hero: null,
+        mainInfo: null,
+        offices: null,
+        map: null,
+        seo: null,
+      };
+    }
+  },
+  ["contact-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.contactUs, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedUgcPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedUgcPage = cache(async function getPublishedUgcPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "ugc", status: "PUBLISHED" },
@@ -823,19 +926,28 @@ export async function getPublishedUgcPage(locale: string = DEFAULT_LOCALE) {
     };
   } catch (err: any) {
     serverLogger.error("[CMS DB ERROR] getPublishedUgcPage failed", err, { module: "pages", action: "getPublishedUgcPage" });
-    return {
-      sections: {},
-      hero: null,
-      documents: null,
-      approvals: null,
-      calloutCta: null,
-      seo: null,
-    };
+      return {
+        sections: {},
+        hero: null,
+        documents: null,
+        approvals: null,
+        calloutCta: null,
+        seo: null,
+      };
+    }
+  },
+  ["ugc-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.ugc, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedTeachingPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedTeachingPage = cache(async function getPublishedTeachingPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "teaching-learning-practices", status: "PUBLISHED" },
@@ -872,20 +984,29 @@ export async function getPublishedTeachingPage(locale: string = DEFAULT_LOCALE) 
     };
   } catch (err: any) {
     serverLogger.error("[CMS DB ERROR] getPublishedTeachingPage failed", err, { module: "pages", action: "getPublishedTeachingPage" });
-    return {
-      sections: {},
-      hero: null,
-      overview: null,
-      pedagogy: null,
-      stats: null,
-      cta: null,
-      seo: null,
-    };
+      return {
+        sections: {},
+        hero: null,
+        overview: null,
+        pedagogy: null,
+        stats: null,
+        cta: null,
+        seo: null,
+      };
+    }
+  },
+  ["teaching-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.teachingLearning, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedGeetaInNewsPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedGeetaInNewsPage = cache(async function getPublishedGeetaInNewsPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "geeta-in-news", status: "PUBLISHED" },
@@ -930,19 +1051,28 @@ export async function getPublishedGeetaInNewsPage(locale: string = DEFAULT_LOCAL
     };
   } catch (err: any) {
     serverLogger.error("[CMS DB ERROR] getPublishedGeetaInNewsPage failed", err, { module: "pages", action: "getPublishedGeetaInNewsPage" });
-    return {
-      sections: {},
-      hero: null,
-      newsItems: null,
-      items: [],
-      publications: [],
-      seo: null,
-    };
+      return {
+        sections: {},
+        hero: null,
+        newsItems: null,
+        items: [],
+        publications: [],
+        seo: null,
+      };
+    }
+  },
+  ["geeta-in-news-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.geetaInNews, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedHowToReachUsPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedHowToReachUsPage = cache(async function getPublishedHowToReachUsPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "how-to-reach-us", status: "PUBLISHED" },
@@ -977,18 +1107,27 @@ export async function getPublishedHowToReachUsPage(locale: string = DEFAULT_LOCA
     };
   } catch (err: any) {
     serverLogger.error("[CMS DB ERROR] getPublishedHowToReachUsPage failed", err, { module: "pages", action: "getPublishedHowToReachUsPage" });
-    return {
-      sections: {},
-      hero: null,
-      map: null,
-      legacyEcosystem: null,
-      seo: null,
-    };
+      return {
+        sections: {},
+        hero: null,
+        map: null,
+        legacyEcosystem: null,
+        seo: null,
+      };
+    }
+  },
+  ["how-to-reach-us-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.howToReachUs, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedAboutPanipatPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedAboutPanipatPage = cache(async function getPublishedAboutPanipatPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "about-panipat", status: "PUBLISHED" },
@@ -1025,20 +1164,29 @@ export async function getPublishedAboutPanipatPage(locale: string = DEFAULT_LOCA
     };
   } catch (err: any) {
     serverLogger.error("[CMS DB ERROR] getPublishedAboutPanipatPage failed", err, { module: "pages", action: "getPublishedAboutPanipatPage" });
-    return {
-      sections: {},
-      hero: null,
-      battles: null,
-      landmarks: null,
-      geographyDemographics: null,
-      legacyEcosystem: null,
-      seo: null,
-    };
+      return {
+        sections: {},
+        hero: null,
+        battles: null,
+        landmarks: null,
+        geographyDemographics: null,
+        legacyEcosystem: null,
+        seo: null,
+      };
+    }
+  },
+  ["about-panipat-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.aboutPanipat, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedAntiRaggingPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedAntiRaggingPage = cache(async function getPublishedAntiRaggingPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "anti-ragging-committee", status: "PUBLISHED" },
@@ -1076,18 +1224,25 @@ export async function getPublishedAntiRaggingPage(locale: string = DEFAULT_LOCAL
     };
   } catch (err: any) {
     serverLogger.error("[CMS DB ERROR] getPublishedAntiRaggingPage failed", err, { module: "pages", action: "getPublishedAntiRaggingPage" });
-    return {
-      sections: {},
-      hero: null,
-      actionCards: null,
-      nationalHelpline: null,
-      ugcMonitoringAgency: null,
-      regulatoryWarning: null,
-      nodalOfficers: null,
-      seo: null,
-    };
+      return {
+        sections: {},
+        hero: null,
+        actionCards: null,
+        nationalHelpline: null,
+        ugcMonitoringAgency: null,
+        regulatoryWarning: null,
+        nodalOfficers: null,
+        seo: null,
+      };
+    }
+  },
+  ["anti-ragging-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.antiRagging, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
 
 

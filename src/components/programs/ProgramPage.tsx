@@ -1,8 +1,7 @@
-"use client";
-
-import React, { useEffect } from "react";
-import { useLenis } from "lenis/react";
+import React from "react";
+import Image from "next/image";
 import type { ProgramPageData } from "@/data/programs/types";
+import ProgramHashScroll from "./ProgramHashScroll";
 
 import ProgramHero from "./ProgramHero";
 import TopRecruiters from "./TopRecruiters";
@@ -36,22 +35,6 @@ interface ProgramPageProps {
 
 export default function ProgramPage({ data, program }: ProgramPageProps) {
   const pageData = data || program;
-  const lenis = useLenis();
-
-  // Handle hash-based navigation from outside (e.g. quick-nav links)
-  useEffect(() => {
-    const hash = window.location.hash.replace("#", "");
-    if (hash) {
-      const timer = setTimeout(() => {
-        if (lenis) {
-          lenis.scrollTo(`#${hash}`, { offset: -130 });
-        } else {
-          document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [lenis]);
 
   if (!pageData) return null;
 
@@ -67,6 +50,7 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
 
   return (
     <div style={{ fontFamily: "'Segoe UI', system-ui, sans-serif", color: "#1A1A2E", background: "#F7F9FC", minHeight: "100vh" }}>
+      <ProgramHashScroll />
       {/* 1. HERO BANNER & ADMISSIONS */}
       {isSecVisible("hero") && <ProgramHero hero={pageData.hero} />}
 
@@ -176,12 +160,14 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
           style={{ backgroundColor: pageData.rankingBanner.bgColor || "#F9EBDB" }}
         >
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex justify-center items-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={pageData.rankingBanner.image}
               alt={pageData.rankingBanner.alt || "Times Higher Education Impact Rankings 2024"}
-              className="w-full h-auto max-h-[460px] max-w-5xl object-contain block mx-auto drop-shadow-none"
+              width={1024}
+              height={460}
+              sizes="(max-width: 1024px) 100vw, 1024px"
               loading="lazy"
+              className="w-full h-auto max-h-[460px] max-w-5xl object-contain block mx-auto drop-shadow-none"
             />
           </div>
         </section>

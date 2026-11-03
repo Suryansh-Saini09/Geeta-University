@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import {
   Award,
   Building2,
@@ -168,14 +169,13 @@ export default function ProgramPlacement({ placement, testimonials }: ProgramPla
                             {initials}
                           </span>
                           {item.image ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
+                            <Image
                               src={item.image}
                               alt={item.name}
-                              className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105 pointer-events-none"
-                              onError={(e) => {
-                                e.currentTarget.style.display = "none";
-                              }}
+                              fill
+                              sizes="64px"
+                              loading="lazy"
+                              className="object-cover object-top transition-transform duration-500 group-hover:scale-105 pointer-events-none"
                             />
                           ) : null}
                         </div>

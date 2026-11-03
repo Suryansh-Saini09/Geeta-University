@@ -1,3 +1,6 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
+import { CACHE_TAGS, DEFAULT_CACHE_TTL } from "@/server/cache/tags";
 import type { CoursePageData } from "@/data/programs/courses/types";
 import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/server/db/client";
@@ -13,11 +16,13 @@ import {
 
 export * from "./courseStatic";
 
-export async function getCourseBySlug(
+export const getCourseBySlug = cache(async function getCourseBySlug(
   schoolSlug: string,
   courseSlug: string
 ): Promise<CoursePageData | undefined> {
-  const normSchool = normalizeSchoolSlug(schoolSlug);
+  return unstable_cache(
+    async () => {
+      const normSchool = normalizeSchoolSlug(schoolSlug);
   const normCourse = normalizeCourseSlug(courseSlug);
 
   try {
@@ -45,13 +50,22 @@ export async function getCourseBySlug(
     serverLogger.warn(`[courseRepository] Failed to fetch program from database for ${courseSlug}, falling back to static files`, error, { module: "courseRepository", action: "getCourseBySlug", courseSlug });
   }
 
-  return getCourseBySlugSync(schoolSlug, courseSlug);
-}
+      return getCourseBySlugSync(schoolSlug, courseSlug);
+    },
+    ["course-by-slug", schoolSlug, courseSlug],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.program(courseSlug), CACHE_TAGS.programsList],
+    }
+  )();
+});
 
-export async function getCourseByDirectSlug(
+export const getCourseByDirectSlug = cache(async function getCourseByDirectSlug(
   courseSlug: string
 ): Promise<CoursePageData | undefined> {
-  const normCourse = normalizeCourseSlug(courseSlug);
+  return unstable_cache(
+    async () => {
+      const normCourse = normalizeCourseSlug(courseSlug);
 
   try {
     const program = await prisma.program.findFirst({
@@ -78,8 +92,15 @@ export async function getCourseByDirectSlug(
     serverLogger.warn(`[courseRepository] Failed to fetch program directly from database for ${courseSlug}`, error, { module: "courseRepository", action: "getCourseByDirectSlug", courseSlug });
   }
 
-  return getCourseByDirectSlugSync(courseSlug);
-}
+      return getCourseByDirectSlugSync(courseSlug);
+    },
+    ["course-by-direct-slug", courseSlug],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.program(courseSlug), CACHE_TAGS.programsList],
+    }
+  )();
+});
 
 export async function getCoursesBySchool(schoolSlug: string): Promise<CoursePageData[]> {
   const normSchool = normalizeSchoolSlug(schoolSlug);

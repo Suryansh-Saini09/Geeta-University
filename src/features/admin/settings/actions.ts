@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { CACHE_TAGS, invalidateCacheTag } from "@/server/cache/tags";
 import { redirect } from "next/navigation";
 
 import { assertPermission } from "@/server/auth/permissions";
@@ -73,6 +74,7 @@ export async function updateContactSettingsAction(formData: FormData) {
     });
 
     revalidateGlobalRoutes();
+    invalidateCacheTag(CACHE_TAGS.contactUs, CACHE_TAGS.pages);
     redirect("/admin/settings?tab=contact&saved=1");
   } catch (error: any) {
     if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
@@ -119,6 +121,7 @@ export async function updateAnnouncementSettingsAction(formData: FormData) {
     });
 
     revalidateGlobalRoutes();
+    invalidateCacheTag(CACHE_TAGS.navigation);
     redirect("/admin/settings?tab=announcement&saved=1");
   } catch (error: any) {
     if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
@@ -165,6 +168,7 @@ export async function updateAdmissionCtaAction(formData: FormData) {
     });
 
     revalidateGlobalRoutes();
+    invalidateCacheTag(CACHE_TAGS.navigation);
     redirect("/admin/settings?tab=cta&saved=1");
   } catch (error: any) {
     if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
@@ -212,6 +216,7 @@ export async function updateSocialLinksAction(formData: FormData) {
     });
 
     revalidateGlobalRoutes();
+    invalidateCacheTag(CACHE_TAGS.socialLinks);
     redirect("/admin/settings?tab=social&saved=1");
   } catch (error: any) {
     if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;

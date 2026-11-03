@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Quote, Sparkles, Star } from "lucide-react";
 import type { EdgeTestimonialsSection } from "@/data/edge/types";
@@ -61,11 +62,13 @@ export default function EdgeTestimonials({ section }: EdgeTestimonialsProps) {
 
               <div className="mt-8 pt-6 border-t border-slate-100 flex items-center gap-4">
                 {test.image ? (
-                  <div className="h-12 w-12 rounded-full overflow-hidden shrink-0 border border-slate-200">
-                    <img
+                  <div className="relative h-12 w-12 rounded-full overflow-hidden shrink-0 border border-slate-200">
+                    <Image
                       src={test.image}
                       alt={test.name || test.author || "Student"}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="48px"
+                      className="object-cover"
                     />
                   </div>
                 ) : (

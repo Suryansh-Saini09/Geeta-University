@@ -1,4 +1,3 @@
-"use client";
 
 import React from "react";
 import { Phone, MapPin, Globe, Headset } from "lucide-react";

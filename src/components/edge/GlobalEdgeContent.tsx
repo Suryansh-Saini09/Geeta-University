@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { ChevronDown, ChevronsLeft, ChevronsRight, Edit2 } from "lucide-react";
 import type { EdgePageData } from "@/data/edge/types";
 import EdgeHero from "./EdgeHero";
@@ -338,10 +339,12 @@ export default function GlobalEdgeContent({ data }: GlobalEdgeContentProps) {
               {/* Featured Image Carousel */}
               <div className="relative rounded-3xl overflow-hidden shadow-xl bg-slate-900 border border-slate-200">
                 <div className="relative aspect-[16/10] w-full overflow-hidden">
-                  <img
+                  <Image
                     src={gallerySlides[activeSlide].src}
                     alt={gallerySlides[activeSlide].caption}
-                    className="w-full h-full object-cover transition-all duration-500"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 800px"
+                    className="object-cover transition-all duration-500"
                   />
 
                   {/* Prev / Next Chevrons */}

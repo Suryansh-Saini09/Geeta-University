@@ -1,3 +1,6 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
+import { CACHE_TAGS, DEFAULT_CACHE_TTL } from "@/server/cache/tags";
 import type { ProgramPageData } from "@/data/programs/types";
 import {
   ALIAS_TO_CANONICAL,
@@ -8,11 +11,13 @@ import { serverLogger } from "@/lib/security/logger";
 
 export * from "./programStatic";
 
-export async function getProgramBySlug(
+export const getProgramBySlug = cache(async function getProgramBySlug(
   slug: string,
   locale: string = "en"
 ): Promise<ProgramPageData | undefined> {
-  const normalizedSlug = slug.toLowerCase();
+  return unstable_cache(
+    async () => {
+      const normalizedSlug = slug.toLowerCase();
   const canonicalSlug = ALIAS_TO_CANONICAL[normalizedSlug] || normalizedSlug;
   const staticFallback = getProgramBySlugSync(normalizedSlug) || getProgramBySlugSync(canonicalSlug);
 
@@ -108,4 +113,11 @@ export async function getProgramBySlug(
   }
 
   return staticFallback;
-}
+    },
+    ["program-by-slug", slug, locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.program(slug), CACHE_TAGS.department(slug), CACHE_TAGS.programsList],
+    }
+  )();
+});

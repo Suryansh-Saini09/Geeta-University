@@ -1,4 +1,3 @@
-"use client";
 
 import React from "react";
 import { Award, Globe2, Users } from "lucide-react";

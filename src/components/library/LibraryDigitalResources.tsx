@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { ArrowRight, X, Sparkles, CheckCircle } from "lucide-react";
 import { libraryPortalsData as fallbackPortals, type LibraryPortal } from "@/data/libraryData";
 
@@ -30,12 +31,14 @@ export default function LibraryDigitalResources({ portals }: LibraryDigitalResou
               className="group flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[#E8871A]/50 hover:shadow-xl"
             >
               <div>
-                {/* Portal Image */}
                 <div className="relative h-44 w-full overflow-hidden rounded-2xl bg-slate-900 mb-6">
-                  <img
+                  <Image
                     src={portal.image}
                     alt={portal.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    loading="lazy"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105 opacity-90"
                   />
                 </div>
 
@@ -89,10 +92,13 @@ export default function LibraryDigitalResources({ portals }: LibraryDigitalResou
               </h3>
 
               <div className="relative h-48 w-full overflow-hidden rounded-2xl bg-slate-100">
-                <img
+                <Image
                   src={activePortal.image}
                   alt={activePortal.title}
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 672px"
+                  loading="lazy"
+                  className="object-cover"
                 />
               </div>
 
