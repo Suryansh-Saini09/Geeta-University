@@ -51,7 +51,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (metadata files)
      * - uploads (static media assets)
+     * - static file extensions (svg, png, jpg, jpeg, gif, webp, ico, mp4, webm, woff, woff2, css, js)
      */
-    "/((?!_next/static|_next/image|favicon.ico|uploads/).*)",
+    "/((?!_next/static|_next/image|favicon.ico|uploads/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp4|webm|woff2?|css|js)$).*)",
   ],
 };

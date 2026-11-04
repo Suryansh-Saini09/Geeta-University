@@ -65,6 +65,7 @@ export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [nextVideoPreload, setNextVideoPreload] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const droneShots = data?.heroDroneShots?.length ? data.heroDroneShots : HERO_DRONE_SHOTS;
@@ -80,15 +81,51 @@ export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
   const secondaryLabel = data?.secondaryCtaLabel || "Campus Tour";
   const secondaryUrl = data?.secondaryCtaUrl || "https://www.youtube.com/embed/arnFS6rf454";
 
-  // Autoplay active video safely
+  // Defer video loading until after initial critical render, LCP image paint, and hydration
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // Respect reduced-motion preferences
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    // Save-data mode check
+    const connection = (navigator as { connection?: { saveData?: boolean } }).connection;
+    if (connection?.saveData) {
+      return;
+    }
+
+    // On mobile devices (<768px), retain the crisp LCP poster to protect cellular bandwidth and CPU
+    if (window.innerWidth < 768) {
+      return;
+    }
+
+    // Defer loading video source to browser idle time or after critical path
+    if ("requestIdleCallback" in window) {
+      const handle = (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(
+        () => setShouldLoadVideo(true),
+        { timeout: 2000 }
+      );
+      return () => {
+        (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(handle);
+      };
+    } else {
+      const timer = setTimeout(() => setShouldLoadVideo(true), 1200);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  // Autoplay active video safely once video source is attached
+  useEffect(() => {
+    if (!shouldLoadVideo) return;
     const currentVideo = videoRefs.current[activeVideoIndex];
     if (currentVideo) {
       currentVideo.play().catch(() => {
         // Fallback gracefully if browser restricts autoplay
       });
     }
-  }, [activeVideoIndex]);
+  }, [shouldLoadVideo, activeVideoIndex]);
 
   // Intelligent preloading & seamless crossfade transition
   const handleTimeUpdate = (index: number) => {
@@ -139,37 +176,43 @@ export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
           CINEMATIC BACKGROUND VIDEO ARCHITECTURE (DUAL LOOP)
       ===================================================== */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {/* Poster Fallback Image */}
+        {/* Poster Fallback Image (Primary Homepage LCP) */}
         <Image
           src={poster}
           alt="Geeta University Campus Aerial View"
           fill
-          priority
+          preload
+          fetchPriority="high"
           className="object-cover object-[70%_center] md:object-center"
           sizes="100vw"
           unoptimized={Boolean(poster?.startsWith("http"))}
         />
 
-        {/* Dual Seamless Crossfading Drone Videos */}
-        {droneShots.map((src, index) => (
-          <video
-            key={src}
-            ref={(el) => {
-              videoRefs.current[index] = el;
-            }}
-            autoPlay={index === 0}
-            muted
-            playsInline
-            preload={index === 0 || nextVideoPreload ? "auto" : "metadata"}
-            poster={poster}
-            onTimeUpdate={() => handleTimeUpdate(index)}
-            onEnded={() => handleVideoEnded(index)}
-            className={`absolute inset-0 h-full w-full object-cover object-[70%_center] md:object-center scale-[1.02] transition-opacity duration-1000 ease-in-out ${index === activeVideoIndex ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-              }`}
-          >
-            <source src={src} type="video/webm" />
-          </video>
-        ))}
+        {/* Dual Seamless Crossfading Drone Videos (Deferred to avoid blocking LCP & hydration) */}
+        {shouldLoadVideo && droneShots.map((src, index) => {
+          const isCurrentActive = index === activeVideoIndex;
+          const isNextPreload = index === (activeVideoIndex + 1) % droneShots.length && nextVideoPreload;
+          const shouldAttachSource = isCurrentActive || isNextPreload;
+
+          return (
+            <video
+              key={src}
+              ref={(el) => {
+                videoRefs.current[index] = el;
+              }}
+              autoPlay={index === 0}
+              muted
+              playsInline
+              preload={isCurrentActive ? "auto" : isNextPreload ? "metadata" : "none"}
+              onTimeUpdate={() => handleTimeUpdate(index)}
+              onEnded={() => handleVideoEnded(index)}
+              className={`absolute inset-0 h-full w-full object-cover object-[70%_center] md:object-center scale-[1.02] transition-opacity duration-1000 ease-in-out ${index === activeVideoIndex ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+                }`}
+            >
+              {shouldAttachSource && <source src={src} type="video/webm" />}
+            </video>
+          );
+        })}
 
         {/* =====================================================
             CINEMATIC LAYERED GRADIENT GRADING (ART-DIRECTED)
