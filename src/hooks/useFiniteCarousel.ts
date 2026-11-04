@@ -15,11 +15,14 @@ export function useFiniteCarousel({
 }: UseFiniteCarouselOptions) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cardStepRef = useRef<number>(0);
+  const lastWidthRef = useRef<number>(0);
+  const rafIdRef = useRef<number | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [maxIndex, setMaxIndex] = useState(0);
   const [visibleItems, setVisibleItems] = useState(1);
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isInView, setIsInView] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftState, setScrollLeftState] = useState(0);
 
@@ -28,6 +31,10 @@ export function useFiniteCarousel({
     if (!containerRef.current || totalItems === 0) return;
     const container = containerRef.current;
     const containerWidth = container.clientWidth;
+
+    if (containerWidth <= 0) return;
+    if (containerWidth === lastWidthRef.current && cardStepRef.current > 0) return;
+    lastWidthRef.current = containerWidth;
 
     // Measure first child card width
     const track = container.firstElementChild as HTMLElement | null;
@@ -64,18 +71,35 @@ export function useFiniteCarousel({
     setCurrentIndex((prev) => Math.min(prev, calculatedMaxIndex));
   }, [totalItems]);
 
-  // Use ResizeObserver for responsive measurement
+  // Viewport intersection observer to gate autoplay and expensive operations
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.05, rootMargin: '100px 0px' }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Use ResizeObserver with requestAnimationFrame for responsive measurement without layout thrashing
   useEffect(() => {
     updateLayout();
 
     if (!containerRef.current) return;
     const observer = new ResizeObserver(() => {
-      updateLayout();
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = requestAnimationFrame(() => {
+        updateLayout();
+      });
     });
 
     observer.observe(containerRef.current);
 
     return () => {
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
       observer.disconnect();
     };
   }, [updateLayout]);
@@ -150,14 +174,14 @@ export function useFiniteCarousel({
 
   // Autoplay
   useEffect(() => {
-    if (!enableAutoplay || isHovered || isDragging || maxIndex <= 0) return;
+    if (!enableAutoplay || !isInView || isHovered || isDragging || maxIndex <= 0) return;
 
     const timer = setInterval(() => {
       next();
     }, autoplayInterval);
 
     return () => clearInterval(timer);
-  }, [enableAutoplay, isHovered, isDragging, maxIndex, autoplayInterval, next]);
+  }, [enableAutoplay, isInView, isHovered, isDragging, maxIndex, autoplayInterval, next]);
 
   // Keep index synced during manual scroll or drag
   const handleScroll = useCallback(() => {
