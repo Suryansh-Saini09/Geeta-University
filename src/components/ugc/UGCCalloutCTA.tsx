@@ -38,7 +38,10 @@ export default function UGCCalloutCTA({ calloutCta }: UGCCalloutCTAProps) {
             <h2 className="font-serif text-3xl font-bold text-white sm:text-4xl">
               {title.includes("Approvals & Verification") ? (
                 <>
-                  {title.replace("Approvals & Verification", "").trim()}{" "}
+                  {title
+                    .replace(/Approvals & Verification\??/i, "")
+                    .replace(/\s*\?+\s*$/, "")
+                    .trim()}{" "}
                   <span className="text-[#E8871A]">Approvals & Verification?</span>
                 </>
               ) : (
