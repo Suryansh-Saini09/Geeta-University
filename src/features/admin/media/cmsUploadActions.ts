@@ -51,6 +51,7 @@ export async function uploadCmsAssetAction(formData: FormData): Promise<UploadCm
 
     const contentArea = (formData.get("contentArea") as string) || "general";
     const section = (formData.get("section") as string) || "default";
+    const profile = (formData.get("profile") as any) || undefined;
     const replaceUrl = (formData.get("replaceUrl") as string) || undefined;
     const replaceShared = formData.get("replaceShared") === "true";
     const altText = (formData.get("altText") as string) || undefined;
@@ -62,6 +63,7 @@ export async function uploadCmsAssetAction(formData: FormData): Promise<UploadCm
     const result = await saveCmsAsset(bytes, file.name, {
       contentArea,
       section,
+      profile,
       replaceUrl,
       replaceShared,
       altText,

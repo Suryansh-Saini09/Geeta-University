@@ -707,9 +707,9 @@ export const computerScienceSchool: ProgramPageData = {
   brochure: {
     title: "Want to know more?",
     description:
-      "Download the official School of Computer Science & Engineering brochure for detailed information on programs, specialisations, placements, certifications, and student outcomes.",
-    fileUrl: "https://geetauniversity.edu.in/uploads/pdf/GU-Brochure-25-26.pdf",
-    fileName: "School_of_Computer_Science_Brochure.pdf",
+      "Download the official School of Computer Science & Engineering brochure (Academic Session 2026–27) for detailed information on programs, specialisations, placements, certifications, and student outcomes.",
+    fileUrl: "/uploads/all/1892/GU-Brochure-2026-27.pdf",
+    fileName: "GU-Brochure-2026-27.pdf",
   },
 
   faqs: [

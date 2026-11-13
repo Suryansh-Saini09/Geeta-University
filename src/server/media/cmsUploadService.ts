@@ -2,12 +2,17 @@ if (typeof window !== "undefined") {
   throw new Error("This module can only be executed on the server.");
 }
 
-import { mkdir, writeFile, readFile, stat } from "node:fs/promises";
+import { mkdir, writeFile, readFile, stat, unlink } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { AuditAction } from "@prisma/client";
 import { prisma } from "@/server/db/client";
 import { serverLogger } from "@/lib/security/logger";
+import {
+  optimizeImageBuffer,
+  type ImageProfileName,
+  type ImageOptimizationResult,
+} from "./imageOptimizer";
 
 export const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10 MB
 export const MAX_DOCUMENT_BYTES = 25 * 1024 * 1024; // 25 MB
@@ -241,6 +246,7 @@ export async function checkMediaAssetUsage(url: string): Promise<{
 export interface SaveCmsMediaOptions {
   contentArea?: string; // e.g. "about", "home", "departments", "footer"
   section?: string; // e.g. "hero", "faculty", "branding", "documents"
+  profile?: ImageProfileName;
   replaceUrl?: string; // e.g. "/about/campus.webp"
   replaceShared?: boolean; // if true and asset is shared, overwrites the shared file; if false, generates unique filename
   altText?: string;
@@ -255,14 +261,21 @@ export interface SaveCmsMediaResult {
   fileName?: string;
   mimeType?: string;
   sizeBytes?: number;
+  width?: number | null;
+  height?: number | null;
   preservedLogicalName?: boolean;
+  optimized?: boolean;
+  originalSizeBytes?: number;
+  compressionRatio?: number;
+  targetAchieved?: boolean;
   warning?: string;
   error?: string;
 }
 
 /**
  * Saves a CMS asset into public/uploads/cms/<contentArea>/<section>/<fileName>.
- * Preserves logical filename when replacing if formats match, or safely changes extension.
+ * Automatically validates, resizes, WebP-converts, and compresses raster images.
+ * Preserves logical filename when replacing if formats match, or safely updates to .webp.
  */
 export async function saveCmsAsset(
   bytes: Buffer,
@@ -303,6 +316,42 @@ export async function saveCmsAsset(
   const contentArea = sanitizePathSegment(options.contentArea || "general", "general");
   const section = sanitizePathSegment(options.section || "default", "default");
 
+  // Automatic Image Optimization Pipeline (WebP conversion + progressive compression)
+  let finalBytes = bytes;
+  let finalWidth: number | null = null;
+  let finalHeight: number | null = null;
+  let optimizationResult: ImageOptimizationResult | null = null;
+
+  if (format.isImage) {
+    try {
+      optimizationResult = await optimizeImageBuffer(bytes, {
+        contentArea,
+        section,
+        profile: options.profile,
+      });
+
+      finalBytes = optimizationResult.buffer;
+      finalWidth = optimizationResult.width || null;
+      finalHeight = optimizationResult.height || null;
+
+      format = {
+        ...format,
+        extension: optimizationResult.extension,
+        mimeType: optimizationResult.mimeType,
+      };
+    } catch (optError: any) {
+      serverLogger.error("Image optimization failed", optError, {
+        module: "cmsUpload",
+        action: "optimizeImage",
+        filename: originalFilename,
+      });
+      return {
+        success: false,
+        error: optError?.message || "Image validation or optimization failed.",
+      };
+    }
+  }
+
   // Determine logical filename
   let targetBaseName = sanitizeBaseFilename(originalFilename);
   let preservedLogicalName = false;
@@ -319,10 +368,21 @@ export async function saveCmsAsset(
         preservedLogicalName = true;
       } else {
         notice = notice
-          ? `${notice} Note: Format changed from .${existingExt} to .${format.extension}.`
-          : `Note: Format changed from .${existingExt} to .${format.extension}. Filename updated to ${targetBaseName}.${format.extension}.`;
+          ? `${notice} Note: Format converted from .${existingExt} to .${format.extension}.`
+          : `Note: Format converted from .${existingExt} to .${format.extension}. Filename updated to ${targetBaseName}.${format.extension}.`;
       }
     }
+  }
+
+  // Append optimization summary to notice
+  if (optimizationResult && optimizationResult.isConvertedToWebp) {
+    const optKb = (finalBytes.length / 1024).toFixed(0);
+    const origKb = (bytes.length / 1024).toFixed(0);
+    const optSummary = `Converted to WebP (${optKb} KB, ${optimizationResult.compressionRatio}% reduction from ${origKb} KB).`;
+    notice = notice ? `${notice} ${optSummary}` : optSummary;
+  }
+  if (optimizationResult?.notice) {
+    notice = notice ? `${notice} ${optimizationResult.notice}` : optimizationResult.notice;
   }
 
   // Base directory on disk
@@ -358,13 +418,13 @@ export async function saveCmsAsset(
   // Staging write: write to temp file first, verify bytes, then atomically rename
   const stagingPath = `${finalFilePath}.tmp.${Date.now()}`;
   try {
-    await writeFile(stagingPath, bytes);
+    await writeFile(stagingPath, finalBytes);
     const writtenStat = await stat(stagingPath);
-    if (writtenStat.size !== bytes.length) {
+    if (writtenStat.size !== finalBytes.length) {
       throw new Error("Byte length verification failed after writing.");
     }
     // Rename to final target
-    await writeFile(finalFilePath, bytes, { flag: "w" });
+    await writeFile(finalFilePath, finalBytes, { flag: "w" });
 
     // If replacing an existing shared file, also update the previous target file on disk so legacy references stay valid
     if (options.replaceShared && options.replaceUrl && options.replaceUrl.startsWith("/uploads/")) {
@@ -372,7 +432,7 @@ export async function saveCmsAsset(
       const oldFilePath = path.join(process.cwd(), "public", "uploads", oldRelativePath);
       if (oldFilePath !== finalFilePath) {
         try {
-          await writeFile(oldFilePath, bytes, { flag: "w" });
+          await writeFile(oldFilePath, finalBytes, { flag: "w" });
         } catch (legacyWriteErr) {
           serverLogger.warn("Failed to update legacy shared asset file on disk", legacyWriteErr, {
             module: "cmsUpload",
@@ -385,7 +445,6 @@ export async function saveCmsAsset(
   } finally {
     // Clean up staging file
     try {
-      const { unlink } = await import("node:fs/promises");
       await unlink(stagingPath);
     } catch {}
   }
@@ -394,7 +453,7 @@ export async function saveCmsAsset(
   const relativePublicUrl = `/uploads/cms/${contentArea}/${section}/${finalFileName}`;
   const storageKey = `uploads/cms/${contentArea}/${section}/${finalFileName}`;
 
-  // Upsert MediaAsset in Aiven MySQL + AuditLog
+  // Upsert MediaAsset in MySQL + AuditLog
   try {
     await prisma.$transaction(async (tx) => {
       const asset = await tx.mediaAsset.upsert({
@@ -403,7 +462,9 @@ export async function saveCmsAsset(
           fileName: finalFileName,
           url: relativePublicUrl,
           mimeType: format!.mimeType,
-          sizeBytes: bytes.length,
+          sizeBytes: finalBytes.length,
+          width: finalWidth,
+          height: finalHeight,
           altText: options.altText || null,
           caption: options.caption || null,
         },
@@ -412,7 +473,9 @@ export async function saveCmsAsset(
           storageKey,
           url: relativePublicUrl,
           mimeType: format!.mimeType,
-          sizeBytes: bytes.length,
+          sizeBytes: finalBytes.length,
+          width: finalWidth,
+          height: finalHeight,
           altText: options.altText || null,
           caption: options.caption || null,
           createdById: options.userId || null,
@@ -431,19 +494,51 @@ export async function saveCmsAsset(
               url: asset.url,
               storageKey: asset.storageKey,
               sizeBytes: asset.sizeBytes,
+              width: asset.width,
+              height: asset.height,
             },
           },
         });
       }
     });
   } catch (dbError) {
-    serverLogger.error("Database upsert failed for MediaAsset", dbError, { module: "cmsUpload", action: "upsertMediaAsset", storageKey });
-    // Note: If DB fails, we do NOT delete the physical file silently if it was an intentional write,
-    // but we report error so the caller does not update the published record.
+    serverLogger.error("Database upsert failed for MediaAsset", dbError, {
+      module: "cmsUpload",
+      action: "upsertMediaAsset",
+      storageKey,
+    });
+    // Clean up physical file so no orphaned file is left on disk
+    try {
+      await unlink(finalFilePath);
+    } catch {}
+
     return {
       success: false,
       error: "Failed to record asset metadata in database. The CMS reference was not changed.",
     };
+  }
+
+  // Safe cleanup of replaced old file (if path changed and asset is not shared)
+  if (options.replaceUrl && options.replaceUrl.startsWith("/uploads/cms/")) {
+    if (options.replaceUrl !== relativePublicUrl) {
+      try {
+        const usage = await checkMediaAssetUsage(options.replaceUrl);
+        // If the old file was only used at most once (or unreferenced), safe to clean up
+        if (!usage.isShared && usage.totalUsageCount <= 1) {
+          const oldDiskSub = options.replaceUrl.replace(/^\/uploads\/cms\//, "");
+          const oldDiskPath = path.join(process.cwd(), "public", "uploads", "cms", oldDiskSub);
+          if (oldDiskPath !== finalFilePath) {
+            await unlink(oldDiskPath).catch(() => {});
+          }
+        }
+      } catch (cleanErr) {
+        serverLogger.warn("Non-fatal: could not clean up replaced old asset", cleanErr, {
+          module: "cmsUpload",
+          action: "cleanupOldAsset",
+          oldUrl: options.replaceUrl,
+        });
+      }
+    }
   }
 
   return {
@@ -452,8 +547,14 @@ export async function saveCmsAsset(
     storageKey,
     fileName: finalFileName,
     mimeType: format.mimeType,
-    sizeBytes: bytes.length,
+    sizeBytes: finalBytes.length,
+    width: finalWidth,
+    height: finalHeight,
     preservedLogicalName,
+    optimized: Boolean(optimizationResult?.isConvertedToWebp),
+    originalSizeBytes: bytes.length,
+    compressionRatio: optimizationResult?.compressionRatio,
+    targetAchieved: optimizationResult?.targetAchieved,
     warning: notice,
   };
 }

@@ -23,21 +23,68 @@ const POPULAR_SEARCHES = [
 export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     if (isOpen) {
+      previousActiveElement.current = (document.activeElement as HTMLElement) || null;
       document.body.style.overflow = "hidden";
       setTimeout(() => {
         if (inputRef.current) inputRef.current.focus();
       }, 50);
     } else {
       document.body.style.overflow = "";
+      if (previousActiveElement.current) {
+        previousActiveElement.current.focus();
+      }
     }
     return () => {
       document.body.style.overflow = "";
+      if (previousActiveElement.current) {
+        previousActiveElement.current.focus();
+      }
     };
   }, [isOpen]);
+
+  // Keyboard navigation: Escape key closes and Tab key traps focus within dialog (GU-09)
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (e.key === "Tab" && dialogRef.current) {
+        const focusableElements = dialogRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -220,7 +267,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
         }
       `}</style>
 
-      <div className="gu-search-card" onClick={(e) => e.stopPropagation()}>
+      <div ref={dialogRef} className="gu-search-card" onClick={(e) => e.stopPropagation()}>
         <button
           type="button"
           className="gu-search-close-btn"

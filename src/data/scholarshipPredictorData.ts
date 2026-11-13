@@ -184,7 +184,7 @@ export const RULES_DATA: Record<string, RuleCategory> = {
   GUTS: {
     label: "GUTS (GEETA UNIVERSITY TEST OF SCHOLARSHIP) SCORE",
     allow_programs: "all",
-    level_applicability: ["UG"],
+    level_applicability: ["UG", "PG"],
     exclude_groups: ["Pharmacy", "Nursing"],
     subcategories: [
       {
@@ -226,8 +226,10 @@ export const RULES_DATA: Record<string, RuleCategory> = {
         label: "CUET-UG Scholarship",
         slabs: [
           { label: ">=95%", percent: 100 },
-          { label: "80–94.99%", percent: 50 },
-          { label: "50–79.99%", percent: 30 },
+          { label: "90–94.99%", percent: 50 },
+          { label: "80–89.99%", percent: 40 },
+          { label: "70–79.99%", percent: 30 },
+          { label: "60–69.99%", percent: 10 },
         ],
       },
     ],

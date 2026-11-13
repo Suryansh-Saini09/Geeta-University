@@ -291,7 +291,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         },
         {
           id: "quick-4",
-          label: "IIC",
+          label: "ICC Report",
           href: "/uploads/all/1203/ICC_Report.xlsx",
           isInternal: false,
           isDocument: true,
@@ -510,7 +510,7 @@ export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
         {
           id: "visit-4",
           label: "GU Finance Committee",
-          href: "https://geetauniversity.edu.in/uploads/all/2590/Notification--finance-committee.pdf",
+          href: "/uploads/all/1378/Reconstiution-of-University-Finance-Committee.pdf",
           isInternal: false,
           isDocument: true,
           enabled: true,

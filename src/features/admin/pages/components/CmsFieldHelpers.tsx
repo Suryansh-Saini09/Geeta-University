@@ -34,6 +34,7 @@ export interface CmsImagePreviewInputProps {
   helpText?: string;
   contentArea?: string;
   section?: string;
+  profile?: "banner" | "portrait" | "logo" | "gallery" | "content" | "default";
   allowClear?: boolean;
   compact?: boolean;
 }

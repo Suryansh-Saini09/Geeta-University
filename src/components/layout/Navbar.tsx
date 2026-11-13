@@ -118,7 +118,7 @@ const defaultTopBarLinks: TopBarLinkItem[] = [
   { label: "Careers", href: "/careers" },
   { label: "Scholarship Predictor", href: "/scholarship-predictor", icon: "Trophy" },
   { label: "International Admissions", href: "/international-admissions", icon: "Globe" },
-  { label: "WhatsApp", href: "https://wa.me/919812345678" },
+  { label: "WhatsApp", href: "https://wa.me/919996303799" },
   { label: "Call Us", href: "tel:01742639100" },
 ];
 

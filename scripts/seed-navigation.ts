@@ -229,7 +229,7 @@ async function seedNavigation() {
     { label: "Careers", href: "/careers", sortOrder: 2 },
     { label: "Scholarship Predictor", href: "/scholarship-predictor", icon: "Trophy", sortOrder: 3, badge: "Predictor" },
     { label: "International Admissions", href: "/international-admissions", icon: "Globe", sortOrder: 4 },
-    { label: "WhatsApp", href: "https://wa.me/919812345678", sortOrder: 5 },
+    { label: "WhatsApp", href: "https://wa.me/91996303799", sortOrder: 5 },
     { label: "Call Us", href: "tel:01742639100", sortOrder: 6 },
   ];
 

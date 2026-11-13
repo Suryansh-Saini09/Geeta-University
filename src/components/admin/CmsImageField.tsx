@@ -30,6 +30,7 @@ export interface CmsImageFieldProps {
   onAltChange?: (alt: string) => void;
   contentArea?: string;
   section?: string;
+  profile?: "banner" | "portrait" | "logo" | "gallery" | "content" | "default";
   placeholder?: string;
   helpText?: string;
   allowClear?: boolean;
@@ -44,6 +45,7 @@ export function CmsImageField({
   onAltChange,
   contentArea = "cms",
   section = "general",
+  profile,
   placeholder = "/images/example.webp",
   helpText,
   allowClear = true,
@@ -125,6 +127,9 @@ export function CmsImageField({
     formData.append("file", file);
     formData.append("contentArea", contentArea);
     formData.append("section", section);
+    if (profile) {
+      formData.append("profile", profile);
+    }
     if (value) {
       formData.append("replaceUrl", value);
     }

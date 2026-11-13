@@ -3,8 +3,9 @@ import { FAQ } from "@/data/programs/types";
 export interface GutsSyllabusItem {
   title: string;
   subtitle: string;
-  pdfUrl: string;
+  pdfUrl?: string;
   category: "Commerce & Mgmt" | "Sciences" | "Humanities" | "Aptitude & Core";
+  isUnderReview?: boolean;
 }
 
 export interface GutsScholarshipSlab {
@@ -73,7 +74,8 @@ export const gutsSyllabusList: GutsSyllabusItem[] = [
   {
     title: "Biology",
     subtitle: "GUTS Syllabus for medical stream candidates.",
-    pdfUrl: "/uploads/all/2607/Syllabus-Aptitude.pdf",
+    pdfUrl: "",
+    isUnderReview: true,
     category: "Sciences",
   },
   {

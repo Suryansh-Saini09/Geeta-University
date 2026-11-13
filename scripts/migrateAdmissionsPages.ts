@@ -401,7 +401,7 @@ export const ADMISSIONS_PAGE_CONFIGS: PageMigrationConfig[] = [
       },
       calculator_overview: {
         title: "Interactive Scholarship Calculator",
-        instructionText: "Select your stream, enter your qualifying percentage or exam score, and click Predict Scholarship.",
+        instructionText: "Select your discipline, academic program, and qualifying eligibility criteria to instantly view your custom tuition waiver and payable semester fee breakdown.",
       },
       types_overview: {
         title: "Available Scholarship Categories",

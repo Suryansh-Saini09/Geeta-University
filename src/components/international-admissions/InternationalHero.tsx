@@ -71,7 +71,9 @@ export default function InternationalHero({ data }: InternationalHeroProps) {
               className="mt-8 flex flex-wrap gap-4 items-center"
             >
               <button
+                type="button"
                 onClick={() => scrollToSection("enquiry-form")}
+                aria-label="Enquire for International Admissions"
                 className="group inline-flex items-center gap-3 rounded-xl bg-[#E8871A] px-8 py-4 text-sm font-extrabold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-[#F5A623] hover:shadow-orange-500/25"
               >
                 Enquire Now

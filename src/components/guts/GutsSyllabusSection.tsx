@@ -83,15 +83,29 @@ export default function GutsSyllabusSection({ data }: GutsSyllabusSectionProps =
                 </p>
               </div>
 
-              <a
-                href={item.pdfUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-[12px] border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 px-4 text-[14px] font-bold text-[#0A1F44] transition-all duration-200 hover:border-[#E8871A] hover:bg-[#E8871A] hover:text-white hover:shadow-md active:scale-95"
-              >
-                <span>Download PDF</span>
-                <Download className="h-4 w-4" />
-              </a>
+              {item.pdfUrl ? (
+                <a
+                  href={item.pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex items-center justify-center gap-2 rounded-[12px] border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 px-4 text-[14px] font-bold text-[#0A1F44] transition-all duration-200 hover:border-[#E8871A] hover:bg-[#E8871A] hover:text-white hover:shadow-md active:scale-95"
+                >
+                  <span>Download PDF</span>
+                  <Download className="h-4 w-4" />
+                </a>
+              ) : (
+                <div className="mt-2 flex flex-col gap-1.5">
+                  <span
+                    className="inline-flex items-center justify-center gap-1.5 rounded-[12px] border border-amber-200 bg-amber-50/80 py-2.5 px-4 text-[13px] font-bold text-amber-900"
+                    title="Official syllabus for Session 2026–27 is currently under academic board notification."
+                  >
+                    Updating Soon (2026–27)
+                  </span>
+                  <p className="text-[11.5px] text-[#64748B] text-center">
+                    Call <a href="tel:+917082200908" className="font-semibold text-[#0A1F44] hover:underline">+91-7082200908</a> for queries
+                  </p>
+                </div>
+              )}
             </div>
           ))}
         </div>
