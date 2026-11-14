@@ -1,7 +1,36 @@
 import type { NextConfig } from "next";
 import path from "path";
+import { execSync } from "child_process";
+
+function resolveDeploymentId(): string | undefined {
+  if (process.env.NEXT_DEPLOYMENT_ID?.trim()) {
+    return process.env.NEXT_DEPLOYMENT_ID.trim();
+  }
+  if (process.env.DEPLOYMENT_ID?.trim()) {
+    return process.env.DEPLOYMENT_ID.trim();
+  }
+  if (process.env.VERCEL_GIT_COMMIT_SHA?.trim()) {
+    return process.env.VERCEL_GIT_COMMIT_SHA.trim();
+  }
+  try {
+    const gitSha = execSync("git rev-parse HEAD", {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    if (gitSha && gitSha.length >= 7) {
+      return gitSha;
+    }
+  } catch {
+    // Fallback if git is unavailable in the execution environment
+  }
+  return undefined;
+}
+
+const deploymentId = resolveDeploymentId();
 
 const nextConfig: NextConfig = {
+  deploymentId,
+  generateBuildId: deploymentId ? async () => deploymentId : undefined,
   serverExternalPackages: ["@prisma/adapter-mariadb", "mariadb", "sharp"],
   experimental: {
     serverActions: {
