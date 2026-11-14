@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   PROGRAMS_FEE_DATABASE,
   SCHOLARSHIP_RULES_DATABASE,
@@ -28,6 +28,7 @@ export default function ScholarshipPredictorSection({ data }: ScholarshipPredict
     tuition: number;
     name: string;
     level: "UG" | "PG" | "Ph.D" | "Diploma";
+    scholarship_allowed?: boolean;
   } | null>(null);
 
   const [selectedCategoryKey, setSelectedCategoryKey] = useState<string>("");
@@ -43,13 +44,29 @@ export default function ScholarshipPredictorSection({ data }: ScholarshipPredict
   // Filter available scholarship categories based on area and level
   const availableCategories = useMemo<Array<[string, any]>>(() => {
     if (!selectedProgramData || !selectedArea) return [];
+    if (selectedProgramData.scholarship_allowed === false) return [];
     return Object.entries(rulesDb).filter(([key, rule]: [string, any]) => {
       if (rule?.exclude_groups?.includes(selectedArea)) return false;
       if (rule?.eligible_groups && !rule.eligible_groups.includes(selectedArea)) return false;
       if (rule?.level_applicability && !rule.level_applicability.includes(selectedProgramData.level)) return false;
+      // GUTS is strictly for UG programs and never for PG, Pharmacy, or Ph.D
+      if (key === "GUTS") {
+        if (selectedProgramData.level !== "UG") return false;
+        if (selectedArea === "Pharmacy") return false;
+        if (/pharm|ph\.?d/i.test(selectedProgramData.name)) return false;
+      }
       return true;
     }) as Array<[string, any]>;
   }, [selectedArea, selectedProgramData, rulesDb]);
+
+  // Reset category if selected category is no longer available
+  useEffect(() => {
+    if (selectedCategoryKey && !availableCategories.some(([k]) => k === selectedCategoryKey)) {
+      setSelectedCategoryKey("");
+      setSelectedSubCategoryIdx("");
+      setSelectedPercent(null);
+    }
+  }, [availableCategories, selectedCategoryKey]);
 
   // Current selected category rule
   const currentRule = useMemo(() => {
@@ -414,6 +431,7 @@ export default function ScholarshipPredictorSection({ data }: ScholarshipPredict
                             tuition: p.tuition_fee,
                             name: p.program,
                             level: p.level,
+                            scholarship_allowed: p.scholarship_allowed,
                           })}
                         >
                           {p.program}

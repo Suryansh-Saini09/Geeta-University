@@ -184,8 +184,8 @@ export const RULES_DATA: Record<string, RuleCategory> = {
   GUTS: {
     label: "GUTS (GEETA UNIVERSITY TEST OF SCHOLARSHIP) SCORE",
     allow_programs: "all",
-    level_applicability: ["UG", "PG"],
-    exclude_groups: ["Pharmacy", "Nursing"],
+    level_applicability: ["UG"],
+    exclude_groups: ["Pharmacy"],
     subcategories: [
       {
         label: "GUTS Scholarship",

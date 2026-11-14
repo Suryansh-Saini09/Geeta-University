@@ -43,14 +43,19 @@ const eightyWaiver = Math.round((cseAiMl!.tuition_fee * eightySlab!.percent) / 1
 const eightyPayable = cseAiMl!.prog_fee_per_sem - eightyWaiver;
 assert(eightyPayable === 79000, `At 80-89.99% CUET slab, payable fee is exactly ₹79,000 (got ₹${eightyPayable})`);
 
-// 2. Verify GU-02: GUTS PG Eligibility
-console.log("\n--- 2. Testing GU-02: GUTS PG Eligibility ---");
+// 2. Verify GU-02: GUTS UG-Only Eligibility Policy (No PG, Pharmacy, or Ph.D)
+console.log("\n--- 2. Testing GU-02: GUTS UG-Only Eligibility Policy ---");
 const gutsRule = RULES_DATA.GUTS;
 assert(Boolean(gutsRule.level_applicability?.includes("UG")), "GUTS applies to UG");
-assert(Boolean(gutsRule.level_applicability?.includes("PG")), "GUTS applies to PG");
+assert(!gutsRule.level_applicability?.includes("PG"), "GUTS strictly does NOT apply to PG");
+assert(!gutsRule.level_applicability?.includes("Ph.D"), "GUTS strictly does NOT apply to Ph.D");
+assert(Boolean(gutsRule.exclude_groups?.includes("Pharmacy")), "GUTS strictly excludes Pharmacy");
 
 const gutsDbRule = SCHOLARSHIP_RULES_DATABASE.GUTS;
-assert(Boolean(gutsDbRule.level_applicability?.includes("PG")), "GUTS in database rule applies to PG");
+assert(Boolean(gutsDbRule.level_applicability?.includes("UG")), "GUTS in database rule applies to UG");
+assert(!gutsDbRule.level_applicability?.includes("PG"), "GUTS in database rule does NOT apply to PG");
+assert(!gutsDbRule.level_applicability?.includes("Ph.D"), "GUTS in database rule does NOT apply to Ph.D");
+assert(Boolean(gutsDbRule.exclude_groups?.includes("Pharmacy")), "GUTS in database rule strictly excludes Pharmacy");
 
 // 3. Verify GU-03: Biology Syllabus PDF Decoupled from Aptitude
 console.log("\n--- 3. Testing GU-03: Biology Syllabus PDF Decoupled ---");

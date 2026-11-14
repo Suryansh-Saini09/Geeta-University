@@ -191,8 +191,8 @@ export const SCHOLARSHIP_RULES_DATABASE: Record<string, ScholarshipRule> = {
   GUTS: {
     label: "GUTS (GEETA UNIVERSITY TEST OF SCHOLARSHIP) SCORE",
     allow_programs: "all",
-    level_applicability: ["UG", "PG"],
-    exclude_groups: ["Pharmacy", "Nursing"],
+    level_applicability: ["UG"],
+    exclude_groups: ["Pharmacy"],
     subcategories: [
       {
         label: "GUTS Scholarship",
