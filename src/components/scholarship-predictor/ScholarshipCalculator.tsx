@@ -401,7 +401,7 @@ export default function ScholarshipCalculator({ data }: ScholarshipCalculatorPro
             <div className="mt-8 flex items-center justify-center gap-2 rounded-[12px] bg-[#FFFBF0] p-4 text-center text-[#92400E] border border-[#FDE68A]">
               <Info className="h-5 w-5 shrink-0 text-[#D97706]" />
               <p className="text-[13.5px] font-medium">
-                <strong>Note:</strong> GUTS Scholarship is not valid for Pharmacy, Nursing, and Postgraduate (PG) / Ph.D. Programs.
+                <strong>Note:</strong> GUTS Scholarship is not valid for Pharmacy and Postgraduate (PG) / Ph.D. Programs.
               </p>
             </div>
           </div>
