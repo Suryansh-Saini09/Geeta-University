@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Image as ImageIcon, Save, Plus, Trash2, CheckCircle2, AlertCircle } from "lucide-react";
 import { updateDepartmentSectionAction } from "@/features/admin/departments/actions";
 import { MediaPickerModal, MediaAssetItem } from "./MediaPickerModal";
+import { CmsImageField } from "@/components/admin/CmsImageField";
 
 export interface HeroSlideItem {
   studentName?: string;
@@ -177,42 +178,18 @@ export function HeroSectionEditor({
               />
             </div>
 
-            <div className="sm:col-span-2 space-y-3">
-              <label className="block text-sm font-bold text-[#0A1F44]">
-                Hero Banner Image
-              </label>
-
-              {image ? (
-                <div className="relative aspect-[21/9] w-full max-w-xl overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={image}
-                    alt={imageAlt || "Hero banner"}
-                    className="h-full w-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                    <p className="text-xs text-white truncate">{image}</p>
-                  </div>
-                </div>
-              ) : null}
-
-              <div className="flex flex-wrap items-center gap-3">
-                <input
-                  type="text"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                  placeholder="/images/schools/hero-banner.webp or image URL"
-                  className="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-slate-300 focus:bg-white"
-                />
-                <button
-                  type="button"
-                  onClick={() => setActiveMediaPickerTarget({ type: "main" })}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-700"
-                >
-                  <ImageIcon className="h-4 w-4" />
-                  Media Library
-                </button>
-              </div>
+            <div className="sm:col-span-2">
+              <CmsImageField
+                label="Hero Banner Image"
+                value={image}
+                onChange={(url) => setImage(url)}
+                altValue={imageAlt}
+                onAltChange={(alt) => setImageAlt(alt)}
+                contentArea="departments"
+                section="hero"
+                placeholder="/images/schools/hero-banner.webp"
+                helpText="High-resolution primary banner image for the school/department."
+              />
             </div>
 
             <div>
@@ -365,29 +342,16 @@ export function HeroSectionEditor({
                       />
                     </div>
 
-                    <div className="sm:col-span-3 flex flex-wrap items-center gap-2">
-                      <div className="flex-1">
-                        <label className="mb-1 block text-xs font-bold text-[#0A1F44]">
-                          Student Photo URL
-                        </label>
-                        <input
-                          type="text"
-                          value={slide.image || ""}
-                          onChange={(e) => handleSlideChange(idx, "image", e.target.value)}
-                          placeholder="/saransh.webp"
-                          className="w-full rounded border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-slate-300"
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setActiveMediaPickerTarget({ type: "slideImage", slideIndex: idx })
-                        }
-                        className="mt-4 inline-flex items-center gap-1 rounded border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
-                      >
-                        <ImageIcon className="h-3 w-3" />
-                        Pick Photo
-                      </button>
+                    <div className="sm:col-span-3">
+                      <CmsImageField
+                        label="Student Placement Photo"
+                        value={slide.image || ""}
+                        onChange={(url) => handleSlideChange(idx, "image", url)}
+                        contentArea="departments"
+                        section="hero-slides"
+                        placeholder="/saransh.webp"
+                        compact
+                      />
                     </div>
 
                     <div className="sm:col-span-3">

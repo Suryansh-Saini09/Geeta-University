@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import { libraryHeroData as fallbackHeroData } from "@/data/libraryData";
 
@@ -21,10 +22,13 @@ export default function LibraryHero({ hero }: LibraryHeroProps) {
     <section className="relative w-full overflow-hidden bg-[#0A1F44] text-white">
       {/* Background Overlay Image */}
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           src={heroImage}
           alt="Geeta University Central Library"
-          className="h-full w-full object-cover object-center opacity-35"
+          fill
+          sizes="100vw"
+          preload
+          className="object-cover object-center opacity-35"
         />
       </div>
 

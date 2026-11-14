@@ -33,10 +33,10 @@ export default async function ScholarshipPredictorPage() {
       <ScholarshipPredictorHero data={sections.hero} />
 
       {/* Interactive Scholarship Calculator */}
-      <ScholarshipCalculator />
+      <ScholarshipCalculator data={sections.calculator_overview} />
 
       {/* Overview of Financial Aid Schemes */}
-      <ScholarshipTypesOverview />
+      <ScholarshipTypesOverview data={sections.types_overview} />
 
       {/* Legacy & Ecosystem */}
       <LegacyEcosystem
@@ -45,7 +45,7 @@ export default async function ScholarshipPredictorPage() {
       />
 
       {/* FAQ Section */}
-      <ScholarshipPredictorFAQ />
+      <ScholarshipPredictorFAQ data={sections.faqs} />
     </div>
   );
 }

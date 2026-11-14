@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { gutsFaqsData } from "@/data/gutsData";
 import { Play, ChevronDown, Phone } from "lucide-react";
-import VideoModal from "@/components/campus-life/VideoModal";
+import dynamic from "next/dynamic";
+
+const VideoModal = dynamic(() => import("@/components/campus-life/VideoModal"), {
+  ssr: false,
+});
 
 export default function GutsFaqAndVideo() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -75,7 +79,7 @@ export default function GutsFaqAndVideo() {
                 className="group relative h-[360px] sm:h-[420px] w-full overflow-hidden rounded-[24px] border border-[#E2E8F0] shadow-xl cursor-pointer bg-[#0A1F44]"
               >
                 <Image
-                  src="https://geetauniversity.edu.in/uploads/all/1839/guts_final.jpg"
+                  src="/uploads/all/1839/guts_final.jpg"
                   alt="Watch GUTS Video"
                   fill
                   sizes="(max-width: 1024px) 100vw, 500px"

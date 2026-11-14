@@ -1,0 +1,2559 @@
+[
+  {
+    "route": "/about",
+    "pageFile": "about/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/about-panipat",
+    "pageFile": "about-panipat/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAboutPanipatPage()",
+      "getPublishedAboutPanipatPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\n        contextText=\"Geeta University in Panipat is part of an integrated, future-ready talent development ecosystem:\"\n        data={legacyEcosystem}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/about-us",
+    "pageFile": "about-us/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAboutPage(locale)",
+      "getPublishedAboutPage(locale)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "AboutPageClient",
+        "importPath": "@/components/about/AboutPageClient",
+        "exists": true,
+        "callProps": "aboutData={aboutData}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/academic-peers-feedback",
+    "pageFile": "academic-peers-feedback/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/advisory-board",
+    "pageFile": "advisory-board/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdvisoryBoardPage()",
+      "getPublishedAdvisoryBoardPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\r\n        contextText=\"Our Advisory Board actively guides the expansive vision and multi-tier talent development framework of:\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/alumni-feedback-form",
+    "pageFile": "alumni-feedback-form/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/anti-ragging-committee",
+    "pageFile": "anti-ragging-committee/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAntiRaggingPage()",
+      "getPublishedAntiRaggingPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/campus-life",
+    "pageFile": "campus-life/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedCampusLifePage()",
+      "getPublishedCampusLifePage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "CampusLifeClientPage",
+        "importPath": "@/components/campus-life/CampusLifeClientPage",
+        "exists": true,
+        "callProps": "sections={sections} seo={seo}",
+        "compDataImports": [
+          "@/data/campusLife"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/careers",
+    "pageFile": "careers/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedCareersPage()",
+      "getPublishedCareersPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "CareersHero",
+        "importPath": "@/components/careers/CareersHero",
+        "exists": true,
+        "callProps": "hero={hero}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "CareersWhyUs",
+        "importPath": "@/components/careers/CareersWhyUs",
+        "exists": true,
+        "callProps": "benefits={benefits}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "CareersForm",
+        "importPath": "@/components/careers/CareersForm",
+        "exists": true,
+        "callProps": "formConfig={formConfig}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "CareersFAQ",
+        "importPath": "@/components/careers/CareersFAQ",
+        "exists": true,
+        "callProps": "faqs={faqs}",
+        "compDataImports": [
+          "@/data/careers"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\r\n        contextText=\"Faculty and staff benefit from the integrated ecosystem of:\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/confused-about-courses",
+    "pageFile": "confused-about-courses/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdmissionsPage(\"confused-about-courses\")",
+      "getPublishedAdmissionsPage(\"confused-about-courses\")"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "ConfusedHero",
+        "importPath": "@/components/confused-about-courses/ConfusedHero",
+        "exists": true,
+        "callProps": "data={heroData}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "ConfusedContentSections",
+        "importPath": "@/components/confused-about-courses/ConfusedContentSections",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\r\n        contextText=\"Students at Geeta University benefit from the integrated ecosystem of:\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/contact-us",
+    "pageFile": "contact-us/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedContactPage()",
+      "getPublishedContactPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "ContactHero",
+        "importPath": "@/components/contact-us/ContactHero",
+        "exists": true,
+        "callProps": "hero={hero}",
+        "compDataImports": [
+          "@/data/contactUsData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "ContactMainCards",
+        "importPath": "@/components/contact-us/ContactMainCards",
+        "exists": true,
+        "callProps": "contact={activeContact}",
+        "compDataImports": [
+          "@/data/contactUsData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "ContactOfficesGrid",
+        "importPath": "@/components/contact-us/ContactOfficesGrid",
+        "exists": true,
+        "callProps": "offices={offices}",
+        "compDataImports": [
+          "@/data/contactUsData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "ContactMapSection",
+        "importPath": "@/components/contact-us/ContactMapSection",
+        "exists": true,
+        "callProps": "map={map}",
+        "compDataImports": [
+          "@/data/contactUsData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "IndustryEcosystemSection",
+        "importPath": "@/components/industry-integration/IndustryEcosystemSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/industryIntegration"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/cuet",
+    "pageFile": "cuet/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdmissionsPage(\"cuet\")",
+      "getPublishedAdmissionsPage(\"cuet\")"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/cuetData"
+    ],
+    "components": [
+      {
+        "componentName": "CuetHeroAndCalculator",
+        "importPath": "@/components/cuet/CuetHeroAndCalculator",
+        "exists": true,
+        "callProps": "data={sections.hero}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "CuetAdmissionProcess",
+        "importPath": "@/components/cuet/CuetAdmissionProcess",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/cuetData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "CuetProgramsOffered",
+        "importPath": "@/components/cuet/CuetProgramsOffered",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "CuetWhyAndStats",
+        "importPath": "@/components/cuet/CuetWhyAndStats",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/cuetData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "CuetTestimonials",
+        "importPath": "@/components/cuet/CuetTestimonials",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/homeFeedback"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "CuetStarPerformers",
+        "importPath": "@/components/cuet/CuetStarPerformers",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/starPerformances"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "FAQSection",
+        "importPath": "@/components/programs/FAQSection",
+        "exists": true,
+        "callProps": "title={faqsData?.title || \"Frequently Asked Questions (FAQs)\"}\r\n          subtitle={\r\n            faqsData?.subtitle ||\r\n            \"Get instant clarity regarding CUET UG cutoffs, scholarship calculation, and online seat allocation.\"\r\n          }\r\n          faqs={faqsData?.items || cuetFaqsData}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\r\n        contextText={sections.legacy_ecosystem?.contextText || \"CUET admitted students benefit from the vast academic infrastructure and ecosystem of:\"}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/departments",
+    "pageFile": "departments/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedDepartments()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/departments/[slug]",
+    "pageFile": "departments/[slug]/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedDepartment((await params)",
+      "getPublishedDepartment((await params)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/doctoral-programs",
+    "pageFile": "doctoral-programs/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/doctoral-programs-phd",
+    "pageFile": "doctoral-programs-phd/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/edge/[slug]",
+    "pageFile": "edge/[slug]/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "EdgePage",
+        "importPath": "@/components/edge/EdgePage",
+        "exists": true,
+        "callProps": "data={pageData}",
+        "compDataImports": [
+          "@/data/edge/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/employer-feedback-form",
+    "pageFile": "employer-feedback-form/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/events",
+    "pageFile": "events/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedEvents(Number.isSafeInteger(requestedPage)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/events/[slug]",
+    "pageFile": "events/[slug]/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedEventBySlug(slug)",
+      "getPublishedEventBySlug(slug)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/faculty",
+    "pageFile": "faculty/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedFaculty()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/faculty/[slug]",
+    "pageFile": "faculty/[slug]/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedFacultyMember((await params)",
+      "getPublishedFacultyMember((await params)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/faq",
+    "pageFile": "faq/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdmissionsPage(\"faq\")",
+      "getPublishedAdmissionsPage(\"faq\")"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "IndustryEcosystemSection",
+        "importPath": "@/components/industry-integration/IndustryEcosystemSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/industryIntegration"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "FAQContactBanner",
+        "importPath": "@/components/faq/FAQContactBanner",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/fee-and-scholarship",
+    "pageFile": "fee-and-scholarship/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdmissionsPage(\"fee-and-scholarship\")",
+      "getPublishedAdmissionsPage(\"fee-and-scholarship\")"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "FeeHero",
+        "importPath": "@/components/fee-and-scholarship/FeeHero",
+        "exists": true,
+        "callProps": "data={sections.hero}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "ScholarshipPredictorSection",
+        "importPath": "@/components/fee-and-scholarship/ScholarshipPredictorSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "TransportAndHostelPredictor",
+        "importPath": "@/components/fee-and-scholarship/TransportAndHostelPredictor",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/feeAndScholarshipData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LegacyEcosystemSection",
+        "importPath": "@/components/fee-and-scholarship/LegacyEcosystemSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "FeeFaqAndCTA",
+        "importPath": "@/components/fee-and-scholarship/FeeFaqAndCTA",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/gallery",
+    "pageFile": "gallery/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAlbums()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/gallery/[slug]",
+    "pageFile": "gallery/[slug]/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAlbumBySlug(slug)",
+      "getPublishedAlbumBySlug(slug)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/geeta-in-news",
+    "pageFile": "geeta-in-news/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedGeetaInNewsPage()",
+      "getPublishedGeetaInNewsPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "GeetaInNewsClient",
+        "importPath": "@/components/geeta-in-news/GeetaInNewsClient",
+        "exists": true,
+        "callProps": "hero={hero}\r\n      items={items}\r\n      publications={publications}\r\n      categories={categories}",
+        "compDataImports": [
+          "@/data/geetaInNewsData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/geeta-nursing-college",
+    "pageFile": "geeta-nursing-college/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/nursing"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={nursingSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/gu-global-edge",
+    "pageFile": "gu-global-edge/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "GlobalEdgeContent",
+        "importPath": "@/components/edge/GlobalEdgeContent",
+        "exists": true,
+        "callProps": "data={pageData}",
+        "compDataImports": [
+          "@/data/edge/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/guts",
+    "pageFile": "guts/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdmissionsPage(\"guts\")",
+      "getPublishedAdmissionsPage(\"guts\")"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/gutsData"
+    ],
+    "components": [
+      {
+        "componentName": "GutsHero",
+        "importPath": "@/components/guts/GutsHero",
+        "exists": true,
+        "callProps": "data={sections.hero}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "GutsScholarshipSlabs",
+        "importPath": "@/components/guts/GutsScholarshipSlabs",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/gutsData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "GutsSyllabusSection",
+        "importPath": "@/components/guts/GutsSyllabusSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/gutsData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "GutsAdmissionProcess",
+        "importPath": "@/components/guts/GutsAdmissionProcess",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/gutsData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "GutsProgramsApplicable",
+        "importPath": "@/components/guts/GutsProgramsApplicable",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/gutsData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "GutsVideoBanner",
+        "importPath": "@/components/guts/GutsVideoBanner",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "GutsVirtualCampus",
+        "importPath": "@/components/guts/GutsVirtualCampus",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "FAQSection",
+        "importPath": "@/components/programs/FAQSection",
+        "exists": true,
+        "callProps": "title={faqsData?.title || \"Frequently Asked Questions (FAQs)\"}\r\n          subtitle={\r\n            faqsData?.subtitle ||\r\n            \"Find answers to common questions about GUTS eligibility, registration, examination mode, and scholarships.\"\r\n          }\r\n          faqs={faqsData?.items || gutsFaqsData}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\r\n        contextText={sections.legacy_ecosystem?.contextText || \"GUTS scholarship scholars benefit from the integrated ecosystem of:\"}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/guts-scholarship",
+    "pageFile": "guts-scholarship/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/how-to-reach-us",
+    "pageFile": "how-to-reach-us/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedHowToReachUsPage()",
+      "getPublishedHowToReachUsPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "ReachInfographicSection",
+        "importPath": "@/components/how-to-reach-us/ReachInfographicSection",
+        "exists": true,
+        "callProps": "hero={hero}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "ContactMapSection",
+        "importPath": "@/components/contact-us/ContactMapSection",
+        "exists": true,
+        "callProps": "map={map}",
+        "compDataImports": [
+          "@/data/contactUsData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "IndustryEcosystemSection",
+        "importPath": "@/components/industry-integration/IndustryEcosystemSection",
+        "exists": true,
+        "callProps": "data={legacyEcosystem}",
+        "compDataImports": [
+          "@/data/industryIntegration"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/icnfpr",
+    "pageFile": "icnfpr/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "IcnfprHero",
+        "importPath": "@/components/icnfpr/IcnfprHero",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "IcnfprAbout",
+        "importPath": "@/components/icnfpr/IcnfprAbout",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "IcnfprSpeakers",
+        "importPath": "@/components/icnfpr/IcnfprSpeakers",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/icnfprData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "IcnfprSchedule",
+        "importPath": "@/components/icnfpr/IcnfprSchedule",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/icnfprData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "IcnfprCfp",
+        "importPath": "@/components/icnfpr/IcnfprCfp",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/icnfprData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "IcnfprPricing",
+        "importPath": "@/components/icnfpr/IcnfprPricing",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/icnfprData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "IcnfprCommittee",
+        "importPath": "@/components/icnfpr/IcnfprCommittee",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/icnfprData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "IcnfprAdvisoryBoard",
+        "importPath": "@/components/icnfpr/IcnfprAdvisoryBoard",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/icnfprData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "IcnfprContact",
+        "importPath": "@/components/icnfpr/IcnfprContact",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\r\n        contextText=\"Conference delegates and scholars benefit from the multidisciplinary academic ecosystem of:\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/industry-integration",
+    "pageFile": "industry-integration/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "IndustryIntegrationHero",
+        "importPath": "@/components/industry-integration/IndustryIntegrationHero",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/industryIntegration"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "IndustryPartnersGrid",
+        "importPath": "@/components/industry-integration/IndustryPartnersGrid",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/industryIntegration"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "IndustryEcosystemSection",
+        "importPath": "@/components/industry-integration/IndustryEcosystemSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/industryIntegration"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "IndustryIntegrationCTA",
+        "importPath": "@/components/industry-integration/IndustryIntegrationCTA",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/international-admissions",
+    "pageFile": "international-admissions/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdmissionsPage(\"international-admissions\")",
+      "getPublishedAdmissionsPage(\"international-admissions\")"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "InternationalHero",
+        "importPath": "@/components/international-admissions/InternationalHero",
+        "exists": true,
+        "callProps": "data={sections.hero}",
+        "compDataImports": [
+          "@/data/internationalAdmissions"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "InternationalLogoMarquee",
+        "importPath": "@/components/international-admissions/InternationalLogoMarquee",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/internationalAdmissions"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "UniverseOfGUSection",
+        "importPath": "@/components/international-admissions/UniverseOfGUSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/internationalAdmissions"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "LeadershipSpotlightSection",
+        "importPath": "@/components/international-admissions/LeadershipSpotlightSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/internationalAdmissions"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "InternationalTestimonials",
+        "importPath": "@/components/international-admissions/InternationalTestimonials",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/internationalAdmissions"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "InternationalVideoSection",
+        "importPath": "@/components/international-admissions/InternationalVideoSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/internationalAdmissions"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "InternationalProgramsAccordion",
+        "importPath": "@/components/international-admissions/InternationalProgramsAccordion",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/internationalAdmissions"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "contextText={sections.legacy_ecosystem?.contextText || \"International students benefit from the integrated ecosystem of:\"}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/knowledge-resource-centre-library",
+    "pageFile": "knowledge-resource-centre-library/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/library",
+    "pageFile": "library/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedLibraryPage()",
+      "getPublishedLibraryPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "LibraryHero",
+        "importPath": "@/components/library/LibraryHero",
+        "exists": true,
+        "callProps": "hero={hero}",
+        "compDataImports": [
+          "@/data/libraryData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LibraryStatCards",
+        "importPath": "@/components/library/LibraryStatCards",
+        "exists": true,
+        "callProps": "metrics={metrics}",
+        "compDataImports": [
+          "@/data/libraryData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LibraryOverview",
+        "importPath": "@/components/library/LibraryOverview",
+        "exists": true,
+        "callProps": "overview={overview}",
+        "compDataImports": [
+          "@/data/libraryData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LibraryDigitalResources",
+        "importPath": "@/components/library/LibraryDigitalResources",
+        "exists": true,
+        "callProps": "portals={portals}",
+        "compDataImports": [
+          "@/data/libraryData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LibraryInfoAndPolicy",
+        "importPath": "@/components/library/LibraryInfoAndPolicy",
+        "exists": true,
+        "callProps": "hoursPolicy={hoursPolicy} loanRules={loanRules}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "LibraryContactLibrarian",
+        "importPath": "@/components/library/LibraryContactLibrarian",
+        "exists": true,
+        "callProps": "contact={contact}",
+        "compDataImports": [
+          "@/data/libraryData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/medal-policy",
+    "pageFile": "medal-policy/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedMedalPolicyPage()",
+      "getPublishedMedalPolicyPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\r\n        contextText=\"Academic brilliance and student achievements at Geeta University are nurtured within an integrated talent development ecosystem:\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/nep",
+    "pageFile": "nep/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdmissionsPage(\"nep\")"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/news",
+    "pageFile": "news/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedNews(Number.isSafeInteger(requestedPage)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/news/[slug]",
+    "pageFile": "news/[slug]/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedNewsBySlug(slug)",
+      "getPublishedNewsBySlug(slug)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/ngos-civil-society-feedback",
+    "pageFile": "ngos-civil-society-feedback/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/notices",
+    "pageFile": "notices/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedNotices()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/notices/[slug]",
+    "pageFile": "notices/[slug]/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedNotice((await params)",
+      "getPublishedNotice((await params)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/",
+    "pageFile": "page.tsx",
+    "getPublishedCalls": [
+      "getPublishedHomePage(locale)",
+      "getPublishedHomePage(locale)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "HomeHeroSection",
+        "importPath": "@/components/home/HomeHeroSection",
+        "exists": true,
+        "callProps": "data={homeData.hero}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "SmartCampusSection",
+        "importPath": "@/components/home/SmartCampusSection",
+        "exists": true,
+        "callProps": "data={homeData.smartCampus}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "HomeStatsSection",
+        "importPath": "@/components/home/HomeStatsSection",
+        "exists": true,
+        "callProps": "data={homeData.stats}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "HomeProgramsSection",
+        "importPath": "@/components/home/HomeProgramsSection",
+        "exists": true,
+        "callProps": "data={homeData.programsOffered}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "TopRecruitersSection",
+        "importPath": "@/components/home/TopRecruitersSection",
+        "exists": true,
+        "callProps": "data={homeData.recruiters}",
+        "compDataImports": [
+          "@/data/recruiters"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "VirtualCampusTourSection",
+        "importPath": "@/components/home/VirtualCampusTourSection",
+        "exists": true,
+        "callProps": "data={homeData.virtualTour}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "AwardsRankingsSection",
+        "importPath": "@/components/about/AwardsRankingsSection",
+        "exists": true,
+        "callProps": "data={homeData.awards}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "HomeFeedbackSection",
+        "importPath": "@/components/home/HomeFeedbackSection",
+        "exists": true,
+        "callProps": "data={homeData.testimonials}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "HomeGlobalEducationSection",
+        "importPath": "@/components/home/HomeGlobalEducationSection",
+        "exists": true,
+        "callProps": "data={homeData.globalEducation}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "HomeUniverseSection",
+        "importPath": "@/components/home/HomeUniverseSection",
+        "exists": true,
+        "callProps": "data={homeData.universe}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "HomeUpdatesSection",
+        "importPath": "@/components/home/HomeUpdatesSection",
+        "exists": true,
+        "callProps": "data={homeData.updates}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "WhyJoinGeetaSection",
+        "importPath": "@/components/home/WhyJoinGeetaSection",
+        "exists": true,
+        "callProps": "data={homeData.whyJoinGeeta}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "ScholarshipsSection",
+        "importPath": "@/components/home/ScholarshipsSection",
+        "exists": true,
+        "callProps": "data={homeData.scholarships}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "IndustryIntegrationSection",
+        "importPath": "@/components/home/IndustryIntegrationSection",
+        "exists": true,
+        "callProps": "data={homeData.industryPartners}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "StarPerformancesSection",
+        "importPath": "@/components/home/StarPerformancesSection",
+        "exists": true,
+        "callProps": "data={homeData.starPerformances}\r\n        ctaData={homeData.starPerformancesCta}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/pages/[slug]",
+    "pageFile": "pages/[slug]/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedPageBySlug(slug)",
+      "getPublishedPageBySlug(slug)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/phd",
+    "pageFile": "phd/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdmissionsPage(\"phd\")",
+      "getPublishedAdmissionsPage(\"phd\")"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/phdData"
+    ],
+    "components": [
+      {
+        "componentName": "PhdHero",
+        "importPath": "@/components/phd/PhdHero",
+        "exists": true,
+        "callProps": "data={heroData}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "PhdAboutAndEnquiry",
+        "importPath": "@/components/phd/PhdAboutAndEnquiry",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/phdData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "PhdImportantDates",
+        "importPath": "@/components/phd/PhdImportantDates",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/phdData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "PhdCourseworkFramework",
+        "importPath": "@/components/phd/PhdCourseworkFramework",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "AwardsRankingsSection",
+        "importPath": "@/components/about/AwardsRankingsSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "PhdVirtualCampusTour",
+        "importPath": "@/components/phd/PhdVirtualCampusTour",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "PhdEligibilitySection",
+        "importPath": "@/components/phd/PhdEligibilitySection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "PhdSyllabusSection",
+        "importPath": "@/components/phd/PhdSyllabusSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/phdData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "PhdNoticeAndContact",
+        "importPath": "@/components/phd/PhdNoticeAndContact",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "FAQSection",
+        "importPath": "@/components/programs/FAQSection",
+        "exists": true,
+        "callProps": "title={faqsData?.title || \"FAQs – Ph.D. at Geeta University\"}\r\n          subtitle={\r\n            faqsData?.subtitle ||\r\n            \"Clear your doubts about Ph.D. eligibility, entrance examination structure, fellowships, exemptions, and coursework delivery.\"\r\n          }\r\n          faqs={faqsData?.items || phdFaqsData}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\r\n        contextText={legacyData?.contextText || \"Ph.D. scholars benefit from the integrated ecosystem of:\"}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/placements",
+    "pageFile": "placements/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedPlacementsPage()",
+      "getPublishedPlacementsPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "PlacementsClientPage",
+        "importPath": "@/components/placements/PlacementsClientPage",
+        "exists": true,
+        "callProps": "sections={sections} seo={seo}",
+        "compDataImports": [
+          "@/data/placements"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/post-graduate-programs",
+    "pageFile": "post-graduate-programs/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdmissionsPage(\"post-graduate-programs\")",
+      "getPublishedAdmissionsPage(\"post-graduate-programs\")"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/postGraduatePrograms"
+    ],
+    "components": [
+      {
+        "componentName": "PostGraduateHero",
+        "importPath": "@/components/post-graduate-programs/PostGraduateHero",
+        "exists": true,
+        "callProps": "data={heroData}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "PostGraduateListSection",
+        "importPath": "@/components/post-graduate-programs/PostGraduateListSection",
+        "exists": true,
+        "callProps": "schoolsData={pgSchoolsData} statsData={statsCardsData}",
+        "compDataImports": [
+          "@/data/postGraduatePrograms"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "FAQSection",
+        "importPath": "@/components/programs/FAQSection",
+        "exists": true,
+        "callProps": "title={faqsData?.title || \"Frequently Asked Questions (FAQs)\"}\r\n          subtitle={\r\n            faqsData?.subtitle ||\r\n            \"Find answers to common questions about postgraduate admissions, eligibility, master's courses, and scholarship opportunities at Geeta University.\"\r\n          }\r\n          faqs={faqsData?.items || pgFaqsData}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\r\n        contextText={legacyData?.contextText || \"PG students benefit from the integrated ecosystem of:\"}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/programs/geeta-nursing-college",
+    "pageFile": "programs/geeta-nursing-college/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/nursing"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={nursingSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/programs",
+    "pageFile": "programs/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedPrograms()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/programs/school-of-agricultural-sciences",
+    "pageFile": "programs/school-of-agricultural-sciences/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/agriculture"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={program || agricultureSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/programs/school-of-agricultural-studies",
+    "pageFile": "programs/school-of-agricultural-studies/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/agriculture"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={program || agricultureSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/programs/school-of-agriculture",
+    "pageFile": "programs/school-of-agriculture/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/agriculture"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={program || agricultureSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/programs/school-of-computer-science-and-engineering",
+    "pageFile": "programs/school-of-computer-science-and-engineering/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedDepartment(departmentSlug)",
+      "getPublishedDepartment(departmentSlug)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/computerScience"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={computerScienceSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/programs/school-of-humanities",
+    "pageFile": "programs/school-of-humanities/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/humanities"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={program || humanitiesSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/programs/school-of-humanities-and-social-science",
+    "pageFile": "programs/school-of-humanities-and-social-science/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/humanities"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={program || humanitiesSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/programs/sp-bansal-school-of-business",
+    "pageFile": "programs/sp-bansal-school-of-business/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/spBansal"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={spBansalSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/programs/[slug]",
+    "pageFile": "programs/[slug]/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={program}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/programs/[slug]/[courseSlug]",
+    "pageFile": "programs/[slug]/[courseSlug]/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "CoursePage",
+        "importPath": "@/components/programs/course/CoursePage",
+        "exists": true,
+        "callProps": "course={course} school={school}",
+        "compDataImports": [
+          "@/data/programs/courses/types",
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/programs-after-12th",
+    "pageFile": "programs-after-12th/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdmissionsPage(\"programs-after-12th\")",
+      "getPublishedAdmissionsPage(\"programs-after-12th\")"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programsAfter12"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramsAfter12Hero",
+        "importPath": "@/components/programs-after-12th/ProgramsAfter12Hero",
+        "exists": true,
+        "callProps": "data={heroData}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "ProgramsListSection",
+        "importPath": "@/components/programs-after-12th/ProgramsListSection",
+        "exists": true,
+        "callProps": "schoolsData={ugSchoolsData} statsData={statsCardsData}",
+        "compDataImports": [
+          "@/data/programsAfter12"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "FAQSection",
+        "importPath": "@/components/programs/FAQSection",
+        "exists": true,
+        "callProps": "title={faqsData?.title || \"Frequently Asked Questions (FAQs)\"}\r\n          subtitle={\r\n            faqsData?.subtitle ||\r\n            \"Everything you need to know about undergraduate admissions, eligibility criteria, scholarships, and academic pathways after 12th.\"\r\n          }\r\n          faqs={faqsData?.items || ugFaqsData}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\r\n        contextText={legacyData?.contextText || \"UG students benefit from the integrated ecosystem of:\"}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/scholarship",
+    "pageFile": "scholarship/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/scholarship-predictor",
+    "pageFile": "scholarship-predictor/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedAdmissionsPage(\"scholarship-predictor\")",
+      "getPublishedAdmissionsPage(\"scholarship-predictor\")"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "ScholarshipPredictorHero",
+        "importPath": "@/components/scholarship-predictor/ScholarshipPredictorHero",
+        "exists": true,
+        "callProps": "data={sections.hero}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "ScholarshipCalculator",
+        "importPath": "@/components/scholarship-predictor/ScholarshipCalculator",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "ScholarshipTypesOverview",
+        "importPath": "@/components/scholarship-predictor/ScholarshipTypesOverview",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "ScholarshipPredictorFAQ",
+        "importPath": "@/components/scholarship-predictor/ScholarshipPredictorFAQ",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/scholarshipPredictorData"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"\r\n        contextText={sections.legacy_ecosystem?.contextText || \"Scholarship students benefit from the integrated ecosystem of:\"}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/school-of-agricultural-sciences",
+    "pageFile": "school-of-agricultural-sciences/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/agriculture"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={program || agricultureSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/school-of-agricultural-studies",
+    "pageFile": "school-of-agricultural-studies/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/agriculture"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={program || agricultureSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/school-of-agriculture",
+    "pageFile": "school-of-agriculture/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/agriculture"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={program || agricultureSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/search",
+    "pageFile": "search/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "SearchResultsView",
+        "importPath": "@/components/search/SearchResultsView",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/sitemap",
+    "pageFile": "sitemap/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "LegacyEcosystem",
+        "importPath": "@/components/about/LegacyEcosystem",
+        "exists": true,
+        "callProps": "id=\"legacy-ecosystem\"",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/social-links",
+    "pageFile": "social-links/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": []
+  },
+  {
+    "route": "/spbsb",
+    "pageFile": "spbsb/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [
+      "@/data/programs/schools/spBansal"
+    ],
+    "components": [
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={spBansalSchool}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/teaching-learning-practices",
+    "pageFile": "teaching-learning-practices/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedTeachingPage()",
+      "getPublishedTeachingPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "TeachingHero",
+        "importPath": "@/components/teaching-learning-practices/TeachingHero",
+        "exists": true,
+        "callProps": "hero={hero}",
+        "compDataImports": [
+          "@/data/teachingLearningPractices"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "TeachingOverviewSection",
+        "importPath": "@/components/teaching-learning-practices/TeachingOverviewSection",
+        "exists": true,
+        "callProps": "overview={overview}",
+        "compDataImports": [
+          "@/data/teachingLearningPractices"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "TeachingPedagogyGrid",
+        "importPath": "@/components/teaching-learning-practices/TeachingPedagogyGrid",
+        "exists": true,
+        "callProps": "pedagogy={pedagogy}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      },
+      {
+        "componentName": "IndustryEcosystemSection",
+        "importPath": "@/components/industry-integration/IndustryEcosystemSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/industryIntegration"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "TeachingCTA",
+        "importPath": "@/components/teaching-learning-practices/TeachingCTA",
+        "exists": true,
+        "callProps": "cta={cta}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/ugc",
+    "pageFile": "ugc/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedUgcPage()",
+      "getPublishedUgcPage()"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "UGCHero",
+        "importPath": "@/components/ugc/UGCHero",
+        "exists": true,
+        "callProps": "hero={hero}",
+        "compDataImports": [
+          "@/data/ugcData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "UGCDocumentsGrid",
+        "importPath": "@/components/ugc/UGCDocumentsGrid",
+        "exists": true,
+        "callProps": "documents={documents}",
+        "compDataImports": [
+          "@/data/ugcData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "UGCStatutoryApprovals",
+        "importPath": "@/components/ugc/UGCStatutoryApprovals",
+        "exists": true,
+        "callProps": "approvals={approvals}",
+        "compDataImports": [
+          "@/data/ugcData"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "IndustryEcosystemSection",
+        "importPath": "@/components/industry-integration/IndustryEcosystemSection",
+        "exists": true,
+        "callProps": "",
+        "compDataImports": [
+          "@/data/industryIntegration"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "UGCCalloutCTA",
+        "importPath": "@/components/ugc/UGCCalloutCTA",
+        "exists": true,
+        "callProps": "calloutCta={calloutCta}",
+        "compDataImports": [],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": false
+      }
+    ]
+  },
+  {
+    "route": "/xedge",
+    "pageFile": "xedge/page.tsx",
+    "getPublishedCalls": [],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "XEdgePage",
+        "importPath": "@/components/xedge/XEdgePage",
+        "exists": true,
+        "callProps": "pageData={pageData}",
+        "compDataImports": [
+          "@/data/edge/types"
+        ],
+        "acceptsDataProp": false,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      }
+    ]
+  },
+  {
+    "route": "/[slug]",
+    "pageFile": "[slug]/page.tsx",
+    "getPublishedCalls": [
+      "getPublishedPageBySlug(slug)",
+      "getPublishedPageBySlug(slug)"
+    ],
+    "getPageSectionCalls": [],
+    "prismaCalls": [],
+    "directDataImports": [],
+    "components": [
+      {
+        "componentName": "CoursePage",
+        "importPath": "@/components/programs/course/CoursePage",
+        "exists": true,
+        "callProps": "course={course} school={school}",
+        "compDataImports": [
+          "@/data/programs/courses/types",
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": false,
+        "fallbackToStatic": true
+      },
+      {
+        "componentName": "ProgramPage",
+        "importPath": "@/components/programs/ProgramPage",
+        "exists": true,
+        "callProps": "data={school}",
+        "compDataImports": [
+          "@/data/programs/types"
+        ],
+        "acceptsDataProp": true,
+        "rendersPropData": true,
+        "fallbackToStatic": true
+      }
+    ]
+  }
+]

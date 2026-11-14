@@ -38,6 +38,7 @@ export const DEDICATED_CMS_PAGE_SLUGS = [
   "library",
   "advisory-board",
   "medal-policy",
+  "geeta-in-news",
 ] as const;
 
 // 5. Standard Institutional Pages
@@ -46,11 +47,11 @@ export const STANDARD_INSTITUTIONAL_PAGE_SLUGS = [
   "contact-us",
   "ugc",
   "teaching-learning-practices",
-  "geeta-in-news",
   "how-to-reach-us",
   "about-panipat",
   "anti-ragging-committee",
 ] as const;
+
 
 // All Institutional Page Slugs (both dedicated dashboards and standard section editors)
 export const ALL_INSTITUTIONAL_PAGE_SLUGS = [

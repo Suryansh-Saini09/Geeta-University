@@ -32,9 +32,9 @@ export const mtechCse: CoursePageData = {
     title: "M.Tech. in Computer Science & Engineering",
     description: "",
     image:
-      "https://geetauniversity.edu.in/uploads/all/1854/M.Tech.-in-Computer-Science-&-Engineering.jpg",
+      "/uploads/all/1854/M.Tech.-in-Computer-Science-&-Engineering.jpg",
     mobileImage:
-      "https://geetauniversity.edu.in/uploads/all/1853/M.Tech.-in-Computer-Science-&-Engineering-2.jpg",
+      "/uploads/all/1853/M.Tech.-in-Computer-Science-&-Engineering-2.jpg",
   },
   quickInfo: {
     program: "M.Tech. in Computer Science & Engineering",
@@ -156,21 +156,21 @@ export const mtechCse: CoursePageData = {
       name: "Ayuba Ishah Malami",
       role: "M.Tech CSE Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2326/conversions/Ayuba-ishah-malami-full.webp",
+        "/uploads/all/2326/conversions/Ayuba-ishah-malami-full.webp",
       text: "The M.Tech Computer Science and Engineering program helped me build expertise in data science, algorithms, and system design. It’s a great option for professionals looking to upgrade their technical careers.",
     },
     {
       name: "Nishant Rawat",
       role: "M.Tech CSE Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2327/conversions/nishant-rawat-full.webp",
+        "/uploads/all/2327/conversions/nishant-rawat-full.webp",
       text: "I highly recommend this M.Tech CSE program in Haryana for students planning to apply for postgraduate engineering courses. The course structure is industry-aligned and supports innovation and research.",
     },
     {
       name: "Narendra Yadav",
       role: "M.Tech CSE Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2328/conversions/Narendra-yadav-full.webp",
+        "/uploads/all/2328/conversions/Narendra-yadav-full.webp",
       text: "I applied for M.Tech CSE in Panipat at Geeta University to enhance my technical skills. The program’s focus on advanced computing, AI, and real-world projects makes it perfect for career growth in software development.",
     },
   ],
@@ -180,27 +180,27 @@ export const mtechCse: CoursePageData = {
       {
         title: "AI & Data Science Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
       },
       {
         title: "Cybersecurity & Cloud Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
       },
       {
         title: "Collaborative Coding & Innovation Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
       },
       {
         title: "Computing & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
       },
     ],
   },
@@ -211,7 +211,7 @@ export const mtechCse: CoursePageData = {
       "Join the M.Tech. in Computer Science & Engineering program at Geeta University and lead the future of intelligent systems, cloud computing, and R&D.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

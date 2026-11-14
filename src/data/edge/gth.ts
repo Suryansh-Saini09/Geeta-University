@@ -260,21 +260,21 @@ export const gthPage: EdgePageData = {
           subtitle: "AWS · Microsoft · Red Hat · Cisco",
           description:
             "We offer globally recognized certifications from AWS, Microsoft, Red Hat, Cisco, and Oracle — boosting student competencies, enhancing resumes, and opening doors to international job opportunities.",
-          image: "https://geetauniversity.edu.in/uploads/all/1320/11-(1).png",
+          image: "/uploads/all/1320/11-(1).png",
         },
         {
           title: "Placement Readiness",
           subtitle: "Coding Tests · Mock Interviews · SFIT Guidance",
           description:
             "Placement preparation begins from Day 1 with intensive aptitude coaching, live coding challenges, simulated technical interviews, and resume reviews — ensuring top offers from Flipkart, Deloitte, Codways, TCS, and more.",
-          image: "https://geetauniversity.edu.in/uploads/all/1321/11-(2).png",
+          image: "/uploads/all/1321/11-(2).png",
         },
         {
           title: "Innovation & Product Building",
           subtitle: "HackForge · AI Tools · Full Stack Apps",
           description:
             "Students build real-world tech solutions via HackForge and specialized skill centers — developing AI tools, cybersecurity apps, and full stack projects like resume parsers, smart dashboards, and cloud-deployed applications.",
-          image: "https://geetauniversity.edu.in/uploads/all/1322/11-(3).png",
+          image: "/uploads/all/1322/11-(3).png",
         },
       ],
     },
@@ -284,7 +284,7 @@ export const gthPage: EdgePageData = {
       features: [
         {
           title: "Skill Centers At GTH",
-          image: "https://geetauniversity.edu.in/uploads/all/1315/6.png",
+          image: "/uploads/all/1315/6.png",
         },
         {
           title: "Programs & Trainings",

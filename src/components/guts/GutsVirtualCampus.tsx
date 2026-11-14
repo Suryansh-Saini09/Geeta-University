@@ -32,7 +32,15 @@ const itemVariants: Variants = {
   },
 };
 
-export default function VirtualCampusTourSection() {
+export interface GutsVirtualCampusProps {
+  data?: {
+    title?: string;
+    videoId?: string;
+  };
+}
+
+export default function VirtualCampusTourSection({ data }: GutsVirtualCampusProps = {}) {
+  const videoId = data?.videoId || "arnFS6rf454";
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -207,7 +215,7 @@ export default function VirtualCampusTourSection() {
               <div className="aspect-video w-full">
                 <iframe
                   title="Geeta University Virtual Campus Tour"
-                  src="https://www.youtube.com/embed/arnFS6rf454?autoplay=1"
+                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
                   className="h-full w-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen

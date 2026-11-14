@@ -109,6 +109,7 @@ export default function AwardsRankingsSection({ data }: AwardsRankingsSectionPro
                         alt={award.title}
                         fill
                         sizes="(max-width: 639px) 280px, (max-width: 767px) 310px, 340px"
+                        unoptimized={Boolean(award.image?.startsWith("http"))}
                         className="object-cover transition-transform duration-500 ease-out group-hover/card:scale-[1.05] pointer-events-none"
                       />
                     </div>

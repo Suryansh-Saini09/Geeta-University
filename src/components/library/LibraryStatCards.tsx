@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { libraryMetricsData as fallbackMetrics, type LibraryMetricCard } from "@/data/libraryData";
 
 interface LibraryStatCardsProps {
@@ -17,12 +18,14 @@ export default function LibraryStatCards({ metrics }: LibraryStatCardsProps) {
               className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#E8871A]/50 hover:shadow-md flex flex-col justify-between"
             >
               <div>
-                {/* Image Header */}
                 <div className="relative h-44 w-full overflow-hidden bg-slate-100">
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    loading="lazy"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
 

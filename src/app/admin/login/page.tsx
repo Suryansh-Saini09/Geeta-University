@@ -8,6 +8,7 @@ import LoginForm from "./LoginForm";
 const errorMessages: Record<string, string> = {
   "invalid-input": "Enter a valid email and password.",
   "invalid-credentials": "The email or password is incorrect.",
+  "too-many-attempts": "Too many failed sign-in attempts. Please wait 15 minutes before trying again.",
   "database-error": "Sign-in is temporarily unavailable. Please try again shortly.",
   "session-error": "Failed to create an active session. Please try again.",
   "server-error": "A server error occurred. Please try again.",

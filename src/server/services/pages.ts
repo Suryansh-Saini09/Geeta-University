@@ -1,14 +1,22 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
+import { CACHE_TAGS, DEFAULT_CACHE_TTL } from "@/server/cache/tags";
 import { prisma, ContentStatus, type Prisma } from "@/server/db/client";
 import { getLocalizedBody, getLocalizedField, DEFAULT_LOCALE } from "@/lib/i18n/localization";
+import { serverLogger } from "@/lib/security/logger";
 
-export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
-  let sections: any[] = [];
+export const getPublishedHomePage = cache(async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      let sections: any[] = [];
   let recruiters: any[] = [];
   let awards: any[] = [];
   let testimonials: any[] = [];
   let industryPartners: any[] = [];
   let starPerformances: any[] = [];
   let homePageRecord: any = null;
+  let draftSections: any[] = [];
+  let visibilitySetting: any = null;
 
   try {
     [
@@ -19,6 +27,8 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
       industryPartners,
       starPerformances,
       homePageRecord,
+      draftSections,
+      visibilitySetting,
     ] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "home", status: "PUBLISHED" },
@@ -26,7 +36,7 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
       }),
       prisma.recruiter.findMany({
         where: { status: "PUBLISHED" },
-        orderBy: { sortOrder: "asc" },
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
       }),
       prisma.awardRanking.findMany({
         where: { status: "PUBLISHED" },
@@ -48,47 +58,82 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
         where: { slug: "home" },
         include: { seo: true },
       }),
+      prisma.pageSection.findMany({
+        where: { pageSlug: "home", status: "DRAFT" },
+        select: { sectionKey: true },
+      }).catch(() => []),
+      prisma.siteSetting.findUnique({
+        where: { key: "cms_visibility:page:home" },
+        select: { value: true },
+      }).catch(() => null),
     ]);
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedHomePage failed:", {
-      message: err?.message ? String(err.message).replace(/:[^:@]+@/, ":****@") : String(err),
-      code: err?.code,
-    });
+    serverLogger.error("[CMS DB ERROR] getPublishedHomePage failed", err, { module: "pages", action: "getPublishedHomePage" });
   }
+
+  const hiddenKeys = new Set((draftSections || []).map((s: any) => s.sectionKey));
+  if (visibilitySetting && visibilitySetting.value && typeof visibilitySetting.value === "object") {
+    for (const [k, v] of Object.entries(visibilitySetting.value as Record<string, any>)) {
+      if (v === false) hiddenKeys.add(k);
+      if (v === true) hiddenKeys.delete(k);
+    }
+  }
+
+  const visibility: Record<string, boolean> = {};
+  [
+    "hero", "smartCampus", "stats", "programsOffered", "recruiters",
+    "awards", "testimonials", "globalEducation", "universe", "updates",
+    "whyJoinGeeta", "scholarships", "industryPartners", "virtualTour",
+    "starPerformances"
+  ].forEach((k) => {
+    visibility[k] = !hiddenKeys.has(k);
+  });
 
   const sectionMap: Record<string, any> = {};
   sections.forEach((sec: any) => {
-    sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+    if (!hiddenKeys.has(sec.sectionKey)) {
+      sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+    }
   });
 
-  const localizedRecruiters = recruiters.map((r: any) => ({
-    ...r,
-    name: getLocalizedField(r, "name", locale),
-  }));
+  const localizedRecruiters = hiddenKeys.has("recruiters")
+    ? []
+    : recruiters.map((r: any) => ({
+        ...r,
+        name: getLocalizedField(r, "name", locale),
+      }));
 
-  const localizedAwards = awards.map((a: any) => ({
-    ...a,
-    title: getLocalizedField(a, "title", locale),
-    presentedBy: getLocalizedField(a, "presentedBy", locale),
-    designation: getLocalizedField(a, "designation", locale),
-  }));
+  const localizedAwards = hiddenKeys.has("awards")
+    ? []
+    : awards.map((a: any) => ({
+        ...a,
+        title: getLocalizedField(a, "title", locale),
+        presentedBy: getLocalizedField(a, "presentedBy", locale),
+        designation: getLocalizedField(a, "designation", locale),
+      }));
 
-  const localizedTestimonials = testimonials.map((t: any) => ({
-    ...t,
-    name: getLocalizedField(t, "name", locale),
-    testimonial: getLocalizedField(t, "testimonial", locale),
-    package: getLocalizedField(t, "package", locale),
-  }));
+  const localizedTestimonials = hiddenKeys.has("testimonials")
+    ? []
+    : testimonials.map((t: any) => ({
+        ...t,
+        name: getLocalizedField(t, "name", locale),
+        testimonial: getLocalizedField(t, "testimonial", locale),
+        package: getLocalizedField(t, "package", locale),
+      }));
 
-  const localizedIndustryPartners = industryPartners.map((p: any) => ({
-    ...p,
-    name: getLocalizedField(p, "name", locale),
-  }));
+  const localizedIndustryPartners = hiddenKeys.has("industryPartners")
+    ? []
+    : industryPartners.map((p: any) => ({
+        ...p,
+        name: getLocalizedField(p, "name", locale),
+      }));
 
-  const localizedStarPerformances = starPerformances.map((s: any) => ({
-    ...s,
-    name: getLocalizedField(s, "name", locale),
-  }));
+  const localizedStarPerformances = hiddenKeys.has("starPerformances")
+    ? []
+    : starPerformances.map((s: any) => ({
+        ...s,
+        name: getLocalizedField(s, "name", locale),
+      }));
 
   const localizedSeo = homePageRecord?.seo
     ? {
@@ -116,63 +161,118 @@ export async function getPublishedHomePage(locale: string = DEFAULT_LOCALE) {
     testimonials: localizedTestimonials,
     industryPartners: localizedIndustryPartners,
     starPerformances: localizedStarPerformances,
+    visibility,
     seo: localizedSeo,
   };
-}
+    },
+    ["home-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.home, CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
-  const [
-    sections,
-    recognitions,
-    awards,
-    leadership,
-    governanceDocs,
-    aboutPageRecord,
-  ] = await Promise.all([
-    prisma.pageSection.findMany({
-      where: { pageSlug: "about", status: "PUBLISHED" },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.recognition.findMany({
-      where: { status: "PUBLISHED" },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.awardRanking.findMany({
-      where: { status: "PUBLISHED" },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.leadershipMember.findMany({
-      where: { status: "PUBLISHED" },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.governanceDocument.findMany({
-      where: { status: "PUBLISHED" },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.page.findUnique({
-      where: { slug: "about" },
-      include: { seo: true },
-    }),
-  ]);
+export const getPublishedAboutPage = cache(async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      let sections: any[] = [];
+  let recognitions: any[] = [];
+  let awards: any[] = [];
+  let leadership: any[] = [];
+  let governanceDocs: any[] = [];
+  let aboutPageRecord: any = null;
+  let draftSections: any[] = [];
+  let visibilitySetting: any = null;
+
+  try {
+    [
+      sections,
+      recognitions,
+      awards,
+      leadership,
+      governanceDocs,
+      aboutPageRecord,
+      draftSections,
+      visibilitySetting,
+    ] = await Promise.all([
+      prisma.pageSection.findMany({
+        where: { pageSlug: "about", status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.recognition.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.awardRanking.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.leadershipMember.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.governanceDocument.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.page.findUnique({
+        where: { slug: "about" },
+        include: { seo: true },
+      }),
+      prisma.pageSection.findMany({
+        where: { pageSlug: "about", status: "DRAFT" },
+        select: { sectionKey: true },
+      }).catch(() => []),
+      prisma.siteSetting.findUnique({
+        where: { key: "cms_visibility:page:about" },
+        select: { value: true },
+      }).catch(() => null),
+    ]);
+  } catch (err: any) {
+    serverLogger.error("[CMS DB ERROR] getPublishedAboutPage failed", err, { module: "pages", action: "getPublishedAboutPage" });
+  }
+
+  const hiddenKeys = new Set((draftSections || []).map((s: any) => s.sectionKey));
+  if (visibilitySetting && visibilitySetting.value && typeof visibilitySetting.value === "object") {
+    for (const [k, v] of Object.entries(visibilitySetting.value as Record<string, any>)) {
+      if (v === false) hiddenKeys.add(k);
+      if (v === true) hiddenKeys.delete(k);
+    }
+  }
+
+  const visibility: Record<string, boolean> = {};
+  [
+    "hero", "visionMission", "recognitions", "awards", "legacy",
+    "leadership", "governance", "policies", "legacyEcosystem"
+  ].forEach((k) => {
+    visibility[k] = !hiddenKeys.has(k);
+  });
 
   const sectionMap: Record<string, any> = {};
   sections.forEach((sec: any) => {
-    sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+    if (!hiddenKeys.has(sec.sectionKey)) {
+      sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+    }
   });
 
-  const localizedRecognitions = recognitions.map((r: any) => ({
-    ...r,
-    name: getLocalizedField(r, "name", locale),
-    fullName: getLocalizedField(r, "fullName", locale),
-  }));
+  const localizedRecognitions = hiddenKeys.has("recognitions")
+    ? []
+    : recognitions.map((r: any) => ({
+        ...r,
+        name: getLocalizedField(r, "name", locale),
+        fullName: getLocalizedField(r, "fullName", locale),
+      }));
 
-  const localizedLeadership = leadership.map((l: any) => ({
-    ...l,
-    name: getLocalizedField(l, "name", locale),
-    role: getLocalizedField(l, "role", locale),
-    message: getLocalizedField(l, "message", locale),
-    quote: getLocalizedField(l, "quote", locale),
-  }));
+  const localizedLeadership = hiddenKeys.has("leadership")
+    ? []
+    : leadership.map((l: any) => ({
+        ...l,
+        name: getLocalizedField(l, "name", locale),
+        role: getLocalizedField(l, "role", locale),
+        message: getLocalizedField(l, "message", locale),
+        quote: getLocalizedField(l, "quote", locale),
+      }));
 
   const localizedGovernance = governanceDocs.map((g: any) => ({
     ...g,
@@ -180,15 +280,22 @@ export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
     description: getLocalizedField(g, "description", locale),
   }));
 
-  const governance = localizedGovernance.filter((d: any) => d.category === "governance");
-  const policies = localizedGovernance.filter((d: any) => d.category === "policy");
+  const governance = hiddenKeys.has("governance")
+    ? []
+    : localizedGovernance.filter((d: any) => d.category === "governance");
 
-  const localizedAwards = awards.map((a: any) => ({
-    ...a,
-    title: getLocalizedField(a, "title", locale),
-    presentedBy: getLocalizedField(a, "presentedBy", locale),
-    designation: getLocalizedField(a, "designation", locale),
-  }));
+  const policies = hiddenKeys.has("policies")
+    ? []
+    : localizedGovernance.filter((d: any) => d.category === "policy");
+
+  const localizedAwards = hiddenKeys.has("awards")
+    ? []
+    : awards.map((a: any) => ({
+        ...a,
+        title: getLocalizedField(a, "title", locale),
+        presentedBy: getLocalizedField(a, "presentedBy", locale),
+        designation: getLocalizedField(a, "designation", locale),
+      }));
 
   const localizedSeo = aboutPageRecord?.seo
     ? {
@@ -210,38 +317,65 @@ export async function getPublishedAboutPage(locale: string = DEFAULT_LOCALE) {
     leadership: localizedLeadership,
     governance,
     policies,
+    visibility,
     seo: localizedSeo,
   };
-}
+    },
+    ["about-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.about, CACHE_TAGS.pages],
+    }
+  )();
+});
 
 export async function getPageSectionsAdmin(pageSlug: string) {
-  const [sections, pageRecord] = await Promise.all([
-    prisma.pageSection.findMany({
-      where: { pageSlug },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.page.findUnique({
-      where: { slug: pageSlug },
-      include: { seo: true },
-    }),
-  ]);
+  try {
+    const [sections, pageRecord] = await Promise.all([
+      prisma.pageSection.findMany({
+        where: { pageSlug },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.page.findUnique({
+        where: { slug: pageSlug },
+        include: { seo: true },
+      }),
+    ]);
 
-  const sectionMap: Record<string, any> = {};
-  sections.forEach((sec: any) => {
-    sectionMap[sec.sectionKey] = {
-      id: sec.id,
-      title: sec.title,
-      body: sec.body,
-      translations: sec.translations || {},
-      status: sec.status,
-      updatedAt: sec.updatedAt,
+    const sectionMap: Record<string, any> = {};
+    sections.forEach((sec: any) => {
+      sectionMap[sec.sectionKey] = {
+        id: sec.id,
+        title: sec.title,
+        body: sec.body,
+        translations: sec.translations || {},
+        status: sec.status,
+        updatedAt: sec.updatedAt,
+      };
+    });
+
+    return {
+      sections: sectionMap,
+      seo: pageRecord?.seo || null,
+      page: pageRecord
+        ? {
+            id: pageRecord.id,
+            slug: pageRecord.slug,
+            title: pageRecord.title,
+            status: pageRecord.status,
+            updatedAt: pageRecord.updatedAt,
+            publishedAt: pageRecord.publishedAt,
+          }
+        : null,
     };
-  });
-
-  return {
-    sections: sectionMap,
-    seo: pageRecord?.seo || null,
-  };
+  } catch (err: any) {
+    serverLogger.error(`[CMS DB ERROR] getPageSectionsAdmin('${pageSlug}') failed`, err, { module: "pages", action: "getPageSectionsAdmin", pageSlug });
+    return {
+      sections: {},
+      seo: null,
+      page: null,
+    };
+  }
 }
 
 export interface AdminPageFilters {
@@ -304,15 +438,25 @@ export async function getAdminPageById(id: string) {
   });
 }
 
-export async function getPublishedPageBySlug(slug: string) {
-  return prisma.page.findFirst({
-    where: { slug, status: "PUBLISHED" },
-    include: { seo: true },
-  });
-}
+export const getPublishedPageBySlug = cache(async function getPublishedPageBySlug(slug: string) {
+  return unstable_cache(
+    async () =>
+      prisma.page.findFirst({
+        where: { slug, status: "PUBLISHED" },
+        include: { seo: true },
+      }),
+    ["page-by-slug", slug],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.page(slug), CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedAdmissionsPage(pageSlug: string, locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedAdmissionsPage = cache(async function getPublishedAdmissionsPage(pageSlug: string, locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug, status: "PUBLISHED" },
@@ -344,19 +488,26 @@ export async function getPublishedAdmissionsPage(pageSlug: string, locale: strin
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error(`[CMS DB ERROR] getPublishedAdmissionsPage("${pageSlug}") failed:`, {
-      message: err?.message ? String(err.message).replace(/:[^:@]+@/, ":****@") : String(err),
-    });
+    serverLogger.error(`[CMS DB ERROR] getPublishedAdmissionsPage("${pageSlug}") failed`, err, { module: "pages", action: "getPublishedAdmissionsPage", pageSlug });
     return {
       page: null,
       sections: {},
       seo: null,
     };
   }
-}
+    },
+    ["admissions-page", pageSlug, locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.page(pageSlug), CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedCampusLifePage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedCampusLifePage = cache(async function getPublishedCampusLifePage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "campus-life", status: "PUBLISHED" },
@@ -387,13 +538,22 @@ export async function getPublishedCampusLifePage(locale: string = DEFAULT_LOCALE
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedCampusLifePage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedCampusLifePage failed", err, { module: "pages", action: "getPublishedCampusLifePage" });
     return { sections: {}, seo: null };
   }
-}
+    },
+    ["campus-life-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.campusLife, CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedPlacementsPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedPlacementsPage = cache(async function getPublishedPlacementsPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "placements", status: "PUBLISHED" },
@@ -424,13 +584,22 @@ export async function getPublishedPlacementsPage(locale: string = DEFAULT_LOCALE
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedPlacementsPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedPlacementsPage failed", err, { module: "pages", action: "getPublishedPlacementsPage" });
     return { sections: {}, seo: null };
   }
-}
+    },
+    ["placements-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.placements, CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedLibraryPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedLibraryPage = cache(async function getPublishedLibraryPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "library", status: "PUBLISHED" },
@@ -468,7 +637,7 @@ export async function getPublishedLibraryPage(locale: string = DEFAULT_LOCALE) {
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedLibraryPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedLibraryPage failed", err, { module: "pages", action: "getPublishedLibraryPage" });
     return {
       sections: {},
       hero: null,
@@ -481,10 +650,19 @@ export async function getPublishedLibraryPage(locale: string = DEFAULT_LOCALE) {
       seo: null,
     };
   }
-}
+    },
+    ["library-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.library, CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedAdvisoryBoardPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedAdvisoryBoardPage = cache(async function getPublishedAdvisoryBoardPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "advisory-board", status: "PUBLISHED" },
@@ -517,7 +695,7 @@ export async function getPublishedAdvisoryBoardPage(locale: string = DEFAULT_LOC
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedAdvisoryBoardPage failed:", err);
+    serverLogger.error("[CMS DB ERROR] getPublishedAdvisoryBoardPage failed", err, { module: "pages", action: "getPublishedAdvisoryBoardPage" });
     return {
       sections: {},
       hero: null,
@@ -525,10 +703,19 @@ export async function getPublishedAdvisoryBoardPage(locale: string = DEFAULT_LOC
       seo: null,
     };
   }
-}
+    },
+    ["advisory-board-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.advisoryBoard, CACHE_TAGS.pages],
+    }
+  )();
+});
 
-export async function getPublishedMedalPolicyPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedMedalPolicyPage = cache(async function getPublishedMedalPolicyPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "medal-policy", status: "PUBLISHED" },
@@ -565,22 +752,31 @@ export async function getPublishedMedalPolicyPage(locale: string = DEFAULT_LOCAL
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedMedalPolicyPage failed:", err);
-    return {
-      sections: {},
-      hero: null,
-      academicMedals: null,
-      thresholds: null,
-      chancellor: null,
-      chancellorWeightage: null,
-      rankersDocument: null,
-      seo: null,
-    };
+    serverLogger.error("[CMS DB ERROR] getPublishedMedalPolicyPage failed", err, { module: "pages", action: "getPublishedMedalPolicyPage" });
+      return {
+        sections: {},
+        hero: null,
+        academicMedals: null,
+        thresholds: null,
+        chancellor: null,
+        chancellorWeightage: null,
+        rankersDocument: null,
+        seo: null,
+      };
+    }
+  },
+  ["medal-policy-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.medalPolicy, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedCareersPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedCareersPage = cache(async function getPublishedCareersPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "careers", status: "PUBLISHED" },
@@ -615,20 +811,29 @@ export async function getPublishedCareersPage(locale: string = DEFAULT_LOCALE) {
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedCareersPage failed:", err);
-    return {
-      sections: {},
-      hero: null,
-      benefits: null,
-      faqs: null,
-      formConfig: null,
-      seo: null,
-    };
+    serverLogger.error("[CMS DB ERROR] getPublishedCareersPage failed", err, { module: "pages", action: "getPublishedCareersPage" });
+      return {
+        sections: {},
+        hero: null,
+        benefits: null,
+        faqs: null,
+        formConfig: null,
+        seo: null,
+      };
+    }
+  },
+  ["careers-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.careers, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedContactPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedContactPage = cache(async function getPublishedContactPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "contact-us", status: "PUBLISHED" },
@@ -663,20 +868,29 @@ export async function getPublishedContactPage(locale: string = DEFAULT_LOCALE) {
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedContactPage failed:", err);
-    return {
-      sections: {},
-      hero: null,
-      mainInfo: null,
-      offices: null,
-      map: null,
-      seo: null,
-    };
+    serverLogger.error("[CMS DB ERROR] getPublishedContactPage failed", err, { module: "pages", action: "getPublishedContactPage" });
+      return {
+        sections: {},
+        hero: null,
+        mainInfo: null,
+        offices: null,
+        map: null,
+        seo: null,
+      };
+    }
+  },
+  ["contact-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.contactUs, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedUgcPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedUgcPage = cache(async function getPublishedUgcPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "ugc", status: "PUBLISHED" },
@@ -711,20 +925,29 @@ export async function getPublishedUgcPage(locale: string = DEFAULT_LOCALE) {
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedUgcPage failed:", err);
-    return {
-      sections: {},
-      hero: null,
-      documents: null,
-      approvals: null,
-      calloutCta: null,
-      seo: null,
-    };
+    serverLogger.error("[CMS DB ERROR] getPublishedUgcPage failed", err, { module: "pages", action: "getPublishedUgcPage" });
+      return {
+        sections: {},
+        hero: null,
+        documents: null,
+        approvals: null,
+        calloutCta: null,
+        seo: null,
+      };
+    }
+  },
+  ["ugc-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.ugc, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedTeachingPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedTeachingPage = cache(async function getPublishedTeachingPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "teaching-learning-practices", status: "PUBLISHED" },
@@ -760,21 +983,30 @@ export async function getPublishedTeachingPage(locale: string = DEFAULT_LOCALE) 
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedTeachingPage failed:", err);
-    return {
-      sections: {},
-      hero: null,
-      overview: null,
-      pedagogy: null,
-      stats: null,
-      cta: null,
-      seo: null,
-    };
+    serverLogger.error("[CMS DB ERROR] getPublishedTeachingPage failed", err, { module: "pages", action: "getPublishedTeachingPage" });
+      return {
+        sections: {},
+        hero: null,
+        overview: null,
+        pedagogy: null,
+        stats: null,
+        cta: null,
+        seo: null,
+      };
+    }
+  },
+  ["teaching-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.teachingLearning, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedGeetaInNewsPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedGeetaInNewsPage = cache(async function getPublishedGeetaInNewsPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "geeta-in-news", status: "PUBLISHED" },
@@ -800,29 +1032,47 @@ export async function getPublishedGeetaInNewsPage(locale: string = DEFAULT_LOCAL
         }
       : null;
 
+    const rawItems: any[] = sectionMap.news_items?.items || [];
+    // Only show published / active items on public website
+    const publishedItems = rawItems.filter((item) => {
+      if (!item) return false;
+      const status = String(item.status || "PUBLISHED").toUpperCase().trim();
+      return status === "PUBLISHED" || status === "ACTIVE";
+    });
+
     return {
       sections: sectionMap,
       hero: sectionMap.hero || null,
       newsItems: sectionMap.news_items || null,
-      items: sectionMap.news_items?.items || [],
+      items: publishedItems,
       publications: sectionMap.news_items?.publications || [],
+      categories: sectionMap.news_items?.categories || ["News", "Event", "Placement Updates"],
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedGeetaInNewsPage failed:", err);
-    return {
-      sections: {},
-      hero: null,
-      newsItems: null,
-      items: [],
-      publications: [],
-      seo: null,
-    };
+    serverLogger.error("[CMS DB ERROR] getPublishedGeetaInNewsPage failed", err, { module: "pages", action: "getPublishedGeetaInNewsPage" });
+      return {
+        sections: {},
+        hero: null,
+        newsItems: null,
+        items: [],
+        publications: [],
+        seo: null,
+      };
+    }
+  },
+  ["geeta-in-news-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.geetaInNews, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedHowToReachUsPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedHowToReachUsPage = cache(async function getPublishedHowToReachUsPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "how-to-reach-us", status: "PUBLISHED" },
@@ -856,19 +1106,28 @@ export async function getPublishedHowToReachUsPage(locale: string = DEFAULT_LOCA
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedHowToReachUsPage failed:", err);
-    return {
-      sections: {},
-      hero: null,
-      map: null,
-      legacyEcosystem: null,
-      seo: null,
-    };
+    serverLogger.error("[CMS DB ERROR] getPublishedHowToReachUsPage failed", err, { module: "pages", action: "getPublishedHowToReachUsPage" });
+      return {
+        sections: {},
+        hero: null,
+        map: null,
+        legacyEcosystem: null,
+        seo: null,
+      };
+    }
+  },
+  ["how-to-reach-us-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.howToReachUs, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedAboutPanipatPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedAboutPanipatPage = cache(async function getPublishedAboutPanipatPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "about-panipat", status: "PUBLISHED" },
@@ -904,21 +1163,30 @@ export async function getPublishedAboutPanipatPage(locale: string = DEFAULT_LOCA
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedAboutPanipatPage failed:", err);
-    return {
-      sections: {},
-      hero: null,
-      battles: null,
-      landmarks: null,
-      geographyDemographics: null,
-      legacyEcosystem: null,
-      seo: null,
-    };
+    serverLogger.error("[CMS DB ERROR] getPublishedAboutPanipatPage failed", err, { module: "pages", action: "getPublishedAboutPanipatPage" });
+      return {
+        sections: {},
+        hero: null,
+        battles: null,
+        landmarks: null,
+        geographyDemographics: null,
+        legacyEcosystem: null,
+        seo: null,
+      };
+    }
+  },
+  ["about-panipat-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.aboutPanipat, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
-export async function getPublishedAntiRaggingPage(locale: string = DEFAULT_LOCALE) {
-  try {
+export const getPublishedAntiRaggingPage = cache(async function getPublishedAntiRaggingPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
     const [sections, pageRecord] = await Promise.all([
       prisma.pageSection.findMany({
         where: { pageSlug: "anti-ragging-committee", status: "PUBLISHED" },
@@ -955,19 +1223,26 @@ export async function getPublishedAntiRaggingPage(locale: string = DEFAULT_LOCAL
       seo: localizedSeo,
     };
   } catch (err: any) {
-    console.error("[CMS DB ERROR] getPublishedAntiRaggingPage failed:", err);
-    return {
-      sections: {},
-      hero: null,
-      actionCards: null,
-      nationalHelpline: null,
-      ugcMonitoringAgency: null,
-      regulatoryWarning: null,
-      nodalOfficers: null,
-      seo: null,
-    };
+    serverLogger.error("[CMS DB ERROR] getPublishedAntiRaggingPage failed", err, { module: "pages", action: "getPublishedAntiRaggingPage" });
+      return {
+        sections: {},
+        hero: null,
+        actionCards: null,
+        nationalHelpline: null,
+        ugcMonitoringAgency: null,
+        regulatoryWarning: null,
+        nodalOfficers: null,
+        seo: null,
+      };
+    }
+  },
+  ["anti-ragging-page", locale],
+  {
+    revalidate: DEFAULT_CACHE_TTL,
+    tags: [CACHE_TAGS.antiRagging, CACHE_TAGS.pages],
   }
-}
+)();
+});
 
 
 

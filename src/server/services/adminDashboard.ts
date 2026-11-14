@@ -163,17 +163,19 @@ async function queryStatsBatch() {
   };
 }
 
+import { serverLogger } from "@/lib/security/logger";
+
 export async function getAdminDashboardStats(): Promise<DashboardStats> {
   try {
     try {
       return await queryStatsBatch();
     } catch (firstError) {
-      console.warn("First attempt to query admin dashboard stats failed, retrying...", firstError);
+      serverLogger.warn("First attempt to query admin dashboard stats failed, retrying", firstError, { module: "adminDashboard", action: "getAdminDashboardStats" });
       await new Promise((resolve) => setTimeout(resolve, 500));
       return await queryStatsBatch();
     }
   } catch (error) {
-    console.error("Failed to query admin dashboard stats:", error);
+    serverLogger.error("Failed to query admin dashboard stats", error, { module: "adminDashboard", action: "getAdminDashboardStats" });
     return {
       counts: {
         pages: 0,

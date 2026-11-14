@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { AdminUserStatus, AuditAction } from "@prisma/client";
 
 import { prisma } from "@/server/db/client";
@@ -11,9 +12,21 @@ import {
   setAdminSessionCookie,
 } from "@/server/auth/session";
 import { verifyPassword } from "@/server/auth/password";
+import { getClientIp } from "@/server/auth/clientIp";
+import { checkRateLimit, resetRateLimit } from "@/server/auth/rateLimiter";
 import { adminLoginSchema } from "@/validations/adminAuth";
+import { serverLogger } from "@/lib/security/logger";
 
 export async function loginAction(formData: FormData) {
+  const headerList = await headers();
+  const clientIp = getClientIp(headerList);
+
+  // Check IP rate limit (max 5 attempts per 15 minutes)
+  const ipRateLimit = checkRateLimit(`login_ip_${clientIp}`, 5, 900);
+  if (!ipRateLimit.success) {
+    redirect("/admin/login?error=too-many-attempts");
+  }
+
   const parsed = adminLoginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -23,12 +36,20 @@ export async function loginAction(formData: FormData) {
     redirect("/admin/login?error=invalid-input");
   }
 
+  const normalizedEmail = parsed.data.email.toLowerCase();
+
+  // Check email-specific rate limit
+  const emailRateLimit = checkRateLimit(`login_email_${normalizedEmail}`, 5, 900);
+  if (!emailRateLimit.success) {
+    redirect("/admin/login?error=too-many-attempts");
+  }
+
   let user = null;
   let passwordMatches = false;
 
   try {
     user = await prisma.adminUser.findUnique({
-      where: { email: parsed.data.email.toLowerCase() },
+      where: { email: normalizedEmail },
     });
 
     if (user && user.status === AdminUserStatus.ACTIVE) {
@@ -38,10 +59,10 @@ export async function loginAction(formData: FormData) {
       );
     }
   } catch (error) {
-    console.error("Database connection error during login:", {
-      message: error instanceof Error ? error.message : String(error),
-      code: (error as any)?.code,
-      hasDbUrl: Boolean(process.env.DATABASE_URL),
+    serverLogger.error("Database error during admin login attempt", error, {
+      module: "Auth",
+      action: "login",
+      clientIp,
     });
     redirect("/admin/login?error=database-error");
   }
@@ -51,6 +72,10 @@ export async function loginAction(formData: FormData) {
   }
 
   try {
+    // Reset rate limit counters on successful authentication
+    resetRateLimit(`login_ip_${clientIp}`);
+    resetRateLimit(`login_email_${normalizedEmail}`);
+
     const session = await createAdminSession(user.id);
 
     await prisma.adminUser.update({
@@ -69,7 +94,11 @@ export async function loginAction(formData: FormData) {
 
     await setAdminSessionCookie(session.token, session.expiresAt);
   } catch (error) {
-    console.error("Session creation error during login:", error);
+    serverLogger.error("Session creation error during login", error, {
+      module: "Auth",
+      action: "createSession",
+      userId: user.id,
+    });
     redirect("/admin/login?error=session-error");
   }
 
@@ -81,7 +110,7 @@ export async function logoutAction() {
     await revokeCurrentAdminSession();
     await clearAdminSessionCookie();
   } catch (error) {
-    console.error("Logout action error:", error);
+    serverLogger.error("Logout action error", error, { module: "Auth", action: "logout" });
   }
   redirect("/admin/login");
 }

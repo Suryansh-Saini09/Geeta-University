@@ -211,7 +211,7 @@ export const phdNutritionAndDietetics: CoursePageData = {
       "Take your research career to the next level with Geeta University. Apply now to advance your knowledge in nutrition science and clinical research.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 92787 68000",
   },
 };

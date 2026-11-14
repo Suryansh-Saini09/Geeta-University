@@ -295,7 +295,7 @@ export const mbaHumanResourceManagement: CoursePageData = {
       "Apply now at Geeta University to master talent management, organizational development, HR analytics, and executive leadership.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

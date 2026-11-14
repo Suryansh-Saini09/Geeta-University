@@ -32,9 +32,9 @@ export const bcaDataScienceAndBusinessAnalytics: CoursePageData = {
     title: "BCA in Data Science & Business Analytics",
     description: "",
     image:
-      "https://geetauniversity.edu.in/uploads/all/1844/BCA-in-Data-Science-&-Business-Analytics.jpg",
+      "/uploads/all/1844/BCA-in-Data-Science-&-Business-Analytics.jpg",
     mobileImage:
-      "https://geetauniversity.edu.in/uploads/all/1843/BCA-in-Data-Science-&-Business-Analytics-2.jpg",
+      "/uploads/all/1843/BCA-in-Data-Science-&-Business-Analytics-2.jpg",
   },
   quickInfo: {
     program: "BCA in Data Science & Business Analytics",
@@ -156,14 +156,14 @@ export const bcaDataScienceAndBusinessAnalytics: CoursePageData = {
       name: "Kishan Shukla",
       role: "BCA Data Science Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2324/conversions/kissn-shukla-full.webp",
+        "/uploads/all/2324/conversions/kissn-shukla-full.webp",
       text: "Studying in Panipat at Geeta University gave me hands-on experience in data analytics and business decision-making. I highly recommend this course if you want to apply for a data science career.",
     },
     {
       name: "Reeva Dixit",
       role: "BCA Data Science & Business Analytics Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2325/conversions/reeva-dixit-full.webp",
+        "/uploads/all/2325/conversions/reeva-dixit-full.webp",
       text: "I applied for BCA Data Science and Business Analytics in Panipat, and it’s been a great decision. The course covers Python, data analytics, and real business projects, making it highly career-focused.",
     },
   ],
@@ -173,27 +173,27 @@ export const bcaDataScienceAndBusinessAnalytics: CoursePageData = {
       {
         title: "AI & Data Science Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
       },
       {
         title: "Cybersecurity & Cloud Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
       },
       {
         title: "Collaborative Coding & Innovation Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
       },
       {
         title: "Computing & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
       },
     ],
   },
@@ -204,7 +204,7 @@ export const bcaDataScienceAndBusinessAnalytics: CoursePageData = {
       "Enroll in BCA in Data Science & Business Analytics at Geeta University and launch your career in AI, machine learning, and enterprise data intelligence.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

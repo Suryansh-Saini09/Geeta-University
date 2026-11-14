@@ -12,7 +12,7 @@ export const policyDocuments: PolicyDocument[] = [
     description:
       "Framework governing sports, participation and sporting activities.",
     documentUrl:
-      "https://geetauniversity.edu.in/uploads/all/1381/Sports-Policy-2025.pdf",
+      "/uploads/all/1381/Sports-Policy-2025.pdf",
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ export const policyDocuments: PolicyDocument[] = [
     description:
       "Institutional framework supporting research, innovation and academic development.",
     documentUrl:
-      "https://geetauniversity.edu.in/uploads/all/1379/Research-and-Innovation-Promotion-Policy.pdf",
+      "/uploads/all/1379/Research-and-Innovation-Promotion-Policy.pdf",
   },
   {
     id: 3,
@@ -28,7 +28,7 @@ export const policyDocuments: PolicyDocument[] = [
     description:
       "Guidelines governing research assistantships and fellowship opportunities.",
     documentUrl:
-      "https://geetauniversity.edu.in/uploads/all/1380/Research-Assistantship-policy.pdf",
+      "/uploads/all/1380/Research-Assistantship-policy.pdf",
   },
   {
     id: 4,
@@ -37,6 +37,6 @@ export const policyDocuments: PolicyDocument[] = [
     description:
       "Framework promoting academic integrity and responsible scholarly practices.",
     documentUrl:
-      "https://geetauniversity.edu.in/uploads/all/1373/Policy-of-Promotion-of-Academic-Integrity-&-Prevention-of-Plagiarism.pdf",
+      "/uploads/all/1373/Policy-of-Promotion-of-Academic-Integrity-&-Prevention-of-Plagiarism.pdf",
   },
 ];

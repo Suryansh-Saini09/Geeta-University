@@ -1,4 +1,7 @@
 import "server-only";
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
+import { CACHE_TAGS, DEFAULT_CACHE_TTL } from "@/server/cache/tags";
 
 import { prisma } from "@/server/db/client";
 import {
@@ -9,6 +12,7 @@ import {
   type FooterLinkItem,
 } from "@/validations/footer";
 import { DEFAULT_LOCALE, getLocalizedBody } from "@/lib/i18n/localization";
+import { serverLogger } from "@/lib/security/logger";
 
 export const FOOTER_SETTINGS_KEY = "footer";
 
@@ -32,8 +36,10 @@ export interface FooterOverviewData {
  * Retrieves the published Footer settings from SiteSetting,
  * falling back to DEFAULT_FOOTER_SETTINGS if not yet created.
  */
-export async function getFooterSettings(locale: string = DEFAULT_LOCALE): Promise<FooterSettings> {
-  try {
+export const getFooterSettings = cache(async function getFooterSettings(locale: string = DEFAULT_LOCALE): Promise<FooterSettings> {
+  return unstable_cache(
+    async () => {
+      try {
     const setting = await prisma.siteSetting.findUnique({
       where: { key: FOOTER_SETTINGS_KEY },
       select: { value: true, translations: true, updatedAt: true },
@@ -50,13 +56,20 @@ export async function getFooterSettings(locale: string = DEFAULT_LOCALE): Promis
       return parsed.data;
     }
 
-    console.warn("Invalid footer settings in database, falling back to defaults:", parsed.error);
+    serverLogger.warn("Invalid footer settings in database, falling back to defaults", parsed.error, { module: "footer", action: "getFooterSettings" });
     return DEFAULT_FOOTER_SETTINGS;
   } catch (err) {
-    console.error("Failed to fetch footer settings from database:", err);
+    serverLogger.error("Failed to fetch footer settings from database", err, { module: "footer", action: "getFooterSettings" });
     return DEFAULT_FOOTER_SETTINGS;
   }
-}
+    },
+    ["footer-settings", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.footer],
+    }
+  )();
+});
 
 /**
  * Returns calculated metrics directly from the persisted footer record in Aiven.
@@ -107,7 +120,7 @@ export async function getFooterOverview(): Promise<FooterOverviewData> {
       columnDistribution,
     };
   } catch (err) {
-    console.error("Failed to compute footer overview:", err);
+    serverLogger.error("Failed to compute footer overview", err, { module: "footer", action: "getFooterOverview" });
     return {
       totalLinks: 0,
       enabledLinks: 0,
@@ -144,7 +157,7 @@ export async function getFooterMediaDocuments(limit = 50) {
       },
     });
   } catch (err) {
-    console.error("Failed to fetch footer documents from MediaAsset:", err);
+    serverLogger.error("Failed to fetch footer documents from MediaAsset", err, { module: "footer", action: "getFooterMediaDocuments" });
     return [];
   }
 }

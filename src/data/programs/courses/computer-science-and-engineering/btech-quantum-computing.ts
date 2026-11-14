@@ -34,9 +34,9 @@ export const btechQuantumComputing: CoursePageData = {
       "BTech in Computer Science & Engineering with specialization in Quantum Computing",
     description: "",
     image:
-      "https://geetauniversity.edu.in/uploads/all/2546/cse-banner.webp",
+      "/uploads/all/2546/cse-banner.webp",
     mobileImage:
-      "https://geetauniversity.edu.in/uploads/all/2546/cse-banner.webp",
+      "/uploads/all/2546/cse-banner.webp",
   },
   quickInfo: {
     program:
@@ -157,35 +157,35 @@ export const btechQuantumComputing: CoursePageData = {
       {
         title: "Quantum Simulation & HPC Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
         description:
           "High-performance computing cluster configured with quantum circuit simulators and cloud SDK integrations.",
       },
       {
         title: "Advanced Software & Algorithm Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
         description:
           "Equipped for complex mathematical simulations, linear algebra processing, and algorithm prototyping.",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
         description:
           "State-of-the-art facility for digital logic, microelectronics, and hardware interfaces.",
       },
       {
         title: "Deep-Tech Research & Innovation Hub",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
         description:
           "Collaborative space for interdisciplinary research between physics, mathematics, and computer science.",
       },
       {
         title: "Collaborative Coding & Project Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
         description:
           "Modern workspace for group hacking, competitive programming, and algorithm design.",
       },
@@ -198,7 +198,7 @@ export const btechQuantumComputing: CoursePageData = {
       "Join the B.Tech in Quantum Computing at Geeta University to master quantum algorithms, deep-tech research, and post-quantum security.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

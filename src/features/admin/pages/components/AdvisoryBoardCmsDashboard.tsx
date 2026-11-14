@@ -15,9 +15,9 @@ import {
   Image as ImageIcon,
   AlertTriangle,
 } from "lucide-react";
-import { updatePageSectionAction } from "@/features/admin/pages/actions";
-import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
-import { CmsImagePreviewInput } from "@/features/admin/pages/components/CmsFieldHelpers";
+import { updatePageSectionAction } from "../actions";
+import { sanitizeErrorMessage } from "../../../../lib/cms/errorSanitizer";
+import { CmsImagePreviewInput } from "./CmsFieldHelpers";
 
 interface AdvisoryBoardCmsDashboardProps {
   initialData: {
@@ -104,7 +104,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
       role: "Dean / Director / Advisory Role",
       institution: "Partner University / Organization",
       category: "Academic & Corporate Leadership",
-      image: "https://geetauniversity.edu.in/uploads/all/2689/AnandPrakash.jpg",
+      image: "/uploads/all/2689/AnandPrakash.jpg",
     };
     updateMembersList([...members, newMember]);
   };
@@ -331,7 +331,7 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
               <CmsImagePreviewInput
                 label="Portrait Image URL"
                 value={member.image || ""}
-                onChange={(url) => handleUpdateMember(idx, "image", url)}
+                onChange={(url: string) => handleUpdateMember(idx, "image", url)}
                 placeholder="https://geetauniversity.edu.in/uploads/all/.../photo.jpg"
               />
             </div>
@@ -378,8 +378,8 @@ export function AdvisoryBoardCmsDashboard({ initialData }: AdvisoryBoardCmsDashb
           <CmsImagePreviewInput
             label="Hero Background Overlay Image"
             value={heroBody.bgImage || ""}
-            onChange={(url) => updateHero((h) => ({ ...h, bgImage: url }))}
-            placeholder="https://geetauniversity.edu.in/uploads/all/252/conversions/new-building-3-(1)-full.webp"
+            onChange={(url: string) => updateHero((h) => ({ ...h, bgImage: url }))}
+            placeholder="/uploads/all/252/conversions/new-building-3-(1)-full.webp"
           />
         </div>
       )}

@@ -191,7 +191,7 @@ export const SCHOLARSHIP_RULES_DATABASE: Record<string, ScholarshipRule> = {
   GUTS: {
     label: "GUTS (GEETA UNIVERSITY TEST OF SCHOLARSHIP) SCORE",
     allow_programs: "all",
-    level_applicability: ["UG"],
+    level_applicability: ["UG", "PG"],
     exclude_groups: ["Pharmacy", "Nursing"],
     subcategories: [
       {
@@ -232,8 +232,10 @@ export const SCHOLARSHIP_RULES_DATABASE: Record<string, ScholarshipRule> = {
         label: "CUET-UG Scholarship",
         slabs: [
           { label: "Score >=95%", percent: 100 },
-          { label: "80–94.99%", percent: 50 },
-          { label: "50–79.99%", percent: 30 },
+          { label: "Score 90–94.99%", percent: 50 },
+          { label: "Score 80–89.99%", percent: 40 },
+          { label: "Score 70–79.99%", percent: 30 },
+          { label: "Score 60–69.99%", percent: 10 },
         ],
       },
     ],

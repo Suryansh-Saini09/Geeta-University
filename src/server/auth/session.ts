@@ -8,6 +8,8 @@ import { AdminUserStatus, type AdminRole } from "@prisma/client";
 import { ADMIN_SESSION_COOKIE } from "@/lib/adminSession";
 import { env } from "@/lib/env";
 import { prisma } from "@/server/db/client";
+import { getClientIp } from "@/server/auth/clientIp";
+import { serverLogger } from "@/lib/security/logger";
 
 export interface AdminSessionUser {
   id: string;
@@ -47,9 +49,7 @@ export async function createAdminSession(userId: string) {
       tokenHash: hashToken(token),
       expiresAt,
       userAgent: requestHeaders.get("user-agent"),
-      ipAddress:
-        requestHeaders.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-        requestHeaders.get("x-real-ip"),
+      ipAddress: getClientIp(requestHeaders),
     },
   });
 
@@ -117,7 +117,7 @@ export async function getAdminSession(): Promise<AdminSession | null> {
       },
     };
   } catch (error) {
-    console.error("Failed to query admin session from database:", error);
+    serverLogger.error("Failed to query admin session from database", error, { module: "Auth", action: "getAdminSession" });
     return null;
   }
 }
@@ -151,6 +151,6 @@ export async function revokeCurrentAdminSession() {
       },
     });
   } catch (error) {
-    console.error("Failed to revoke admin session in database:", error);
+    serverLogger.error("Failed to revoke admin session in database", error, { module: "Auth", action: "revokeSession" });
   }
 }

@@ -3,32 +3,76 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Search, ChevronLeft, ChevronRight, BookOpen, GraduationCap, Award, HelpCircle, Sparkles, ExternalLink } from "lucide-react";
-import { searchWebsite } from "@/lib/search/searchEngine";
-import type { SearchResultsResponse, SearchResultItem } from "@/lib/search/types";
+import {
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  HelpCircle,
+  Sparkles,
+  ExternalLink,
+  AlertCircle,
+  RotateCcw,
+} from "lucide-react";
+import { STOP_WORDS } from "@/lib/search/searchEngine";
+import type { SearchResultsResponse } from "@/lib/search/types";
 
-// Helper component to render snippet with highlighted search terms without raw HTML injection
-function HighlightedText({ text, query }: { text: string; query: string }) {
+// Helper component to render snippet with highlighted search terms with strict word boundaries and stop-word filtering
+export function HighlightedText({ text, query }: { text: string; query: string }) {
   if (!text || !query.trim()) return <>{text}</>;
 
-  const terms = query
-    .toLowerCase()
+  const cleanQuery = query.trim();
+  const lowerQuery = cleanQuery.toLowerCase();
+
+  // If query is explicitly quoted, preserve all terms
+  const isQuoted =
+    (lowerQuery.startsWith('"') && lowerQuery.endsWith('"')) ||
+    (lowerQuery.startsWith("'") && lowerQuery.endsWith("'"));
+
+  const unquotedPhrase = lowerQuery.replace(/["']/g, "").replace(/\s+/g, " ").trim();
+  const rawTokens = unquotedPhrase
     .replace(/[^\w\s-]/g, "")
     .split(/\s+/)
-    .filter((t) => t.length > 1);
+    .filter((t) => t.length > 0);
 
-  if (terms.length === 0) return <>{text}</>;
+  if (rawTokens.length === 0) return <>{text}</>;
 
-  // Escape special regex characters
-  const escapedTerms = terms.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-  const regex = new RegExp(`(${escapedTerms.join("|")})`, "gi");
+  // Filter out stop words unless quoted or all tokens are stop words
+  let activeTerms: string[] = [];
+  if (isQuoted) {
+    activeTerms = rawTokens;
+  } else {
+    const nonStop = rawTokens.filter((t) => !STOP_WORDS.has(t) && t.length > 1);
+    activeTerms = nonStop.length > 0 ? nonStop : rawTokens;
+  }
 
+  // Build patterns array with whole phrase first (if multi-word), then active terms
+  const patterns: string[] = [];
+  if (unquotedPhrase.split(/\s+/).length > 1) {
+    patterns.push(unquotedPhrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  }
+
+  for (const term of activeTerms) {
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    if (!patterns.includes(escaped)) {
+      patterns.push(escaped);
+    }
+  }
+
+  // Sort patterns by length descending so longer phrases match first
+  patterns.sort((a, b) => b.length - a.length);
+
+  if (patterns.length === 0) return <>{text}</>;
+
+  // Enforce word boundaries (\b) so terms match whole words only (prevent matching "of" in "offering")
+  const regex = new RegExp(`(\\b(?:${patterns.join("|")})\\b)`, "gi");
   const parts = text.split(regex);
+  const testRegex = new RegExp(`^\\b(?:${patterns.join("|")})\\b$`, "i");
 
   return (
     <>
       {parts.map((part, index) => {
-        const isMatch = terms.some((term) => term.toLowerCase() === part.toLowerCase());
+        if (!part) return null;
+        const isMatch = testRegex.test(part);
         return isMatch ? (
           <span key={index} className="gu-search-highlight">
             {part}
@@ -57,21 +101,62 @@ const POPULAR_TAGS = [
 export default function SearchResultsView() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const queryParam = searchParams.get("q") || "";
   const pageParam = parseInt(searchParams.get("page") || "1", 10);
 
   const [inputQuery, setInputQuery] = useState(queryParam);
   const [data, setData] = useState<SearchResultsResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Asynchronous API fetch to /api/search with abort controller
   useEffect(() => {
     setInputQuery(queryParam);
-    if (queryParam) {
-      const res = searchWebsite(queryParam, pageParam, 10);
-      setData(res);
-    } else {
+    if (!queryParam.trim()) {
       setData(null);
+      setIsLoading(false);
+      setErrorMessage(null);
+      return;
     }
+
+    let isCancelled = false;
+    setIsLoading(true);
+    setErrorMessage(null);
+
+    const abortController = new AbortController();
+
+    async function doSearch() {
+      try {
+        const res = await fetch(
+          `/api/search?q=${encodeURIComponent(queryParam)}&page=${pageParam}&pageSize=10`,
+          { signal: abortController.signal }
+        );
+
+        if (!res.ok) {
+          throw new Error(`Search error (status ${res.status})`);
+        }
+
+        const json: SearchResultsResponse = await res.json();
+        if (!isCancelled) {
+          setData(json);
+          setIsLoading(false);
+        }
+      } catch (err: any) {
+        if (err.name !== "AbortError" && !isCancelled) {
+          console.error("[SearchResultsView] Search fetch failed:", err);
+          setErrorMessage("Failed to load search results. Please try again.");
+          setIsLoading(false);
+        }
+      }
+    }
+
+    doSearch();
+
+    return () => {
+      isCancelled = true;
+      abortController.abort();
+    };
   }, [queryParam, pageParam]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -196,7 +281,7 @@ export default function SearchResultsView() {
         .gu-search-list {
           display: flex;
           flex-direction: column;
-          gap: 24px;
+          gap: 20px;
         }
 
         .gu-search-item {
@@ -262,11 +347,11 @@ export default function SearchResultsView() {
         }
 
         .gu-search-highlight {
-          background: rgba(232, 135, 26, 0.18);
+          background: rgba(232, 135, 26, 0.20);
           color: #0A1F44;
           font-weight: 700;
           padding: 1px 3px;
-          border-radius: 2px;
+          border-radius: 3px;
         }
 
         .gu-search-item-url {
@@ -280,6 +365,30 @@ export default function SearchResultsView() {
         }
         .gu-search-item-url:hover {
           text-decoration: underline;
+        }
+
+        /* ── SKELETON LOADING ── */
+        .gu-skeleton-bar {
+          background: linear-gradient(90deg, #E2E8F0 25%, #EDF2F7 50%, #E2E8F0 75%);
+          background-size: 200% 100%;
+          animation: guSkeletonShimmer 1.5s infinite ease-in-out;
+        }
+        @keyframes guSkeletonShimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+
+        /* ── ERROR ALERT ── */
+        .gu-search-error-box {
+          background: #FFF5F5;
+          border: 1px solid #FEB2B2;
+          color: #C53030;
+          border-radius: 8px;
+          padding: 18px 22px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 24px;
         }
 
         /* ── PAGINATION ── */
@@ -435,8 +544,70 @@ export default function SearchResultsView() {
 
       {/* ── MAIN RESULTS AREA ── */}
       <main className="gu-search-body">
+        {/* ERROR STATE */}
+        {errorMessage && (
+          <div className="gu-search-error-box">
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <AlertCircle size={20} />
+              <span>{errorMessage}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => router.refresh()}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                color: "#C53030",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                fontWeight: 700,
+              }}
+            >
+              <RotateCcw size={14} /> Retry
+            </button>
+          </div>
+        )}
+
+        {/* LOADING SKELETON */}
+        {isLoading && (
+          <div aria-busy="true" aria-label="Loading search results">
+            <div
+              className="gu-skeleton-bar"
+              style={{ width: "220px", height: "18px", marginBottom: "24px", borderRadius: "4px" }}
+            />
+            <div className="gu-search-list">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="gu-search-item" style={{ pointerEvents: "none" }}>
+                  <div
+                    className="gu-skeleton-bar"
+                    style={{ width: "80px", height: "16px", marginBottom: "12px", borderRadius: "4px" }}
+                  />
+                  <div
+                    className="gu-skeleton-bar"
+                    style={{ width: "60%", height: "22px", marginBottom: "12px", borderRadius: "4px" }}
+                  />
+                  <div
+                    className="gu-skeleton-bar"
+                    style={{ width: "95%", height: "15px", marginBottom: "8px", borderRadius: "3px" }}
+                  />
+                  <div
+                    className="gu-skeleton-bar"
+                    style={{ width: "70%", height: "15px", marginBottom: "12px", borderRadius: "3px" }}
+                  />
+                  <div
+                    className="gu-skeleton-bar"
+                    style={{ width: "160px", height: "13px", borderRadius: "3px" }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* CASE 1: Query Provided & Results Found */}
-        {data && data.totalResults > 0 && (
+        {!isLoading && data && data.totalResults > 0 && (
           <>
             <div className="gu-search-stats">
               <span>
@@ -468,10 +639,21 @@ export default function SearchResultsView() {
                     <HighlightedText text={item.snippet} query={data.query} />
                   </p>
 
-                  <Link href={item.document.href} className="gu-search-item-url">
-                    <span>geetauniversity.edu.in{item.document.href}</span>
-                    <ExternalLink size={12} />
-                  </Link>
+                  {item.document.href.startsWith("http") ? (
+                    <a
+                      href={item.document.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="gu-search-item-url"
+                    >
+                      <span>{item.document.href}</span>
+                      <ExternalLink size={12} />
+                    </a>
+                  ) : (
+                    <Link href={item.document.href} className="gu-search-item-url">
+                      <span>{item.document.href}</span>
+                    </Link>
+                  )}
                 </article>
               ))}
             </div>
@@ -515,7 +697,7 @@ export default function SearchResultsView() {
         )}
 
         {/* CASE 2: Query Provided but NO Results Found */}
-        {data && data.totalResults === 0 && (
+        {!isLoading && data && data.totalResults === 0 && (
           <div className="gu-search-empty-box">
             <div className="gu-empty-icon">
               <HelpCircle size={32} />
@@ -535,7 +717,14 @@ export default function SearchResultsView() {
             </div>
 
             <div>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "#718096", textTransform: "uppercase" }}>
+              <div
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  color: "#718096",
+                  textTransform: "uppercase",
+                }}
+              >
                 Try popular searches instead:
               </div>
               <div className="gu-popular-chips">
@@ -555,14 +744,21 @@ export default function SearchResultsView() {
         )}
 
         {/* CASE 3: Empty Query Landing State */}
-        {!queryParam && (
-          <div className="gu-search-empty-box" style={{ paddingTop: "60px", paddingBottom: "60px" }}>
-            <div className="gu-empty-icon" style={{ background: "rgba(10, 31, 68, 0.08)", color: "#0A1F44" }}>
+        {!isLoading && !queryParam && (
+          <div
+            className="gu-search-empty-box"
+            style={{ paddingTop: "60px", paddingBottom: "60px" }}
+          >
+            <div
+              className="gu-empty-icon"
+              style={{ background: "rgba(10, 31, 68, 0.08)", color: "#0A1F44" }}
+            >
               <Sparkles size={32} style={{ color: "#e8871a" }} />
             </div>
             <h2 className="gu-empty-title">Search Geeta University</h2>
             <p className="gu-empty-text">
-              Enter a keyword in the search bar above to find undergraduate programs, postgraduate courses, PhD research, scholarships, campus facilities, and admissions information.
+              Enter a keyword in the search bar above to find undergraduate programs, postgraduate
+              courses, PhD research, scholarships, campus facilities, and admissions information.
             </p>
 
             <div className="gu-popular-chips">

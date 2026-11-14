@@ -32,9 +32,9 @@ export const bcaAIML: CoursePageData = {
     title: "BCA in Artificial Intelligence & Machine Learning (AIML)",
     description: "",
     image:
-      "https://geetauniversity.edu.in/uploads/all/1051/BCA-in-Artificial-Intelligence-&-Machine-Learning-(AIML).jpg",
+      "/uploads/all/1051/BCA-in-Artificial-Intelligence-&-Machine-Learning-(AIML).jpg",
     mobileImage:
-      "https://geetauniversity.edu.in/uploads/all/1053/BCA-in-Artificial-Intelligence-&-Machine-Learning-(AIML)-2.png",
+      "/uploads/all/1053/BCA-in-Artificial-Intelligence-&-Machine-Learning-(AIML)-2.png",
   },
   quickInfo: {
     program: "BCA in Artificial Intelligence & Machine Learning (AIML)",
@@ -160,42 +160,42 @@ export const bcaAIML: CoursePageData = {
       name: "Anuj Dhingra",
       role: "BCA AI & ML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2314/conversions/BCAAI3-full.webp",
+        "/uploads/all/2314/conversions/BCAAI3-full.webp",
       text: "What I love about this BCA AI & ML course is the focus on real-world AI projects and internships. It truly prepares you for future tech careers.",
     },
     {
       name: "Aaradhana Yadav",
       role: "BCA AI & ML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2312/conversions/BCAAI5-full.webp",
+        "/uploads/all/2312/conversions/BCAAI5-full.webp",
       text: "The BCA AI & ML program helped me build skills in Python, data science, and machine learning. The learning environment is very supportive and practical.",
     },
     {
       name: "Muskan",
       role: "BCA AI & ML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2313/conversions/BCA14-full.webp",
+        "/uploads/all/2313/conversions/BCA14-full.webp",
       text: "With BCA Artificial Intelligence and Machine Learning, I gained both theoretical knowledge and industry exposure. It’s a great course for anyone interested in AI careers.",
     },
     {
       name: "Sani Devi",
       role: "BCA AI & ML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2315/conversions/BCAI2-full.webp",
+        "/uploads/all/2315/conversions/BCAI2-full.webp",
       text: "Choosing BCA Artificial Intelligence and Machine Learning at Geeta University was the best decision. The curriculum is industry-focused, and hands-on AI projects really helped me understand real-world applications.",
     },
     {
       name: "Taranjot Singh",
       role: "BCA AI & ML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2317/conversions/BCA-AI-full.webp",
+        "/uploads/all/2317/conversions/BCA-AI-full.webp",
       text: "The BCA AI & ML program offers excellent exposure to machine learning tools and technologies. I especially liked the practical learning approach and industry collaboration.",
     },
     {
       name: "Aakib Choudhary",
       role: "BCA AI & ML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2316/conversions/BCA-AI1-full.webp",
+        "/uploads/all/2316/conversions/BCA-AI1-full.webp",
       text: "Studying BCA Artificial Intelligence and Machine Learning here gave me strong coding and AI fundamentals. The faculty and project-based learning make a big difference.",
     },
   ],
@@ -205,27 +205,27 @@ export const bcaAIML: CoursePageData = {
       {
         title: "Cybersecurity & Cloud Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
       },
       {
         title: "Collaborative Coding & Innovation Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
       },
       {
         title: "Computing & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
       },
       {
         title: "AI & Data Science Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
       },
     ],
   },
@@ -236,7 +236,7 @@ export const bcaAIML: CoursePageData = {
       "Apply now for BCA in AI & ML at Geeta University and launch your career in the most exciting domain in tech.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

@@ -123,6 +123,7 @@ export default function HomeFeedbackSection({ data }: HomeFeedbackSectionProps) 
                     alt={student.name}
                     fill
                     sizes="80px"
+                    unoptimized={Boolean(student.image?.startsWith("http"))}
                     className="object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
                   />
                 </div>

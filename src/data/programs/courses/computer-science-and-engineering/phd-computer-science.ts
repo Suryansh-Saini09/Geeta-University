@@ -32,8 +32,8 @@ export const phdComputerScience: CoursePageData = {
   hero: {
     title: "Ph.D in Computer Science & Engineering",
     description: "",
-    image: "https://geetauniversity.edu.in/uploads/all/1729/phd-cse.jpeg",
-    mobileImage: "https://geetauniversity.edu.in/uploads/all/1729/phd-cse.jpeg",
+    image: "/uploads/all/1729/phd-cse.jpeg",
+    mobileImage: "/uploads/all/1729/phd-cse.jpeg",
   },
   quickInfo: {
     program: "Ph.D in Computer Science",
@@ -154,28 +154,28 @@ export const phdComputerScience: CoursePageData = {
       name: "Aarti",
       role: "Ph.D. CSE Scholar",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2507/conversions/student_photograph20241024162313-full.webp",
+        "/uploads/all/2507/conversions/student_photograph20241024162313-full.webp",
       text: "My journey in the Ph.D. CSE program at Geeta University has helped me grow academically and professionally. The university encourages innovation, practical problem-solving, and industry-relevant research. Participation in technical seminars, workshops, and research projects enhanced my analytical thinking and understanding of modern computer science applications.",
     },
     {
       name: "Priya Tyagi",
       role: "Ph.D. CSE Scholar",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2508/conversions/student_photograph20250908144825-full.webp",
+        "/uploads/all/2508/conversions/student_photograph20250908144825-full.webp",
       text: "Choosing Geeta University for my Ph.D. in Computer Science & Engineering allowed me to explore advanced research areas in software development, artificial intelligence, and data-driven technologies. The supportive learning environment and expert mentorship helped me improve my technical expertise, research skills, and confidence in tackling real-world challenges.",
     },
     {
       name: "Ankit Pannu",
       role: "Ph.D. CSE Scholar",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2506/conversions/student_photo_20250822094346-full.webp",
+        "/uploads/all/2506/conversions/student_photo_20250822094346-full.webp",
       text: "The Ph.D. CSE program at Geeta University provided me with valuable opportunities to enhance my research and technical abilities. The university’s emphasis on innovation, quality education, and practical exposure helped me gain a deeper understanding of computing technologies, system design, and emerging trends in the IT industry.",
     },
     {
       name: "Manjeet Kaur",
       role: "Ph.D. CSE Scholar",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2505/conversions/student_1769_20240523202753-full.webp",
+        "/uploads/all/2505/conversions/student_1769_20240523202753-full.webp",
       text: "Pursuing my Ph.D. in Computer Science & Engineering at Geeta University has been a rewarding experience. The university provides a research-focused environment with excellent academic support and modern technical resources. The guidance from faculty members helped me strengthen my knowledge in emerging technologies, research methodologies, and advanced computing concepts.",
     },
   ],
@@ -185,27 +185,27 @@ export const phdComputerScience: CoursePageData = {
       {
         title: "AI & Data Science Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
       },
       {
         title: "Cybersecurity & Cloud Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
       },
       {
         title: "Collaborative Coding & Innovation Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
       },
       {
         title: "Computing & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
       },
     ],
   },
@@ -216,7 +216,7 @@ export const phdComputerScience: CoursePageData = {
       "Join the Ph.D. in Computer Science & Engineering program at Geeta University and conduct breakthrough doctoral research.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

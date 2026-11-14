@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import type { RecruiterItem } from "@/data/programs/types";
 
 export const BRAND_DATA: Record<string, { src: string; width: number; height: number; label: string }> = {
@@ -319,24 +320,27 @@ function RecruiterCard({ name, customLogo }: { name: string; customLogo?: string
       }}
     >
       {imageSrc ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={imageSrc}
-          alt={brand?.label || name}
-          width={brand?.width || 120}
-          height={brand?.height || 36}
-          style={{ objectFit: "contain", maxWidth: "100%", maxHeight: 56 }}
-          onError={(e) => {
-            const t = e.currentTarget.parentElement;
-            if (t) {
-              e.currentTarget.style.display = "none";
-              const span = document.createElement("span");
-              span.textContent = name;
-              span.style.cssText = "font-size:14px;font-weight:700;color:#1A1A2E;text-align:center;";
-              t.appendChild(span);
-            }
-          }}
-        />
+        <div className="relative flex items-center justify-center w-full h-[56px]">
+          <Image
+            src={imageSrc}
+            alt={brand?.label || name}
+            fill
+            sizes="160px"
+            loading="lazy"
+            className="object-contain pointer-events-none"
+            onError={(e) => {
+              const parent = e.currentTarget.parentElement;
+              const card = parent?.parentElement;
+              if (parent && card) {
+                parent.style.display = "none";
+                const span = document.createElement("span");
+                span.textContent = name;
+                span.style.cssText = "font-size:14px;font-weight:700;color:#1A1A2E;text-align:center;";
+                card.appendChild(span);
+              }
+            }}
+          />
+        </div>
       ) : (
         <span style={{ fontSize: 14, fontWeight: 700, color: "#1A1A2E", textAlign: "center" }}>{name}</span>
       )}

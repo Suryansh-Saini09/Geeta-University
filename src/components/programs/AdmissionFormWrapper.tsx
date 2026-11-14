@@ -379,7 +379,7 @@ export default function AdmissionFormWrapper({
     customCity: "",
     discipline: "",
     course: "",
-    agree: true,
+    agree: false,
   });
 
   const [loading, setLoading] = useState(false);
@@ -527,7 +527,7 @@ export default function AdmissionFormWrapper({
       customCity: "",
       discipline: resolveDiscipline(initialDiscipline),
       course: "",
-      agree: true,
+      agree: false,
     });
   };
 

@@ -4,7 +4,13 @@ import { prisma } from "@/server/db/client";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminAboutPage() {
+export default async function AdminAboutPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ section?: string }>;
+}) {
+  const { section: requestedSectionKey } = (await searchParams) || {};
+
   const [adminData, aboutData, allGovDocs] = await Promise.all([
     getPageSectionsAdmin("about"),
     getPublishedAboutPage(),
@@ -16,6 +22,7 @@ export default async function AdminAboutPage() {
 
   return (
     <AboutCmsDashboard
+      initialSectionKey={requestedSectionKey}
       sections={adminData.sections}
       seo={adminData.seo}
       recognitions={aboutData.recognitions}

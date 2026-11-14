@@ -16,6 +16,7 @@ import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import {
   CmsImagePreviewInput,
   CmsStringRepeater,
+  CmsDocumentField,
 } from "@/features/admin/pages/components/CmsFieldHelpers";
 
 interface MedalPolicyCmsDashboardProps {
@@ -782,19 +783,16 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
-                    Download / View Document URL (PDF)
-                  </label>
-                  <input
-                    type="url"
-                    value={body.documentUrl || ""}
-                    onChange={(e) => updateBody("rankers_document", (b) => ({ ...b, documentUrl: e.target.value }))}
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-[#0A1F44]"
-                    placeholder="https://geetauniversity.edu.in/.../Medal-List.pdf"
-                  />
-                </div>
+              <div className="space-y-4">
+                <CmsDocumentField
+                  label="Download / View Document URL (PDF)"
+                  value={body.documentUrl || ""}
+                  onChange={(url) => updateBody("rankers_document", (b) => ({ ...b, documentUrl: url }))}
+                  contentArea="medal-policy"
+                  section="rankers_document"
+                  modalTitle="Select Rankers PDF Document"
+                  helpText="Select an official convocation ranker document from the Media Library or upload a new PDF."
+                />
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
                     CTA Button Label
@@ -865,7 +863,7 @@ export function MedalPolicyCmsDashboard({ initialData }: MedalPolicyCmsDashboard
                 label="Hero Background Overlay Image"
                 value={body.bgImage || ""}
                 onChange={(url) => updateBody("hero", (b) => ({ ...b, bgImage: url }))}
-                placeholder="https://geetauniversity.edu.in/uploads/all/224/conversions/new-building-3-full.webp"
+                placeholder="/uploads/all/224/conversions/new-building-3-full.webp"
               />
             </div>
           );

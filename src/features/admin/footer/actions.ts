@@ -2,6 +2,7 @@
 
 import path from "node:path";
 import { revalidatePath } from "next/cache";
+import { CACHE_TAGS, invalidateCacheTag } from "@/server/cache/tags";
 import { AuditAction } from "@prisma/client";
 
 import { assertPermission } from "@/server/auth/permissions";
@@ -10,6 +11,7 @@ import { prisma } from "@/server/db/client";
 import { detectMediaFormat, MAX_MEDIA_BYTES, removeMedia, saveMedia } from "@/server/media/storage";
 import { FOOTER_SETTINGS_KEY, getFooterSettings } from "@/server/services/footer";
 import { safeActionError } from "@/lib/cms/errorSanitizer";
+import { serverLogger } from "@/lib/security/logger";
 import {
   footerBannerSchema,
   footerBrandingSchema,
@@ -28,6 +30,7 @@ import {
  */
 function revalidateSharedFooterRoutes() {
   try {
+    invalidateCacheTag(CACHE_TAGS.footer);
     revalidatePath("/", "layout");
     revalidatePath("/");
     revalidatePath("/about");
@@ -40,7 +43,7 @@ function revalidateSharedFooterRoutes() {
     revalidatePath("/how-to-reach-us");
     revalidatePath("/admin/footer");
   } catch (err) {
-    console.error("Error during footer cache revalidation:", err);
+    serverLogger.error("Failed to revalidate footer cache", err, { module: "FooterCMS", action: "revalidateCache" });
   }
 }
 
@@ -222,7 +225,7 @@ export async function updateFooterColumnHeadingAction(
 ): Promise<ActionResponse> {
   try {
     const session = await requireAdminSession();
-    assertPermission(session.user.role, "manageContent");
+    assertPermission(session.user.role, "manageNavigation");
 
     const trimmedTitle = newTitle.trim();
     if (!trimmedTitle) {
@@ -284,7 +287,7 @@ export async function addFooterLinkAction(
 ): Promise<ActionResponse<FooterLinkItem>> {
   try {
     const session = await requireAdminSession();
-    assertPermission(session.user.role, "manageContent");
+    assertPermission(session.user.role, "manageNavigation");
 
     const current = await getFooterSettings();
     const colIndex = current.columns.findIndex((c) => c.id === columnId);
@@ -377,7 +380,7 @@ export async function updateFooterLinkAction(
 ): Promise<ActionResponse<FooterLinkItem>> {
   try {
     const session = await requireAdminSession();
-    assertPermission(session.user.role, "manageContent");
+    assertPermission(session.user.role, "manageNavigation");
 
     const current = await getFooterSettings();
     const colIndex = current.columns.findIndex((c) => c.id === columnId);
@@ -468,7 +471,7 @@ export async function reorderFooterLinksAction(
 ): Promise<ActionResponse> {
   try {
     const session = await requireAdminSession();
-    assertPermission(session.user.role, "manageContent");
+    assertPermission(session.user.role, "manageNavigation");
 
     const current = await getFooterSettings();
     const colIndex = current.columns.findIndex((c) => c.id === columnId);
@@ -773,7 +776,7 @@ export async function deleteFooterDocumentAction(documentId: string): Promise<
 > {
   try {
     const session = await requireAdminSession();
-    assertPermission(session.user.role, "manageContent");
+    assertPermission(session.user.role, "manageNavigation");
 
     if (!documentId || typeof documentId !== "string") {
       return { success: false, error: "Invalid document ID." };
@@ -884,7 +887,7 @@ export async function deleteFooterDocumentAction(documentId: string): Promise<
 
     // Remove file from disk storage (ignore error if file already removed or missing)
     await removeMedia(asset.storageKey).catch((error) => {
-      console.error("Failed to remove media file from storage:", error);
+      serverLogger.error("Failed to remove media file from storage", error, { module: "FooterCMS", action: "removeMedia" });
     });
 
     revalidateSharedFooterRoutes();

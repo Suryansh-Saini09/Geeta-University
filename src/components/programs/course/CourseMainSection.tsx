@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { BookOpen, GraduationCap, CheckCircle2 } from "lucide-react";
 import type {
   CourseOverview,
@@ -901,12 +902,13 @@ export default function CourseMainSection({
               </h3>
 
               <div className="relative w-full rounded-xl overflow-hidden bg-[#F8FAFC] border border-slate-100 p-3 sm:p-4 flex items-center justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://geetauniversity.edu.in/uploads/all/1830/1__1_-removebg-preview.png"
+                <Image
+                  src="/uploads/all/1830/1__1_-removebg-preview.png"
                   alt="Design Your Own Degree With GU - Industry Ready Curriculum"
+                  width={597}
+                  height={418}
                   className="w-full h-auto object-contain block mx-auto"
-                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, 597px"
                 />
               </div>
             </div>

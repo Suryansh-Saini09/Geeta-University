@@ -1,4 +1,3 @@
-"use client";
 
 import React from "react";
 import type { CourseCollaborations as CourseCollaborationsType, CollaborationOrganisation } from "@/data/programs/courses/types";

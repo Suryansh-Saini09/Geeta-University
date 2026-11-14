@@ -287,7 +287,7 @@ export const phdPoliticalScience: CoursePageData = {
       "Join the doctoral research community at Geeta University's School of Humanities & Social Sciences. Conduct transformative inquiry that informs public policy, democracy, and global politics.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 92787 68000",
   },
 };

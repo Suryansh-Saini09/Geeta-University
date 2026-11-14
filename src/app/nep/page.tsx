@@ -25,7 +25,7 @@ export default async function NEPPage() {
 
   const sections = dbAdmissions.sections || {};
 
-  const heroImage = sections.hero?.image || "https://geetauniversity.edu.in/uploads/all/341/conversions/1-1-full.webp";
+  const heroImage = sections.hero?.image || "/uploads/all/341/conversions/1-1-full.webp";
   const heroTitle = sections.features?.title || "FIRST UNIVERSITY OF HARYANA TO IMPLEMENTING THE NEP 2020";
   const featureBullets: string[] = sections.features?.bullets || [
     "A teaching-learning methodology based on outcome-based education.",
@@ -35,7 +35,7 @@ export default async function NEPPage() {
     "Opportunity for interdisciplinary study and research to cater to the interests and passions of individual students.",
     "Individual career plans to fulfill the aspirations of each and every student.",
   ];
-  const sideImage = sections.features?.image || "https://geetauniversity.edu.in/uploads/all/345/student-(1).jpg";
+  const sideImage = sections.features?.image || "/uploads/all/345/student-(1).jpg";
 
   const mainContent = sections.main_content || {};
 

@@ -33,10 +33,21 @@ export async function generateStaticParams() {
   ];
 }
 
+function isValidSlug(slug: string): boolean {
+  if (!slug || typeof slug !== "string") return false;
+  if (slug.includes(" ") || slug.includes("%20") || slug.startsWith("admin/") || slug.includes(".")) {
+    return false;
+  }
+  return true;
+}
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  if (!isValidSlug(slug)) {
+    return {};
+  }
   const locale = await getLocale();
 
   const course = await getCourseByDirectSlug(slug);
@@ -113,6 +124,9 @@ export async function generateMetadata({
 
 export default async function DirectSlugPage({ params }: PageProps) {
   const { slug } = await params;
+  if (!isValidSlug(slug)) {
+    notFound();
+  }
   const locale = await getLocale();
 
   // 1. Check if slug matches a course directly (e.g., phd-computer-application, phd-cse, mca, etc.)
@@ -129,39 +143,41 @@ export default async function DirectSlugPage({ params }: PageProps) {
   }
 
   // 3. Check if slug matches a published page from CMS
+  let page = null;
   try {
-    const page = await getPublishedPageBySlug(slug);
-    if (page) {
-      const sections = parsePageSections(page.sections);
-      return (
-        <article className="min-h-screen bg-white text-[#0A1F44]">
-          <header className="border-b border-slate-200 bg-slate-50 px-5 py-12 sm:py-16">
-            <div className="mx-auto max-w-5xl">
-              <h1 className="font-serif text-4xl font-bold sm:text-5xl">
-                {page.title}
-              </h1>
-            </div>
-          </header>
-          <div className="mx-auto max-w-5xl px-5 py-10 sm:py-14">
-            {sections.map((section, index) => (
-              <section
-                key={index}
-                className="border-b border-slate-200 py-7 first:pt-0 last:border-b-0"
-              >
-                <h2 className="font-serif text-2xl font-bold">
-                  {section.heading}
-                </h2>
-                <p className="mt-4 whitespace-pre-wrap text-base leading-8 text-slate-700">
-                  {section.body}
-                </p>
-              </section>
-            ))}
-          </div>
-        </article>
-      );
-    }
+    page = await getPublishedPageBySlug(slug);
   } catch {
     // ignore database error
+  }
+
+  if (page) {
+    const sections = parsePageSections(page.sections);
+    return (
+      <article className="min-h-screen bg-white text-[#0A1F44]">
+        <header className="border-b border-slate-200 bg-slate-50 px-5 py-12 sm:py-16">
+          <div className="mx-auto max-w-5xl">
+            <h1 className="font-serif text-4xl font-bold sm:text-5xl">
+              {page.title}
+            </h1>
+          </div>
+        </header>
+        <div className="mx-auto max-w-5xl px-5 py-10 sm:py-14">
+          {sections.map((section, index) => (
+            <section
+              key={index}
+              className="border-b border-slate-200 py-7 first:pt-0 last:border-b-0"
+            >
+              <h2 className="font-serif text-2xl font-bold">
+                {section.heading}
+              </h2>
+              <p className="mt-4 whitespace-pre-wrap text-base leading-8 text-slate-700">
+                {section.body}
+              </p>
+            </section>
+          ))}
+        </div>
+      </article>
+    );
   }
 
   // 4. Fallback to 404

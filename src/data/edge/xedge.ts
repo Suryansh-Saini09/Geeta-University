@@ -27,7 +27,7 @@ export const xedgePage: EdgePageData = {
     subtitle: "Career Skills · Life Skills · Social Skills",
     description:
       "Geeta University has taken up a new initiative towards developing Complete Corporate Citizens. We help our students master high-quality skills to enlighten their path, supported by an experienced professional team dedicated to grooming future leaders.",
-    image: "https://geetauniversity.edu.in/uploads/all/120/conversions/2-xedge-full.webp",
+    image: "/uploads/all/120/conversions/2-xedge-full.webp",
     ctaText: "Apply Now",
     ctaLink: "https://admissions.geetauniversity.edu.in/",
   },

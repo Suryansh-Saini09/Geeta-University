@@ -38,14 +38,11 @@ export default function LenisProvider({ children }: LenisProviderProps) {
   }
 
   const lenisOptions = {
-    duration: reducedMotion ? 0 : 1.6,
-    lerp: reducedMotion ? 1 : 0.05,
+    duration: reducedMotion ? 0 : 1.0,
     smoothWheel: !reducedMotion,
-    syncTouch: !reducedMotion,
-    syncTouchLerp: 0.05,
-    touchMultiplier: 1.5,
+    syncTouch: false,
     wheelMultiplier: 1.0,
-    autoRaf: true, // Let Lenis run its own requestAnimationFrame loop automatically
+    autoRaf: true,
   };
 
   return (

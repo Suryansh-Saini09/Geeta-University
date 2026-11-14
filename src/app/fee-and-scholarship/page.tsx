@@ -34,10 +34,10 @@ export default async function FeeAndScholarshipPage() {
   return (
     <div className="min-w-0 overflow-x-hidden bg-white text-[#0A1F44]">
       <FeeHero data={sections.hero} />
-      <ScholarshipPredictorSection />
-      <TransportAndHostelPredictor />
-      <LegacyEcosystemSection />
-      <FeeFaqAndCTA />
+      <ScholarshipPredictorSection data={sections.scholarship_predictor} />
+      <TransportAndHostelPredictor data={sections.transport_hostel} />
+      <LegacyEcosystemSection data={sections.legacy_ecosystem} />
+      <FeeFaqAndCTA data={sections.faqs_cta} />
     </div>
   );
 }

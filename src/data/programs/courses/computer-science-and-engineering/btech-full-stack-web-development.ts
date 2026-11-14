@@ -34,8 +34,8 @@ export const btechFullStackWebDevelopment: CoursePageData = {
       "B.Tech (Hons) in CSE with specialization in Full Stack Web Development",
     description: "",
     image:
-      "https://geetauniversity.edu.in/uploads/all/1831/B.Tech-(Hons)-CSE.jpg",
-    mobileImage: "https://geetauniversity.edu.in/uploads/all/1832/4-(2).jpg",
+      "/uploads/all/1831/B.Tech-(Hons)-CSE.jpg",
+    mobileImage: "/uploads/all/1832/4-(2).jpg",
   },
   quickInfo: {
     program:
@@ -154,35 +154,35 @@ export const btechFullStackWebDevelopment: CoursePageData = {
       {
         title: "Advanced Web & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
         description:
           "Modern high-speed computing environment configured with modern IDEs, node environments, and local development servers.",
       },
       {
         title: "Computing & Software Engineering Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
         description:
           "Dedicated systems for frontend UI/UX prototyping, full-stack application testing, and cloud deployments.",
       },
       {
         title: "Cloud & Distributed Computing Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
         description:
           "Equipped for multi-cloud deployments, RESTful microservices testing, and server-side orchestration.",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
         description:
           "State-of-the-art facility for building connected hardware and IoT-enabled web applications.",
       },
       {
         title: "Collaborative Project & Hackathon Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
         description:
           "Spacious collaborative space supporting team sprints, startup product ideation, and live code reviews.",
       },
@@ -195,7 +195,7 @@ export const btechFullStackWebDevelopment: CoursePageData = {
       "Apply now at Geeta University to build future-ready skills in modern frontend frameworks, backend microservices, and cloud architectures.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

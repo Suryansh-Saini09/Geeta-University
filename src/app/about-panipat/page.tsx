@@ -40,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         seo?.description ||
         "Explore the rich history, three major battles, famous landmarks, geography, and textile heritage of Panipat, Haryana — the proud home of Geeta University.",
-      images: seo?.ogImage ? [{ url: seo.ogImage }] : ["https://geetauniversity.edu.in/uploads/all/253/conversions/f-block-(1)-full.webp"],
+      images: seo?.ogImage ? [{ url: seo.ogImage }] : ["/uploads/all/253/conversions/f-block-(1)-full.webp"],
     },
   };
 }
@@ -56,7 +56,7 @@ export default async function AboutPanipatPage() {
     "Panipat is a prestigious, historic city in Haryana, situated on NH-44, 95 km north of Delhi and 169 km south of Chandigarh. Globally renowned as the “City of Weavers” and India's textile recycling capital, Panipat seamlessly blends a storied 500-year history with rapid industrial growth and modern educational excellence.";
   const heroImage =
     hero?.heroImage ||
-    "https://geetauniversity.edu.in/uploads/all/253/conversions/f-block-(1)-full.webp";
+    "/uploads/all/253/conversions/f-block-(1)-full.webp";
   const heroImageAlt = hero?.heroImageAlt || "Geeta University campus in Panipat";
 
   const battleList = Array.isArray(battles?.battles) ? battles.battles : [];

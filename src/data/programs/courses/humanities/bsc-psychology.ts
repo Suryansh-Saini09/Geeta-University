@@ -327,7 +327,7 @@ export const bscPsychology: CoursePageData = {
       "Join the School of Humanities & Social Sciences at Geeta University and embark on a scientific journey understanding the human mind, behavior, and mental wellness.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 92787 68000",
   },
 };

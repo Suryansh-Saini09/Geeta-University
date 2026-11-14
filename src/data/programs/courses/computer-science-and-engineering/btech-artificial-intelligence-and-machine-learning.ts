@@ -32,9 +32,9 @@ export const btechArtificialIntelligenceAndMachineLearning: CoursePageData = {
     title: "B.Tech (Hons) in CSE with specialization in AI & ML",
     description: "",
     image:
-      "https://geetauniversity.edu.in/uploads/all/1016/B.Tech-Artificial-Intelligence-&Machine-Learning.jpg",
+      "/uploads/all/1016/B.Tech-Artificial-Intelligence-&Machine-Learning.jpg",
     mobileImage:
-      "https://geetauniversity.edu.in/uploads/all/1967/1.webp",
+      "/uploads/all/1967/1.webp",
   },
   quickInfo: {
     program: "B.Tech (Hons) in CSE with specialization in AI & ML",
@@ -152,42 +152,42 @@ export const btechArtificialIntelligenceAndMachineLearning: CoursePageData = {
       name: "Shaina Hussian",
       role: "B.Tech AIML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2295/conversions/aiml5-full.webp",
+        "/uploads/all/2295/conversions/aiml5-full.webp",
       text: "Studying AIML here has been a great journey till now. The hands-on projects and updated curriculum helped me explore machine learning concepts deeply, while the supportive faculty made learning easier and more interesting throughout the program.",
     },
     {
       name: "Vansh Sharma",
       role: "B.Tech AIML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2297/conversions/aiml3-full.webp",
+        "/uploads/all/2297/conversions/aiml3-full.webp",
       text: "My experience in Artificial Intelligence and Machine Learning here has been really exciting so far. The course gives practical exposure to new technologies, and the faculty guidance helped me understand concepts like data models and real-world applications more clearly.",
     },
     {
       name: "Ashish",
       role: "B.Tech AIML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2296/conversions/aiml4-full.webp",
+        "/uploads/all/2296/conversions/aiml4-full.webp",
       text: "My journey in Artificial Intelligence and Machine Learning has been very engaging. The balance of theory and practical sessions helped me understand how intelligent systems work, and the faculty always encourages us to think creatively and solve problems.",
     },
     {
       name: "Ashish",
       role: "B.Tech AIML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2299/conversions/aiml1-full.webp",
+        "/uploads/all/2299/conversions/aiml1-full.webp",
       text: "Learning AIML here has been a really valuable experience so far. The focus on real-world applications and regular project work helped me build confidence, while the faculty support made complex topics easier to understand and apply practically.",
     },
     {
       name: "Yuvraj Saini",
       role: "B.Tech AIML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2298/conversions/aiml2-full.webp",
+        "/uploads/all/2298/conversions/aiml2-full.webp",
       text: "My experience in this Artificial Intelligence and Machine Learning course has been very positive till now. The practical approach and industry-focused subjects helped me understand how AI works, and improved my confidence in building real-world solutions.",
     },
     {
       name: "Nitesh",
       role: "B.Tech AIML Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2300/conversions/aiml-full.webp",
+        "/uploads/all/2300/conversions/aiml-full.webp",
       text: "Being part of the AIML program has been an amazing experience so far. The course structure is well-designed, and the practical learning approach along with faculty guidance helped me develop strong skills in machine learning and data-driven technologies.",
     },
   ],
@@ -197,27 +197,27 @@ export const btechArtificialIntelligenceAndMachineLearning: CoursePageData = {
       {
         title: "Computing & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
       },
       {
         title: "AI & Data Science Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
       },
       {
         title: "Cybersecurity & Cloud Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
       },
       {
         title: "Collaborative Coding & Innovation Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
       },
     ],
   },
@@ -228,7 +228,7 @@ export const btechArtificialIntelligenceAndMachineLearning: CoursePageData = {
       "Apply now at Geeta University and step into the future of artificial intelligence, intelligent systems, and robotics.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

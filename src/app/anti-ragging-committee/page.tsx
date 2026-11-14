@@ -58,14 +58,14 @@ export default async function AntiRaggingPage() {
           id: "poster",
           title: "Anti Ragging Poster",
           subtitle: "View official guidelines and posters",
-          url: "https://geetauniversity.edu.in/uploads/all/388/Anti-Ragging-Poster.pdf",
+          url: "/uploads/all/388/Anti-Ragging-Poster.pdf",
           bgStyle: "navy",
         },
         {
           id: "committee-notification",
           title: "Anti Ragging Committee",
           subtitle: "View committee members & notification",
-          url: "https://geetauniversity.edu.in/uploads/all/2073/Notification-Anti-Ragging-Committee.pdf",
+          url: "/uploads/all/2073/Notification-Anti-Ragging-Committee.pdf",
           bgStyle: "orange",
         },
       ];

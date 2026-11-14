@@ -57,41 +57,58 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Home() {
   const locale = await getLocale();
   const homeData = await getPublishedHomePage(locale);
+  const isVisible = (key: string) => homeData.visibility?.[key] !== false;
 
   return (
     <main className="bg-white">
-      <HomeHeroSection data={homeData.hero} />
+      {isVisible("hero") && homeData.hero && <HomeHeroSection data={homeData.hero} />}
 
-      <SmartCampusSection data={homeData.smartCampus} />
+      {isVisible("smartCampus") && homeData.smartCampus && <SmartCampusSection data={homeData.smartCampus} />}
 
-      <HomeStatsSection data={homeData.stats} />
+      {isVisible("stats") && homeData.stats && <HomeStatsSection data={homeData.stats} />}
 
-      <TopRecruitersSection />
+      {isVisible("recruiters") && homeData.recruiters && homeData.recruiters.length > 0 && (
+        <TopRecruitersSection data={homeData.recruiters} />
+      )}
 
-      <HomeProgramsSection data={homeData.programsOffered} />
+      {isVisible("programsOffered") && homeData.programsOffered && (
+        <HomeProgramsSection data={homeData.programsOffered} />
+      )}
 
-      <AwardsRankingsSection data={homeData.awards} />
+      {isVisible("awards") && homeData.awards && homeData.awards.length > 0 && (
+        <AwardsRankingsSection data={homeData.awards} />
+      )}
 
-      <HomeFeedbackSection data={homeData.testimonials} />
+      {isVisible("testimonials") && homeData.testimonials && homeData.testimonials.length > 0 && (
+        <HomeFeedbackSection data={homeData.testimonials} />
+      )}
 
-      <HomeGlobalEducationSection data={homeData.globalEducation} />
+      {isVisible("globalEducation") && homeData.globalEducation && (
+        <HomeGlobalEducationSection data={homeData.globalEducation} />
+      )}
 
-      <HomeUniverseSection data={homeData.universe} />
+      {isVisible("universe") && homeData.universe && <HomeUniverseSection data={homeData.universe} />}
 
-      <HomeUpdatesSection data={homeData.updates} />
+      {isVisible("updates") && homeData.updates && <HomeUpdatesSection data={homeData.updates} />}
 
-      <WhyJoinGeetaSection data={homeData.whyJoinGeeta} />
+      {isVisible("whyJoinGeeta") && homeData.whyJoinGeeta && <WhyJoinGeetaSection data={homeData.whyJoinGeeta} />}
 
-      <ScholarshipsSection data={homeData.scholarships} />
+      {isVisible("scholarships") && homeData.scholarships && <ScholarshipsSection data={homeData.scholarships} />}
 
-      <IndustryIntegrationSection data={homeData.industryPartners} />
+      {isVisible("industryPartners") && homeData.industryPartners && homeData.industryPartners.length > 0 && (
+        <IndustryIntegrationSection data={homeData.industryPartners} />
+      )}
 
-      <VirtualCampusTourSection data={homeData.virtualTour} />
+      {isVisible("virtualTour") && homeData.virtualTour && (
+        <VirtualCampusTourSection data={homeData.virtualTour} />
+      )}
 
-      <StarPerformancesSection
-        data={homeData.starPerformances}
-        ctaData={homeData.starPerformancesCta}
-      />
+      {isVisible("starPerformances") && (homeData.starPerformances?.length > 0 || homeData.starPerformancesCta) && (
+        <StarPerformancesSection
+          data={homeData.starPerformances}
+          ctaData={homeData.starPerformancesCta}
+        />
+      )}
     </main>
   );
 }

@@ -457,7 +457,7 @@ export const humanitiesSchool: ProgramPageData = {
     title: "Want to know more?",
     description:
       "Get detailed insights into our undergraduate, postgraduate, and doctoral curricula, faculty mentor profiles, psychological lab infrastructure, and placement pathways.",
-    fileUrl: "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+    fileUrl: "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     fileName: "GU_Humanities_Brochure.pdf",
   },
 

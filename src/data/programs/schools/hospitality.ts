@@ -503,7 +503,7 @@ export const hospitalitySchool: ProgramPageData = {
     title: "Want to know more?",
     description:
       "Get detailed information about our hospitality courses, curriculum, paid international internships, and career pathways.",
-    fileUrl: "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+    fileUrl: "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     fileName: "GU_Hospitality_Brochure.pdf",
   },
 
@@ -836,7 +836,7 @@ export const hospitalitySchool: ProgramPageData = {
   cta: {
     heading: "Ready to Build an International Hospitality Career?",
     applyLink: "https://admissions.geetauniversity.edu.in/",
-    brochureUrl: "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+    brochureUrl: "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     brochureName: "GU_Hospitality_Brochure.pdf",
     website: "https://geetauniversity.edu.in",
   },

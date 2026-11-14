@@ -287,7 +287,7 @@ export const mbaMarketing: CoursePageData = {
       "Apply now at Geeta University to build a successful career in brand strategy, digital marketing, sales leadership, and market analytics.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

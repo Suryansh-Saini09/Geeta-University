@@ -40,7 +40,7 @@ export const computerScienceSchool: ProgramPageData = {
 
   hero: {
     bannerOnly: false,
-    image: "https://geetauniversity.edu.in/uploads/all/2546/cse-banner.webp",
+    image: "/uploads/all/2546/cse-banner.webp",
     title: "Building Intelligent Solutions. Shaping the Future.",
     eyebrow: "Geeta University",
     description:
@@ -569,27 +569,27 @@ export const computerScienceSchool: ProgramPageData = {
     {
       title: "Advanced Computing Laboratories",
       desc: "High-performance computing workstations, AI development tools, and modern software engineering suites.",
-      image: "https://geetauniversity.edu.in/uploads/all/766/conversions/cr-8-(1)-full.webp",
+      image: "/uploads/all/766/conversions/cr-8-(1)-full.webp",
     },
     {
       title: "Tech Innovation Hub",
       desc: "Collaborative workspaces for hackathons, prototyping, software development, and industry-led projects.",
-      image: "https://geetauniversity.edu.in/uploads/all/773/conversions/cr-1-full.webp",
+      image: "/uploads/all/773/conversions/cr-1-full.webp",
     },
     {
       title: "Cloud & Cybersecurity Labs",
       desc: "Specialized infrastructure for network penetration testing, cloud architecture, and secure computing.",
-      image: "https://geetauniversity.edu.in/uploads/all/774/conversions/cr-2-full.webp",
+      image: "/uploads/all/774/conversions/cr-2-full.webp",
     },
     {
       title: "Project Development Center",
       desc: "Hands-on software development suites and coding arenas for competitive programmers and developers.",
-      image: "https://geetauniversity.edu.in/uploads/all/776/conversions/cr-4-full.webp",
+      image: "/uploads/all/776/conversions/cr-4-full.webp",
     },
     {
       title: "Centre of Excellence & Smart Labs",
       desc: "State-of-the-art facilities for robotics, intelligent systems, data sciences, and enterprise cloud solutions.",
-      image: "https://geetauniversity.edu.in/uploads/all/778/conversions/cr-6-full.webp",
+      image: "/uploads/all/778/conversions/cr-6-full.webp",
     },
   ],
 
@@ -707,9 +707,9 @@ export const computerScienceSchool: ProgramPageData = {
   brochure: {
     title: "Want to know more?",
     description:
-      "Download the official School of Computer Science & Engineering brochure for detailed information on programs, specialisations, placements, certifications, and student outcomes.",
-    fileUrl: "https://geetauniversity.edu.in/uploads/pdf/GU-Brochure-25-26.pdf",
-    fileName: "School_of_Computer_Science_Brochure.pdf",
+      "Download the official School of Computer Science & Engineering brochure (Academic Session 2026–27) for detailed information on programs, specialisations, placements, certifications, and student outcomes.",
+    fileUrl: "/uploads/all/1892/GU-Brochure-2026-27.pdf",
+    fileName: "GU-Brochure-2026-27.pdf",
   },
 
   faqs: [

@@ -1,6 +1,6 @@
-"use client";
 
 import React from "react";
+import Image from "next/image";
 import { teachingOverview as fallbackOverview } from "@/data/teachingLearningPractices";
 
 interface TeachingOverviewSectionProps {
@@ -41,10 +41,13 @@ export default function TeachingOverviewSection({ overview }: TeachingOverviewSe
           {/* Right Image Feature */}
           <div className="lg:col-span-5">
             <div className="relative overflow-hidden rounded-2xl border border-slate-200 shadow-2xl transition-all duration-300 hover:shadow-amber-500/10">
-              <img
+              <Image
                 src={image}
                 alt="Teaching Practice at Geeta University"
+                width={1024}
+                height={682}
                 className="h-full w-full object-cover"
+                sizes="(max-width: 1024px) 100vw, 42vw"
               />
             </div>
           </div>

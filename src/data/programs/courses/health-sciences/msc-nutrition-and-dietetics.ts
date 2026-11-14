@@ -218,7 +218,7 @@ export const mscNutritionAndDietetics: CoursePageData = {
       "Explore admissions at Geeta University and take the first step towards an advanced career in clinical nutrition, dietetics, and health research.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 92787 68000",
   },
 };

@@ -8,8 +8,12 @@ import SportsFacilitiesSection from "@/components/campus-life/SportsFacilitiesSe
 import CampusEventsSection from "@/components/campus-life/CampusEventsSection";
 import EminentPersonalitiesSection from "@/components/campus-life/EminentPersonalitiesSection";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
+import dynamic from "next/dynamic";
 import FAQSection from "@/components/programs/FAQSection";
-import VideoModal from "@/components/campus-life/VideoModal";
+
+const VideoModal = dynamic(() => import("@/components/campus-life/VideoModal"), {
+  ssr: false,
+});
 import { campusFaqs } from "@/data/campusLife";
 
 interface CampusLifeClientPageProps {

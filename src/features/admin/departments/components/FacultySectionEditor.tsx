@@ -17,6 +17,7 @@ import {
   reorderDepartmentFacultyAction,
 } from "@/features/admin/departments/actions";
 import { MediaPickerModal, MediaAssetItem } from "./MediaPickerModal";
+import { CmsImageField } from "@/components/admin/CmsImageField";
 
 export interface FacultyMemberItem {
   name: string;
@@ -411,30 +412,16 @@ export function FacultySectionEditor({
                           />
                         </div>
 
-                        {/* Photo Portrait URL & Media Picker */}
-                        <div className="sm:col-span-2 flex flex-wrap items-end gap-2">
-                          <div className="flex-1">
-                            <label className="mb-1 block font-semibold text-slate-700">
-                              Photo Portrait URL
-                            </label>
-                            <input
-                              type="text"
-                              value={member.image || ""}
-                              onChange={(e) =>
-                                handleFacultyChange(idx, "image", e.target.value)
-                              }
-                              placeholder="/programs/computer-science/faculty/prof.webp"
-                              className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-slate-300 focus:bg-white"
-                            />
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setActiveMediaIndex(idx)}
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-2xs hover:bg-slate-50 transition"
-                          >
-                            <ImageIcon className="h-3.5 w-3.5 text-slate-400" />
-                            Pick Photo
-                          </button>
+                        <div className="sm:col-span-2">
+                          <CmsImageField
+                            label="Photo Portrait"
+                            value={member.image || ""}
+                            onChange={(url) => handleFacultyChange(idx, "image", url)}
+                            contentArea="departments"
+                            section="faculty"
+                            placeholder="/programs/computer-science/faculty/prof.webp"
+                            compact
+                          />
                         </div>
 
                         <div>

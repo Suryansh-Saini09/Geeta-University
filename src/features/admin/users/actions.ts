@@ -9,6 +9,8 @@ import { hashPassword } from "@/server/auth/password";
 import { requireAdminSession } from "@/server/auth/session";
 import { prisma } from "@/server/db/client";
 import { adminUserCreateSchema, adminUserUpdateSchema } from "@/validations/adminUser";
+import { serverLogger } from "@/lib/security/logger";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 
 function errorUrl(path: string, message: string) {
   return `${path}?error=${encodeURIComponent(message)}`;
@@ -36,7 +38,9 @@ export async function createAdminUserAction(formData: FormData) {
     });
   } catch (error) {
     if (isUniqueError(error)) redirect(errorUrl(path, "This email is already in use."));
-    throw error;
+    serverLogger.error("Failed to create admin user", error, { module: "UsersCMS", action: "create" });
+    const safeMsg = sanitizeErrorMessage(error, "Unable to create user. Please try again.");
+    redirect(errorUrl(path, safeMsg));
   }
   revalidatePath("/admin/users");
   revalidatePath("/admin");
@@ -75,7 +79,9 @@ export async function updateAdminUserAction(formData: FormData) {
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   } catch (error) {
     if (isUniqueError(error)) redirect(errorUrl(path, "This email is already in use."));
-    throw error;
+    serverLogger.error("Failed to update admin user", error, { module: "UsersCMS", action: "update", userId: id });
+    const safeMsg = sanitizeErrorMessage(error, "Unable to update user. Please try again.");
+    redirect(errorUrl(path, safeMsg));
   }
   if (!result) redirect("/admin/users?error=not-found");
   if (result === "last-super-admin") redirect(errorUrl(path, "At least one active Super Admin is required."));
@@ -91,9 +97,14 @@ export async function revokeAdminUserSessionsAction(formData: FormData) {
   if (id === session.user.id) redirect("/admin/users?error=self-session");
   const user = await prisma.adminUser.findUnique({ where: { id }, select: { id: true } });
   if (!user) redirect("/admin/users?error=not-found");
-  await prisma.$transaction(async (tx) => {
-    await tx.adminSession.updateMany({ where: { userId: id, revokedAt: null }, data: { revokedAt: new Date() } });
-    await tx.auditLog.create({ data: { actorId: session.user.id, action: AuditAction.UPDATE, entityType: "AdminUser", entityId: id, after: { sessionsRevoked: true } } });
-  });
+  try {
+    await prisma.$transaction(async (tx) => {
+      await tx.adminSession.updateMany({ where: { userId: id, revokedAt: null }, data: { revokedAt: new Date() } });
+      await tx.auditLog.create({ data: { actorId: session.user.id, action: AuditAction.UPDATE, entityType: "AdminUser", entityId: id, after: { sessionsRevoked: true } } });
+    });
+  } catch (error) {
+    serverLogger.error("Failed to revoke admin user sessions", error, { module: "UsersCMS", action: "revokeSessions", userId: id });
+    redirect("/admin/users?error=failed-revoke");
+  }
   redirect("/admin/users?sessionsRevoked=1");
 }

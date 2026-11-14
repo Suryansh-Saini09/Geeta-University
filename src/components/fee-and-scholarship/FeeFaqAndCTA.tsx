@@ -42,8 +42,20 @@ const FAQS: FaqItem[] = [
   },
 ];
 
-export default function FeeFaqAndCTA() {
+interface FeeFaqAndCTAProps {
+  data?: {
+    title?: string;
+    supportEmail?: string;
+    supportPhone?: string;
+    items?: FaqItem[];
+  };
+}
+
+export default function FeeFaqAndCTA({ data }: FeeFaqAndCTAProps = {}) {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
+  const faqs = (data?.items && data.items.length > 0) ? data.items : FAQS;
+  const ctaTitle = data?.title || "Ready to Begin Your Journey at Geeta University?";
+  const supportPhone = data?.supportPhone || "+91-7082200908";
 
   const toggleFaq = (idx: number) => {
     setOpenIdx((prev) => (prev === idx ? null : idx));
@@ -64,7 +76,7 @@ export default function FeeFaqAndCTA() {
 
         {/* FAQ Accordion List */}
         <div className="max-w-4xl mx-auto space-y-4 mb-16">
-          {FAQS.map((faq, idx) => {
+          {faqs.map((faq, idx) => {
             const isOpen = openIdx === idx;
             return (
               <div
@@ -104,7 +116,7 @@ export default function FeeFaqAndCTA() {
             </span>
 
             <h3 className="font-serif text-[28px] sm:text-[36px] md:text-[42px] font-black text-white leading-tight">
-              Ready to Begin Your Journey at Geeta University?
+              {ctaTitle}
             </h3>
 
             <p className="text-[16px] sm:text-[18px] text-white/80 leading-relaxed max-w-2xl mx-auto">
@@ -123,11 +135,11 @@ export default function FeeFaqAndCTA() {
               </a>
 
               <a
-                href="tel:01742639100"
+                href={`tel:${supportPhone.replace(/\s+/g, "")}`}
                 className="inline-flex items-center gap-2 rounded-[10px] border-2 border-white/40 bg-white/10 backdrop-blur-md px-7 py-3 text-[16px] font-bold text-white hover:bg-white hover:text-[#0A1F44] transition-all"
               >
                 <PhoneCall className="h-4 w-4" />
-                <span>Call Admission Helpline</span>
+                <span>Call Admission Helpline ({supportPhone})</span>
               </a>
             </div>
           </div>

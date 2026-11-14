@@ -30,9 +30,9 @@ export const btechCse: CoursePageData = {
     title: "B.Tech Computer Science and Engineering",
     description: "",
     image:
-      "https://geetauniversity.edu.in/uploads/all/1831/B.Tech-(Hons)-CSE.jpg",
+      "/uploads/all/1831/B.Tech-(Hons)-CSE.jpg",
     mobileImage:
-      "https://geetauniversity.edu.in/uploads/all/1832/4-(2).jpg",
+      "/uploads/all/1832/4-(2).jpg",
   },
   quickInfo: {
     program: "Bachelor of Technology in Computer Science & Engineering",
@@ -335,42 +335,42 @@ export const btechCse: CoursePageData = {
       name: "Nitish",
       role: "B.Tech CSE Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2294/conversions/WhatsApp-Image-2026-05-02-at-3.01.05-PM-full.webp",
+        "/uploads/all/2294/conversions/WhatsApp-Image-2026-05-02-at-3.01.05-PM-full.webp",
       text: "Getting placed at Samsung has been a proud moment for me. Studying Computer Science Engineering here, along with practical exposure and constant faculty support, helped me build strong skills and confidence to achieve this opportunity.",
     },
     {
       name: "Gagandeep Singh",
       role: "B.Tech CSE Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2288/conversions/CSE5-full.webp",
+        "/uploads/all/2288/conversions/CSE5-full.webp",
       text: "Studying computer science here has been quite interesting till now. The practical sessions and assignments helped me improve my coding skills, while the faculty support made it easier to understand difficult topics with more clarity",
     },
     {
       name: "Pranjal Jaiswal",
       role: "B.Tech CSE Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2293/conversions/CSE-full.webp",
+        "/uploads/all/2293/conversions/CSE-full.webp",
       text: "Learning computer science here has been a smooth journey till now. The hands-on projects and regular guidance from faculty helped me understand programming concepts better and grow more confident in my technical abilities overall.",
     },
     {
       name: "Sahil",
       role: "B.Tech CSE Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2292/conversions/CSE1-full.webp",
+        "/uploads/all/2292/conversions/CSE1-full.webp",
       text: "Learning B.Tech CSE at Geeta University has been a valuable experience so far. The focus on real-world applications and continuous support from faculty helped me build clarity in concepts and improve my confidence in coding.",
     },
     {
       name: "Aman Pandey",
       role: "B.Tech CSE Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2291/conversions/CSE2-full.webp",
+        "/uploads/all/2291/conversions/CSE2-full.webp",
       text: "Being part of the B.Tech CSE program at Geeta University has been a good experience so far. The project-based learning and helpful faculty made concepts easier and helped me feel more prepared for future career opportunities.",
     },
     {
       name: "Ragini Sharma",
       role: "B.Tech CSE Student",
       image:
-        "https://geetauniversity.edu.in/uploads/all/2289/conversions/CSE4-full.webp",
+        "/uploads/all/2289/conversions/CSE4-full.webp",
       text: "Studying here has been a good experience so far. The project-based learning approach and helpful faculty made concepts easier to grasp and helped me feel more prepared for future opportunities in the tech industry ahead.",
     },
   ],
@@ -380,27 +380,27 @@ export const btechCse: CoursePageData = {
       {
         title: "Computing & Software Development Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2016/conversions/cse4-thumb.webp",
+          "/uploads/all/2016/conversions/cse4-thumb.webp",
       },
       {
         title: "AI & Data Science Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2015/conversions/cse5-thumb.webp",
+          "/uploads/all/2015/conversions/cse5-thumb.webp",
       },
       {
         title: "Hardware, IoT & Embedded Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2013/conversions/cse3-thumb.webp",
+          "/uploads/all/2013/conversions/cse3-thumb.webp",
       },
       {
         title: "Cybersecurity & Cloud Systems Lab",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2012/conversions/cse-(1)-thumb.webp",
+          "/uploads/all/2012/conversions/cse-(1)-thumb.webp",
       },
       {
         title: "Collaborative Coding & Innovation Space",
         image:
-          "https://geetauniversity.edu.in/uploads/all/2014/conversions/cse2-thumb.webp",
+          "/uploads/all/2014/conversions/cse2-thumb.webp",
       },
     ],
   },
@@ -411,7 +411,7 @@ export const btechCse: CoursePageData = {
       "Apply now at Geeta University and take the first step towards an exciting career in software and technology.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

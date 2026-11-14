@@ -27,13 +27,17 @@ interface GovernanceCommitteeModalProps {
   onSave: (payload: any) => Promise<{ success: boolean; error?: string }>;
 }
 
-export function GovernanceCommitteeModal({
+export function GovernanceCommitteeModal(props: GovernanceCommitteeModalProps) {
+  if (!props.isOpen || !props.committee) return null;
+  return <GovernanceCommitteeModalContent {...props} />;
+}
+
+function GovernanceCommitteeModalContent({
   committee,
-  isOpen,
+  isOpen: _isOpen,
   onClose,
   onSave,
 }: GovernanceCommitteeModalProps) {
-  if (!isOpen || !committee) return null;
 
   // Initialize columns and rows from existing tableData or default 4 columns
   const initialTableData: GovernanceTableData = committee.tableData || {

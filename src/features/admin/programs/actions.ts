@@ -2,11 +2,14 @@
 
 import { AuditAction, ContentStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { CACHE_TAGS, invalidateCacheTag } from "@/server/cache/tags";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/server/db/client";
 import { assertPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
+import { serverLogger } from "@/lib/security/logger";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import {
   programCreateSchema,
   programUpdateSchema,
@@ -97,26 +100,33 @@ export async function createProgramAction(formData: FormData) {
     },
   };
 
-  const program = await prisma.program.create({
-    data: {
-      ...toProgramWriteData(parsed.data),
-      overview: initialOverview,
-    },
-  });
+  try {
+    const program = await prisma.program.create({
+      data: {
+        ...toProgramWriteData(parsed.data),
+        overview: initialOverview,
+      },
+    });
 
-  await prisma.auditLog.create({
-    data: {
-      actorId: session.user.id,
-      action: AuditAction.CREATE,
-      entityType: "Program",
-      entityId: program.id,
-      after: program,
-    },
-  });
+    await prisma.auditLog.create({
+      data: {
+        actorId: session.user.id,
+        action: AuditAction.CREATE,
+        entityType: "Program",
+        entityId: program.id,
+        after: program,
+      },
+    });
 
-  revalidatePath("/admin");
-  revalidatePath("/admin/programs");
-  redirect("/admin/programs?created=1");
+    revalidatePath("/admin");
+    revalidatePath("/admin/programs");
+    invalidateCacheTag(CACHE_TAGS.programsList, CACHE_TAGS.departmentsList, CACHE_TAGS.navigation);
+    redirect("/admin/programs?created=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to create program", error, { module: "programs", action: "createProgram" });
+    redirect(`/admin/programs/new?error=${encodeURIComponent(sanitizeErrorMessage(error))}`);
+  }
 }
 
 export async function updateProgramAction(formData: FormData) {
@@ -202,8 +212,18 @@ export async function updateProgramAction(formData: FormData) {
     },
   });
 
-  revalidateProgramPaths(existing.slug, program.slug, department.slug, existing.aliases.map((a) => a.slug), program.id);
-  redirect(`/admin/programs/${program.id}/edit?updated=1`);
+  invalidateCacheTag(
+    CACHE_TAGS.programsList,
+    CACHE_TAGS.departmentsList,
+    CACHE_TAGS.navigation,
+    CACHE_TAGS.program(program.slug),
+    CACHE_TAGS.program(program.id)
+  );
+
+  const returnSection = formData.get("section")
+    ? `?section=${encodeURIComponent(String(formData.get("section")))}&updated=1`
+    : `?section=overview&updated=1`;
+  redirect(`/admin/programs/${program.id}/edit${returnSection}`);
 }
 
 export async function updateProgramSectionAction(formData: FormData) {
@@ -507,14 +527,6 @@ export async function updateProgramSectionAction(formData: FormData) {
       break;
     }
 
-    case "advancedJson": {
-      if (session.user.role !== "SUPER_ADMIN" && session.user.role !== "ADMIN") {
-        redirect(`/admin/programs/${id}/edit?section=${section}&error=${encodeURIComponent("Only Administrators can modify raw JSON.")}`);
-      }
-      updatedOverview = sectionPayload;
-      break;
-    }
-
     default:
       redirect(`/admin/programs/${id}/edit?error=${encodeURIComponent("The requested section could not be found.")}`);
   }
@@ -550,7 +562,8 @@ export async function updateProgramSectionAction(formData: FormData) {
     updatedProgram.id
   );
 
-  redirect(`/admin/programs/${id}/edit?section=${section}&saved=1`);
+  const redirectSection = section === "quickInfo" ? "hero" : section;
+  redirect(`/admin/programs/${id}/edit?section=${redirectSection}&saved=1`);
 }
 
 export async function archiveProgramAction(formData: FormData) {
@@ -615,6 +628,16 @@ function revalidateProgramPaths(
     revalidatePath(`/${slug}`);
     revalidatePath(`/programs/${schoolSlug}/${slug}`);
   }
+
+  invalidateCacheTag(
+    CACHE_TAGS.programsList,
+    CACHE_TAGS.departmentsList,
+    CACHE_TAGS.navigation,
+    CACHE_TAGS.program(oldSlug),
+    CACHE_TAGS.program(newSlug),
+    CACHE_TAGS.program(programId),
+    ...aliases.map((a) => CACHE_TAGS.program(a))
+  );
 }
 
 function getProgramPayload(formData: FormData) {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { fetchSocialData, SocialLink, SocialProfile } from "@/lib/socialLinks";
 import { ChevronRight, Star, Globe, MessageCircle, Radio, GraduationCap, Compass } from "lucide-react";
+import { serverLogger } from "@/lib/security/logger";
 
 export const metadata: Metadata = {
   title: "Connect with Geeta University",
@@ -126,7 +127,7 @@ export default async function SocialLinksPage() {
       }
     }
   } catch (err) {
-    console.error("Error loading social links page:", err);
+    serverLogger.error("Failed to load social links from API", err, { module: "SocialLinks", action: "loadPage" });
   }
 
   // Group links by category (defaulting to "Official Social Media" & "Reviews & Platforms")
@@ -146,8 +147,8 @@ export default async function SocialLinksPage() {
       ]
     : [{ title: "Official Digital Channels", items: links }];
 
-  const heroBg = profile?.heroImage || "https://geetauniversity.edu.in/uploads/all/2080/campus.webp";
-  const logoUrl = profile?.logo || "https://geetauniversity.edu.in/uploads/all/754/GU-Logo-PNG-(1).webp";
+  const heroBg = profile?.heroImage || "/uploads/all/2080/campus.webp";
+  const logoUrl = profile?.logo || "/uploads/all/754/GU-Logo-PNG-(1).webp";
   const title = profile?.name || "Geeta University";
   const tagline = profile?.tagline || "Empowering Minds. Transforming Futures.";
 
@@ -175,7 +176,7 @@ export default async function SocialLinksPage() {
               alt={title}
               width={220}
               height={70}
-              className="h-auto max-w-[200px] sm:max-w-[220px] object-contain"
+              className="h-auto w-auto max-w-[200px] sm:max-w-[220px] object-contain"
               priority
             />
           </div>

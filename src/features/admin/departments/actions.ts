@@ -1,12 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { CACHE_TAGS, invalidateCacheTag } from "@/server/cache/tags";
 import { redirect } from "next/navigation";
 
 import { prisma, AuditAction, ContentStatus } from "@/server/db/client";
 import { assertPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
 import { getAliasesForSlug } from "@/lib/programs/programRepository";
+import { serverLogger } from "@/lib/security/logger";
+import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 import {
   departmentCreateSchema,
   departmentUpdateSchema,
@@ -61,32 +64,39 @@ export async function createDepartmentAction(formData: FormData) {
     );
   }
 
-  const department = await prisma.department.create({
-    data: {
-      name: parsed.data.name,
-      shortName: parsed.data.shortName || null,
-      slug: parsed.data.slug,
-      summary: parsed.data.summary || null,
-      status: parsed.data.status,
-      sortOrder: parsed.data.sortOrder,
-      publishedAt:
-        parsed.data.status === "PUBLISHED" ? new Date() : null,
-    },
-  });
+  try {
+    const department = await prisma.department.create({
+      data: {
+        name: parsed.data.name,
+        shortName: parsed.data.shortName || null,
+        slug: parsed.data.slug,
+        summary: parsed.data.summary || null,
+        status: parsed.data.status,
+        sortOrder: parsed.data.sortOrder,
+        publishedAt:
+          parsed.data.status === "PUBLISHED" ? new Date() : null,
+      },
+    });
 
-  await prisma.auditLog.create({
-    data: {
-      actorId: session.user.id,
-      action: AuditAction.CREATE,
-      entityType: "Department",
-      entityId: department.id,
-      after: department,
-    },
-  });
+    await prisma.auditLog.create({
+      data: {
+        actorId: session.user.id,
+        action: AuditAction.CREATE,
+        entityType: "Department",
+        entityId: department.id,
+        after: department,
+      },
+    });
 
-  revalidatePath("/admin");
-  revalidatePath("/admin/departments");
-  redirect("/admin/departments?created=1");
+    revalidatePath("/admin");
+    revalidatePath("/admin/departments");
+    invalidateCacheTag(CACHE_TAGS.departmentsList, CACHE_TAGS.navigation);
+    redirect("/admin/departments?created=1");
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to create department", error, { module: "departments", action: "createDepartment" });
+    redirect(`/admin/departments/new?error=${encodeURIComponent(sanitizeErrorMessage(error))}`);
+  }
 }
 
 export async function updateDepartmentAction(formData: FormData) {
@@ -138,50 +148,62 @@ export async function updateDepartmentAction(formData: FormData) {
   if (parsed.data.shortName) updatedBody.shortName = parsed.data.shortName;
   updatedBody.slug = parsed.data.slug;
 
-  const department = await prisma.department.update({
-    where: { id: parsed.data.id },
-    data: {
-      name: parsed.data.name,
-      shortName: parsed.data.shortName || null,
-      slug: parsed.data.slug,
-      summary: parsed.data.summary || null,
-      body: JSON.parse(JSON.stringify(updatedBody)),
-      status: parsed.data.status,
-      sortOrder: parsed.data.sortOrder,
-      publishedAt:
-        parsed.data.status === "PUBLISHED"
-          ? existing.publishedAt ?? new Date()
-          : null,
-    },
-  });
+  try {
+    const department = await prisma.department.update({
+      where: { id: parsed.data.id },
+      data: {
+        name: parsed.data.name,
+        shortName: parsed.data.shortName || null,
+        slug: parsed.data.slug,
+        summary: parsed.data.summary || null,
+        body: JSON.parse(JSON.stringify(updatedBody)),
+        status: parsed.data.status,
+        sortOrder: parsed.data.sortOrder,
+        publishedAt:
+          parsed.data.status === "PUBLISHED"
+            ? existing.publishedAt ?? new Date()
+            : null,
+      },
+    });
 
-  await prisma.auditLog.create({
-    data: {
-      actorId: session.user.id,
-      action: AuditAction.UPDATE,
-      entityType: "Department",
-      entityId: department.id,
-      before: existing,
-      after: department,
-    },
-  });
+    await prisma.auditLog.create({
+      data: {
+        actorId: session.user.id,
+        action: AuditAction.UPDATE,
+        entityType: "Department",
+        entityId: department.id,
+        before: existing,
+        after: department,
+      },
+    });
 
-  const affectedSlugs = getAliasesForSlug(department.slug);
-  if (existing.slug !== department.slug) {
-    affectedSlugs.push(...getAliasesForSlug(existing.slug));
+    const affectedSlugs = getAliasesForSlug(department.slug);
+    if (existing.slug !== department.slug) {
+      affectedSlugs.push(...getAliasesForSlug(existing.slug));
+    }
+
+    revalidatePath("/admin");
+    revalidatePath("/admin/departments");
+    revalidatePath(`/admin/departments/${department.id}/edit`);
+    revalidatePath("/programs");
+    for (const slugToRevalidate of Array.from(new Set(affectedSlugs))) {
+      revalidatePath(`/programs/${slugToRevalidate}`);
+    }
+    invalidateCacheTag(
+      CACHE_TAGS.departmentsList,
+      CACHE_TAGS.department(department.slug),
+      CACHE_TAGS.department(department.id),
+      CACHE_TAGS.navigation
+    );
+
+    const section = formData.get("section") ? String(formData.get("section")) : "";
+    const sectionQuery = section ? `&section=${encodeURIComponent(section)}` : "";
+    redirect(`/admin/departments/${department.id}/edit?updated=1${sectionQuery}`);
+  } catch (error: any) {
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
+    serverLogger.error("Failed to update department", error, { module: "departments", action: "updateDepartment", id: parsed.data.id });
+    redirect(`/admin/departments/${parsed.data.id}/edit?error=${encodeURIComponent(sanitizeErrorMessage(error))}`);
   }
-
-  revalidatePath("/admin");
-  revalidatePath("/admin/departments");
-  revalidatePath(`/admin/departments/${department.id}/edit`);
-  revalidatePath("/programs");
-  for (const slugToRevalidate of Array.from(new Set(affectedSlugs))) {
-    revalidatePath(`/programs/${slugToRevalidate}`);
-  }
-
-  const section = formData.get("section") ? String(formData.get("section")) : "";
-  const sectionQuery = section ? `&section=${encodeURIComponent(section)}` : "";
-  redirect(`/admin/departments/${department.id}/edit?updated=1${sectionQuery}`);
 }
 
 export async function updateDepartmentSectionAction(formData: FormData) {
@@ -522,14 +544,6 @@ export async function updateDepartmentSectionAction(formData: FormData) {
       break;
     }
 
-    case "advancedJson": {
-      if (session.user.role !== "SUPER_ADMIN" && session.user.role !== "ADMIN") {
-        redirect(`/admin/departments/${id}/edit?section=${section}&error=${encodeURIComponent("Only Super Admins can save raw JSON.")}`);
-      }
-      updatedBody = sectionPayload;
-      break;
-    }
-
     default:
       redirect(`/admin/departments/${id}/edit?error=${encodeURIComponent("The requested section could not be found.")}`);
   }
@@ -561,6 +575,11 @@ export async function updateDepartmentSectionAction(formData: FormData) {
   for (const slugToRevalidate of Array.from(new Set(affectedSlugs))) {
     revalidatePath(`/programs/${slugToRevalidate}`);
   }
+  invalidateCacheTag(
+    CACHE_TAGS.departmentsList,
+    CACHE_TAGS.department(existing.slug),
+    CACHE_TAGS.department(id)
+  );
 
   redirect(`/admin/departments/${id}/edit?section=${section}&saved=1`);
 }
@@ -604,6 +623,12 @@ export async function archiveDepartmentAction(formData: FormData) {
 
   revalidatePath("/admin");
   revalidatePath("/admin/departments");
+  invalidateCacheTag(
+    CACHE_TAGS.departmentsList,
+    CACHE_TAGS.department(department.slug),
+    CACHE_TAGS.department(department.id),
+    CACHE_TAGS.navigation
+  );
   redirect("/admin/departments?archived=1");
 }
 
@@ -729,6 +754,12 @@ export async function reorderDepartmentFacultyAction(formData: FormData) {
   for (const slugToRevalidate of Array.from(new Set(affectedSlugs))) {
     revalidatePath(`/programs/${slugToRevalidate}`);
   }
+  invalidateCacheTag(
+    CACHE_TAGS.departmentsList,
+    CACHE_TAGS.department(existing.slug),
+    CACHE_TAGS.department(departmentId),
+    CACHE_TAGS.facultyList
+  );
 
   redirect(`/admin/departments/${departmentId}/edit?section=faculty&reordered=1`);
 }

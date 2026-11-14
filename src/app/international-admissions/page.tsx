@@ -8,6 +8,7 @@ import LeadershipSpotlightSection from "@/components/international-admissions/Le
 import InternationalTestimonials from "@/components/international-admissions/InternationalTestimonials";
 import InternationalVideoSection from "@/components/international-admissions/InternationalVideoSection";
 import InternationalProgramsAccordion from "@/components/international-admissions/InternationalProgramsAccordion";
+import InternationalEnquiryForm from "@/components/international-admissions/InternationalEnquiryForm";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
 
@@ -45,22 +46,25 @@ export default async function InternationalAdmissionsPage() {
       <InternationalHero data={sections.hero} />
 
       {/* Partner Flags / Logos Ticker Marquee */}
-      <InternationalLogoMarquee />
+      <InternationalLogoMarquee data={sections.partner_marquee} />
 
-      {/* Universe of GU Narrative & Enquiry Form */}
-      <UniverseOfGUSection />
+      {/* Universe of GU Narrative */}
+      <UniverseOfGUSection data={sections.universe_of_gu} />
+
+      {/* International Admissions Enquiry Section */}
+      <InternationalEnquiryForm data={sections.enquiry_form} />
 
       {/* Leadership Spotlight */}
-      <LeadershipSpotlightSection />
+      <LeadershipSpotlightSection data={sections.leadership_spotlight} />
 
       {/* International Student Testimonials */}
-      <InternationalTestimonials />
+      <InternationalTestimonials data={sections.testimonials} />
 
       {/* Campus Life & Virtual Campus Tour Videos */}
-      <InternationalVideoSection />
+      <InternationalVideoSection data={sections.video_showcase} />
 
       {/* Programs Offered Accordion Catalog */}
-      <InternationalProgramsAccordion />
+      <InternationalProgramsAccordion data={sections.program_accordion} />
 
       {/* Legacy & Ecosystem */}
       <LegacyEcosystem contextText={sections.legacy_ecosystem?.contextText || "International students benefit from the integrated ecosystem of:"} />

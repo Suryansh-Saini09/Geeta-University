@@ -10,7 +10,7 @@ export default function IcnfprHero() {
       {/* Background Banner Image with High-Contrast Dark Gradient Overlays */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="https://geetauniversity.edu.in/uploads/all/2008/conversions/hero-full.webp"
+          src="/uploads/all/2008/conversions/hero-full.webp"
           alt="ICNFPR 2026 Conference Banner"
           fill
           priority

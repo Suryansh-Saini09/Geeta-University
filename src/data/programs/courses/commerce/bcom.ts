@@ -400,7 +400,7 @@ export const bcom: CoursePageData = {
       "Apply now at Geeta University and build a solid corporate foundation in accounting, taxation, auditing, and financial management.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 99963 03799",
   },
 };

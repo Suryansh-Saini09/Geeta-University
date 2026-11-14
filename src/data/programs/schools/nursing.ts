@@ -55,7 +55,7 @@ export const nursingSchool: ProgramPageData = {
 
   hero: {
     bannerOnly: false,
-    image: "https://geetauniversity.edu.in/uploads/all/1888/nursing.jpg",
+    image: "/uploads/all/1888/nursing.jpg",
     title: "Geeta Nursing College",
     eyebrow: "Geeta University",
     description:
@@ -70,7 +70,7 @@ export const nursingSchool: ProgramPageData = {
       "At Geeta University, we are committed to nurturing compassionate, skilled healthcare professionals who make a difference in communities. In response to the growing demand for quality nursing care and skilled practitioners in the healthcare sector, we are planning to introduce comprehensive nursing programmes under Geeta Nursing College — designed with academic excellence, practical exposure, and career readiness at the core.",
       '<strong>"Programmes are proposed and subject to statutory approvals and inspections as per regulatory requirements. Affiliation and approval status will be updated on this page once received."</strong>',
     ],
-    image: "https://geetauniversity.edu.in/uploads/all/253/conversions/f-block-(1)-full.webp",
+    image: "/uploads/all/253/conversions/f-block-(1)-full.webp",
     badgeText: "Excellence in Nursing Education",
     careers: [
       "Staff Nurse in Hospitals & Healthcare Institutions",
@@ -211,7 +211,7 @@ export const nursingSchool: ProgramPageData = {
         description: "Advanced Technology, Certifications, and Industry Skills.",
       },
     ],
-    image: "https://geetauniversity.edu.in/uploads/all/2080/campus.webp",
+    image: "/uploads/all/2080/campus.webp",
   },
 
   faqs: nursingFaqs.map((f) => ({

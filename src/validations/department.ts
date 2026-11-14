@@ -1,4 +1,4 @@
-import { ContentStatus } from "@/server/db/client";
+import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 
 export const departmentCreateSchema = z.object({

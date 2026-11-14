@@ -171,12 +171,8 @@ async function runTests() {
     "Institutional dispatcher validates slug with isValidInstitutionalSlug"
   );
   assert(
-    dispatcherContent.includes("CampusLifeCmsDashboard") &&
-      dispatcherContent.includes("PlacementsCmsDashboard") &&
-      dispatcherContent.includes("LibraryCmsDashboard") &&
-      dispatcherContent.includes("AdvisoryBoardCmsDashboard") &&
-      dispatcherContent.includes("MedalPolicyCmsDashboard"),
-    "Institutional dispatcher imports and routes to all 5 dedicated CMS dashboards"
+    dispatcherContent.includes("InstitutionalPagesCmsDashboard"),
+    "Institutional dispatcher routes via unified InstitutionalPagesCmsDashboard"
   );
 
   // -------------------------------------------------------------------

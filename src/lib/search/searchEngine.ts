@@ -1,6 +1,33 @@
 import type { SearchDocument, SearchResultItem, SearchResultsResponse } from "./types";
 import { getSearchIndex } from "./searchIndex";
 
+// Standard English stop words to strip during tokenization (unless quoted)
+export const STOP_WORDS = new Set([
+  "of",
+  "the",
+  "in",
+  "and",
+  "to",
+  "a",
+  "for",
+  "on",
+  "with",
+  "at",
+  "by",
+  "from",
+  "an",
+  "is",
+  "are",
+  "as",
+  "or",
+  "it",
+  "be",
+]);
+
+export function isStopWord(term: string): boolean {
+  return STOP_WORDS.has(term.trim().toLowerCase());
+}
+
 // Common education acronym expansions for higher search accuracy
 const ACRONYM_MAP: Record<string, string[]> = {
   cse: ["computer", "science", "engineering", "btech"],
@@ -25,7 +52,7 @@ const ACRONYM_MAP: Record<string, string[]> = {
 };
 
 // Levenshtein distance helper for typo tolerance (e.g. "computr" -> "computer")
-function getLevenshteinDistance(a: string, b: string): number {
+export function getLevenshteinDistance(a: string, b: string): number {
   if (a.length === 0) return b.length;
   if (b.length === 0) return a.length;
 
@@ -55,11 +82,12 @@ function getLevenshteinDistance(a: string, b: string): number {
 }
 
 /**
- * Checks if query token fuzzy-matches target word
+ * Checks if query token fuzzy-matches target word with safe bounds
  */
 function isFuzzyMatch(token: string, targetWord: string): boolean {
   if (token.length < 4 || targetWord.length < 4) return false;
-  if (targetWord.startsWith(token.substring(0, 3))) {
+  if (Math.abs(token.length - targetWord.length) > 2) return false;
+  if (targetWord.startsWith(token.substring(0, 2))) {
     const dist = getLevenshteinDistance(token, targetWord);
     return dist <= 2;
   }
@@ -67,46 +95,247 @@ function isFuzzyMatch(token: string, targetWord: string): boolean {
 }
 
 /**
- * Generates a clean 160-character snippet around the matched search terms
+ * Escapes regex special characters
  */
-function generateSnippet(doc: SearchDocument, matchedTokens: string[]): string {
-  const fullText = [doc.description, doc.content || ""].join(" ");
-  if (!fullText.trim()) return doc.description || doc.title;
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * Counts occurrences of a term using whole-word boundary
+ */
+function countTermOccurrences(text: string, term: string): number {
+  if (!text || !term) return 0;
+  const escaped = escapeRegex(term);
+  const regex = new RegExp(`\\b${escaped}\\b`, "gi");
+  const matches = text.match(regex);
+  return matches ? matches.length : 0;
+}
+
+/**
+ * Checks if text contains exact word boundary match
+ */
+function textContainsWord(text: string, term: string): boolean {
+  if (!text || !term) return 0 !== 0;
+  const escaped = escapeRegex(term);
+  const regex = new RegExp(`\\b${escaped}\\b`, "i");
+  return regex.test(text);
+}
+
+function cleanSnippetText(raw: string): string {
+  if (!raw) return "";
+  return raw
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\{[^{}]*\}/g, " ")
+    .replace(/\[[^\[\]]*\]/g, " ")
+    .replace(/[{}"]+/g, " ")
+    .replace(/https?:\/\/[^\s]+/gi, "")
+    .replace(/\/uploads\/[^\s]+/gi, "")
+    .replace(/[a-zA-Z0-9_-]+\.(webp|jpg|jpeg|png|svg|pdf)/gi, "")
+    .replace(/[\r\n\t]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * Generates a clean ~160-character snippet around matched search terms,
+ * strictly honoring word boundaries and stripping raw JSON/URLs.
+ */
+export function generateSnippet(
+  doc: SearchDocument,
+  matchedTokens: string[],
+  exactPhrase?: string
+): string {
+  const rawText = [doc.description, doc.content || ""].filter(Boolean).join(" ");
+  const fullText = cleanSnippetText(rawText);
+  if (!fullText) return cleanSnippetText(doc.description || doc.title);
 
   const lowerText = fullText.toLowerCase();
   let firstMatchIndex = -1;
 
-  for (const token of matchedTokens) {
-    const idx = lowerText.indexOf(token);
-    if (idx !== -1 && (firstMatchIndex === -1 || idx < firstMatchIndex)) {
-      firstMatchIndex = idx;
+  // 1. Try finding exact consecutive phrase first
+  if (exactPhrase && exactPhrase.length > 2) {
+    const pIdx = lowerText.indexOf(exactPhrase);
+    if (pIdx !== -1) {
+      firstMatchIndex = pIdx;
+    }
+  }
+
+  // 2. Otherwise find earliest matching non-stop token
+  if (firstMatchIndex === -1) {
+    for (const token of matchedTokens) {
+      if (isStopWord(token)) continue;
+      const regex = new RegExp(`\\b${escapeRegex(token)}\\b`, "i");
+      const match = regex.exec(lowerText);
+      if (match && (firstMatchIndex === -1 || match.index < firstMatchIndex)) {
+        firstMatchIndex = match.index;
+      }
     }
   }
 
   if (firstMatchIndex === -1) {
-    return fullText.length > 170 ? fullText.substring(0, 167) + "..." : fullText;
+    if (fullText.length <= 160) return fullText;
+    const boundary = fullText.lastIndexOf(" ", 157);
+    return (boundary > 50 ? fullText.substring(0, boundary) : fullText.substring(0, 157)) + "...";
   }
 
-  const start = Math.max(0, firstMatchIndex - 40);
-  const end = Math.min(fullText.length, firstMatchIndex + 130);
-  let snippet = fullText.substring(start, end).trim();
+  const rawStart = Math.max(0, firstMatchIndex - 45);
+  const rawEnd = Math.min(fullText.length, firstMatchIndex + 125);
 
-  if (start > 0) snippet = "..." + snippet;
-  if (end < fullText.length) snippet = snippet + "...";
+  let adjustedStart = rawStart;
+  if (adjustedStart > 0) {
+    const nextSpace = fullText.indexOf(" ", adjustedStart);
+    if (nextSpace !== -1 && nextSpace < firstMatchIndex) {
+      adjustedStart = nextSpace + 1;
+    }
+  }
+
+  let adjustedEnd = rawEnd;
+  if (adjustedEnd < fullText.length) {
+    const lastSpace = fullText.lastIndexOf(" ", adjustedEnd);
+    if (lastSpace !== -1 && lastSpace > firstMatchIndex) {
+      adjustedEnd = lastSpace;
+    }
+  }
+
+  let snippet = fullText.substring(adjustedStart, adjustedEnd).trim();
+  snippet = snippet.replace(/^[^\w]+/, "").replace(/[^\w.]+$/, "");
+
+  if (adjustedStart > 0) snippet = "..." + snippet;
+  if (adjustedEnd < fullText.length) snippet = snippet + "...";
 
   return snippet;
 }
 
 /**
+ * Parsed Query Structure
+ */
+interface ParsedQuery {
+  rawQuery: string;
+  isQuoted: boolean;
+  exactPhrase: string;
+  rawTokens: string[];
+  searchTokens: string[];
+  requiredTokens: string[];
+}
+
+/**
+ * Parses user search query:
+ * - Identifies explicit quote wrappers ("..." or '...')
+ * - Strips stop words from required tokens unless quoted or all are stop words
+ * - Expands educational acronyms (e.g. cse -> btech, computer, science, engineering)
+ */
+export function parseSearchQuery(rawQuery: string): ParsedQuery {
+  const trimmed = rawQuery.trim();
+  const lower = trimmed.toLowerCase();
+
+  // Check if query is wrapped in quotes
+  const isQuoted =
+    (lower.startsWith('"') && lower.endsWith('"')) ||
+    (lower.startsWith("'") && lower.endsWith("'"));
+
+  const unquotedPhrase = lower.replace(/["']/g, "").replace(/\s+/g, " ").trim();
+
+  // Extract raw word tokens
+  const rawTokens = unquotedPhrase
+    .replace(/[^\w\s-]/g, "")
+    .split(/\s+/)
+    .filter(Boolean);
+
+  let searchTokens: string[] = [];
+  let requiredTokens: string[] = [];
+
+  if (isQuoted) {
+    // Inside quotes: keep all tokens including stop words for exact matching
+    searchTokens = [...rawTokens];
+    requiredTokens = [...rawTokens];
+  } else {
+    // Strip common stop words from required tokens
+    const nonStopTokens = rawTokens.filter((t) => !STOP_WORDS.has(t));
+
+    // If query consisted ONLY of stop words (e.g. "of" or "the"), fallback to raw tokens
+    requiredTokens = nonStopTokens.length > 0 ? nonStopTokens : rawTokens;
+
+    // Expand acronyms into search tokens
+    const tokenSet = new Set<string>(rawTokens);
+    for (const t of rawTokens) {
+      if (ACRONYM_MAP[t]) {
+        ACRONYM_MAP[t].forEach((exp) => tokenSet.add(exp));
+      }
+    }
+    searchTokens = Array.from(tokenSet);
+  }
+
+  return {
+    rawQuery: trimmed,
+    isQuoted,
+    exactPhrase: unquotedPhrase,
+    rawTokens,
+    searchTokens,
+    requiredTokens,
+  };
+}
+
+/**
+ * Precomputes BM25 IDF (Inverse Document Frequency) for all terms in the corpus
+ */
+function computeCorpusIDF(
+  documents: SearchDocument[],
+  tokens: string[]
+): Map<string, number> {
+  const N = documents.length;
+  const idfMap = new Map<string, number>();
+
+  for (const token of tokens) {
+    let docCount = 0;
+    for (const doc of documents) {
+      const titleLower = doc.title.toLowerCase();
+      const descLower = doc.description.toLowerCase();
+      const contentLower = (doc.content || "").toLowerCase();
+      const tagsLower = [
+        doc.category,
+        doc.subcategory || "",
+        ...(doc.keywords || []),
+        ...(doc.tags || []),
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      if (
+        textContainsWord(titleLower, token) ||
+        textContainsWord(descLower, token) ||
+        textContainsWord(tagsLower, token) ||
+        textContainsWord(contentLower, token)
+      ) {
+        docCount++;
+      }
+    }
+
+    // Standard smoothed BM25 IDF
+    const idf = Math.log(1 + (N - docCount + 0.5) / (docCount + 0.5));
+    idfMap.set(token, Math.max(0.1, idf));
+  }
+
+  return idfMap;
+}
+
+/**
  * Central Search Engine Function
- * Performs multi-word relevance scoring, acronym expansion, typo matching & snippet extraction.
+ * Performs:
+ * 1. Multi-word relevance scoring with BM25 algorithm
+ * 2. Stop word elimination during tokenization & matching
+ * 3. 75%+ term coverage constraint (AND / Min-Should-Match)
+ * 4. 10x Exact phrase boosting in title, keywords, & body
+ * 5. Weighted field scoring (Title/Slug 5x, Description/Tags 3x, Body 1x)
+ * 6. Typo tolerance and acronym expansion
  */
 export function searchWebsite(
   rawQuery: string,
   page = 1,
-  pageSize = 10
+  pageSize = 10,
+  customIndex?: SearchDocument[]
 ): SearchResultsResponse {
-  const query = rawQuery.trim().toLowerCase();
+  const query = rawQuery.trim();
   if (!query) {
     return {
       results: [],
@@ -118,160 +347,225 @@ export function searchWebsite(
     };
   }
 
-  const index = getSearchIndex();
+  const documents = customIndex || getSearchIndex();
+  const parsed = parseSearchQuery(query);
 
-  // Tokenize query
-  const rawTokens = query
-    .replace(/[^\w\s-]/g, "")
-    .split(/\s+/)
-    .filter(Boolean);
-
-  if (rawTokens.length === 0) {
+  if (parsed.rawTokens.length === 0) {
     return {
       results: [],
       totalResults: 0,
-      query: rawQuery,
+      query,
       page: 1,
       pageSize,
       totalPages: 0,
     };
   }
 
-  // Expand acronyms (e.g. cse -> cse, computer, science, engineering)
-  const searchTokensSet = new Set<string>(rawTokens);
-  for (const token of rawTokens) {
-    if (ACRONYM_MAP[token]) {
-      ACRONYM_MAP[token].forEach((expanded) => searchTokensSet.add(expanded));
-    }
+  // Gracefully handle overly broad queries containing only stop words (e.g. "of", "the", "in")
+  if (!parsed.isQuoted && parsed.rawTokens.every((t) => STOP_WORDS.has(t))) {
+    return {
+      results: [],
+      totalResults: 0,
+      query,
+      page: 1,
+      pageSize,
+      totalPages: 0,
+    };
   }
-  const searchTokens = Array.from(searchTokensSet);
+
+  // Precompute IDF for search tokens
+  const idfMap = computeCorpusIDF(documents, parsed.searchTokens);
+
+  // Compute average document length across corpus for BM25 normalization
+  let totalDocLength = 0;
+  for (const doc of documents) {
+    const text = [
+      doc.title,
+      doc.description,
+      doc.content || "",
+      doc.category,
+      doc.subcategory || "",
+    ].join(" ");
+    totalDocLength += text.split(/\s+/).length;
+  }
+  const avgDocLength = documents.length > 0 ? totalDocLength / documents.length : 100;
+
+  // BM25 parameters
+  const k1 = 1.2;
+  const b = 0.75;
+
+  // Coverage requirement: At least 75% of non-stop-word required terms must match
+  const requiredCount = parsed.requiredTokens.length;
+  const minMatchesRequired = Math.max(1, Math.ceil(requiredCount * 0.75));
 
   const scoredItems: SearchResultItem[] = [];
 
-  for (const doc of index) {
-    let score = 0;
+  for (const doc of documents) {
     const titleLower = doc.title.toLowerCase();
+    const slugLower = (doc.slug || doc.href || "").toLowerCase();
     const descLower = doc.description.toLowerCase();
     const contentLower = (doc.content || "").toLowerCase();
     const categoryLower = doc.category.toLowerCase();
     const subcategoryLower = (doc.subcategory || "").toLowerCase();
-    const keywordsLower = (doc.keywords || []).map((k) => k.toLowerCase()).join(" ");
+    const keywordsLower = [
+      ...(doc.keywords || []),
+      ...(doc.tags || []),
+    ]
+      .join(" ")
+      .toLowerCase();
 
-    const docWords = [
-      ...titleLower.split(/\s+/),
-      ...descLower.split(/\s+/),
-      ...keywordsLower.split(/\s+/),
-    ];
+    const fullDocText = [
+      titleLower,
+      slugLower,
+      descLower,
+      categoryLower,
+      subcategoryLower,
+      keywordsLower,
+      contentLower,
+    ].join(" ");
 
-    const matchedTermsInDoc = new Set<string>();
+    const docWords = fullDocText.split(/\s+/);
+    const docLength = docWords.length;
 
-    /* ── 1. EXACT PHRASE MATCHES ── */
-    if (titleLower === query) {
-      score += 250;
-    } else if (titleLower.startsWith(query)) {
-      score += 160;
-    } else if (titleLower.includes(query)) {
-      score += 110;
-    }
+    // Track matching tokens
+    const matchedRequiredTokens = new Set<string>();
+    const matchedTokensSet = new Set<string>();
 
-    if (descLower.includes(query)) {
-      score += 60;
-    }
+    /* ── A. FIELD-WEIGHTED TERM FREQUENCY & BM25 ── */
+    let bm25Score = 0;
 
-    if (keywordsLower.includes(query)) {
-      score += 70;
-    }
+    for (const token of parsed.searchTokens) {
+      const isReq = parsed.requiredTokens.includes(token);
+      let termMatched = false;
 
-    /* ── 2. TOKEN MATCHES ── */
-    for (const token of searchTokens) {
-      let tokenMatched = false;
+      // Count whole-word occurrences per field
+      const countTitle = countTermOccurrences(titleLower, token);
+      const countSlug = countTermOccurrences(slugLower, token);
+      const countDesc = countTermOccurrences(descLower, token);
+      const countKeywords =
+        countTermOccurrences(keywordsLower, token) +
+        countTermOccurrences(categoryLower, token) +
+        countTermOccurrences(subcategoryLower, token);
+      const countContent = countTermOccurrences(contentLower, token);
 
-      // Title Token Match
-      if (titleLower.includes(token)) {
-        score += 45;
-        tokenMatched = true;
-        matchedTermsInDoc.add(token);
-      }
+      // Weighted Term Frequency: Title/Slug (5x), Meta/Tags (3x), Body (1x)
+      const weightedTF =
+        (countTitle + countSlug) * 5 +
+        (countDesc + countKeywords) * 3 +
+        countContent * 1;
 
-      // Keywords Token Match
-      if (keywordsLower.includes(token)) {
-        score += 30;
-        tokenMatched = true;
-        matchedTermsInDoc.add(token);
-      }
+      if (weightedTF > 0) {
+        termMatched = true;
+        matchedTokensSet.add(token);
+        if (isReq) matchedRequiredTokens.add(token);
 
-      // Category / Subcategory Match
-      if (categoryLower.includes(token) || subcategoryLower.includes(token)) {
-        score += 25;
-        tokenMatched = true;
-        matchedTermsInDoc.add(token);
-      }
-
-      // Description Match
-      if (descLower.includes(token)) {
-        score += 15;
-        tokenMatched = true;
-        matchedTermsInDoc.add(token);
-      }
-
-      // Content Match
-      if (contentLower.includes(token)) {
-        score += 8;
-        tokenMatched = true;
-        matchedTermsInDoc.add(token);
-      }
-
-      // Typo / Fuzzy Match if not already matched
-      if (!tokenMatched) {
-        for (const word of docWords) {
-          if (isFuzzyMatch(token, word)) {
-            score += 20;
-            tokenMatched = true;
-            matchedTermsInDoc.add(word);
-            break;
+        const idf = idfMap.get(token) || 1.0;
+        const normDocLen = docLength / avgDocLength;
+        const tfSat = (weightedTF * (k1 + 1)) / (weightedTF + k1 * (1 - b + b * normDocLen));
+        bm25Score += idf * tfSat * 20;
+      } else {
+        // Levenshtein fuzzy match if length >= 4
+        if (token.length >= 4) {
+          for (const word of docWords) {
+            if (isFuzzyMatch(token, word)) {
+              termMatched = true;
+              matchedTokensSet.add(word);
+              if (isReq) matchedRequiredTokens.add(token);
+              const idf = idfMap.get(token) || 1.0;
+              bm25Score += idf * 8; // discounted fuzzy match
+              break;
+            }
           }
         }
       }
     }
 
-    // Require at least one token match
-    if (score > 0 && matchedTermsInDoc.size > 0) {
-      // Bonus if all raw tokens matched
-      const allRawMatched = rawTokens.every((t) =>
-        titleLower.includes(t) ||
-        descLower.includes(t) ||
-        keywordsLower.includes(t) ||
-        contentLower.includes(t)
-      );
-      if (allRawMatched) {
-        score += 40;
+    /* ── B. MATCHING STRATEGY (75%+ non-stop-word coverage) ── */
+    // If query has non-stop terms, require at least minMatchesRequired non-stop terms
+    if (matchedRequiredTokens.size < minMatchesRequired) {
+      // Discard document completely
+      continue;
+    }
+
+    let totalScore = bm25Score;
+
+    /* ── C. EXACT CONSECUTIVE PHRASE BOOST (10x Maximum Weight) ── */
+    if (parsed.exactPhrase && parsed.exactPhrase.length > 2) {
+      const phrase = parsed.exactPhrase;
+
+      // Title exact phrase matches (10x maximum boost)
+      if (titleLower === phrase) {
+        totalScore += 2500;
+      } else if (titleLower.startsWith(phrase)) {
+        totalScore += 1800;
+      } else if (titleLower.includes(phrase)) {
+        totalScore += 1200;
       }
 
-      const matchedTerms = Array.from(matchedTermsInDoc);
-      const snippet = generateSnippet(doc, matchedTerms.length > 0 ? matchedTerms : rawTokens);
+      // Slug exact phrase match
+      if (slugLower.includes(phrase.replace(/\s+/g, "-"))) {
+        totalScore += 1000;
+      }
 
-      scoredItems.push({
-        document: doc,
-        score,
-        snippet,
-        matchedTerms,
-      });
+      // Keywords exact phrase match
+      if (keywordsLower.includes(phrase)) {
+        totalScore += 700;
+      }
+
+      // Description & Body exact phrase match
+      if (descLower.includes(phrase)) {
+        totalScore += 500;
+      }
+      if (contentLower.includes(phrase)) {
+        totalScore += 350;
+      }
+
+      // If user wrapped in quotes and no exact phrase match, penalize
+      if (parsed.isQuoted && !fullDocText.includes(phrase)) {
+        continue;
+      }
+    }
+
+    /* ── D. COVERAGE BONUSES ── */
+    // 100% required terms coverage bonus
+    if (matchedRequiredTokens.size === requiredCount && requiredCount > 1) {
+      totalScore += 300;
+    }
+
+    const matchedTerms = Array.from(matchedTokensSet);
+    const snippet = generateSnippet(doc, matchedTerms, parsed.exactPhrase);
+
+    scoredItems.push({
+      document: doc,
+      score: Math.round(totalScore * 10) / 10,
+      snippet,
+      matchedTerms,
+    });
+  }
+
+  // Sort descending by relevance score
+  scoredItems.sort((a, b) => b.score - a.score);
+
+  // Deduplicate results pointing to identical canonical destinations
+  const seenHrefs = new Set<string>();
+  const deduplicatedItems: SearchResultItem[] = [];
+  for (const item of scoredItems) {
+    if (!seenHrefs.has(item.document.href)) {
+      seenHrefs.add(item.document.href);
+      deduplicatedItems.push(item);
     }
   }
 
-  // Sort results strictly by relevance score descending
-  scoredItems.sort((a, b) => b.score - a.score);
-
-  const totalResults = scoredItems.length;
+  const totalResults = deduplicatedItems.length;
   const totalPages = Math.ceil(totalResults / pageSize) || 1;
   const currentPage = Math.max(1, Math.min(page, totalPages));
   const startIndex = (currentPage - 1) * pageSize;
-  const paginatedResults = scoredItems.slice(startIndex, startIndex + pageSize);
+  const paginatedResults = deduplicatedItems.slice(startIndex, startIndex + pageSize);
 
   return {
     results: paginatedResults,
     totalResults,
-    query: rawQuery,
+    query,
     page: currentPage,
     pageSize,
     totalPages,

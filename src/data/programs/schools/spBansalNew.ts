@@ -26,7 +26,7 @@ export const spBansalSchoolNew: ProgramPageData = {
 
   hero: {
     bannerOnly: true,
-    image: "https://geetauniversity.edu.in/uploads/all/2169/spbsb.webp",
+    image: "/uploads/all/2169/spbsb.webp",
     title: "SP Bansal School of Business",
     eyebrow: "Geeta University",
     description:
@@ -41,7 +41,7 @@ export const spBansalSchoolNew: ProgramPageData = {
       "SPBSB distinguishes itself as Panipat's top management school through agile, AI-powered education in Geeta University's world-first AI university setup. Unlike traditional programs, it revises curriculum semiannually with stakeholder inputs, ensuring latest theories and industry relevance.",
       "Unique Value addition: The MBA program at SPBSB also delivers Global certifications (EC-Council, EY, Deloitte, Paytm, AWS, Cisco, IRM etc); and hands- on labs for AI, ML, Analytics, cybersecurity etc. Industry trainers simulate real world problems in every class every day refining the decision-making ability in students. This repeated problem solving also builds critical, creative, lateral and out of the box thinking in students thereby developing their ability to solve difficult problems through a rigorous and analytical process.",
     ],
-    image: "https://geetauniversity.edu.in/uploads/all/2080/campus.webp",
+    image: "/uploads/all/2080/campus.webp",
     badgeText: "Top AI-Empowered Business School",
     careers: [
       "AI & Digital Transformation Manager",
@@ -168,23 +168,23 @@ export const spBansalSchoolNew: ProgramPageData = {
   departmentHighlights: [
     {
       title: "Project-Based Learning & Business Simulations",
-      image: "https://geetauniversity.edu.in/uploads/all/2208/sp1.webp",
+      image: "/uploads/all/2208/sp1.webp",
     },
     {
       title: "Interactive Classroom Discussions & Case Studies",
-      image: "https://geetauniversity.edu.in/uploads/all/2209/sp2.webp",
+      image: "/uploads/all/2209/sp2.webp",
     },
     {
       title: "Corporate Conclaves & Leadership Sessions",
-      image: "https://geetauniversity.edu.in/uploads/all/2210/sp3.webp",
+      image: "/uploads/all/2210/sp3.webp",
     },
     {
       title: "Industry Mentorship & Student Collaborations",
-      image: "https://geetauniversity.edu.in/uploads/all/2211/sp4.webp",
+      image: "/uploads/all/2211/sp4.webp",
     },
     {
       title: "Academic Excellence & Executive Forums",
-      image: "https://geetauniversity.edu.in/uploads/all/2212/sp5.webp",
+      image: "/uploads/all/2212/sp5.webp",
     },
   ],
 
@@ -289,7 +289,7 @@ export const spBansalSchoolNew: ProgramPageData = {
       role: "MBA Graduate - Canada Computers & Electronics",
       quote:
         "Geeta University’s MBA program strengthened my leadership, decision-making, and problem solving skills through practical learning, helping me confidently tackle business challenges and grow professionally.",
-      image: "https://geetauniversity.edu.in/uploads/all/1902/conversions/Manik.jpg-full.webp",
+      image: "/uploads/all/1902/conversions/Manik.jpg-full.webp",
     },
     {
       name: "Rahul Mor",
@@ -297,7 +297,7 @@ export const spBansalSchoolNew: ProgramPageData = {
       role: "MBA Graduate - Blinkit",
       quote:
         "Geeta University’s MBA program built my analytical, strategic, and operational skills through practical, case-based learning, preparing me to perform confidently in a competitive business environment.",
-      image: "https://geetauniversity.edu.in/uploads/all/1899/conversions/rahul.jpg-full.webp",
+      image: "/uploads/all/1899/conversions/rahul.jpg-full.webp",
     },
     {
       name: "Srishti Ahuja",
@@ -305,7 +305,7 @@ export const spBansalSchoolNew: ProgramPageData = {
       role: "MBA Graduate - Godrej Properties Ltd.",
       quote:
         "My MBA at Geeta University strengthened my communication, client handling, and negotiation skills through practical, industry focused learning, preparing me to confidently manage real estate responsibilities from day one.",
-      image: "https://geetauniversity.edu.in/uploads/all/2171/srishti.webp",
+      image: "/uploads/all/2171/srishti.webp",
     },
     {
       name: "Arvind Kushwaha",
@@ -313,7 +313,7 @@ export const spBansalSchoolNew: ProgramPageData = {
       role: "MBA Graduate - Academor",
       quote:
         "Geeta University’s MBA enhanced my business understanding, problem-solving, and adaptability through practical learning, preparing me to confidently begin my career with clarity and purpose.",
-      image: "https://geetauniversity.edu.in/uploads/all/2170/arvind.webp",
+      image: "/uploads/all/2170/arvind.webp",
     },
   ],
 
@@ -344,7 +344,7 @@ export const spBansalSchoolNew: ProgramPageData = {
     title: "Want to know more?",
     description:
       "Explore comprehensive curriculum guides for MBA specialisations, LOP framework, faculty credentials, global immersion itineraries, and placement records.",
-    fileUrl: "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+    fileUrl: "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     fileName: "SP_Bansal_School_of_Business_Brochure.pdf",
   },
 

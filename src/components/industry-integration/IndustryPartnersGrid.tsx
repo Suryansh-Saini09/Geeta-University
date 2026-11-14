@@ -1,6 +1,6 @@
-"use client";
 
 import React from "react";
+import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
 import { industryPartners } from "@/data/industryIntegration";
 
@@ -34,11 +34,16 @@ export default function IndustryPartnersGrid() {
               <div>
                 {/* Logo Area */}
                 <div className="mb-6 flex h-36 w-full items-center justify-center rounded-xl bg-slate-50 p-4 border border-slate-100 transition-colors group-hover:bg-amber-50/30">
-                  <img
-                    src={partner.logo}
-                    alt={`${partner.name} logo`}
-                    className="max-h-24 max-w-[200px] object-contain transition-transform duration-300 group-hover:scale-105"
-                  />
+                  <div className="relative h-24 w-full">
+                    <Image
+                      src={partner.logo}
+                      alt={`${partner.name} logo`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      loading="lazy"
+                      className="object-contain transition-transform duration-300 group-hover:scale-105 pointer-events-none"
+                    />
+                  </div>
                 </div>
 
                 {/* Partner Name & Tagline */}

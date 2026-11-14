@@ -27,7 +27,7 @@ type ProgramCategory = {
   schoolHref?: string;
 };
 
-const programCategories: ProgramCategory[] = INTERNATIONAL_PROGRAM_CATEGORIES.map((cat, idx) => ({
+const categories: ProgramCategory[] = INTERNATIONAL_PROGRAM_CATEGORIES.map((cat, idx) => ({
   id: `cat-${idx}`,
   number: String(idx + 1).padStart(2, "0"),
   title: cat.categoryName,
@@ -333,8 +333,27 @@ function ProgramCategoryDetails({
   );
 }
 
-export default function InternationalProgramsAccordion() {
-  const [activeCategory, setActiveCategory] = useState<string | null>(programCategories[0]?.id || null);
+export interface InternationalProgramsAccordionProps {
+  data?: {
+    title?: string;
+    categories?: any[];
+  };
+}
+
+export default function InternationalProgramsAccordion({ data }: InternationalProgramsAccordionProps = {}) {
+  const rawCategories = data?.categories && data.categories.length > 0 ? data.categories : INTERNATIONAL_PROGRAM_CATEGORIES;
+  const categories: ProgramCategory[] = rawCategories.map((cat: any, idx: number) => ({
+    id: `cat-${idx}`,
+    number: String(idx + 1).padStart(2, "0"),
+    title: cat.categoryName || cat.title,
+    shortTitle: cat.categoryName || cat.shortTitle || cat.title,
+    schoolHref: cat.href || cat.schoolHref,
+    programs: (cat.programs || []).map((prog: any) => ({
+      name: typeof prog === "string" ? prog : prog.title || prog.name,
+      href: typeof prog === "object" ? prog.href : undefined,
+    })),
+  }));
+  const [activeCategory, setActiveCategory] = useState<string | null>(categories[0]?.id || null);
   const [openLevels, setOpenLevels] = useState<Record<string, boolean>>({
     Undergraduate: true,
   });
@@ -351,8 +370,8 @@ export default function InternationalProgramsAccordion() {
   };
 
   const activeProgramCategory =
-    programCategories.find((category) => category.id === activeCategory) ??
-    programCategories[0];
+    categories.find((category) => category.id === activeCategory) ??
+    categories[0];
 
   return (
     <section
@@ -430,7 +449,7 @@ export default function InternationalProgramsAccordion() {
               >
                 <div className="p-4 sm:p-6">
                   <div className="flex flex-col gap-2">
-                    {programCategories.map((category) => {
+                    {categories.map((category) => {
                       const isActive = category.id === activeCategory;
 
                       return (

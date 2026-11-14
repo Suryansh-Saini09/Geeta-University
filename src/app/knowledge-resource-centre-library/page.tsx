@@ -24,7 +24,7 @@ export default function KnowledgeResourceCentreLibraryPage() {
       <section className="relative overflow-hidden bg-[#0A1F44] pt-32 pb-20 text-white">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://geetauniversity.edu.in/uploads/all/295/conversions/Best-Library-Resources-for-Teachers-full.webp"
+            src="/uploads/all/295/conversions/Best-Library-Resources-for-Teachers-full.webp"
             alt="Knowledge Resource Centre - Library"
             fill
             className="object-cover opacity-25"

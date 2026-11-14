@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://geetauniversity.edu.in/uploads/all/2008/conversions/hero-full.webp",
+        url: "/uploads/all/2008/conversions/hero-full.webp",
         width: 1200,
         height: 630,
         alt: "ICNFPR 2026 - Geeta University",

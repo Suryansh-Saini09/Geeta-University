@@ -237,7 +237,7 @@ export const bscNutritionAndDietetics: CoursePageData = {
       "Explore admissions at Geeta University and take the first step towards a rewarding career as a skilled nutritionist and dietician.",
     applyUrl: "https://admissions.geetauniversity.edu.in/",
     brochureUrl:
-      "https://geetauniversity.edu.in/uploads/all/1892/GU-Brochure-2026-27.pdf",
+      "/uploads/all/1892/GU-Brochure-2026-27.pdf",
     helpline: "+91 92787 68000",
   },
 };

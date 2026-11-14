@@ -1,4 +1,3 @@
-"use client";
 
 import React from "react";
 import type { RankingItem } from "@/data/programs/types";

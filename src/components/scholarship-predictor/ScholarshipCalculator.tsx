@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calculator, Award, CheckCircle2, Info, AlertTriangle, Sparkles } from "lucide-react";
 import {
@@ -11,7 +11,14 @@ import {
   detectLevel,
 } from "@/data/scholarshipPredictorData";
 
-export default function ScholarshipCalculator() {
+interface ScholarshipCalculatorProps {
+  data?: {
+    title?: string;
+    instructionText?: string;
+  };
+}
+
+export default function ScholarshipCalculator({ data }: ScholarshipCalculatorProps = {}) {
   const [selectedArea, setSelectedArea] = useState<string>("");
   const [selectedProgramJson, setSelectedProgramJson] = useState<string>("");
   const [selectedCategoryKey, setSelectedCategoryKey] = useState<string>("");
@@ -87,6 +94,31 @@ export default function ScholarshipCalculator() {
     return [];
   }, [currentRule, selectedSubCategoryIndex, availableSubCategories]);
 
+  // Defensive cleanup to avoid stale selections across category/program/slab resets (GU-02)
+  useEffect(() => {
+    if (selectedCategoryKey && !availableCategories.some((c) => c.key === selectedCategoryKey)) {
+      setSelectedCategoryKey("");
+      setSelectedSubCategoryIndex("");
+      setSelectedSlabPercent(null);
+    }
+  }, [availableCategories, selectedCategoryKey]);
+
+  useEffect(() => {
+    if (selectedSubCategoryIndex !== "" && selectedSubCategoryIndex !== "direct") {
+      const idx = parseInt(selectedSubCategoryIndex, 10);
+      if (isNaN(idx) || !availableSubCategories[idx]) {
+        setSelectedSubCategoryIndex("");
+        setSelectedSlabPercent(null);
+      }
+    }
+  }, [availableSubCategories, selectedSubCategoryIndex]);
+
+  useEffect(() => {
+    if (selectedSlabPercent !== null && !availableSlabs.some((s) => s.percent === selectedSlabPercent)) {
+      setSelectedSlabPercent(null);
+    }
+  }, [availableSlabs, selectedSlabPercent]);
+
   // Handle Area Selection Change
   const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedArea(e.target.value);
@@ -153,10 +185,14 @@ export default function ScholarshipCalculator() {
         {/* Section Title */}
         <div className="mx-auto mb-14 max-w-3xl text-center">
           <h2 className="font-serif text-[36px] font-black text-[#0A1F44] sm:text-[44px]">
-            Scholarship <span className="text-[#066191]">Calculator</span>
+            {data?.title || (
+              <>
+                Scholarship <span className="text-[#066191]">Calculator</span>
+              </>
+            )}
           </h2>
           <p className="mt-3 text-[16px] leading-[1.7] text-[#64748B]">
-            Select your discipline, academic program, and qualifying eligibility category to view your custom semester fee breakdown and tuition scholarship.
+            {data?.instructionText || "Select your discipline, academic program, and qualifying eligibility criteria to instantly view your custom tuition waiver and payable semester fee breakdown."}
           </p>
         </div>
 
@@ -171,9 +207,6 @@ export default function ScholarshipCalculator() {
                   Geeta University Scholarship Estimator
                 </h3>
               </div>
-              {/* <span className="hidden text-[12px] font-semibold text-white/80 sm:block">
-                Session 2026-2027
-              </span> */}
             </div>
           </div>
 
@@ -183,10 +216,12 @@ export default function ScholarshipCalculator() {
               <div className="space-y-6 lg:col-span-7">
                 {/* 1. Area of Interest */}
                 <div>
-                  <label className="mb-1.5 block text-[13.5px] font-bold text-[#0A1F44]">
+                  <label htmlFor="calc-area-select" className="mb-1.5 block text-[13.5px] font-bold text-[#0A1F44]">
                     Area of Interest <span className="text-red-500">*</span>
                   </label>
                   <select
+                    id="calc-area-select"
+                    aria-label="Area of Interest"
                     value={selectedArea}
                     onChange={handleAreaChange}
                     className="w-full rounded-[10px] border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-[14.5px] text-[#0A1F44] transition-all focus:border-[#066191] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#066191]/20"
@@ -202,10 +237,12 @@ export default function ScholarshipCalculator() {
 
                 {/* 2. Program Selection */}
                 <div>
-                  <label className="mb-1.5 block text-[13.5px] font-bold text-[#0A1F44]">
+                  <label htmlFor="calc-program-select" className="mb-1.5 block text-[13.5px] font-bold text-[#0A1F44]">
                     Program <span className="text-red-500">*</span>
                   </label>
                   <select
+                    id="calc-program-select"
+                    aria-label="Academic Program"
                     value={selectedProgramJson}
                     onChange={handleProgramChange}
                     disabled={!selectedArea}
@@ -225,10 +262,12 @@ export default function ScholarshipCalculator() {
                 {/* 3. Scholarship Category */}
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1.5 block text-[13.5px] font-bold text-[#0A1F44]">
+                    <label htmlFor="calc-category-select" className="mb-1.5 block text-[13.5px] font-bold text-[#0A1F44]">
                       Scholarship Category
                     </label>
                     <select
+                      id="calc-category-select"
+                      aria-label="Scholarship Eligibility Category"
                       value={selectedCategoryKey}
                       onChange={handleCategoryChange}
                       disabled={!selectedProgramJson || currentProgram?.scholarship_allowed === false}
@@ -251,10 +290,12 @@ export default function ScholarshipCalculator() {
 
                   {/* 4. Subcategory */}
                   <div>
-                    <label className="mb-1.5 block text-[13.5px] font-bold text-[#0A1F44]">
+                    <label htmlFor="calc-subcategory-select" className="mb-1.5 block text-[13.5px] font-bold text-[#0A1F44]">
                       Scholarship Subcategory
                     </label>
                     <select
+                      id="calc-subcategory-select"
+                      aria-label="Scholarship Subcategory Criteria"
                       value={selectedSubCategoryIndex}
                       onChange={handleSubCategoryChange}
                       disabled={!selectedCategoryKey}
@@ -278,10 +319,12 @@ export default function ScholarshipCalculator() {
 
                 {/* 5. Scholarship Slab */}
                 <div>
-                  <label className="mb-1.5 block text-[13.5px] font-bold text-[#0A1F44]">
+                  <label htmlFor="calc-slab-select" className="mb-1.5 block text-[13.5px] font-bold text-[#0A1F44]">
                     Scholarship Slab / Criteria
                   </label>
                   <select
+                    id="calc-slab-select"
+                    aria-label="Qualifying Score or Percentage Slab"
                     value={selectedSlabPercent === null ? "" : selectedSlabPercent.toString()}
                     onChange={handleSlabChange}
                     disabled={selectedSubCategoryIndex === ""}

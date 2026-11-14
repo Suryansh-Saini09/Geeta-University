@@ -39,13 +39,21 @@ export default async function FAQPage() {
   return (
     <main className="min-h-screen bg-[#F7F9FC] text-[#0A1F44]">
       {/* Interactive FAQ Search & Accordion Section */}
-      <FAQClientWrapper heroData={sections.hero} />
+      <FAQClientWrapper
+        heroData={sections.hero}
+        categoriesData={sections.categories}
+        faqsListData={sections.faqs_list}
+      />
 
       {/* Group Legacy & Ecosystem */}
-      <IndustryEcosystemSection />
+      <IndustryEcosystemSection
+        data={{
+          intro: sections.industry_ecosystem?.contextText || undefined,
+        }}
+      />
 
       {/* Contact & Support Banner */}
-      <FAQContactBanner />
+      <FAQContactBanner data={sections.contact_banner} />
     </main>
   );
 }

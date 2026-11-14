@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Briefcase, Building2, ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
 import type {
@@ -290,13 +291,15 @@ function RecruitersCarousel({ items }: { items: CarouselItem[] }) {
             className="flex h-[76px] w-[150px] shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white p-3 shadow-xs transition-all hover:shadow-md"
           >
             {item.logo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={item.logo}
-                alt={item.name}
-                className="max-h-[46px] max-w-[85%] object-contain pointer-events-none"
-                loading="lazy"
-              />
+              <div className="relative flex items-center justify-center w-full h-[46px]">
+                <Image
+                  src={item.logo}
+                  alt={item.name}
+                  fill
+                  sizes="130px"
+                  className="object-contain pointer-events-none"
+                />
+              </div>
             ) : (
               <span className="text-[13px] font-bold text-[#0A1F44] text-center leading-tight">
                 {item.name}
