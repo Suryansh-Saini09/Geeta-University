@@ -139,11 +139,23 @@ export const fetchSocialData = cache(async function fetchSocialData(): Promise<S
 
     if (setting?.value) {
       const val = setting.value as any;
+      const links = (val.links || HARDCODED_SOCIAL_LINKS).map((l: any) => {
+        if (
+          l.type === "whatsapp" ||
+          l.name?.toLowerCase().includes("whatsapp") ||
+          l.url?.includes("wa.me") ||
+          l.url?.includes("9812345678") ||
+          l.url?.includes("996303799")
+        ) {
+          return { ...l, url: "https://api.whatsapp.com/send?phone=919996303799" };
+        }
+        return l;
+      });
       return {
         success: true,
         data: {
           profile: val.profile || HARDCODED_SOCIAL_PROFILE,
-          links: val.links || HARDCODED_SOCIAL_LINKS,
+          links,
         },
       };
     }

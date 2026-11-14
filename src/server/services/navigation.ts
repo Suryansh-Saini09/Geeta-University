@@ -237,9 +237,19 @@ export const getHeaderNavigation = cache(async function getHeaderNavigation(
     if (topMenu?.items && topMenu.items.length > 0) {
       topBarLinks = topMenu.items.map((item) => {
         const anyItem = item as any;
+        const label = getLocalizedField(item, "label", locale) || item.label;
+        let href = item.href || "#";
+        if (
+          label?.toLowerCase().includes("whatsapp") ||
+          href.includes("wa.me") ||
+          href.includes("9812345678") ||
+          href.includes("996303799")
+        ) {
+          href = "https://wa.me/919996303799";
+        }
         return {
-          label: getLocalizedField(item, "label", locale) || item.label,
-          href: item.href || "#",
+          label,
+          href,
           icon: anyItem.icon || undefined,
           badge: anyItem.badge || undefined,
         };
