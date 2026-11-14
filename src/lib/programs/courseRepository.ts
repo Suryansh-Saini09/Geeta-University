@@ -23,32 +23,32 @@ export const getCourseBySlug = cache(async function getCourseBySlug(
   return unstable_cache(
     async () => {
       const normSchool = normalizeSchoolSlug(schoolSlug);
-  const normCourse = normalizeCourseSlug(courseSlug);
+      const normCourse = normalizeCourseSlug(courseSlug);
 
-  try {
-    const program = await prisma.program.findFirst({
-      where: {
-        OR: [
-          { slug: normCourse },
-          { slug: courseSlug.toLowerCase() },
-          { aliases: { some: { slug: normCourse } } },
-          { aliases: { some: { slug: courseSlug.toLowerCase() } } },
-        ],
-        status: ContentStatus.PUBLISHED,
-      },
-      include: {
-        department: true,
-        seo: true,
-        heroImage: true,
-      },
-    });
+      try {
+        const program = await prisma.program.findFirst({
+          where: {
+            OR: [
+              { slug: normCourse },
+              { slug: courseSlug.toLowerCase() },
+              { aliases: { some: { slug: normCourse } } },
+              { aliases: { some: { slug: courseSlug.toLowerCase() } } },
+            ],
+            status: ContentStatus.PUBLISHED,
+          },
+          include: {
+            department: true,
+            seo: true,
+            heroImage: true,
+          },
+        });
 
-    if (program && program.overview && typeof program.overview === "object") {
-      return transformProgramToCoursePageData(program, normSchool, normCourse);
-    }
-  } catch (error) {
-    serverLogger.warn(`[courseRepository] Failed to fetch program from database for ${courseSlug}, falling back to static files`, error, { module: "courseRepository", action: "getCourseBySlug", courseSlug });
-  }
+        if (program && program.overview && typeof program.overview === "object") {
+          return transformProgramToCoursePageData(program, normSchool, normCourse);
+        }
+      } catch (error) {
+        serverLogger.warn(`[courseRepository] Failed to fetch program from database for ${courseSlug}, falling back to static files`, error, { module: "courseRepository", action: "getCourseBySlug", courseSlug });
+      }
 
       return getCourseBySlugSync(schoolSlug, courseSlug);
     },
@@ -67,30 +67,30 @@ export const getCourseByDirectSlug = cache(async function getCourseByDirectSlug(
     async () => {
       const normCourse = normalizeCourseSlug(courseSlug);
 
-  try {
-    const program = await prisma.program.findFirst({
-      where: {
-        OR: [
-          { slug: normCourse },
-          { slug: courseSlug.toLowerCase() },
-          { aliases: { some: { slug: normCourse } } },
-          { aliases: { some: { slug: courseSlug.toLowerCase() } } },
-        ],
-        status: ContentStatus.PUBLISHED,
-      },
-      include: {
-        department: true,
-        seo: true,
-        heroImage: true,
-      },
-    });
+      try {
+        const program = await prisma.program.findFirst({
+          where: {
+            OR: [
+              { slug: normCourse },
+              { slug: courseSlug.toLowerCase() },
+              { aliases: { some: { slug: normCourse } } },
+              { aliases: { some: { slug: courseSlug.toLowerCase() } } },
+            ],
+            status: ContentStatus.PUBLISHED,
+          },
+          include: {
+            department: true,
+            seo: true,
+            heroImage: true,
+          },
+        });
 
-    if (program && program.overview && typeof program.overview === "object") {
-      return transformProgramToCoursePageData(program);
-    }
-  } catch (error) {
-    serverLogger.warn(`[courseRepository] Failed to fetch program directly from database for ${courseSlug}`, error, { module: "courseRepository", action: "getCourseByDirectSlug", courseSlug });
-  }
+        if (program && program.overview && typeof program.overview === "object") {
+          return transformProgramToCoursePageData(program);
+        }
+      } catch (error) {
+        serverLogger.warn(`[courseRepository] Failed to fetch program directly from database for ${courseSlug}`, error, { module: "courseRepository", action: "getCourseByDirectSlug", courseSlug });
+      }
 
       return getCourseByDirectSlugSync(courseSlug);
     },

@@ -137,7 +137,6 @@ export const bscAgriculture: CoursePageData = {
     conclusion:
       "Geeta University is a top choice among B.Sc agriculture colleges in Haryana, offering quality education with strong future scope.",
     stats: [
-      { value: "40 LPA", label: "HIGHEST PACKAGE" },
       { value: "550+", label: "RECRUITERS" },
       { value: "3500+", label: "JOB OFFERS" },
     ],

@@ -232,7 +232,6 @@ const programCategories: ProgramCategory[] = [
       },
       {
         name: "M.Com.",
-        href: "/programs/school-of-commerce-and-business-management/mcom",
       },
       {
         name: "Ph.D. — Commerce",

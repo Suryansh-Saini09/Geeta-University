@@ -126,7 +126,7 @@ export const mca: CoursePageData = {
       "Industry-Centric Curriculum: Syllabus aligned with modern tech standards, focusing on full-stack development, cloud computing, and intelligent systems.",
       "Hands-On Practical Pedagogy: Extensive lab hours, live project assignments, and collaborative coding sessions that build real-world engineering problem solving.",
       "Geeta Technical Hub (GTH) Training: Special training modules on emerging tech stacks, hackathons, and certifications delivered by corporate technical trainers.",
-      "Proven Placement Record: Direct campus placement access to 550+ global recruiting partners offering top packages up to 40 LPA.",
+      "Proven Placement Record: Direct campus placement access to 550+ global recruiting partners offering top packages.",
     ],
   },
   scholarships: {

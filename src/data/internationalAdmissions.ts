@@ -242,7 +242,7 @@ export const INTERNATIONAL_PROGRAM_CATEGORIES: ProgramSchoolCategory[] = [
       { title: "B.Com. (Hons.) Banking & Insurance", href: "/programs/school-of-commerce-and-business-management/bcom-banking-and-insurance" },
       { title: "B.Com. (Hons.) Advanced Accounting" },
       { title: "B.Com. (Hons.) International Accounting with ACCA UK", href: "/programs/school-of-commerce-and-business-management/bcom-international-accounting" },
-      { title: "M.Com. (Master of Commerce)", href: "/programs/school-of-commerce-and-business-management/mcom" },
+      { title: "M.Com. (Master of Commerce)" },
       { title: "Ph.D. (Commerce)", href: "/phd-commerce" },
     ],
   },

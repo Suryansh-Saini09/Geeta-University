@@ -102,7 +102,7 @@ export const bba: CoursePageData = {
       {
         title: "Robust Placement Track Record",
         description:
-          "Access placement opportunities with 550+ top recruiters like Deloitte, Amazon, EY, Marico, Flipkart, and BYJU'S with packages up to 40 LPA.",
+          "Access placement opportunities with 550+ top recruiters like Deloitte, Amazon, EY, Marico, Flipkart, and BYJU'S with leading industry packages.",
       },
     ],
   },

@@ -537,13 +537,13 @@ export const pharmacySchool: ProgramPageData = {
     {
       title: "Diploma Program",
       duration: "2 years",
-      eligibility: "Passed 10+2 (Science stream) with Physics, Chemistry and Biology or Mathematics with at least 50% marks in the qualifying examination.",
+      eligibility: "A pass in 10+2 examination (Science academic stream) with Physics, Chemistry and Biology or Mathematics with at least 50% marks in the qualifying examination.",
       programs: [
         {
           name: "D.Pharm. (Diploma in Pharmacy)",
           href: "/programs/geeta-institute-of-pharmacy/d-pharmacy",
           duration: "2 years",
-          eligibility: "Passed 10+2 (Science stream) with Physics, Chemistry and Biology or Mathematics with at least 50% marks in the qualifying examination.",
+          eligibility: "A pass in 10+2 examination (Science academic stream) with Physics, Chemistry and Biology or Mathematics with at least 50% marks in the qualifying examination.",
         },
       ],
     },
