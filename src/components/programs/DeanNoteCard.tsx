@@ -81,9 +81,9 @@ export default function DeanNoteCard({ dean, schoolName }: DeanNoteCardProps) {
 
             {/* Action Bar */}
             <div className="mt-4 pt-3.5 border-t border-slate-200/60 flex flex-wrap items-center justify-between gap-3">
-              <span className="text-[12px] sm:text-[13px] font-medium text-slate-400">
+              {/* <span className="text-[12px] sm:text-[13px] font-medium text-slate-400">
                 {dean.schoolName || "Academic Leadership Statement"}
-              </span>
+              </span> */}
 
               <button
                 type="button"

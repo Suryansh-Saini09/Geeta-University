@@ -91,6 +91,11 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
       {isSecVisible("courses") && pageData.courses && pageData.courses.length > 0 && (
         <ProgramCourses courses={pageData.courses} title={pageData.coursesSectionTitle} />
       )}
+      
+      {/* 8. TRANSFORMATIVE TRACKS ("Leadership Odyssey Program (LOP)") */}
+      {isSecVisible("transformativeTracks") && pageData.transformativeTracks && (
+        <TransformativeTracks tracks={pageData.transformativeTracks} />
+      )}
 
       {/* 5. DEPARTMENT HIGHLIGHTS ("Where Learning Meets Achievement") */}
       {isSecVisible("highlights") && pageData.departmentHighlights && pageData.departmentHighlights.length > 0 && (
@@ -116,10 +121,6 @@ export default function ProgramPage({ data, program }: ProgramPageProps) {
         <ProgramCorporateConnect corporateConnect={pageData.corporateConnect} />
       )}
 
-      {/* 8. TRANSFORMATIVE TRACKS ("Leadership Odyssey Program (LOP)") */}
-      {isSecVisible("transformativeTracks") && pageData.transformativeTracks && (
-        <TransformativeTracks tracks={pageData.transformativeTracks} />
-      )}
 
       {/* 9. USPS OF THE INSTITUTE */}
       {isSecVisible("usps") && pageData.usps && (
