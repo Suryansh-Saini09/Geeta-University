@@ -181,6 +181,24 @@ export const PROGRAMS_DATA: Record<string, AreaData> = {
 };
 
 export const RULES_DATA: Record<string, RuleCategory> = {
+  GUTS: {
+    label: "GUTS (GEETA UNIVERSITY TEST OF SCHOLARSHIP) SCORE",
+    allow_programs: "all",
+    level_applicability: ["UG"],
+    exclude_groups: ["Pharmacy"],
+    subcategories: [
+      {
+        label: "GUTS Scholarship",
+        slabs: [
+          { label: ">=95%", percent: 100 },
+          { label: ">=90%", percent: 50 },
+          { label: ">=80%", percent: 40 },
+          { label: ">=70%", percent: 30 },
+          { label: ">=60%", percent: 10 },
+        ],
+      },
+    ],
+  },
   MERIT: {
     label: "MERIT PERCENTAGE IN QUALIFYING EXAMINATION",
     allow_programs: "all",

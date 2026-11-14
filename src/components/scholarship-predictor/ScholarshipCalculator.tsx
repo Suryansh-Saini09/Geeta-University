@@ -46,16 +46,22 @@ export default function ScholarshipCalculator({ data }: ScholarshipCalculatorPro
     if (!currentProgram || !selectedArea) return [];
     if (currentProgram.scholarship_allowed === false) return [];
 
-    const programLevel = detectLevel(currentProgram.program);
+    const programLevel = currentProgram.level || detectLevel(currentProgram.program);
 
     return Object.entries(RULES_DATA)
-      .filter(([_, rule]) => {
+      .filter(([key, rule]) => {
         // Exclusions by Area
         if (rule.exclude_groups?.includes(selectedArea)) return false;
         // Eligibility by Area
         if (rule.eligible_groups && !rule.eligible_groups.includes(selectedArea)) return false;
         // Applicability by Level (UG, PG, Diploma)
         if (rule.level_applicability && !rule.level_applicability.includes(programLevel)) return false;
+        // GUTS is strictly for UG programs and never for PG, Pharmacy, or Ph.D
+        if (key === "GUTS") {
+          if (programLevel !== "UG") return false;
+          if (selectedArea === "Pharmacy" || selectedArea === "Nursing") return false;
+          if (/pharm|nurs|ph\.?d/i.test(currentProgram.program)) return false;
+        }
         return true;
       })
       .map(([key, rule]) => ({ key, rule }));

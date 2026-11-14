@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Award, TrendingDown } from "lucide-react";
 import {
   programsFeeData,
@@ -52,9 +52,24 @@ export default function ScholarshipCalculator() {
       if (rule.level_applicability && !rule.level_applicability.includes(programLevel)) {
         return false;
       }
+      // GUTS is strictly for UG programs and never for PG, Pharmacy, or Ph.D
+      if (key === "GUTS") {
+        if (programLevel !== "UG") return false;
+        if (area === "Pharmacy") return false;
+        if (/pharm|ph\.?d/i.test(currentProgram.program)) return false;
+      }
       return true;
     });
   }, [currentProgram, selectedArea, programLevel]);
+
+  // Defensive cleanup to avoid stale selections
+  useEffect(() => {
+    if (selectedCategoryKey && !availableCategories.some(([k]) => k === selectedCategoryKey)) {
+      setSelectedCategoryKey("");
+      setSelectedSubcategoryIdx("");
+      setSelectedSlabPercent("");
+    }
+  }, [availableCategories, selectedCategoryKey]);
 
   const currentRule = useMemo(() => {
     if (!selectedCategoryKey || !scholarshipRulesData[selectedCategoryKey]) return null;
