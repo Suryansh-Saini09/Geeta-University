@@ -153,6 +153,20 @@ export function DepartmentContentManager({
     setActiveSection(sec);
   }, [currentSearchParams, searchParams.section]);
 
+  // Clear transient query params (saved=1, updated=1, reordered=1) from the browser address bar after display
+  useEffect(() => {
+    if (currentSearchParams.get("saved") || currentSearchParams.get("updated") || currentSearchParams.get("reordered")) {
+      const timer = setTimeout(() => {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("saved");
+        url.searchParams.delete("updated");
+        url.searchParams.delete("reordered");
+        window.history.replaceState({}, "", url.pathname + url.search);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentSearchParams]);
+
   // Update browser URL query params
   const updateUrl = (sectionKey: string) => {
     const url = new URL(window.location.href);
