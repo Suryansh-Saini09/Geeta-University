@@ -188,24 +188,6 @@ export const PROGRAMS_FEE_DATABASE: Record<string, SchoolData> = {
 };
 
 export const SCHOLARSHIP_RULES_DATABASE: Record<string, ScholarshipRule> = {
-  GUTS: {
-    label: "GUTS (GEETA UNIVERSITY TEST OF SCHOLARSHIP) SCORE",
-    allow_programs: "all",
-    level_applicability: ["UG", "PG"],
-    exclude_groups: ["Pharmacy", "Nursing"],
-    subcategories: [
-      {
-        label: "GUTS Scholarship",
-        slabs: [
-          { label: "Score >=95%", percent: 100 },
-          { label: "Score >=90%", percent: 50 },
-          { label: "Score >=80%", percent: 40 },
-          { label: "Score >=70%", percent: 30 },
-          { label: "Score >=60%", percent: 10 },
-        ],
-      },
-    ],
-  },
   MERIT: {
     label: "MERIT PERCENTAGE IN QUALIFYING EXAMINATION",
     allow_programs: "all",

@@ -43,14 +43,10 @@ const eightyWaiver = Math.round((cseAiMl!.tuition_fee * eightySlab!.percent) / 1
 const eightyPayable = cseAiMl!.prog_fee_per_sem - eightyWaiver;
 assert(eightyPayable === 79000, `At 80-89.99% CUET slab, payable fee is exactly ₹79,000 (got ₹${eightyPayable})`);
 
-// 2. Verify GU-02: GUTS PG Eligibility
-console.log("\n--- 2. Testing GU-02: GUTS PG Eligibility ---");
-const gutsRule = RULES_DATA.GUTS;
-assert(Boolean(gutsRule.level_applicability?.includes("UG")), "GUTS applies to UG");
-assert(Boolean(gutsRule.level_applicability?.includes("PG")), "GUTS applies to PG");
-
-const gutsDbRule = SCHOLARSHIP_RULES_DATABASE.GUTS;
-assert(Boolean(gutsDbRule.level_applicability?.includes("PG")), "GUTS in database rule applies to PG");
+// 2. Verify GU-02: GUTS Decommissioned from Predictor Databases
+console.log("\n--- 2. Testing GU-02: GUTS Predictor Exclusion ---");
+assert(RULES_DATA.GUTS === undefined, "GUTS is excluded from scholarship predictor RULES_DATA");
+assert(SCHOLARSHIP_RULES_DATABASE.GUTS === undefined, "GUTS is excluded from SCHOLARSHIP_RULES_DATABASE");
 
 // 3. Verify GU-03: Biology Syllabus PDF Decoupled from Aptitude
 console.log("\n--- 3. Testing GU-03: Biology Syllabus PDF Decoupled ---");
