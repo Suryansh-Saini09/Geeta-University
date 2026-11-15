@@ -295,7 +295,11 @@ export async function updateDepartmentSectionAction(formData: FormData) {
         const msg = parsed.error.issues[0]?.message ?? "Invalid vision & mission content";
         redirect(`/admin/departments/${id}/edit?section=${section}&error=${encodeURIComponent(msg)}`);
       }
-      updatedBody.visionMission = parsed.data;
+      const existingVm = (updatedBody.visionMission && typeof updatedBody.visionMission === "object") ? (updatedBody.visionMission as Record<string, any>) : {};
+      updatedBody.visionMission = {
+        ...existingVm,
+        ...parsed.data,
+      };
       break;
     }
 
@@ -374,7 +378,11 @@ export async function updateDepartmentSectionAction(formData: FormData) {
         const msg = parsed.error.issues[0]?.message ?? "Invalid transformative tracks";
         redirect(`/admin/departments/${id}/edit?section=${section}&error=${encodeURIComponent(msg)}`);
       }
-      updatedBody.transformativeTracks = parsed.data;
+      const existingTracks = (updatedBody.transformativeTracks && typeof updatedBody.transformativeTracks === "object") ? (updatedBody.transformativeTracks as Record<string, any>) : {};
+      updatedBody.transformativeTracks = {
+        ...existingTracks,
+        ...parsed.data,
+      };
       break;
     }
 
@@ -412,7 +420,11 @@ export async function updateDepartmentSectionAction(formData: FormData) {
         const msg = parsed.error.issues[0]?.message ?? "Invalid corporate connect data";
         redirect(`/admin/departments/${id}/edit?section=${section}&error=${encodeURIComponent(msg)}`);
       }
-      updatedBody.corporateConnect = parsed.data;
+      const existingCorporate = (updatedBody.corporateConnect && typeof updatedBody.corporateConnect === "object") ? (updatedBody.corporateConnect as Record<string, any>) : {};
+      updatedBody.corporateConnect = {
+        ...existingCorporate,
+        ...parsed.data,
+      };
       break;
     }
 
@@ -422,7 +434,11 @@ export async function updateDepartmentSectionAction(formData: FormData) {
         const msg = parsed.error.issues[0]?.message ?? "Invalid center of excellence";
         redirect(`/admin/departments/${id}/edit?section=${section}&error=${encodeURIComponent(msg)}`);
       }
-      updatedBody.centerOfExcellence = parsed.data;
+      const existingCoe = (updatedBody.centerOfExcellence && typeof updatedBody.centerOfExcellence === "object") ? (updatedBody.centerOfExcellence as Record<string, any>) : {};
+      updatedBody.centerOfExcellence = {
+        ...existingCoe,
+        ...parsed.data,
+      };
       break;
     }
 
@@ -464,7 +480,11 @@ export async function updateDepartmentSectionAction(formData: FormData) {
         const msg = parsed.error.issues[0]?.message ?? "Invalid brochure data";
         redirect(`/admin/departments/${id}/edit?section=${section}&error=${encodeURIComponent(msg)}`);
       }
-      updatedBody.brochure = parsed.data;
+      const existingBrochure = (updatedBody.brochure && typeof updatedBody.brochure === "object") ? (updatedBody.brochure as Record<string, any>) : {};
+      updatedBody.brochure = {
+        ...existingBrochure,
+        ...parsed.data,
+      };
       break;
     }
 
@@ -568,17 +588,23 @@ export async function updateDepartmentSectionAction(formData: FormData) {
   });
 
   const affectedSlugs = getAliasesForSlug(existing.slug);
+  const uniqueSlugs = Array.from(new Set(affectedSlugs));
   revalidatePath("/admin");
   revalidatePath("/admin/departments");
   revalidatePath(`/admin/departments/${id}/edit`);
   revalidatePath("/programs");
-  for (const slugToRevalidate of Array.from(new Set(affectedSlugs))) {
+  for (const slugToRevalidate of uniqueSlugs) {
     revalidatePath(`/programs/${slugToRevalidate}`);
   }
+  const programTags = uniqueSlugs.map((s) => CACHE_TAGS.program(s));
+  const deptTags = uniqueSlugs.map((s) => CACHE_TAGS.department(s));
   invalidateCacheTag(
     CACHE_TAGS.departmentsList,
+    CACHE_TAGS.programsList,
     CACHE_TAGS.department(existing.slug),
-    CACHE_TAGS.department(id)
+    CACHE_TAGS.department(id),
+    ...deptTags,
+    ...programTags
   );
 
   redirect(`/admin/departments/${id}/edit?section=${section}&saved=1`);

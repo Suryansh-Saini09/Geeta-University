@@ -141,20 +141,33 @@ export const transformativeTrackCardSchema = z.object({
 });
 
 export const departmentTransformativeTracksSectionSchema = z.object({
+  eyebrow: z.string().trim().optional(),
   title: z.string().trim().optional(),
+  subtitle: z.string().trim().optional(),
   cards: z.array(transformativeTrackCardSchema).optional(),
+  immersionCards: z.array(z.any()).optional(),
+});
+
+export const recruiterItemSchema = z.object({
+  name: z.string().trim().min(1, "Recruiter name is required"),
+  logo: z.string().trim().optional(),
 });
 
 export const notableRoleItemSchema = z.object({
-  name: z.string().trim().min(1, "Company name is required"),
+  name: z.string().trim().min(1, "Role name is required"),
   logo: z.string().trim().optional(),
 });
 
 export const departmentCareerPathwaysSectionSchema = z.object({
+  eyebrow: z.string().trim().optional(),
   title: z.string().trim().optional(),
   description: z.string().trim().optional(),
   rolesTitle: z.string().trim().optional(),
+  recruitersTitle: z.string().trim().optional(),
+  recruiters: z.array(recruiterItemSchema).optional(),
   notableRoles: z.array(notableRoleItemSchema).optional(),
+  pathways: z.array(z.any()).optional(),
+  hideRecruiters: z.boolean().optional(),
 });
 
 export const learningSpaceItemSchema = z.object({
@@ -168,6 +181,8 @@ export const departmentLearningSpacesSectionSchema = z.object({
   title: z.string().trim().optional(),
   description: z.string().trim().optional(),
   spaces: z.array(learningSpaceItemSchema).optional(),
+  gallery: z.array(z.any()).optional(),
+  closingNote: z.string().trim().optional(),
 });
 
 export const corporateConnectVideoSchema = z.object({
