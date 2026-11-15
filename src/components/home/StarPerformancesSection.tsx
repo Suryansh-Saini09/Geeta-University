@@ -52,9 +52,9 @@ export default function StarPerformancesSection({ data, ctaData }: StarPerforman
         className="pointer-events-none absolute -right-32 bottom-10 h-80 w-80 rounded-full bg-[#06355F]/5 blur-3xl"
       />
 
-      <div className="relative mx-auto max-w-[1600px]">
+      <div className="relative mx-auto w-full max-w-[1600px] overflow-hidden">
         {/* Heading */}
-        <div className="px-5 text-center sm:px-8">
+        <div className="px-4 text-center sm:px-8">
           <h2 className="font-serif text-4xl font-bold leading-tight text-[#06355F] sm:text-5xl md:text-6xl">
             {headingText}
           </h2>

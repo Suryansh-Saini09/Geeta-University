@@ -33,7 +33,7 @@ export default function WhyJoinGeetaSection({ data }: WhyJoinGeetaSectionProps) 
         className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-[#06355F]/5 blur-3xl"
       />
 
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
         {/* Section heading */}
         <div className="mx-auto mb-14 max-w-3xl text-center">
           <h2 className="font-serif text-4xl font-bold leading-tight text-[#06355F] sm:text-5xl">

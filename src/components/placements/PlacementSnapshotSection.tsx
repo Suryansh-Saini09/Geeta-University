@@ -161,7 +161,7 @@ export default function PlacementSnapshotSection({ data }: PlacementSnapshotSect
             <span className="h-px w-9 bg-[#E8871A]" />
           </div>
 
-          <h2 className="font-serif text-[38px] font-black leading-[1.08] tracking-[-1.5px] text-[#0A1F44] sm:text-[46px] md:text-[52px]">
+          <h2 className="font-serif text-[clamp(1.75rem,5vw,3.25rem)] font-black leading-[1.08] tracking-[-1px] text-[#0A1F44]">
             Placement Snapshot<span className="font-sans text-[#E8871A]"> 2025–26</span>
           </h2>
 
@@ -173,7 +173,7 @@ Our institution continues to demonstrate strong industry engagement, with 150+ r
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-12">
           {/* Left Column: 150+ Companies in Canonical 3-Column Layout with 0.1x Auto-Scroll */}
           <div className="lg:col-span-7">
-            <div className="rounded-[24px] border border-[#E2E8F0] bg-[#F7F9FC] p-6 shadow-sm sm:p-8">
+            <div className="rounded-[24px] border border-[#E2E8F0] bg-[#F7F9FC] p-4 sm:p-8 shadow-sm">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h3 className="font-serif text-[24px] font-bold text-[#0A1F44]">

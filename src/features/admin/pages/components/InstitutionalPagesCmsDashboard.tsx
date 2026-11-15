@@ -607,7 +607,7 @@ export function InstitutionalPagesCmsDashboard({
 
           {/* Sections Responsive Cards Grid */}
           {filteredSections.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-5">
               {filteredSections.map((sec) => {
                 const isSeo = sec.key === "seo";
                 const body = isSeo ? seoData : getBody(sec.key);
@@ -619,39 +619,39 @@ export function InstitutionalPagesCmsDashboard({
                   <div
                     key={sec.key}
                     onClick={() => handleSelectSection(sec.key)}
-                    className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-400 hover:shadow-md transition-all cursor-pointer"
+                    className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-400 hover:shadow-md transition-all cursor-pointer min-w-0 w-full"
                   >
-                    <div>
-                      {/* Top Row: Title & Config Status Badge */}
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <h3 className="text-base font-bold text-[#0A1F44] group-hover:text-black transition-colors">
-                          {sec.label}
-                        </h3>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          {!isSeo && (
-                            <CmsSectionVisibilityBadge
-                              isVisible={sectionsData[sec.key]?.status !== "DRAFT"}
-                            />
-                          )}
+                    <div className="min-w-0 w-full">
+                      {/* Row 1: Title */}
+                      <h3 className="text-base font-bold text-[#0A1F44] group-hover:text-black transition-colors break-words min-w-0 mb-2">
+                        {sec.label}
+                      </h3>
+
+                      {/* Row 2: Status Indicator Badges Row */}
+                      <div className="flex flex-wrap items-center gap-1.5 mb-3 min-w-0">
+                        {!isSeo && (
+                          <CmsSectionVisibilityBadge
+                            isVisible={sectionsData[sec.key]?.status !== "DRAFT"}
+                          />
+                        )}
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
+                            hasContent
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              : "bg-slate-100 text-slate-600 border-slate-200"
+                          }`}
+                        >
                           <span
-                            className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
-                              hasContent
-                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                : "bg-slate-100 text-slate-600 border-slate-200"
+                            className={`h-1.5 w-1.5 rounded-full ${
+                              hasContent ? "bg-emerald-500" : "bg-slate-400"
                             }`}
-                          >
-                            <span
-                              className={`h-1.5 w-1.5 rounded-full ${
-                                hasContent ? "bg-emerald-500" : "bg-slate-400"
-                              }`}
-                            />
-                            {hasContent ? "Configured" : "Empty"}
-                          </span>
-                        </div>
+                          />
+                          {hasContent ? "Configured" : "Empty"}
+                        </span>
                       </div>
 
-                      {/* Description */}
-                      <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 mb-4">
+                      {/* Row 3: Description */}
+                      <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 mb-4 min-w-0">
                         {sec.description}
                       </p>
                     </div>

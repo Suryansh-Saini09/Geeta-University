@@ -39,7 +39,7 @@ export default function IndustryIntegrationSection({ data }: IndustryIntegration
         className="pointer-events-none absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-[#F28C18]/5 blur-3xl"
       />
 
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
         {/* Heading */}
         <div className="mx-auto mb-12 max-w-3xl text-center">
           <h2 className="font-serif text-4xl font-bold leading-tight text-[#06355F] sm:text-5xl">

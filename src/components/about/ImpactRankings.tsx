@@ -49,6 +49,7 @@ export default function ImpactRankings() {
             className="
               h-auto
               w-full
+              max-w-full
               object-contain
               transition-transform
               duration-700

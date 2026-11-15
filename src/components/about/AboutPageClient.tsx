@@ -230,7 +230,7 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
       </section>
 
       {/* SECTION NAVIGATION */}
-      <nav className="sticky top-[136px] z-30 w-full border-b border-[#E2E8F0] bg-white/95 shadow-xs backdrop-blur-md">
+      <nav className="sticky top-[var(--navbar-height,118px)] z-30 w-full border-b border-[#E2E8F0] bg-white/95 shadow-xs backdrop-blur-md">
         <div className="gu-container overflow-x-auto [scrollbar-width:none]">
           <div className="flex min-w-max items-center gap-1 py-2.5 md:justify-center md:gap-3">
             {navItems.map((item) => {

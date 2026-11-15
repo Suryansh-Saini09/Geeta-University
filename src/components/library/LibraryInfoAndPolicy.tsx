@@ -120,7 +120,7 @@ export default function LibraryInfoAndPolicy({ hoursPolicy, loanRules }: Library
           </div>
 
           <div className="overflow-x-auto rounded-2xl border border-slate-200">
-            <table className="w-full text-left text-sm text-slate-700">
+            <table className="w-full min-w-[560px] text-left text-sm text-slate-700">
               <thead className="bg-[#0A1F44] text-xs font-bold uppercase tracking-wider text-white">
                 <tr>
                   <th scope="col" className="px-6 py-4">SN.</th>

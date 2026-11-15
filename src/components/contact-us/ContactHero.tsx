@@ -22,7 +22,7 @@ export default function ContactHero({ hero }: ContactHeroProps) {
   const title = h.title || fallbackHero.title;
 
   return (
-    <section className="relative flex min-h-[500px] w-full items-center overflow-hidden bg-[#0A1F44] text-white sm:min-h-[560px] md:min-h-[620px] lg:min-h-[660px]">
+    <section className="relative flex min-h-[360px] w-full items-center overflow-hidden bg-[#0A1F44] text-white sm:min-h-[460px] md:min-h-[560px] lg:min-h-[620px]">
       {/* Background Campus Overlay */}
       <div className="absolute inset-0 z-0">
         <Image

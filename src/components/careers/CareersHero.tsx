@@ -59,7 +59,7 @@ export default function CareersHero({ hero }: CareersHeroProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A1F44]/75 via-transparent to-black/20" />
 
         {/* Content Container */}
-        <div className="gu-container relative z-10 flex min-h-[500px] items-center py-16 lg:min-h-[580px]">
+        <div className="gu-container relative z-10 flex min-h-[360px] sm:min-h-[460px] items-center py-12 sm:py-16 lg:min-h-[580px]">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -73,7 +73,7 @@ export default function CareersHero({ hero }: CareersHeroProps) {
             {/* Main Title */}
             <motion.h1
               variants={fadeUp}
-              className="font-serif text-[clamp(2.6rem,5.5vw,4.2rem)] font-black leading-[1.1] text-white"
+              className="font-serif text-[clamp(1.85rem,5.5vw,4.2rem)] font-black leading-[1.1] text-white"
             >
               {title.includes("Geeta University") ? (
                 <>

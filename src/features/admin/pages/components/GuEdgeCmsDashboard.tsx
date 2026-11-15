@@ -900,7 +900,7 @@ function GuEdgeSectionsOverviewView({
       </div>
 
       {/* Responsive Grid of Independent Section Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-5">
         {filteredSections.map((sec) => {
           const rawSec = sections[sec.key]?.body;
           const cleanBody =
@@ -913,16 +913,18 @@ function GuEdgeSectionsOverviewView({
             <div
               key={sec.key}
               onClick={() => onSelectSection(sec.key)}
-              className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-400 hover:shadow-md transition-all cursor-pointer"
+              className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-400 hover:shadow-md transition-all cursor-pointer min-w-0 w-full"
             >
-              <div>
-                {/* Top Row: Title & Config Status Badge */}
-                <div className="flex items-start justify-between gap-3 mb-2.5">
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-slate-950 transition-colors">
-                    {sec.label.replace(/^\d+[\.\)]\s*/, "")}
-                  </h3>
+              <div className="min-w-0 w-full">
+                {/* Row 1: Title */}
+                <h3 className="text-base font-bold text-slate-900 group-hover:text-slate-950 transition-colors break-words min-w-0 mb-2">
+                  {sec.label.replace(/^\d+[\.\)]\s*/, "")}
+                </h3>
+
+                {/* Row 2: Status Indicator Badges Row */}
+                <div className="flex flex-wrap items-center gap-1.5 mb-2.5 min-w-0">
                   <span
-                    className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
                       isConfigured
                         ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                         : "bg-slate-100 text-slate-600 border-slate-200"
@@ -937,8 +939,8 @@ function GuEdgeSectionsOverviewView({
                   </span>
                 </div>
 
-                {/* Section Description */}
-                <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">
+                {/* Row 3: Section Description */}
+                <p className="text-xs text-slate-500 leading-relaxed line-clamp-3 min-w-0">
                   {sec.description}
                 </p>
               </div>

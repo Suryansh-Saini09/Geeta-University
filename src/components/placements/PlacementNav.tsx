@@ -56,7 +56,7 @@ export default function PlacementNav() {
   return (
     <nav
       id="placement-subnav"
-      className="sticky top-[64px] z-[990] w-full border-b border-[#E2E8F0] bg-white shadow-sm backdrop-blur-xl md:top-[118px]"
+      className="sticky top-[var(--navbar-height,118px)] z-30 w-full border-b border-[#E2E8F0] bg-white shadow-sm backdrop-blur-xl"
     >
       <div className="gu-container overflow-x-auto [scrollbar-width:none]">
         <div className="flex min-w-max items-center gap-1 py-2.5 md:justify-center md:gap-3">

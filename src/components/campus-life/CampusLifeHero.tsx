@@ -30,7 +30,7 @@ export default function CampusLifeHero({ data, onOpenVirtualTour }: CampusLifeHe
       {/* 2. Clean Title & Intro Description */}
       <div className="gu-container py-8 sm:py-10">
         <div className="max-w-4xl">
-          <h1 className="font-serif text-[36px] font-bold text-[#0A1F44] sm:text-[44px] md:text-[50px]">
+          <h1 className="font-serif text-[clamp(1.85rem,5vw,3.125rem)] font-bold text-[#0A1F44] leading-tight">
             {title}
           </h1>
 

@@ -171,7 +171,7 @@ export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
   };
 
   return (
-    <section className="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden bg-[#0A1F44]">
+    <section className="relative flex min-h-[calc(100dvh-var(--navbar-height,118px))] flex-col justify-center overflow-hidden bg-[#0A1F44]">
       {/* =====================================================
           CINEMATIC BACKGROUND VIDEO ARCHITECTURE (DUAL LOOP)
       ===================================================== */}
@@ -236,7 +236,7 @@ export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
       {/* =====================================================
           MAIN HERO CONTENT (LEFT-ALIGNED ADMISSIONS HIERARCHY)
       ===================================================== */}
-      <div className="gu-container relative z-20 flex w-full flex-1 flex-col justify-center pb-16 pt-28 sm:pt-36 lg:pt-40">
+      <div className="gu-container relative z-20 flex w-full flex-1 flex-col justify-center py-12 sm:py-16 lg:py-20">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -275,7 +275,7 @@ export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
           {/* 2. MAIN HEADLINE */}
           <motion.h1
             variants={itemVariants}
-            className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[76px] font-bold leading-[1.08] tracking-tight drop-shadow-[0_4px_16px_rgba(10,31,68,0.7)]"
+            className="font-serif text-[clamp(2rem,6vw,4.75rem)] font-bold leading-[1.1] tracking-tight drop-shadow-[0_4px_16px_rgba(10,31,68,0.7)] break-words"
           >
             <span className="text-white block">{headline}</span>
             <span className="text-[#E8871A] block mt-1">{highlightedHeadline}</span>
@@ -284,7 +284,7 @@ export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
           {/* 3. SUPPORTING DESCRIPTION */}
           <motion.p
             variants={itemVariants}
-            className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-slate-200 font-sans drop-shadow-[0_2px_8px_rgba(10,31,68,0.6)]"
+            className="mt-5 sm:mt-6 max-w-xl text-sm sm:text-base md:text-lg leading-relaxed text-slate-200 font-sans drop-shadow-[0_2px_8px_rgba(10,31,68,0.6)]"
           >
             {description}
           </motion.p>

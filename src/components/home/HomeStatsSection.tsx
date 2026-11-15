@@ -160,7 +160,7 @@ export default function HomeStatsSection({ data }: HomeStatsSectionProps) {
         }}
       />
 
-      <div className="relative mx-auto max-w-6xl px-8 sm:px-12 lg:px-16">
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-8 lg:px-16">
         <motion.div
           variants={sectionVariants}
           initial="hidden"
@@ -209,7 +209,7 @@ export default function HomeStatsSection({ data }: HomeStatsSectionProps) {
                   duration: 0.25,
                   ease: "easeOut",
                 }}
-                className="group relative w-full max-w-sm flex-1 min-w-[280px] overflow-hidden rounded-3xl border bg-white p-7 shadow-sm transition-shadow duration-300 hover:shadow-xl sm:p-8"
+                className="group relative w-full max-w-sm flex-1 min-w-0 sm:min-w-[260px] overflow-hidden rounded-3xl border bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-xl sm:p-8"
                 style={{
                   borderColor:
                     index === 1

@@ -816,7 +816,7 @@ export default function HomeProgramsSection({ data }: HomeProgramsSectionProps) 
         }}
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
         <motion.div
           variants={sectionVariants}
           initial="hidden"

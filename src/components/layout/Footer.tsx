@@ -94,7 +94,7 @@ export default function Footer({ data, socialLinks }: FooterProps) {
     const visibleLinks = isExpanded ? activeLinks : activeLinks.slice(0, 5);
 
     return (
-      <div key={columnKey} className="flex flex-col gap-3 min-w-[200px] flex-1">
+      <div key={columnKey} className="flex flex-col gap-3 min-w-0 w-full flex-1">
         <h4 className="font-serif text-base font-bold text-white border-l-4 border-[#E8871A] pl-2.5">
           {col.title}
         </h4>
@@ -132,7 +132,7 @@ export default function Footer({ data, socialLinks }: FooterProps) {
   const currentYear = legal.dynamicYear ? new Date().getFullYear() : 2026;
 
   return (
-    <footer className="w-full bg-[#0A1F44] text-slate-300 border-t-4 border-[#E8871A] pt-12 pb-8">
+    <footer className="w-full bg-[#0A1F44] text-slate-300 border-t-4 border-[#E8871A] pt-12 pb-24 min-[1320px]:pb-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Top Header CTA Row */}
         {banner.enabled && (
@@ -160,9 +160,9 @@ export default function Footer({ data, socialLinks }: FooterProps) {
         )}
 
         {/* Middle Main Content Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Logo & About Column */}
-          <div className="lg:col-span-1 space-y-4">
+          <div className="md:col-span-2 lg:col-span-1 space-y-4">
             <Link href="/" className="inline-block">
               <Image
                 src={branding.logoUrl || "/GU-Logo.webp"}
@@ -248,7 +248,7 @@ export default function Footer({ data, socialLinks }: FooterProps) {
           </div>
 
           {/* Columns 2-5: Apply Here, Quick Links, Visit Here, Others */}
-          <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="md:col-span-2 lg:col-span-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {columns.map((col, colIdx) => renderColumn(col, colIdx))}
           </div>
         </div>
