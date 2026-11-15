@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 import DeleteMediaButton from "@/components/admin/DeleteMediaButton";
-import { uploadMediaAction } from "@/features/admin/media/actions";
+import { MediaUploadForm } from "@/features/admin/media/components/MediaUploadForm";
 import { hasPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
 import {
@@ -240,64 +240,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
       </section>
 
       {/* Upload Box (Collapsible/Concise) */}
-      <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-        <h3 className="mb-3 font-serif text-lg font-bold text-[#0A1F44]">Upload Asset</h3>
-        <form
-          action={uploadMediaAction}
-          className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[2fr_1.5fr_1.5fr_auto] lg:items-end"
-        >
-          <div>
-            <label htmlFor="file" className="mb-1 block text-xs font-semibold text-slate-700">
-              Select File
-            </label>
-            <input
-              id="file"
-              name="file"
-              type="file"
-              accept="image/jpeg,image/png,image/gif,image/webp,image/svg+xml,application/pdf"
-              required
-              className="block w-full rounded-lg border border-slate-200 bg-slate-50 p-2 text-xs"
-            />
-            <p className="mt-1 text-[11px] text-slate-400">
-              JPEG, PNG, WebP, SVG, or PDF · Up to 10 MB (25 MB for PDF)
-            </p>
-          </div>
-
-          <div>
-            <label htmlFor="altText" className="mb-1 block text-xs font-semibold text-slate-700">
-              Alt Text (for accessibility &amp; search)
-            </label>
-            <input
-              id="altText"
-              name="altText"
-              maxLength={300}
-              placeholder="e.g. Geeta University campus entrance"
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs outline-none focus:bg-white"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="caption" className="mb-1 block text-xs font-semibold text-slate-700">
-              Caption (optional)
-            </label>
-            <input
-              id="caption"
-              name="caption"
-              maxLength={500}
-              placeholder="e.g. Annual convocation 2026"
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs outline-none focus:bg-white"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="inline-flex h-9 items-center justify-center gap-2 rounded-xl bg-[#0A1F44] px-4 text-xs font-bold text-white shadow-xs hover:bg-[#1A3A6B] transition"
-          >
-            <Upload className="h-3.5 w-3.5" />
-            Upload File
-          </button>
-        </form>
-      </section>
+      <MediaUploadForm />
 
       {/* Main Filter & Inventory Card */}
       <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs">

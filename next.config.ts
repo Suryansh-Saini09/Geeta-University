@@ -34,8 +34,9 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["@prisma/adapter-mariadb", "mariadb", "sharp"],
   experimental: {
     serverActions: {
-      bodySizeLimit: "11mb",
+      bodySizeLimit: "30mb",
     },
+    proxyClientMaxBodySize: "30mb",
     cpus: 1,
     workerThreads: false,
     optimizePackageImports: ["lucide-react", "framer-motion"],

@@ -307,10 +307,10 @@ export async function saveCmsAsset(
 
   // Size checks
   if (format.isImage && bytes.length > MAX_IMAGE_BYTES) {
-    return { success: false, error: "Image files must be 10 MB or smaller." };
+    return { success: false, error: "This image is larger than the permitted 10 MB limit." };
   }
   if (format.isDocument && bytes.length > MAX_DOCUMENT_BYTES) {
-    return { success: false, error: "Documents must be 25 MB or smaller." };
+    return { success: false, error: "This PDF is larger than the permitted 25 MB limit." };
   }
 
   const contentArea = sanitizePathSegment(options.contentArea || "general", "general");

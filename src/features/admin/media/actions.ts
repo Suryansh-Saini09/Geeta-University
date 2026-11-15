@@ -5,7 +5,11 @@ import { redirect } from "next/navigation";
 
 import { assertPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
-import { saveCmsAsset } from "@/server/media/cmsUploadService";
+import {
+  saveCmsAsset,
+  MAX_IMAGE_BYTES,
+  MAX_DOCUMENT_BYTES,
+} from "@/server/media/cmsUploadService";
 import {
   deleteUnifiedMediaAssetSafe,
   updateUnifiedMediaAssetMetadata,
@@ -25,16 +29,45 @@ function metadata(formData: FormData) {
   });
 }
 
-export async function uploadMediaAction(formData: FormData) {
-  const session = await requireAdminSession();
-  assertPermission(session.user.role, "manageContent");
-  const pathname = "/admin/media";
-  const file = formData.get("file");
-  const parsed = metadata(formData);
-  if (!parsed.success) redirect(errorUrl(pathname, parsed.error.issues[0]?.message ?? "Invalid media details."));
-  if (!(file instanceof File) || file.size === 0) redirect(errorUrl(pathname, "Choose a file to upload."));
-
+export async function uploadMediaAction(formData: FormData): Promise<{
+  success: boolean;
+  error?: string;
+  url?: string;
+  fileName?: string;
+}> {
   try {
+    const session = await requireAdminSession();
+    assertPermission(session.user.role, "manageContent");
+
+    const file = formData.get("file");
+    const parsed = metadata(formData);
+    if (!parsed.success) {
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message ?? "Invalid media details.",
+      };
+    }
+    if (!(file instanceof File) || file.size === 0) {
+      return {
+        success: false,
+        error: "Please select a valid file to upload.",
+      };
+    }
+
+    const isPdf = file.name.toLowerCase().endsWith(".pdf") || file.type === "application/pdf";
+    if (isPdf && file.size > MAX_DOCUMENT_BYTES) {
+      return {
+        success: false,
+        error: "This PDF is larger than the permitted 25 MB limit.",
+      };
+    }
+    if (!isPdf && file.size > MAX_IMAGE_BYTES) {
+      return {
+        success: false,
+        error: "This image is larger than the permitted 10 MB limit.",
+      };
+    }
+
     const bytes = Buffer.from(await file.arrayBuffer());
     const res = await saveCmsAsset(bytes, file.name, {
       contentArea: "media",
@@ -45,15 +78,28 @@ export async function uploadMediaAction(formData: FormData) {
     });
 
     if (!res.success) {
-      redirect(errorUrl(pathname, res.error || "Failed to upload file."));
+      return {
+        success: false,
+        error: res.error || "Failed to upload file.",
+      };
     }
 
     revalidatePath("/admin/media");
-    redirect("/admin/media?uploaded=1");
+    return {
+      success: true,
+      url: res.url,
+      fileName: res.fileName,
+    };
   } catch (error: any) {
     if (error?.digest?.startsWith?.("NEXT_REDIRECT")) throw error;
-    serverLogger.error("Failed to upload media asset", error, { module: "media", action: "uploadMedia" });
-    redirect(errorUrl(pathname, sanitizeErrorMessage(error)));
+    serverLogger.error("Failed to upload media asset", error, {
+      module: "media",
+      action: "uploadMedia",
+    });
+    return {
+      success: false,
+      error: sanitizeErrorMessage(error, "The upload could not be completed. Please try again."),
+    };
   }
 }
 
