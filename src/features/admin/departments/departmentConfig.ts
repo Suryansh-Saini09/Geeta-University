@@ -202,13 +202,16 @@ export const DEPARTMENT_SECTIONS_CONFIG: DepartmentSectionConfigItem[] = [
     searchKeywords: "career pathways placements jobs recruitment roles recruiters companies packages",
     checkCompleteness: (_dept, body) => {
       const cp = body.careerPathways || {};
+      const recruiters = Array.isArray(cp.recruiters) ? cp.recruiters : [];
       const roles = Array.isArray(cp.notableRoles) ? cp.notableRoles : [];
       const hasDesc = !!cp.description;
+      const hasRecruiters = recruiters.length > 0 || roles.some((r: any) => typeof r === "object" && !!r.logo);
       const hasRoles = roles.length > 0;
+      const hasItems = hasRecruiters || hasRoles;
 
-      if (hasDesc && hasRoles) return { status: "Complete" };
-      if (hasDesc || hasRoles || cp.title) {
-        return { status: "Partial", detail: "Notable roles or description missing" };
+      if (hasDesc && hasItems) return { status: "Complete" };
+      if (hasDesc || hasItems || cp.title) {
+        return { status: "Partial", detail: "Recruiters, roles or description missing" };
       }
       return { status: "Not Configured", detail: "No career pathways configured" };
     },
