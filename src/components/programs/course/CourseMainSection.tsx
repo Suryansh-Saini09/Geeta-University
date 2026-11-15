@@ -677,7 +677,7 @@ export default function CourseMainSection({
                     </div>
 
                     <div className="overflow-x-auto rounded-xl border border-slate-200">
-                      <table className="min-w-full text-left text-sm text-[#334155]">
+                      <table className="min-w-[560px] w-full text-left text-sm text-[#334155]">
                         <thead className="bg-[#0A1F44] text-white text-[13px] uppercase tracking-wider font-semibold">
                           <tr>
                             <th className="px-4 py-3 border-b border-slate-200">Name</th>

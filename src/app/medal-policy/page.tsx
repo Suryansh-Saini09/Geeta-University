@@ -190,8 +190,8 @@ export default async function MedalPolicyPage() {
                 </p>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto rounded-xl border border-slate-200">
+                <table className="w-full min-w-[560px] text-left border-collapse">
                   <thead>
                     <tr className="bg-[#0A1F44] text-white text-xs sm:text-sm font-semibold">
                       <th className="p-4 rounded-tl-xl">Medal Category</th>

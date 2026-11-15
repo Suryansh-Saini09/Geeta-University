@@ -46,11 +46,11 @@ export default function AwardsRankingsSection({ data }: AwardsRankingsSectionPro
       id="awards-ranking"
       className="scroll-mt-[190px] overflow-hidden bg-[#F7F8FA] pt-12 md:pt-16 pb-8 md:pb-10"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12">
+      <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-12">
         {/* SECTION INTRO */}
         <div className="mx-auto mb-10 max-w-[900px] text-center">
           {/* Heading */}
-          <h2 className="font-serif text-[38px] font-black leading-[1.06] tracking-[-1.5px] text-[#0A1F44] sm:text-[46px] md:text-[54px] lg:text-[60px]">
+          <h2 className="font-serif text-[clamp(1.75rem,5vw,3.75rem)] font-black leading-[1.08] tracking-[-1px] text-[#0A1F44]">
             Awards &amp; Rankings
           </h2>
         </div>

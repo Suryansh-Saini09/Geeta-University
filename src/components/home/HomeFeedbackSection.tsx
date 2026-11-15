@@ -51,7 +51,7 @@ export default function HomeFeedbackSection({ data }: HomeFeedbackSectionProps) 
         className="pointer-events-none absolute -right-32 bottom-10 h-96 w-96 rounded-full bg-[#06355F]/5 blur-3xl"
       />
 
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
         {/* Section heading */}
         <div className="mx-auto mb-12 max-w-3xl text-center">
           <h2 className="font-serif text-4xl font-bold leading-tight text-[#06355F] sm:text-5xl">
@@ -104,7 +104,7 @@ export default function HomeFeedbackSection({ data }: HomeFeedbackSectionProps) 
           {feedbackList.map((student, index) => (
             <article
               key={`${student.name}-${index}`}
-              className={`group relative flex w-[300px] sm:w-[350px] md:w-[380px] shrink-0 flex-col overflow-hidden rounded-3xl border bg-white p-7 pb-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${
+              className={`group relative flex w-[280px] sm:w-[340px] md:w-[380px] shrink-0 flex-col overflow-hidden rounded-3xl border bg-white p-6 sm:p-7 pb-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${
                 index % 2 === 1 ? "border-[#F28C18]/40" : "border-[#DCE5ED]"
               }`}
             >

@@ -81,8 +81,8 @@ export default function PhdImportantDates({ data }: PhdImportantDatesProps = {})
             <h3 className="font-serif text-[20px] sm:text-[22px] font-bold">Tentative Schedule of Ph.D. Activities</h3>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+          <div className="overflow-x-auto rounded-b-2xl border-x border-b border-[#E2E8F0]">
+            <table className="w-full min-w-[500px] text-left border-collapse">
               <thead>
                 <tr className="border-b border-[#E2E8F0] bg-[#F8FAFC] text-[13.5px] uppercase tracking-wider font-bold text-[#475569]">
                   <th className="py-4 px-5 text-center w-16">Sr. No.</th>

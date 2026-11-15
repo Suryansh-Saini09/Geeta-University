@@ -44,6 +44,26 @@ export default function AdminShell({ user, children }: AdminShellProps) {
     }
   }, [pathname]);
 
+  // Handle Escape key and body lock for mobile drawer
+  useEffect(() => {
+    if (!isMobileOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isMobileOpen]);
+
   const toggleCollapsed = () => {
     setIsCollapsed((prev) => {
       const next = !prev;

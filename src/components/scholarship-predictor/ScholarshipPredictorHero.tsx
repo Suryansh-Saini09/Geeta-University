@@ -54,7 +54,7 @@ export default function ScholarshipPredictorHero({ data }: ScholarshipPredictorH
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A1F44]/75 via-transparent to-black/20" />
 
         {/* Content Container */}
-        <div className="gu-container relative z-10 flex min-h-[460px] items-center py-16 lg:min-h-[540px]">
+        <div className="gu-container relative z-10 flex min-h-[360px] sm:min-h-[440px] items-center py-12 sm:py-16 lg:min-h-[540px]">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -68,7 +68,7 @@ export default function ScholarshipPredictorHero({ data }: ScholarshipPredictorH
             {/* Title */}
             <motion.h1
               variants={fadeUp}
-              className="font-serif text-[clamp(2.5rem,5vw,4.2rem)] font-black leading-[1.1] text-white"
+              className="font-serif text-[clamp(1.85rem,5vw,4.2rem)] font-black leading-[1.1] text-white"
             >
               {title}
             </motion.h1>

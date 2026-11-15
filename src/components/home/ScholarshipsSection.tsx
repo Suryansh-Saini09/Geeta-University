@@ -45,7 +45,7 @@ export default function ScholarshipsSection({ data }: ScholarshipsSectionProps) 
         className="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-[#06355F]/10 blur-3xl"
       />
 
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
         {/* Main cards */}
         <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
           {/* Scholarships card */}

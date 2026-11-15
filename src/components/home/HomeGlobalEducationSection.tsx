@@ -37,15 +37,15 @@ export default function HomeGlobalEducationSection({ data }: HomeGlobalEducation
           />
 
           {/* Map container with full width display */}
-          <div className="relative mx-auto flex w-full items-center justify-center p-2 sm:p-4 md:p-6">
+          <div className="relative mx-auto flex w-full max-w-full items-center justify-center overflow-hidden p-2 sm:p-4 md:p-6">
             <Image
               src={image}
               alt={altText}
               width={1600}
               height={750}
-              sizes="100vw"
+              sizes="(max-width: 768px) 100vw, 1440px"
               unoptimized={Boolean(image?.startsWith("http"))}
-              className="h-auto w-full rounded-2xl object-contain"
+              className="h-auto w-full max-w-full rounded-2xl object-contain"
               priority={false}
             />
           </div>

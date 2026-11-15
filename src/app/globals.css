@@ -165,3 +165,84 @@ svg {
   padding-bottom: clamp(48px, 6vw, 76px);
 }
 
+/* ========================================
+   Floating Social Quick-Action Navigation
+   ======================================== */
+.gu-floating-social-nav {
+  position: fixed;
+  z-index: 40;
+  user-select: none;
+  transition: opacity 250ms ease-out, transform 250ms ease-out;
+}
+
+/* Mobile Only (< 768px): Always-Sticky Centered Bottom Horizontal Bar */
+@media (max-width: 767px) {
+  .gu-floating-social-nav {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    bottom: calc(max(12px, env(safe-area-inset-bottom, 0px) + 8px) + var(--social-banner-offset, 0px)) !important;
+    top: auto !important;
+    width: min(210px, calc(100vw - 32px));
+    height: 42px;
+    padding: 0 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 9999px;
+    background-color: rgba(10, 31, 68, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(10, 31, 68, 0.45);
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* Tablet, Laptop & Desktop (>= 768px): Flush Left Edge, No Background */
+@media (min-width: 768px) {
+  .gu-floating-social-nav {
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    left: 6px !important;
+    bottom: auto !important;
+    width: auto;
+    height: auto;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  /* Smoothly fade out on desktop/laptop when footer is reached */
+  .gu-floating-social-nav.gu-footer-overlap {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  .gu-floating-social-nav.gu-footer-overlap a {
+    pointer-events: none !important;
+  }
+}
+
+/* Safe Left Gutter on Tablet & Laptop (768px - 1380px):
+   Keeps section backgrounds 100% full-width while indenting inner text
+   so the 28px left social icons never overlap headings or footer text */
+@media (min-width: 768px) and (max-width: 1380px) {
+  main section > [class*="max-w-"],
+  main section > .container,
+  body > section > [class*="max-w-"],
+  footer > [class*="max-w-"],
+  footer > .container,
+  footer > div {
+    padding-left: 48px !important;
+  }
+}

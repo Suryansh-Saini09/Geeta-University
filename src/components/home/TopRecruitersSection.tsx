@@ -81,7 +81,7 @@ export default function TopRecruitersSection({
       aria-labelledby="top-recruiters-heading"
       className="relative overflow-hidden bg-white py-12 md:py-16"
     >
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
         <motion.div
           variants={sectionVariants}
           initial="hidden"

@@ -481,15 +481,21 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
         .gu-topbar {
           background: #EDE9DF;
           color: #0A1F44;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 0 24px;
+          padding: 0 20px;
           height: 36px;
           font-size: 12px;
           border-bottom: 1px solid #DFD9CB;
           position: relative;
           z-index: 1001;
+        }
+        .gu-topbar-inner {
+          width: 100%;
+          max-width: 1440px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 100%;
         }
         .gu-topbar-left {
           display: flex;
@@ -497,8 +503,9 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
           gap: 8px;
           flex: 1;
           overflow: hidden;
+          min-width: 0;
         }
-        .gu-ticker-nav { display: flex; gap: 2px; }
+        .gu-ticker-nav { display: flex; gap: 2px; flex-shrink: 0; }
         .gu-ticker-btn {
           background: none; border: none; color: #555555;
           cursor: pointer; padding: 0 5px; font-size: 14px;
@@ -513,6 +520,7 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
           font-size: 12px;
           font-weight: 500;
           color: #0A1F44;
+          min-width: 0;
         }
         .gu-apply-pill {
           background: #e8871a;
@@ -548,7 +556,7 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
           white-space: nowrap;
         }
         .gu-topbar-ico:hover { color: #e8871a; }
-        .gu-vdivider { width: 1px; height: 13px; background: #DFD9CB; }
+        .gu-vdivider { width: 1px; height: 13px; background: #DFD9CB; flex-shrink: 0; }
         .gu-socials { display: flex; align-items: center; gap: 8px; }
         .gu-socials a { color: #4A5568; transition: color .2s; display: flex; align-items: center; }
         .gu-socials a:hover { color: #e8871a; }
@@ -556,14 +564,19 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
         /* ─── MAIN COMPACT HEADER ROW (LOGO + NAV) ───────────── */
         .gu-mainbar {
           background: #FAF7F2;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 0 24px;
-          height: 82px;
+          padding: 0 20px;
           position: relative;
           z-index: 1001;
           border-bottom: 2px solid #e8871a;
+        }
+        .gu-mainbar-inner {
+          width: 100%;
+          max-width: 1440px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 82px;
         }
 
         /* Logo on LEFT */
@@ -1030,6 +1043,30 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
           .gu-mob-toggle { display: flex !important; }
           .gu-mega-backdrop { top: var(--navbar-height, 118px); }
         }
+        @media (max-width: 768px) {
+          .gu-mainbar-inner { height: 72px; }
+          .gu-logo-img { width: 175px; height: 50px; }
+          .gu-search-btn { padding: 6px 10px; font-size: 12px; }
+        }
+        @media (max-width: 640px) {
+          .gu-topbar { padding: 0 10px; height: 34px; }
+          .gu-mainbar { padding: 0 10px; }
+          .gu-mainbar-inner { height: 64px; }
+          .gu-logo-img { width: 145px; height: 42px; }
+          .gu-search-btn { padding: 6px 8px; }
+          .gu-search-btn span { display: none; }
+          .gu-apply-pill { padding: 2.5px 8px; font-size: 10px; margin-left: 6px; }
+          .gu-ticker { font-size: 11px; }
+          .gu-mainbar-right { gap: 6px; margin-left: 4px; }
+          .gu-mob-drawer { top: var(--navbar-height, 98px); padding: 14px 16px 40px; }
+        }
+        @media (max-width: 380px) {
+          .gu-topbar { padding: 0 6px; }
+          .gu-mainbar { padding: 0 6px; }
+          .gu-logo-img { width: 125px; height: 38px; }
+          .gu-apply-pill { padding: 2px 6px; font-size: 9.5px; }
+          .gu-ticker-btn { padding: 0 3px; font-size: 12px; }
+        }
         @media (min-width: 1081px) {
           .gu-mob-toggle { display: none !important; }
           .gu-mob-drawer { display: none !important; }
@@ -1046,91 +1083,94 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
       <header ref={headerRef} className="gu-root" onMouseLeave={handleMouseLeaveItem}>
         {/* ── TOP UTILITY BAR ── */}
         <div className="gu-topbar">
-          <div className="gu-topbar-left">
-            <div className="gu-ticker-nav">
-              <button
-                type="button"
-                className="gu-ticker-btn"
-                onClick={() => setAnnouncementIndex((p) => (p - 1 + announcements.length) % announcements.length)}
-                aria-label="Previous announcement"
-              >
-                ‹
-              </button>
-              <button
-                type="button"
-                className="gu-ticker-btn"
-                onClick={() => setAnnouncementIndex((p) => (p + 1) % announcements.length)}
-                aria-label="Next announcement"
-              >
-                ›
-              </button>
-            </div>
-            <span className="gu-ticker">{announcements[announcementIndex]}</span>
-            <Link
-              href="https://admissions.geetauniversity.edu.in/"
-              target="_blank"
-              rel="noreferrer"
-              className="gu-apply-pill"
-            >
-              APPLY NOW
-            </Link>
-          </div>
-
-          <div className="gu-topbar-right">
-            {topBarLinks.map((item, idx) => (
-              <React.Fragment key={item.href || `${item.label}-${idx}`}>
-                {idx > 0 && <div className="gu-vdivider" />}
-                <Link
-                  href={item.href}
-                  className="gu-topbar-ico"
-                  style={{
-                    fontWeight: item.label.includes("Predictor") ? 700 : 600,
-                    color: item.label.includes("Predictor") ? "#e8871a" : undefined,
-                  }}
-                  target={item.href.startsWith("http") ? "_blank" : undefined}
-                  rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+          <div className="gu-topbar-inner">
+            <div className="gu-topbar-left">
+              <div className="gu-ticker-nav">
+                <button
+                  type="button"
+                  className="gu-ticker-btn"
+                  onClick={() => setAnnouncementIndex((p) => (p - 1 + announcements.length) % announcements.length)}
+                  aria-label="Previous announcement"
                 >
-                  {renderTopBarIcon(item.icon, item.label)}
-                  {item.label}
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  className="gu-ticker-btn"
+                  onClick={() => setAnnouncementIndex((p) => (p + 1) % announcements.length)}
+                  aria-label="Next announcement"
+                >
+                  ›
+                </button>
+              </div>
+              <span className="gu-ticker">{announcements[announcementIndex]}</span>
+              <Link
+                href="https://admissions.geetauniversity.edu.in/"
+                target="_blank"
+                rel="noreferrer"
+                className="gu-apply-pill"
+              >
+                APPLY NOW
+              </Link>
+            </div>
+
+            <div className="gu-topbar-right">
+              {topBarLinks.map((item, idx) => (
+                <React.Fragment key={item.href || `${item.label}-${idx}`}>
+                  {idx > 0 && <div className="gu-vdivider" />}
+                  <Link
+                    href={item.href}
+                    className="gu-topbar-ico"
+                    style={{
+                      fontWeight: item.label.includes("Predictor") ? 700 : 600,
+                      color: item.label.includes("Predictor") ? "#e8871a" : undefined,
+                    }}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                  >
+                    {renderTopBarIcon(item.icon, item.label)}
+                    {item.label}
+                  </Link>
+                </React.Fragment>
+              ))}
+              <div className="gu-vdivider" />
+              <div className="gu-socials">
+                <Link href="https://www.facebook.com/geetauniversity" target="_blank" rel="noreferrer" title="Facebook">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
                 </Link>
-              </React.Fragment>
-            ))}
-            <div className="gu-vdivider" />
-            <div className="gu-socials">
-              <Link href="https://www.facebook.com/geetauniversity" target="_blank" rel="noreferrer" title="Facebook">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
-              </Link>
-              <Link href="https://www.instagram.com/geetauniversitypanipat" target="_blank" rel="noreferrer" title="Instagram">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
-              </Link>
-              <Link href="https://www.linkedin.com/school/geeta-university-official/" target="_blank" rel="noreferrer" title="LinkedIn">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
-              </Link>
-              <Link href="https://www.youtube.com/c/geetauniversity" target="_blank" rel="noreferrer" title="YouTube">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
-              </Link>
+                <Link href="https://www.instagram.com/geetauniversitypanipat" target="_blank" rel="noreferrer" title="Instagram">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
+                </Link>
+                <Link href="https://www.linkedin.com/school/geeta-university-official/" target="_blank" rel="noreferrer" title="LinkedIn">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
+                </Link>
+                <Link href="https://www.youtube.com/c/geetauniversity" target="_blank" rel="noreferrer" title="YouTube">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
 
         {/* ── MAIN HEADER ROW (LOGO + NAV SHARED) ── */}
         <div className="gu-mainbar">
-          {/* Logo */}
-          <Link href="/" className="gu-logo" aria-label="Geeta University Homepage">
-            <div className="gu-logo-img">
-              <Image
-                src="/GU-Logo.webp"
-                alt="Geeta University Logo"
-                width={230}
-                height={60}
-                style={{ objectFit: "contain", width: "100%", height: "100%" }}
-                priority
-              />
-            </div>
-          </Link>
+          <div className="gu-mainbar-inner">
+            {/* Logo */}
+            <Link href="/" className="gu-logo" aria-label="Geeta University Homepage">
+              <div className="gu-logo-img">
+                <Image
+                  src="/GU-Logo.webp"
+                  alt="Geeta University Logo"
+                  width={230}
+                  height={60}
+                  style={{ objectFit: "contain", width: "100%", height: "100%" }}
+                  priority
+                />
+              </div>
+            </Link>
 
-          {/* Integrated Primary Navigation Directly Beside Logo */}
-          <nav className="gu-main-nav" aria-label="Main navigation">
+            {/* Integrated Primary Navigation Directly Beside Logo */}
+            <nav className="gu-main-nav" aria-label="Main navigation">
             {primaryNav.map((link) => {
               const isActive = isNavEntryActive(link, pathname);
 
@@ -1268,73 +1308,116 @@ export default function Navbar({ initialNavData }: NavbarProps = {}) {
             </button>
           </div>
         </div>
+      </div>
 
-        {/* ── MOBILE DRAWER ── */}
-        {isMobileMenuOpen && (
-          <div className="gu-mob-drawer" role="dialog" aria-label="Mobile Navigation Drawer">
-            {primaryNav.map((link) => {
-              const isActive = isNavEntryActive(link, pathname);
+      {/* ── MOBILE DRAWER ── */}
+      {isMobileMenuOpen && (
+        <div className="gu-mob-drawer" role="dialog" aria-label="Mobile Navigation Drawer">
+          {primaryNav.map((link) => {
+            const isActive = isNavEntryActive(link, pathname);
 
-              if (link.href) {
-                return (
-                  <div key={link.key} className="gu-mob-row">
-                    <Link
-                      href={link.href}
-                      className={`gu-mob-btn${isActive ? " active" : ""}`}
-                      style={{ textDecoration: "none", display: "flex" }}
-                      onClick={() => {
-                        setIsMobileMenuOpen(false);
-                        if (typeof window !== "undefined" && window.location.pathname === link.href) {
-                          window.scrollTo({ top: 0, behavior: "smooth" });
-                        }
-                      }}
-                    >
-                      <span>{link.label}</span>
-                    </Link>
-                  </div>
-                );
-              }
-
-              const isExpanded = mobileExpanded === link.key;
+            if (link.href) {
               return (
                 <div key={link.key} className="gu-mob-row">
-                  <button
-                    type="button"
+                  <Link
+                    href={link.href}
                     className={`gu-mob-btn${isActive ? " active" : ""}`}
-                    onClick={() => setMobileExpanded(isExpanded ? null : link.key)}
-                    aria-expanded={isExpanded}
+                    style={{ textDecoration: "none", display: "flex" }}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      if (typeof window !== "undefined" && window.location.pathname === link.href) {
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }
+                    }}
                   >
                     <span>{link.label}</span>
-                    <span>{isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</span>
-                  </button>
-                  {isExpanded && (
-                    <div className="gu-mob-sub">
-                      {link.cols?.flatMap((col) => col.links).map((item, itemIdx) => (
-                        <Link
-                          key={`mob-sub-${item.href || item.label}-${itemIdx}`}
-                          href={item.href}
-                          className={`gu-mob-sub-link${pathname === item.href ? " active" : ""}`}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  </Link>
                 </div>
               );
-            })}
-            <Link
-              href="https://admissions.geetauniversity.edu.in/"
-              target="_blank"
-              rel="noreferrer"
-              className="gu-mob-apply"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Apply Now
-            </Link>
+            }
+
+            const isExpanded = mobileExpanded === link.key;
+            return (
+              <div key={link.key} className="gu-mob-row">
+                <button
+                  type="button"
+                  className={`gu-mob-btn${isActive ? " active" : ""}`}
+                  onClick={() => setMobileExpanded(isExpanded ? null : link.key)}
+                  aria-expanded={isExpanded}
+                >
+                  <span>{link.label}</span>
+                  <span>{isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}</span>
+                </button>
+                {isExpanded && (
+                  <div className="gu-mob-sub">
+                    {link.cols?.flatMap((col) => col.links).map((item, itemIdx) => (
+                      <Link
+                        key={`mob-sub-${item.href || item.label}-${itemIdx}`}
+                        href={item.href}
+                        className={`gu-mob-sub-link${pathname === item.href ? " active" : ""}`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                    {link.banner && (
+                      <div className="mt-2 pt-2 border-t border-[#DFD9CB]/70 flex flex-col gap-1.5">
+                        <span className="text-[11px] font-bold text-[#e8871a] uppercase tracking-wider px-2">
+                          {link.banner.text}
+                        </span>
+                        {link.banner.items.map((bi, biIdx) => (
+                          <Link
+                            key={`mob-banner-${bi.href || bi.label}-${biIdx}`}
+                            href={bi.href}
+                            className="flex items-center gap-2 text-xs font-semibold text-[#0A1F44] bg-white/70 rounded px-2.5 py-1.5 hover:bg-[#e8871a] hover:text-white transition-colors"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <span className="shrink-0">{renderBannerIcon(bi.icon)}</span>
+                            <span>{bi.label}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Quick Utility Links Section inside Mobile Drawer */}
+          <div className="mt-5 pt-4 border-t-2 border-[#EAE5DA] space-y-1">
+            <span className="text-[11px] font-extrabold text-[#718096] uppercase tracking-wider block px-1 mb-2">
+              Quick & Institutional Links
+            </span>
+            {topBarLinks.map((item, idx) => (
+              <Link
+                key={`mob-quick-${item.href}-${idx}`}
+                href={item.href}
+                className="flex items-center justify-between text-[13.5px] font-semibold text-[#0A1F44] py-2 px-3 rounded-md hover:bg-[#EDE9DF] transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+              >
+                <span className="flex items-center gap-2.5">
+                  {renderTopBarIcon(item.icon, item.label)}
+                  <span>{item.label}</span>
+                </span>
+                <span className="text-xs text-[#e8871a] font-bold">›</span>
+              </Link>
+            ))}
           </div>
-        )}
+
+          <Link
+            href="https://admissions.geetauniversity.edu.in/"
+            target="_blank"
+            rel="noreferrer"
+            className="gu-mob-apply"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Apply Now
+          </Link>
+        </div>
+      )}
       </header>
 
       {/* ── SPACER FOR FIXED NAVBAR LAYOUT ── */}

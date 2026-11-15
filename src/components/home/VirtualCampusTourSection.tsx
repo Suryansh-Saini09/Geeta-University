@@ -107,7 +107,7 @@ export default function VirtualCampusTourSection({ data }: VirtualCampusTourSect
             />
 
             {/* Content */}
-            <div className="relative z-10 flex min-h-[460px] items-center px-7 py-14 sm:min-h-[540px] sm:px-12 lg:min-h-[620px] lg:px-20">
+            <div className="relative z-10 flex min-h-[380px] sm:min-h-[460px] items-center px-5 py-10 sm:px-12 sm:py-14 lg:min-h-[620px] lg:px-20">
               <div className="max-w-2xl">
                 <motion.h2
                   variants={itemVariants}

@@ -87,7 +87,7 @@ export default function CampusLifeNav() {
 
   return (
     <nav
-      className="sticky z-[900] w-full border-b border-[#E2E8F0] bg-white/95 shadow-sm backdrop-blur-md"
+      className="sticky z-30 w-full border-b border-[#E2E8F0] bg-white/95 shadow-sm backdrop-blur-md"
       style={{ top: "var(--navbar-height, 118px)" }}
     >
       <div className="gu-container overflow-x-auto [scrollbar-width:none]">
