@@ -1,10 +1,13 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { assertPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
 import {
   checkMediaAssetUsage,
   saveCmsAsset,
+  MAX_IMAGE_BYTES,
+  MAX_DOCUMENT_BYTES,
   type SaveCmsMediaResult,
 } from "@/server/media/cmsUploadService";
 import { safeActionError, sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
@@ -49,6 +52,14 @@ export async function uploadCmsAssetAction(formData: FormData): Promise<UploadCm
       return { success: false, error: "Please select a valid file to upload." };
     }
 
+    const isPdf = file.name.toLowerCase().endsWith(".pdf") || file.type === "application/pdf";
+    if (isPdf && file.size > MAX_DOCUMENT_BYTES) {
+      return { success: false, error: "This PDF is larger than the permitted 25 MB limit." };
+    }
+    if (!isPdf && file.size > MAX_IMAGE_BYTES) {
+      return { success: false, error: "This image is larger than the permitted 10 MB limit." };
+    }
+
     const contentArea = (formData.get("contentArea") as string) || "general";
     const section = (formData.get("section") as string) || "default";
     const profile = (formData.get("profile") as any) || undefined;
@@ -71,6 +82,10 @@ export async function uploadCmsAssetAction(formData: FormData): Promise<UploadCm
       userId: session.user.id,
     });
 
+    if (result.success) {
+      revalidatePath("/admin/media");
+    }
+
     return result;
   } catch (error: unknown) {
     const correlationId = serverLogger.error("Failed to upload CMS asset", error, {
@@ -79,7 +94,7 @@ export async function uploadCmsAssetAction(formData: FormData): Promise<UploadCm
     });
     return {
       success: false,
-      error: sanitizeErrorMessage(error, "Failed to upload asset. Please try again."),
+      error: sanitizeErrorMessage(error, "The upload could not be completed. Please try again."),
       correlationId,
     };
   }
