@@ -72,6 +72,18 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "mediumspringgreen-buffalo-633359.hostingersite.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.hostingersite.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "img.youtube.com",
         port: "",
         pathname: "/**",

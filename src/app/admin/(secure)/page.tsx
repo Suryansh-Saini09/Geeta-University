@@ -10,9 +10,14 @@ import {
   Users,
 } from "lucide-react";
 
+import type { Metadata } from "next";
 import { getAdminDashboardStats } from "@/server/services/adminDashboard";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Admin CMS Geeta University",
+};
 
 const inventoryConfig = [
   { key: "pages", label: "Managed Pages", href: "/admin/pages", desc: "Custom institutional & dynamic pages" },
