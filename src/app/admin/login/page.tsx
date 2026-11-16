@@ -3,7 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { AlertCircle } from "lucide-react";
 
+import type { Metadata } from "next";
+
 import LoginForm from "./LoginForm";
+
+export const metadata: Metadata = {
+  title: "Admin CMS Geeta University",
+};
 
 const errorMessages: Record<string, string> = {
   "invalid-input": "Enter a valid email and password.",

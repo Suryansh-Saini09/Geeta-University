@@ -1244,6 +1244,260 @@ export const getPublishedAntiRaggingPage = cache(async function getPublishedAnti
 )();
 });
 
+export const getPublishedPrivacyPolicyPage = cache(async function getPublishedPrivacyPolicyPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
+        const [sections, pageRecord] = await Promise.all([
+          prisma.pageSection.findMany({
+            where: { pageSlug: "privacy-policy", status: "PUBLISHED" },
+            orderBy: { sortOrder: "asc" },
+          }),
+          prisma.page.findUnique({
+            where: { slug: "privacy-policy" },
+            include: { seo: true },
+          }),
+        ]);
+
+        const sectionMap: Record<string, any> = {};
+        sections.forEach((sec: any) => {
+          sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+        });
+
+        const localizedSeo = pageRecord?.seo
+          ? {
+              ...pageRecord.seo,
+              title: getLocalizedField(pageRecord.seo, "title", locale),
+              description: getLocalizedField(pageRecord.seo, "description", locale),
+              ogTitle: getLocalizedField(pageRecord.seo, "ogTitle", locale),
+            }
+          : null;
+
+        return {
+          sections: sectionMap,
+          hero: sectionMap.hero || null,
+          introduction: sectionMap.introduction || null,
+          termsAndCollection: sectionMap.terms_and_collection || null,
+          collectionMethods: sectionMap.collection_methods || null,
+          howWeUse: sectionMap.how_we_use || null,
+          disclosureAndRights: sectionMap.disclosure_and_rights || null,
+          additionalPolicies: sectionMap.additional_policies || null,
+          legacyEcosystem: sectionMap.legacy_ecosystem || null,
+          seo: localizedSeo,
+        };
+      } catch (err: any) {
+        serverLogger.error("[CMS DB ERROR] getPublishedPrivacyPolicyPage failed", err, { module: "pages", action: "getPublishedPrivacyPolicyPage" });
+        return {
+          sections: {},
+          hero: null,
+          introduction: null,
+          termsAndCollection: null,
+          collectionMethods: null,
+          howWeUse: null,
+          disclosureAndRights: null,
+          additionalPolicies: null,
+          legacyEcosystem: null,
+          seo: null,
+        };
+      }
+    },
+    ["privacy-policy-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.privacyPolicy, CACHE_TAGS.pages],
+    }
+  )();
+});
+
+export const getPublishedTermsAndConditionsPage = cache(async function getPublishedTermsAndConditionsPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
+        const [sections, pageRecord] = await Promise.all([
+          prisma.pageSection.findMany({
+            where: { pageSlug: "terms-and-conditions", status: "PUBLISHED" },
+            orderBy: { sortOrder: "asc" },
+          }),
+          prisma.page.findUnique({
+            where: { slug: "terms-and-conditions" },
+            include: { seo: true },
+          }),
+        ]);
+
+        const sectionMap: Record<string, any> = {};
+        sections.forEach((sec: any) => {
+          sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+        });
+
+        const localizedSeo = pageRecord?.seo
+          ? {
+              ...pageRecord.seo,
+              title: getLocalizedField(pageRecord.seo, "title", locale),
+              description: getLocalizedField(pageRecord.seo, "description", locale),
+              ogTitle: getLocalizedField(pageRecord.seo, "ogTitle", locale),
+            }
+          : null;
+
+        return {
+          sections: sectionMap,
+          hero: sectionMap.hero || null,
+          acceptanceAndWebsite: sectionMap.acceptance_and_website || null,
+          accountAndConduct: sectionMap.account_and_conduct || null,
+          communicationsAndCommunities: sectionMap.communications_and_communities || null,
+          liabilityAndLegal: sectionMap.liability_and_legal || null,
+          ipAndTermination: sectionMap.ip_and_termination || null,
+          contactInformation: sectionMap.contact_information || null,
+          legacyEcosystem: sectionMap.legacy_ecosystem || null,
+          seo: localizedSeo,
+        };
+      } catch (err: any) {
+        serverLogger.error("[CMS DB ERROR] getPublishedTermsAndConditionsPage failed", err, { module: "pages", action: "getPublishedTermsAndConditionsPage" });
+        return {
+          sections: {},
+          hero: null,
+          acceptanceAndWebsite: null,
+          accountAndConduct: null,
+          communicationsAndCommunities: null,
+          liabilityAndLegal: null,
+          ipAndTermination: null,
+          contactInformation: null,
+          legacyEcosystem: null,
+          seo: null,
+        };
+      }
+    },
+    ["terms-and-conditions-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.termsAndConditions, CACHE_TAGS.pages],
+    }
+  )();
+});
+
+export const getPublishedDisclaimerPage = cache(async function getPublishedDisclaimerPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
+        const [sections, pageRecord] = await Promise.all([
+          prisma.pageSection.findMany({
+            where: { pageSlug: "disclaimer", status: "PUBLISHED" },
+            orderBy: { sortOrder: "asc" },
+          }),
+          prisma.page.findUnique({
+            where: { slug: "disclaimer" },
+            include: { seo: true },
+          }),
+        ]);
+
+        const sectionMap: Record<string, any> = {};
+        sections.forEach((sec: any) => {
+          sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+        });
+
+        const localizedSeo = pageRecord?.seo
+          ? {
+              ...pageRecord.seo,
+              title: getLocalizedField(pageRecord.seo, "title", locale),
+              description: getLocalizedField(pageRecord.seo, "description", locale),
+              ogTitle: getLocalizedField(pageRecord.seo, "ogTitle", locale),
+            }
+          : null;
+
+        return {
+          sections: sectionMap,
+          hero: sectionMap.hero || null,
+          disclaimerStatement: sectionMap.disclaimer_statement || null,
+          privacyStatement: sectionMap.privacy_statement || null,
+          contactInformation: sectionMap.contact_information || null,
+          legacyEcosystem: sectionMap.legacy_ecosystem || null,
+          seo: localizedSeo,
+        };
+      } catch (err: any) {
+        serverLogger.error("[CMS DB ERROR] getPublishedDisclaimerPage failed", err, { module: "pages", action: "getPublishedDisclaimerPage" });
+        return {
+          sections: {},
+          hero: null,
+          disclaimerStatement: null,
+          privacyStatement: null,
+          contactInformation: null,
+          legacyEcosystem: null,
+          seo: null,
+        };
+      }
+    },
+    ["disclaimer-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.disclaimer, CACHE_TAGS.pages],
+    }
+  )();
+});
+
+export const getPublishedScholarshipPage = cache(async function getPublishedScholarshipPage(locale: string = DEFAULT_LOCALE) {
+  return unstable_cache(
+    async () => {
+      try {
+        const [sections, pageRecord] = await Promise.all([
+          prisma.pageSection.findMany({
+            where: { pageSlug: "scholarship", status: "PUBLISHED" },
+            orderBy: { sortOrder: "asc" },
+          }),
+          prisma.page.findUnique({
+            where: { slug: "scholarship" },
+            include: { seo: true },
+          }),
+        ]);
+
+        const sectionMap: Record<string, any> = {};
+        sections.forEach((sec: any) => {
+          sectionMap[sec.sectionKey] = getLocalizedBody(sec.body, sec.translations, locale);
+        });
+
+        const localizedSeo = pageRecord?.seo
+          ? {
+              ...pageRecord.seo,
+              title: getLocalizedField(pageRecord.seo, "title", locale),
+              description: getLocalizedField(pageRecord.seo, "description", locale),
+              ogTitle: getLocalizedField(pageRecord.seo, "ogTitle", locale),
+            }
+          : null;
+
+        return {
+          sections: sectionMap,
+          hero: sectionMap.hero || null,
+          overview: sectionMap.overview || null,
+          categories: sectionMap.categories || null,
+          gutsScholarship: sectionMap.guts_scholarship || null,
+          meritScholarship: sectionMap.merit_scholarship || null,
+          legacyEcosystem: sectionMap.legacy_ecosystem || null,
+          seo: localizedSeo,
+        };
+      } catch (err: any) {
+        serverLogger.error("[CMS DB ERROR] getPublishedScholarshipPage failed", err, { module: "pages", action: "getPublishedScholarshipPage" });
+        return {
+          sections: {},
+          hero: null,
+          overview: null,
+          categories: null,
+          gutsScholarship: null,
+          meritScholarship: null,
+          legacyEcosystem: null,
+          seo: null,
+        };
+      }
+    },
+    ["scholarship-page", locale],
+    {
+      revalidate: DEFAULT_CACHE_TTL,
+      tags: [CACHE_TAGS.scholarship, CACHE_TAGS.pages],
+    }
+  )();
+});
+
+
+
+
+
 
 
 

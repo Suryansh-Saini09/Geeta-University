@@ -204,9 +204,7 @@ export default function AdminShell({ user, children }: AdminShellProps) {
 
             {/* Header Title Context */}
             <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-slate-500">
-              <span>Geeta University</span>
-              <span className="text-slate-300">/</span>
-              <span className="font-semibold text-slate-800">Admin Control Panel</span>
+              <span className="font-semibold text-slate-800">Admin CMS Geeta University</span>
             </div>
           </div>
 

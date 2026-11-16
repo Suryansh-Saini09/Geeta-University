@@ -261,19 +261,51 @@ export default function Footer({ data, socialLinks }: FooterProps) {
           </p>
 
           <div className="flex items-center gap-4">
-            {legal?.links?.map((link, idx) => (
-              <React.Fragment key={link.id || `${link.label}-${idx}` || `legal-${idx}`}>
-                {idx > 0 && <span>/</span>}
-                <a
-                  href={link.href}
-                  target={link.target || "_blank"}
-                  rel="noopener noreferrer"
-                  className="hover:text-[#E8871A] transition-colors"
-                >
-                  {link.label}
-                </a>
-              </React.Fragment>
-            ))}
+            {legal?.links?.map((link, idx) => {
+              const isInternal =
+                link.href.startsWith("/") ||
+                /^(https?:\/\/)?(www\.)?geetauniversity\.edu\.in(\/.*)?$/i.test(link.href);
+              const normalizedHref = link.href.startsWith("/")
+                ? link.href
+                : link.href.replace(/^(https?:\/\/)?(www\.)?geetauniversity\.edu\.in/i, "");
+
+              // If it's internal (relative or points to geetauniversity.edu.in) or legal pages, use Link with relative path
+              if (
+                isInternal ||
+                link.id === "privacy-policy" ||
+                link.id === "terms-and-conditions" ||
+                link.id === "disclaimer" ||
+                link.href.startsWith("/")
+              ) {
+                let targetHref = normalizedHref.startsWith("/") ? normalizedHref : `/${normalizedHref}`;
+                if (!targetHref || targetHref === "//") targetHref = "/";
+                return (
+                  <React.Fragment key={link.id || `${link.label}-${idx}` || `legal-${idx}`}>
+                    {idx > 0 && <span>/</span>}
+                    <Link
+                      href={targetHref}
+                      className="hover:text-[#E8871A] transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </React.Fragment>
+                );
+              }
+
+              return (
+                <React.Fragment key={link.id || `${link.label}-${idx}` || `legal-${idx}`}>
+                  {idx > 0 && <span>/</span>}
+                  <a
+                    href={link.href}
+                    target={link.target || "_blank"}
+                    rel="noopener noreferrer"
+                    className="hover:text-[#E8871A] transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                </React.Fragment>
+              );
+            })}
           </div>
         </div>
       </div>

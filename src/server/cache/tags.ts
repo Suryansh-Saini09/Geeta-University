@@ -44,6 +44,10 @@ export const CACHE_TAGS = {
   howToReachUs: "page:how-to-reach-us",
   aboutPanipat: "page:about-panipat",
   antiRagging: "page:anti-ragging",
+  privacyPolicy: "page:privacy-policy",
+  termsAndConditions: "page:terms-and-conditions",
+  disclaimer: "page:disclaimer",
+  scholarship: "page:scholarship",
 } as const;
 
 /**

@@ -285,6 +285,45 @@ const PAGE_SPECIFIC_SECTION_LABELS: Record<string, Record<string, string>> = {
     nodal_officers: "Anti-Ragging Committee Officers",
     seo: "Search Engine Settings",
   },
+  "privacy-policy": {
+    hero: "Hero Banner",
+    introduction: "Policy Introduction",
+    terms_and_collection: "Information We Collect",
+    collection_methods: "Collection Methods",
+    how_we_use: "How We Use Information",
+    disclosure_and_rights: "Data Disclosure & Security",
+    additional_policies: "Children, DNT & Contact",
+    legacy_ecosystem: "Legacy & Ecosystem",
+    seo: "Search Engine Settings",
+  },
+  "terms-and-conditions": {
+    hero: "Hero Banner",
+    acceptance_and_website: "Acceptance & Website Scope",
+    account_and_conduct: "Account & Online Conduct",
+    communications_and_communities: "Communications & Communities",
+    liability_and_legal: "Liability & Choice of Law",
+    ip_and_termination: "IP, DMCA & Termination",
+    contact_information: "Terms Contact Information",
+    legacy_ecosystem: "Legacy & Ecosystem",
+    seo: "Search Engine Settings",
+  },
+  disclaimer: {
+    hero: "Hero Banner",
+    disclaimer_statement: "Website Disclaimer & Liability",
+    privacy_statement: "Privacy & Cookie Statement",
+    contact_information: "Disclaimer Contact Information",
+    legacy_ecosystem: "Legacy & Ecosystem",
+    seo: "Search Engine Settings",
+  },
+  scholarship: {
+    hero: "Scholarship Hero Banner",
+    overview: "Overview & Scheme Philosophy",
+    categories: "Scholarship Categories Catalog",
+    guts_scholarship: "GUTS Exam Scholarship Slabs",
+    merit_scholarship: "Merit Qualifying Exam Slabs",
+    legacy_ecosystem: "Legacy & Ecosystem",
+    seo: "Search Engine Settings",
+  },
 };
 
 /**
@@ -456,6 +495,10 @@ const PAGE_TITLES: Record<string, string> = {
   "how-to-reach-us": "How to Reach Us",
   "about-panipat": "About Panipat",
   "anti-ragging-committee": "Anti-Ragging Committee",
+  "privacy-policy": "Privacy Policy",
+  "terms-and-conditions": "Terms & Conditions",
+  disclaimer: "Disclaimer",
+  scholarship: "Scholarships at GU",
 };
 
 /**

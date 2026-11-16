@@ -50,6 +50,10 @@ export const STANDARD_INSTITUTIONAL_PAGE_SLUGS = [
   "how-to-reach-us",
   "about-panipat",
   "anti-ragging-committee",
+  "privacy-policy",
+  "terms-and-conditions",
+  "disclaimer",
+  "scholarship",
 ] as const;
 
 
