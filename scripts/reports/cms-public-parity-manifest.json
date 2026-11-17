@@ -2117,7 +2117,7 @@
         "componentName": "FAQSection",
         "importPath": "@/components/programs/FAQSection",
         "exists": true,
-        "callProps": "title={faqsData?.title || \"Frequently Asked Questions (FAQs)\"}\r\n          subtitle={\r\n            faqsData?.subtitle ||\r\n            \"Everything you need to know about undergraduate admissions, eligibility criteria, scholarships, and academic pathways after 12th.\"\r\n          }\r\n          faqs={faqsData?.items || ugFaqsData}",
+        "callProps": "title={faqsData?.title || \"Frequently Asked Questions (FAQs)\"}\r\n          subtitle={\r\n            faqsData?.subtitle ||\r\n            \"\"\r\n          }\r\n          faqs={faqsData?.items || ugFaqsData}",
         "compDataImports": [
           "@/data/programs/types"
         ],

@@ -48,9 +48,7 @@ export default async function ProgramsAfter12Page() {
         <FAQSection
           title={faqsData?.title || "Frequently Asked Questions (FAQs)"}
           subtitle={
-            faqsData?.subtitle ||
-            "Everything you need to know about undergraduate admissions, eligibility criteria, scholarships, and academic pathways after 12th."
-          }
+            faqsData?.subtitle}
           faqs={faqsData?.items || ugFaqsData}
         />
       </section>

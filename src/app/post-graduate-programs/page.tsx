@@ -48,9 +48,7 @@ export default async function PostGraduateProgramsPage() {
         <FAQSection
           title={faqsData?.title || "Frequently Asked Questions (FAQs)"}
           subtitle={
-            faqsData?.subtitle ||
-            "Find answers to common questions about postgraduate admissions, eligibility, master's courses, and scholarship opportunities at Geeta University."
-          }
+            faqsData?.subtitle           }
           faqs={faqsData?.items || pgFaqsData}
         />
       </section>
