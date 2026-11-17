@@ -147,7 +147,7 @@ export const nursingSchool: ProgramPageData = {
     eyebrow: "CAREER OPPORTUNITIES",
     title: "Career Opportunities & Professional Pathways",
     description:
-      "Graduates of GNM and B.Sc. Nursing from Geeta Nursing College will be prepared for diverse roles across multi-specialty hospitals, public health centers, academic institutions, and administrative leadership.",
+      "Graduates of GNM and B.Sc. Nursing from Geeta Nursing College will be prepared for diverse roles.",
     rolesTitle: "Key Professional Roles",
     notableRoles: [
       { name: "Staff Nurse in Hospitals & Healthcare Institutions" },
