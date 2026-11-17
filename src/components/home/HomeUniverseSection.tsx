@@ -109,18 +109,18 @@ export default function HomeUniverseSection({ data }: HomeUniverseSectionProps) 
         <div className="grid gap-5 lg:grid-cols-3">
           {/* Global community */}
           <div className="group rounded-2xl border border-[#DCE5ED] bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#F28C18]/50 hover:shadow-lg">
-            <h3 className="font-sans text-2xl font-bold text-[#06355F]">
-              {countries} Countries
-            </h3>
+  <h3 className="font-sans text-2xl font-bold text-[#06355F] lining-nums tabular-nums">
+    {countries} Countries
+  </h3>
 
-            <p className="mt-1 font-semibold text-[#536B83]">
-              {states} States
-            </p>
+  <p className="mt-1 font-semibold text-[#536B83] lining-nums tabular-nums">
+    {states} States
+  </p>
 
-            <p className="mt-4 text-sm leading-6 text-[#64778A]">
-              {commDesc}
-            </p>
-          </div>
+  <p className="mt-4 text-sm leading-6 text-[#64778A]">
+    {commDesc}
+  </p>
+</div>
 
           {/* Global universities */}
           <div className="group rounded-2xl border border-[#DCE5ED] bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#F28C18]/50 hover:shadow-lg">

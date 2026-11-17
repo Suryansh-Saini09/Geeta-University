@@ -92,7 +92,7 @@ export const ADMISSIONS_PAGE_CONFIGS: PageMigrationConfig[] = [
       },
       faqs: {
         title: "Frequently Asked Questions (FAQs)",
-        subtitle: "Everything you need to know about undergraduate admissions, eligibility criteria, scholarships, and academic pathways after 12th.",
+        subtitle: "",
         items: ugFaqsData,
       },
       legacy_ecosystem: {
