@@ -16,15 +16,10 @@ interface AcademicOverviewSectionEditorProps {
     image?: string;
   };
   takeaways?: string[];
-  takeawaysTitle?: string;
   subjects?: string[];
   subjectsTitle?: string;
   subjectsParagraphs?: string[];
   learningOutcomes?: string[];
-  learningOutcomesTitle?: string;
-  readMoreText?: string;
-  readLessText?: string;
-  degreeDesignTitle?: string;
   mediaAssets?: MediaAssetItem[];
   saved?: boolean;
   error?: string;
@@ -35,15 +30,10 @@ export function AcademicOverviewSectionEditor({
   programName,
   overviewData = {},
   takeaways: initialTakeaways = [],
-  takeawaysTitle: initialTakeawaysTitle = "",
   subjects: initialSubjects = [],
   subjectsTitle: initialSubjectsTitle = "",
   subjectsParagraphs: initialSubjectsParagraphs = [],
   learningOutcomes: initialOutcomes = [],
-  learningOutcomesTitle: initialOutcomesTitle = "",
-  readMoreText: initialReadMoreText = "",
-  readLessText: initialReadLessText = "",
-  degreeDesignTitle: initialDegreeDesignTitle = "",
   mediaAssets = [],
   saved,
   error,
@@ -56,17 +46,12 @@ export function AcademicOverviewSectionEditor({
   );
   const [image, setImage] = useState(overviewData.image || "");
   const [takeaways, setTakeaways] = useState<string[]>(initialTakeaways);
-  const [takeawaysTitle, setTakeawaysTitle] = useState(initialTakeawaysTitle || "Key Takeaways");
   const [subjectsTitle, setSubjectsTitle] = useState(initialSubjectsTitle || "Core Curriculum & Focus Areas");
   const [subjectsParagraphs, setSubjectsParagraphs] = useState<string[]>(
     initialSubjectsParagraphs.length > 0 ? initialSubjectsParagraphs : [""]
   );
   const [subjects, setSubjects] = useState<string[]>(initialSubjects);
   const [learningOutcomes, setLearningOutcomes] = useState<string[]>(initialOutcomes);
-  const [learningOutcomesTitle, setLearningOutcomesTitle] = useState(initialOutcomesTitle || "Program Learning Outcomes");
-  const [readMoreText, setReadMoreText] = useState(initialReadMoreText || "Read More");
-  const [readLessText, setReadLessText] = useState(initialReadLessText || "Read Less");
-  const [degreeDesignTitle, setDegreeDesignTitle] = useState(initialDegreeDesignTitle || "DESIGN YOUR OWN DEGREE WITH GU");
 
   const [isMediaPickerOpen, setIsMediaPickerOpen] = useState(false);
 
@@ -130,15 +115,10 @@ export function AcademicOverviewSectionEditor({
     paragraphs: paragraphs.filter((p) => p.trim().length > 0),
     image,
     takeaways: takeaways.filter((t) => t.trim().length > 0),
-    takeawaysTitle,
     subjects: subjects.filter((s) => s.trim().length > 0),
     subjectsTitle,
     subjectsParagraphs: subjectsParagraphs.filter((sp) => sp.trim().length > 0),
     learningOutcomes: learningOutcomes.filter((o) => o.trim().length > 0),
-    learningOutcomesTitle,
-    readMoreText,
-    readLessText,
-    degreeDesignTitle,
   };
 
   return (
@@ -161,92 +141,6 @@ export function AcademicOverviewSectionEditor({
         <input type="hidden" name="id" value={programId} />
         <input type="hidden" name="section" value="academicOverview" />
         <input type="hidden" name="payload" value={JSON.stringify(payload)} />
-
-        {/* Custom Headings & Labels Configuration */}
-        <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-6 shadow-sm space-y-4">
-          <div>
-            <h3 className="font-serif text-lg font-bold text-amber-900">
-              Curriculum Section Headings & Action Labels
-            </h3>
-            <p className="mt-0.5 text-xs text-amber-700">
-              Customize the section headers and interactive action text displayed on this program page.
-            </p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Key Takeaways Heading
-              </label>
-              <input
-                type="text"
-                value={takeawaysTitle}
-                onChange={(e) => setTakeawaysTitle(e.target.value)}
-                placeholder="Key Takeaways"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Subjects Covered Heading
-              </label>
-              <input
-                type="text"
-                value={subjectsTitle}
-                onChange={(e) => setSubjectsTitle(e.target.value)}
-                placeholder="Key Subjects Covered"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Program Learning Outcomes Heading
-              </label>
-              <input
-                type="text"
-                value={learningOutcomesTitle}
-                onChange={(e) => setLearningOutcomesTitle(e.target.value)}
-                placeholder="Program Learning Outcomes"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Degree Design Card Heading
-              </label>
-              <input
-                type="text"
-                value={degreeDesignTitle}
-                onChange={(e) => setDegreeDesignTitle(e.target.value)}
-                placeholder="DESIGN YOUR OWN DEGREE WITH GU"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Expand Button Label (Collapsed)
-              </label>
-              <input
-                type="text"
-                value={readMoreText}
-                onChange={(e) => setReadMoreText(e.target.value)}
-                placeholder="Read More"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Collapse Button Label (Expanded)
-              </label>
-              <input
-                type="text"
-                value={readLessText}
-                onChange={(e) => setReadLessText(e.target.value)}
-                placeholder="Read Less"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-          </div>
-        </div>
 
         {/* Section 1: Overview Text & Feature Image */}
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">

@@ -250,18 +250,11 @@ export function transformProgramToCoursePageData(
     image: program.heroImage?.url || "/programs/default-banner.jpg",
   };
 
-  const customLabels = (overviewData.customLabels && typeof overviewData.customLabels === "object"
-    ? overviewData.customLabels
-    : {}) as Record<string, any>;
-
   const defaultQuickInfo = {
     program: program.name,
     duration: program.duration || "",
     eligibility: program.eligibility || "",
     level: program.level || undefined,
-    programLabel: overviewData.quickInfo?.programLabel || customLabels.programLabel || undefined,
-    durationLabel: overviewData.quickInfo?.durationLabel || customLabels.durationLabel || undefined,
-    eligibilityLabel: overviewData.quickInfo?.eligibilityLabel || customLabels.eligibilityLabel || undefined,
   };
 
   const seoData = program.seo ? {
@@ -284,66 +277,28 @@ export function transformProgramToCoursePageData(
     quickInfo: { ...defaultQuickInfo, ...(overviewData.quickInfo || {}) },
     overview: overviewData.overview || { title: program.name, paragraphs: [program.eligibility || ""] },
     takeaways: Array.isArray(overviewData.takeaways) ? overviewData.takeaways : [],
-    takeawaysTitle: overviewData.takeawaysTitle || customLabels.takeawaysTitle || undefined,
     subjects: Array.isArray(overviewData.subjects) ? overviewData.subjects : [],
-    subjectsTitle: overviewData.subjectsTitle || customLabels.subjectsTitle || undefined,
+    subjectsTitle: overviewData.subjectsTitle,
     subjectsParagraphs: overviewData.subjectsParagraphs,
     learningOutcomes: Array.isArray(overviewData.learningOutcomes) ? overviewData.learningOutcomes : [],
-    learningOutcomesTitle: overviewData.learningOutcomesTitle || customLabels.learningOutcomesTitle || undefined,
-    readMoreText: overviewData.readMoreText || customLabels.readMoreText || undefined,
-    readLessText: overviewData.readLessText || customLabels.readLessText || undefined,
-    degreeDesignTitle: overviewData.degreeDesignTitle || customLabels.degreeDesignTitle || undefined,
-    admission: overviewData.admission
-      ? {
-          ...overviewData.admission,
-          eligibility: overviewData.admission?.eligibility || program.eligibility || "",
-          title: overviewData.admission?.title || customLabels.admissionTitle || undefined,
-          eligibilityLabel: overviewData.admission?.eligibilityLabel || customLabels.admissionEligibilityLabel || undefined,
-          whyPreferTitle: overviewData.admission?.whyPreferTitle || customLabels.whyPreferTitle || undefined,
-          enquiryTitle: overviewData.admission?.enquiryTitle || customLabels.enquiryTitle || undefined,
-          enquiryButtonText: overviewData.admission?.enquiryButtonText || customLabels.enquiryButtonText || undefined,
-        }
-      : {
-          eligibility: program.eligibility || "",
-          whyChooseHeading: overviewData.admission?.whyChooseHeading,
-          whyChooseParagraphs: overviewData.admission?.whyChooseParagraphs,
-          title: customLabels.admissionTitle || undefined,
-          eligibilityLabel: customLabels.admissionEligibilityLabel || undefined,
-          whyPreferTitle: customLabels.whyPreferTitle || undefined,
-          enquiryTitle: customLabels.enquiryTitle || undefined,
-          enquiryButtonText: customLabels.enquiryButtonText || undefined,
-        },
+    admission: overviewData.admission || {
+      eligibility: program.eligibility || "",
+      whyChooseHeading: overviewData.admission?.whyChooseHeading,
+      whyChooseParagraphs: overviewData.admission?.whyChooseParagraphs,
+    },
     career: overviewData.career || undefined,
     whyGeeta: overviewData.whyGeeta || undefined,
     learningSpaces: overviewData.learningSpaces || undefined,
     scholarships: overviewData.scholarships || undefined,
     faculty: Array.isArray(overviewData.faculty) ? overviewData.faculty : undefined,
-    mentorsTitle: overviewData.mentorsTitle || overviewData.facultyTitle || customLabels.facultyTitle || undefined,
-    mentorsSubtitle: overviewData.mentorsSubtitle || overviewData.facultySubtitle || customLabels.facultySubtitle || undefined,
-    virtualTour: overviewData.virtualTour || (customLabels.virtualTourEyebrow || customLabels.virtualTourTitle || customLabels.virtualTourDescription ? {
-      eyebrow: customLabels.virtualTourEyebrow,
-      title: customLabels.virtualTourTitle,
-      description: customLabels.virtualTourDescription,
-    } : undefined),
     testimonials: Array.isArray(overviewData.testimonials) ? overviewData.testimonials : undefined,
-    testimonialsTitle: overviewData.testimonialsTitle || customLabels.testimonialsTitle || undefined,
-    testimonialsSubtitle: overviewData.testimonialsSubtitle || customLabels.testimonialsSubtitle || undefined,
     faqs: Array.isArray(overviewData.faqs) ? overviewData.faqs : undefined,
-    faqsTitle: overviewData.faqsTitle || customLabels.faqsTitle || undefined,
-    faqsSubtitle: overviewData.faqsSubtitle || customLabels.faqsSubtitle || undefined,
     relatedCourses: Array.isArray(overviewData.relatedCourses) ? overviewData.relatedCourses : undefined,
-    cta: {
-      title: overviewData.cta?.title || "Apply Now",
-      heading: overviewData.cta?.heading,
-      description: overviewData.cta?.description || "Join Geeta University",
-      applyUrl: overviewData.cta?.applyUrl || "https://admissions.geetauniversity.edu.in",
-      brochureUrl: overviewData.cta?.brochureUrl,
-      helpline: overviewData.cta?.helpline,
-      applyText: overviewData.cta?.applyText || customLabels.ctaApplyText || undefined,
-      contactText: overviewData.cta?.contactText || customLabels.ctaContactText || undefined,
-      contactUrl: overviewData.cta?.contactUrl || customLabels.ctaContactUrl || undefined,
+    cta: overviewData.cta || {
+      title: "Apply Now",
+      description: "Join Geeta University",
+      applyUrl: "https://admissions.geetauniversity.edu.in",
     },
-    customLabels: Object.keys(customLabels).length > 0 ? customLabels : undefined,
     curriculum: overviewData.curriculum,
     research: overviewData.research,
     collaborations: overviewData.collaborations,

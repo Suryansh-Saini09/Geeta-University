@@ -5,15 +5,7 @@ import { ArrowRight } from "lucide-react";
 import type { ProgramPageData } from "@/data/programs/types";
 
 interface ProgramFinalCTAProps {
-  cta?: (ProgramPageData["cta"] & {
-    title?: string;
-    applyUrl?: string;
-    applyText?: string;
-    applyButtonText?: string;
-    contactText?: string;
-    contactButtonText?: string;
-    contactUrl?: string;
-  }) | any;
+  cta?: ProgramPageData["cta"];
   schoolName?: string;
 }
 
@@ -23,14 +15,9 @@ export default function ProgramFinalCTA({ cta, schoolName }: ProgramFinalCTAProp
         ? schoolName
         : `the ${schoolName}`)
     : "";
-  const heading =
-    cta?.heading ||
-    cta?.title ||
-    (normalizedSchool ? `Ready to Join ${normalizedSchool} at Geeta University?` : "Ready to Join Geeta University?");
-  const applyLink = cta?.applyLink || cta?.applyUrl || "https://admissions.geetauniversity.edu.in/";
-  const applyButtonText = cta?.applyText || cta?.applyButtonText || "Apply Now";
-  const contactLink = cta?.contactUrl || cta?.contactLink || "https://geetauniversity.edu.in/contact-us";
-  const contactButtonText = cta?.contactText || cta?.contactButtonText || "Contact Admissions";
+  const heading = cta?.heading || (normalizedSchool ? `Ready to Join ${normalizedSchool} at Geeta University?` : "Ready to Join Geeta University?");
+  const applyLink = cta?.applyLink || "https://admissions.geetauniversity.edu.in/";
+  const contactLink = "https://geetauniversity.edu.in/contact-us";
 
   return (
     <section style={{ background: "#E8871A", padding: "54px 24px", textAlign: "center" }}>
@@ -64,7 +51,7 @@ export default function ProgramFinalCTA({ cta, schoolName }: ProgramFinalCTAProp
               e.currentTarget.style.transform = "none";
             }}
           >
-            {applyButtonText}
+            Apply Now
             <ArrowRight size={16} />
           </a>
           <a
@@ -89,7 +76,7 @@ export default function ProgramFinalCTA({ cta, schoolName }: ProgramFinalCTAProp
               e.currentTarget.style.background = "transparent";
             }}
           >
-            {contactButtonText}
+            Contact Admissions
           </a>
         </div>
       </div>

@@ -30,7 +30,6 @@ import { TestimonialsSectionEditor } from "./TestimonialsSectionEditor";
 import { FaqSectionEditor } from "./FaqSectionEditor";
 import { CtaSectionEditor } from "./CtaSectionEditor";
 import { SeoSectionEditor } from "./SeoSectionEditor";
-import { CustomLabelsSectionEditor } from "./CustomLabelsSectionEditor";
 import { ProgramFields, ProgramPublishingPanel } from "./ProgramFormFields";
 import { updateProgramAction } from "@/features/admin/programs/actions";
 import {
@@ -638,15 +637,10 @@ export function ProgramContentManager({
                 programName={program.name}
                 overviewData={overview.overview}
                 takeaways={overview.takeaways}
-                takeawaysTitle={overview.takeawaysTitle || overview.customLabels?.takeawaysTitle}
                 subjects={overview.subjects}
-                subjectsTitle={overview.subjectsTitle || overview.customLabels?.subjectsTitle}
+                subjectsTitle={overview.subjectsTitle}
                 subjectsParagraphs={overview.subjectsParagraphs}
                 learningOutcomes={overview.learningOutcomes}
-                learningOutcomesTitle={overview.learningOutcomesTitle || overview.customLabels?.learningOutcomesTitle}
-                readMoreText={overview.readMoreText || overview.customLabels?.readMoreText}
-                readLessText={overview.readLessText || overview.customLabels?.readLessText}
-                degreeDesignTitle={overview.degreeDesignTitle || overview.customLabels?.degreeDesignTitle}
                 mediaAssets={mediaAssets}
                 saved={saved}
                 error={error}
@@ -710,8 +704,6 @@ export function ProgramContentManager({
                 programId={program.id}
                 programName={program.name}
                 facultyData={overview.faculty}
-                title={overview.facultyTitle || overview.mentorsTitle || overview.customLabels?.facultyTitle}
-                subtitle={overview.facultySubtitle || overview.mentorsSubtitle || overview.customLabels?.facultySubtitle}
                 mediaAssets={mediaAssets}
                 saved={saved}
                 error={error}
@@ -723,8 +715,6 @@ export function ProgramContentManager({
                 programId={program.id}
                 programName={program.name}
                 testimonialsData={overview.testimonials}
-                title={overview.testimonialsTitle || overview.customLabels?.testimonialsTitle}
-                subtitle={overview.testimonialsSubtitle || overview.customLabels?.testimonialsSubtitle}
                 mediaAssets={mediaAssets}
                 saved={saved}
                 error={error}
@@ -736,8 +726,6 @@ export function ProgramContentManager({
                 programId={program.id}
                 programName={program.name}
                 faqsData={overview.faqs}
-                title={overview.faqsTitle || overview.customLabels?.faqsTitle}
-                subtitle={overview.faqsSubtitle || overview.customLabels?.faqsSubtitle}
                 saved={saved}
                 error={error}
               />
@@ -748,17 +736,6 @@ export function ProgramContentManager({
                 programId={program.id}
                 programName={program.name}
                 ctaData={overview.cta}
-                saved={saved}
-                error={error}
-              />
-            )}
-
-            {activeSection === "customLabels" && (
-              <CustomLabelsSectionEditor
-                programId={program.id}
-                programName={program.name}
-                customLabels={overview.customLabels}
-                overview={overview}
                 saved={saved}
                 error={error}
               />

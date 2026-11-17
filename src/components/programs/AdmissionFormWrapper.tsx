@@ -18,8 +18,6 @@ import {
 interface AdmissionFormWrapperProps {
   initialDiscipline?: string;
   initialCourse?: string;
-  title?: string;
-  buttonText?: string;
 }
 
 const INDIAN_STATES = [
@@ -371,8 +369,6 @@ function resolveDiscipline(hint?: string): string {
 export default function AdmissionFormWrapper({
   initialDiscipline = "",
   initialCourse = "",
-  title = "Enquire Now",
-  buttonText = "Enquire Now",
 }: AdmissionFormWrapperProps) {
   const [formData, setFormData] = useState({
     name: "",
@@ -548,7 +544,7 @@ export default function AdmissionFormWrapper({
       {/* ── CARD HEADER ── */}
       <div className="text-center pb-3 mb-4 border-b border-slate-100">
         <h3 className="text-[#0A1F44] font-extrabold text-[22px] sm:text-[24px] tracking-tight leading-tight">
-          {title || "Enquire Now"}
+          Enquire Now
         </h3>
       </div>
 
@@ -909,7 +905,7 @@ export default function AdmissionFormWrapper({
               </>
             ) : (
               <>
-                <span>{buttonText || "Enquire Now"}</span>
+                <span>Enquire Now</span>
                 <Send size={14} />
               </>
             )}

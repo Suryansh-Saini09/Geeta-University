@@ -90,30 +90,21 @@ export default function CourseSharedSections({
       {/* 1. Meet Our Mentors (Directly shared from the main program page) */}
       {faculty && faculty.length > 0 && (
         <ProgramMentors
-          title={course.mentorsTitle || course.customLabels?.facultyTitle || "Meet Our Mentors"}
-          subtitle={course.mentorsSubtitle || course.customLabels?.facultySubtitle || "Guiding Futures with Expertise, Experience & Empathy"}
+          title="Meet Our Mentors"
+          subtitle="Guiding Futures with Expertise, Experience & Empathy"
           faculty={faculty}
         />
       )}
 
       {/* 2. Virtual Campus Tour */}
-      <CourseVirtualCampus
-        eyebrow={course.virtualTour?.eyebrow || course.customLabels?.virtualTourEyebrow}
-        title={course.virtualTour?.title || course.customLabels?.virtualTourTitle}
-        description={course.virtualTour?.description || course.customLabels?.virtualTourDescription}
-        videoUrl={course.virtualTour?.videoUrl}
-      />
+      <CourseVirtualCampus />
 
       {/* 3. Scholarships & GUTS */}
       <CourseScholarships scholarships={course.scholarships} />
 
       {/* 4. Student Testimonials */}
       {testimonials && testimonials.length > 0 && (
-        <CourseTestimonials
-          testimonials={testimonials}
-          title={course.testimonialsTitle || course.customLabels?.testimonialsTitle || "Student Testimonial"}
-          subtitle={course.testimonialsSubtitle || course.customLabels?.testimonialsSubtitle}
-        />
+        <CourseTestimonials testimonials={testimonials} />
       )}
 
       {/* 5. Highlights of Our Learning Spaces */}
@@ -139,15 +130,14 @@ export default function CourseSharedSections({
       {/* 7. Frequently Asked Questions */}
       {faqs && faqs.length > 0 && (
         <FAQSection
-          title={course.faqsTitle || course.customLabels?.faqsTitle || "Frequently Asked Questions"}
-          subtitle={course.faqsSubtitle || course.customLabels?.faqsSubtitle || "Find answers to common questions about eligibility, courses, placements, and campus facilities."}
+          title="Frequently Asked Questions"
           faqs={faqs}
         />
       )}
 
       {/* 8. Legacy & Integrated University Ecosystem */}
       <LegacyEcosystem
-        contextText={course.customLabels?.ecosystemText || "Students benefit from the integrated ecosystem of:"}
+        contextText="Students benefit from the integrated ecosystem of:"
       />
 
       {/* 9. Final CTA & Admissions Footer */}

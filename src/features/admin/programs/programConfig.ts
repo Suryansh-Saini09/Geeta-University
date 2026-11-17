@@ -287,22 +287,6 @@ export const PROGRAM_SECTIONS_CONFIG: ProgramSectionConfigItem[] = [
       return { status: "Not Configured", detail: "No SEO metadata configured" };
     },
   },
-  {
-    id: "customLabels",
-    title: "Custom Headings & UI Labels",
-    shortTitle: "Labels & Headings",
-    description: "Full control over every section title, subheading, card header, and button label across this entire program page.",
-    iconName: "Type",
-    category: "core",
-    checkCompleteness: (_program, overview) => {
-      const cl = overview.customLabels || {};
-      const hasAny = Object.values(cl).some((v) => typeof v === "string" && v.trim().length > 0);
-      if (hasAny) {
-        return { status: "Complete", detail: "Custom headings configured" };
-      }
-      return { status: "Not Configured", detail: "Using standard default template headings" };
-    },
-  },
 ];
 
 /**

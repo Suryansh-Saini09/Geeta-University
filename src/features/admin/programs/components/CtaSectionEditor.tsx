@@ -30,9 +30,6 @@ export function CtaSectionEditor({
   const [applyUrl, setApplyUrl] = useState(ctaData?.applyUrl || "/admissions");
   const [brochureUrl, setBrochureUrl] = useState(ctaData?.brochureUrl || "");
   const [helpline, setHelpline] = useState(ctaData?.helpline || "+91 99960 51000");
-  const [applyText, setApplyText] = useState(ctaData?.applyText || "Apply Now");
-  const [contactText, setContactText] = useState(ctaData?.contactText || "Contact Admissions");
-  const [contactUrl, setContactUrl] = useState(ctaData?.contactUrl || "https://geetauniversity.edu.in/contact-us");
 
   const payload = {
     title,
@@ -41,9 +38,6 @@ export function CtaSectionEditor({
     applyUrl,
     brochureUrl,
     helpline,
-    applyText,
-    contactText,
-    contactUrl,
   };
 
   return (
@@ -154,51 +148,6 @@ export function CtaSectionEditor({
                 placeholder="+91 99960 51000"
                 className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm outline-none focus:border-slate-400"
               />
-            </div>
-          </div>
-
-          {/* Action Button Custom Labels */}
-          <div className="rounded-lg bg-amber-50/70 border border-amber-200/80 p-4 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900">
-              Action Button Text & Targets (Customizable)
-            </h4>
-            <div className="grid gap-4 md:grid-cols-3">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700">
-                  Primary Button Text (Default: Apply Now)
-                </label>
-                <input
-                  type="text"
-                  value={applyText}
-                  onChange={(e) => setApplyText(e.target.value)}
-                  placeholder="Apply Now"
-                  className="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-amber-400"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-700">
-                  Secondary Button Text (Default: Contact Admissions)
-                </label>
-                <input
-                  type="text"
-                  value={contactText}
-                  onChange={(e) => setContactText(e.target.value)}
-                  placeholder="Contact Admissions"
-                  className="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-amber-400"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-700">
-                  Secondary Button URL Target
-                </label>
-                <input
-                  type="text"
-                  value={contactUrl}
-                  onChange={(e) => setContactUrl(e.target.value)}
-                  placeholder="https://geetauniversity.edu.in/contact-us"
-                  className="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-amber-400"
-                />
-              </div>
             </div>
           </div>
         </div>

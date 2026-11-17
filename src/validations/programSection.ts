@@ -20,9 +20,6 @@ export const programQuickInfoSectionSchema = z.object({
   degree: z.string().trim().optional(),
   intake: z.string().trim().optional(),
   location: z.string().trim().optional(),
-  programLabel: z.string().trim().optional(),
-  durationLabel: z.string().trim().optional(),
-  eligibilityLabel: z.string().trim().optional(),
 });
 
 export const programAcademicOverviewSectionSchema = z.object({
@@ -30,26 +27,16 @@ export const programAcademicOverviewSectionSchema = z.object({
   paragraphs: z.array(z.string().trim()).optional(),
   image: z.string().trim().optional(),
   takeaways: z.array(z.string().trim()).optional(),
-  takeawaysTitle: z.string().trim().optional(),
   subjects: z.array(z.string().trim()).optional(),
   subjectsTitle: z.string().trim().optional(),
   subjectsParagraphs: z.array(z.string().trim()).optional(),
   learningOutcomes: z.array(z.string().trim()).optional(),
-  learningOutcomesTitle: z.string().trim().optional(),
-  readMoreText: z.string().trim().optional(),
-  readLessText: z.string().trim().optional(),
-  degreeDesignTitle: z.string().trim().optional(),
 });
 
 export const programAdmissionsSectionSchema = z.object({
-  title: z.string().trim().optional(),
   eligibility: z.string().trim().optional(),
-  eligibilityLabel: z.string().trim().optional(),
   whyChooseHeading: z.string().trim().optional(),
   whyChooseParagraphs: z.array(z.string().trim()).optional(),
-  whyPreferTitle: z.string().trim().optional(),
-  enquiryTitle: z.string().trim().optional(),
-  enquiryButtonText: z.string().trim().optional(),
   applicationUrl: z.string().trim().optional(),
   process: z.array(z.string().trim()).optional(),
 });
@@ -92,9 +79,6 @@ export const programCareersSectionSchema = z.object({
   privateRoles: z.array(careerRoleItemSchema).optional(),
   recruitersTitle: z.string().trim().optional(),
   recruiters: z.array(careerRecruiterItemSchema).optional(),
-  whoShouldPursueTitle: z.string().trim().optional(),
-  whoShouldPursueDescription: z.string().trim().optional(),
-  conclusion: z.string().trim().optional(),
 });
 
 export const learningSpaceItemSchema = z.object({
@@ -140,8 +124,6 @@ export const facultyMemberItemSchema = z.object({
 });
 
 export const programFacultySectionSchema = z.object({
-  title: z.string().trim().optional(),
-  subtitle: z.string().trim().optional(),
   faculty: z.array(facultyMemberItemSchema).optional(),
 });
 
@@ -155,8 +137,6 @@ export const testimonialItemSchema = z.object({
 });
 
 export const programTestimonialsSectionSchema = z.object({
-  title: z.string().trim().optional(),
-  subtitle: z.string().trim().optional(),
   testimonials: z.array(testimonialItemSchema).optional(),
 });
 
@@ -167,8 +147,6 @@ export const faqItemSchema = z.object({
 });
 
 export const programFaqSectionSchema = z.object({
-  title: z.string().trim().optional(),
-  subtitle: z.string().trim().optional(),
   faqs: z.array(faqItemSchema).optional(),
 });
 
@@ -179,9 +157,6 @@ export const programCtaSectionSchema = z.object({
   applyUrl: z.string().trim().optional(),
   brochureUrl: z.string().trim().optional(),
   helpline: z.string().trim().optional(),
-  applyText: z.string().trim().optional(),
-  contactText: z.string().trim().optional(),
-  contactUrl: z.string().trim().optional(),
 });
 
 export const programSeoSectionSchema = z.object({
@@ -190,35 +165,4 @@ export const programSeoSectionSchema = z.object({
   keywords: z.string().trim().optional(),
   canonical: z.string().trim().optional(),
   ogImage: z.string().trim().optional(),
-});
-
-export const programCustomLabelsSchema = z.object({
-  programLabel: z.string().trim().optional(),
-  durationLabel: z.string().trim().optional(),
-  eligibilityLabel: z.string().trim().optional(),
-  overviewTitle: z.string().trim().optional(),
-  takeawaysTitle: z.string().trim().optional(),
-  subjectsTitle: z.string().trim().optional(),
-  learningOutcomesTitle: z.string().trim().optional(),
-  readMoreText: z.string().trim().optional(),
-  readLessText: z.string().trim().optional(),
-  degreeDesignTitle: z.string().trim().optional(),
-  admissionTitle: z.string().trim().optional(),
-  admissionEligibilityLabel: z.string().trim().optional(),
-  whyPreferTitle: z.string().trim().optional(),
-  enquiryTitle: z.string().trim().optional(),
-  enquiryButtonText: z.string().trim().optional(),
-  facultyTitle: z.string().trim().optional(),
-  facultySubtitle: z.string().trim().optional(),
-  virtualTourEyebrow: z.string().trim().optional(),
-  virtualTourTitle: z.string().trim().optional(),
-  virtualTourDescription: z.string().trim().optional(),
-  testimonialsTitle: z.string().trim().optional(),
-  testimonialsSubtitle: z.string().trim().optional(),
-  faqsTitle: z.string().trim().optional(),
-  faqsSubtitle: z.string().trim().optional(),
-  ecosystemText: z.string().trim().optional(),
-  ctaApplyText: z.string().trim().optional(),
-  ctaContactText: z.string().trim().optional(),
-  ctaContactUrl: z.string().trim().optional(),
 });

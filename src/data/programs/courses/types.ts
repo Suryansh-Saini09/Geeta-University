@@ -26,9 +26,6 @@ export interface CourseQuickInfo {
   degree?: string;
   intake?: string;
   location?: string;
-  programLabel?: string;
-  durationLabel?: string;
-  eligibilityLabel?: string;
 }
 
 export interface CourseOverview {
@@ -57,15 +54,12 @@ export interface CourseLearningOutcome {
 export interface CourseAdmissionProcess {
   title?: string;
   eligibility?: string;
-  eligibilityLabel?: string;
   whyChooseHeading?: string;
   whyChooseIntro?: string;
   whyChooseParagraphs?: string[];
   whyChooseOutro?: string;
   whyPreferTitle?: string;
   whyPreferParagraphs?: string[];
-  enquiryTitle?: string;
-  enquiryButtonText?: string;
 }
 
 export interface CourseWhatIs {
@@ -204,9 +198,6 @@ export interface CourseCTAData {
   applyUrl: string;
   brochureUrl?: string;
   helpline?: string;
-  applyText?: string;
-  contactText?: string;
-  contactUrl?: string;
 }
 
 // Optional support types for extended research & curriculum modules
@@ -336,37 +327,6 @@ export interface NestedListSection {
   items: NestedListItem[];
 }
 
-export interface CourseCustomLabels {
-  programLabel?: string;
-  durationLabel?: string;
-  eligibilityLabel?: string;
-  overviewTitle?: string;
-  takeawaysTitle?: string;
-  subjectsTitle?: string;
-  learningOutcomesTitle?: string;
-  readMoreText?: string;
-  readLessText?: string;
-  degreeDesignTitle?: string;
-  admissionTitle?: string;
-  admissionEligibilityLabel?: string;
-  whyPreferTitle?: string;
-  enquiryTitle?: string;
-  enquiryButtonText?: string;
-  facultyTitle?: string;
-  facultySubtitle?: string;
-  virtualTourEyebrow?: string;
-  virtualTourTitle?: string;
-  virtualTourDescription?: string;
-  testimonialsTitle?: string;
-  testimonialsSubtitle?: string;
-  faqsTitle?: string;
-  faqsSubtitle?: string;
-  ecosystemText?: string;
-  ctaApplyText?: string;
-  ctaContactText?: string;
-  ctaContactUrl?: string;
-}
-
 export interface CoursePageData {
   id: string;
   schoolSlug: string;
@@ -382,33 +342,16 @@ export interface CoursePageData {
   subjectsTitle?: string;
   subjectsParagraphs?: string[];
   learningOutcomes?: string[];
-  learningOutcomesTitle?: string;
-  readMoreText?: string;
-  readLessText?: string;
-  degreeDesignTitle?: string;
   admission?: CourseAdmissionProcess;
   career?: CourseCareerPathways;
   whyGeeta?: CourseWhyGeeta;
   learningSpaces?: CourseLearningSpacesData;
   scholarships?: CourseScholarshipsData;
   faculty?: FacultyMember[];
-  mentorsTitle?: string;
-  mentorsSubtitle?: string;
-  virtualTour?: {
-    eyebrow?: string;
-    title?: string;
-    description?: string;
-    videoUrl?: string;
-  };
   testimonials?: CourseTestimonial[];
-  testimonialsTitle?: string;
-  testimonialsSubtitle?: string;
   faqs?: CourseFAQItem[];
-  faqsTitle?: string;
-  faqsSubtitle?: string;
   relatedCourses?: RelatedCourseItem[];
   cta: CourseCTAData;
-  customLabels?: CourseCustomLabels;
   curriculum?: CourseCurriculum;
   research?: CourseResearch;
   collaborations?: CourseCollaborations;

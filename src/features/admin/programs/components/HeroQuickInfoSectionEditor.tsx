@@ -29,9 +29,6 @@ interface HeroQuickInfoSectionEditorProps {
     degree?: string;
     intake?: string;
     location?: string;
-    programLabel?: string;
-    durationLabel?: string;
-    eligibilityLabel?: string;
   };
   mediaAssets?: MediaAssetItem[];
   saved?: boolean;
@@ -66,9 +63,6 @@ export function HeroQuickInfoSectionEditor({
   const [degree, setDegree] = useState(quickInfoData.degree || "");
   const [intake, setIntake] = useState(quickInfoData.intake || "");
   const [location, setLocation] = useState(quickInfoData.location || "Main Campus, Panipat");
-  const [programLabel, setProgramLabel] = useState(quickInfoData.programLabel || "Program");
-  const [durationLabel, setDurationLabel] = useState(quickInfoData.durationLabel || "Duration");
-  const [eligibilityLabel, setEligibilityLabel] = useState(quickInfoData.eligibilityLabel || "Eligibility");
 
   // Media Picker modal state
   const [mediaPickerTarget, setMediaPickerTarget] = useState<"desktop" | "mobile" | null>(null);
@@ -93,9 +87,6 @@ export function HeroQuickInfoSectionEditor({
     degree,
     intake,
     location,
-    programLabel,
-    durationLabel,
-    eligibilityLabel,
   };
 
   return (
@@ -314,51 +305,6 @@ export function HeroQuickInfoSectionEditor({
           <input type="hidden" name="id" value={programId} />
           <input type="hidden" name="section" value="quickInfo" />
           <input type="hidden" name="payload" value={JSON.stringify(quickInfoPayload)} />
-
-          {/* Customizable Card Labels Sub-section */}
-          <div className="rounded-lg bg-amber-50/70 border border-amber-200/80 p-4 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900">
-              Quick Fact Card Eyebrow Labels (Customizable)
-            </h4>
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700">
-                  Card 1 Label (Default: Program)
-                </label>
-                <input
-                  type="text"
-                  value={programLabel}
-                  onChange={(e) => setProgramLabel(e.target.value)}
-                  placeholder="Program"
-                  className="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-amber-400"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-700">
-                  Card 2 Label (Default: Duration)
-                </label>
-                <input
-                  type="text"
-                  value={durationLabel}
-                  onChange={(e) => setDurationLabel(e.target.value)}
-                  placeholder="Duration"
-                  className="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-amber-400"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-700">
-                  Card 3 Label (Default: Eligibility)
-                </label>
-                <input
-                  type="text"
-                  value={eligibilityLabel}
-                  onChange={(e) => setEligibilityLabel(e.target.value)}
-                  placeholder="Eligibility"
-                  className="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none focus:border-amber-400"
-                />
-              </div>
-            </div>
-          </div>
 
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             <div>
