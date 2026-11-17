@@ -56,8 +56,8 @@ export function AcademicOverviewSectionEditor({
   );
   const [image, setImage] = useState(overviewData.image || "");
   const [takeaways, setTakeaways] = useState<string[]>(initialTakeaways);
-  const [takeawaysTitle, setTakeawaysTitle] = useState(initialTakeawaysTitle || "Key Takeaways");
-  const [subjectsTitle, setSubjectsTitle] = useState(initialSubjectsTitle || "Core Curriculum & Focus Areas");
+  const [takeawaysTitle, setTakeawaysTitle] = useState(initialTakeawaysTitle || "Key Academic Takeaways");
+  const [subjectsTitle, setSubjectsTitle] = useState(initialSubjectsTitle || "Curriculum & Key Subjects");
   const [subjectsParagraphs, setSubjectsParagraphs] = useState<string[]>(
     initialSubjectsParagraphs.length > 0 ? initialSubjectsParagraphs : [""]
   );
@@ -157,118 +157,43 @@ export function AcademicOverviewSectionEditor({
         </div>
       ) : null}
 
-      <form action={updateProgramSectionAction} className="space-y-8">
+      <form action={updateProgramSectionAction} className="space-y-6">
         <input type="hidden" name="id" value={programId} />
         <input type="hidden" name="section" value="academicOverview" />
         <input type="hidden" name="payload" value={JSON.stringify(payload)} />
 
-        {/* Custom Headings & Labels Configuration */}
-        <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-6 shadow-sm space-y-4">
-          <div>
-            <h3 className="font-serif text-lg font-bold text-amber-900">
-              Curriculum Section Headings & Action Labels
-            </h3>
-            <p className="mt-0.5 text-xs text-amber-700">
-              Customize the section headers and interactive action text displayed on this program page.
-            </p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Key Takeaways Heading
-              </label>
-              <input
-                type="text"
-                value={takeawaysTitle}
-                onChange={(e) => setTakeawaysTitle(e.target.value)}
-                placeholder="Key Takeaways"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Subjects Covered Heading
-              </label>
-              <input
-                type="text"
-                value={subjectsTitle}
-                onChange={(e) => setSubjectsTitle(e.target.value)}
-                placeholder="Key Subjects Covered"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Program Learning Outcomes Heading
-              </label>
-              <input
-                type="text"
-                value={learningOutcomesTitle}
-                onChange={(e) => setLearningOutcomesTitle(e.target.value)}
-                placeholder="Program Learning Outcomes"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Degree Design Card Heading
-              </label>
-              <input
-                type="text"
-                value={degreeDesignTitle}
-                onChange={(e) => setDegreeDesignTitle(e.target.value)}
-                placeholder="DESIGN YOUR OWN DEGREE WITH GU"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Expand Button Label (Collapsed)
-              </label>
-              <input
-                type="text"
-                value={readMoreText}
-                onChange={(e) => setReadMoreText(e.target.value)}
-                placeholder="Read More"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Collapse Button Label (Expanded)
-              </label>
-              <input
-                type="text"
-                value={readLessText}
-                onChange={(e) => setReadLessText(e.target.value)}
-                placeholder="Read Less"
-                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
-              />
-            </div>
-          </div>
-        </div>
-
         {/* Section 1: Overview Text & Feature Image */}
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
-            Academic Description & Overview
-          </h3>
-          <p className="mt-1 text-sm text-slate-500">
-            Comprehensive description detailing the curriculum structure, industry relevance, and academic scope.
-          </p>
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
+                {title.trim() || "Academic Description & Overview"}
+              </h3>
+              <p className="mt-0.5 text-xs text-slate-500">
+                Comprehensive description detailing the curriculum structure, industry relevance, and academic scope.
+              </p>
+            </div>
+            <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
+              Overview
+            </span>
+          </div>
 
           <div className="mt-5 space-y-4">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Section Heading
+                Section Heading / Display Name (Displayed on Website)
               </label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g. Program Overview, Academic Description & Overview, About Course"
                 className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm outline-none focus:border-slate-400"
                 required
               />
+              <p className="mt-1 text-xs text-slate-400">
+                The primary title of this overview section displayed on the program page.
+              </p>
             </div>
 
             {/* Paragraphs Repeater */}
@@ -356,7 +281,7 @@ export function AcademicOverviewSectionEditor({
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
               <h3 className="font-serif text-lg font-bold text-[#0A1F44]">
-                Key Academic Takeaways
+                {takeawaysTitle.trim() || "Key Academic Takeaways"}
               </h3>
               <p className="mt-0.5 text-xs text-slate-500">
                 High-impact highlights and distinctive pillars of this course.
@@ -372,32 +297,53 @@ export function AcademicOverviewSectionEditor({
             </button>
           </div>
 
-          <div className="mt-4 space-y-2.5">
-            {takeaways.length === 0 ? (
-              <p className="text-xs text-slate-400 italic">No key takeaways added yet.</p>
-            ) : (
-              takeaways.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500">
-                    {idx + 1}
-                  </span>
-                  <input
-                    type="text"
-                    value={item}
-                    onChange={(e) => handleUpdateTakeaway(idx, e.target.value)}
-                    placeholder="e.g. Industry-ready curriculum co-designed with top tech firms..."
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-slate-400"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveTakeaway(idx)}
-                    className="p-1.5 text-slate-400 hover:text-red-600"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              ))
-            )}
+          <div className="mt-4 space-y-4">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Section Heading / Display Name (Displayed on Website)
+              </label>
+              <input
+                type="text"
+                value={takeawaysTitle}
+                onChange={(e) => setTakeawaysTitle(e.target.value)}
+                placeholder="e.g. Key Academic Takeaways, Key Takeaways, Clinical Competencies"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2 text-sm outline-none focus:border-slate-400"
+              />
+              <p className="mt-1 text-xs text-slate-400">
+                Customize the title of this section (default: &ldquo;Key Academic Takeaways&rdquo;).
+              </p>
+            </div>
+
+            <div className="space-y-2.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Takeaway Items ({takeaways.length})
+              </label>
+              {takeaways.length === 0 ? (
+                <p className="text-xs text-slate-400 italic">No key takeaways added yet.</p>
+              ) : (
+                takeaways.map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-2">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500">
+                      {idx + 1}
+                    </span>
+                    <input
+                      type="text"
+                      value={item}
+                      onChange={(e) => handleUpdateTakeaway(idx, e.target.value)}
+                      placeholder="e.g. Industry-ready curriculum co-designed with top healthcare / tech firms..."
+                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-slate-400"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveTakeaway(idx)}
+                      className="p-1.5 text-slate-400 hover:text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
 
@@ -406,7 +352,7 @@ export function AcademicOverviewSectionEditor({
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
               <h3 className="font-serif text-lg font-bold text-[#0A1F44]">
-                Curriculum & Key Subjects
+                {subjectsTitle.trim() || "Curriculum & Key Subjects"}
               </h3>
               <p className="mt-0.5 text-xs text-slate-500">
                 Foundational and advanced subjects covered throughout the degree.
@@ -425,36 +371,85 @@ export function AcademicOverviewSectionEditor({
           <div className="mt-4 space-y-4">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Curriculum Section Heading
+                Section Heading / Display Name (Displayed on Website)
               </label>
               <input
                 type="text"
                 value={subjectsTitle}
                 onChange={(e) => setSubjectsTitle(e.target.value)}
-                placeholder="Core Curriculum & Specialized Electives"
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-slate-400"
+                placeholder="e.g. Curriculum & Key Subjects, Core Subjects Covered, Course Structure"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2 text-sm outline-none focus:border-slate-400"
               />
+              <p className="mt-1 text-xs text-slate-400">
+                Customize the title of this curriculum section (default: &ldquo;Curriculum & Key Subjects&rdquo;).
+              </p>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-2">
-              {subjects.map((sub, idx) => (
-                <div key={idx} className="flex items-center gap-2 rounded-lg border border-slate-100 bg-slate-50/50 p-2">
-                  <input
-                    type="text"
-                    value={sub}
-                    onChange={(e) => handleUpdateSubject(idx, e.target.value)}
-                    placeholder="e.g. Data Structures & Algorithms"
-                    className="w-full rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-sm outline-none focus:border-slate-400"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveSubject(idx)}
-                    className="p-1 text-slate-400 hover:text-red-600"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
+            {/* Optional intro paragraphs for curriculum */}
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                  Curriculum Intro Paragraphs ({subjectsParagraphs.length})
+                </label>
+                <button
+                  type="button"
+                  onClick={handleAddSubParagraph}
+                  className="inline-flex items-center gap-1 text-xs font-bold text-[#E8871A] hover:underline"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  Add Intro Paragraph
+                </button>
+              </div>
+
+              <div className="mt-2 space-y-2">
+                {subjectsParagraphs.map((sp, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={sp}
+                      onChange={(e) => handleUpdateSubParagraph(idx, e.target.value)}
+                      placeholder={`Curriculum overview text ${idx + 1}...`}
+                      className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-sm outline-none focus:border-slate-400"
+                    />
+                    {subjectsParagraphs.length > 1 ? (
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSubParagraph(idx)}
+                        className="p-1.5 text-slate-400 hover:text-red-600"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Subjects list */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                Subjects / Module List ({subjects.length})
+              </label>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {subjects.map((sub, idx) => (
+                  <div key={idx} className="flex items-center gap-2 rounded-lg border border-slate-100 bg-slate-50/50 p-2">
+                    <input
+                      type="text"
+                      value={sub}
+                      onChange={(e) => handleUpdateSubject(idx, e.target.value)}
+                      placeholder="e.g. Data Structures & Algorithms, Pharmacology"
+                      className="w-full rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-sm outline-none focus:border-slate-400"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveSubject(idx)}
+                      className="p-1 text-slate-400 hover:text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -464,7 +459,7 @@ export function AcademicOverviewSectionEditor({
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
               <h3 className="font-serif text-lg font-bold text-[#0A1F44]">
-                Program Learning Outcomes
+                {learningOutcomesTitle.trim() || "Program Learning Outcomes"}
               </h3>
               <p className="mt-0.5 text-xs text-slate-500">
                 Skills, competencies, and demonstrable knowledge graduates will acquire.
@@ -480,32 +475,103 @@ export function AcademicOverviewSectionEditor({
             </button>
           </div>
 
-          <div className="mt-4 space-y-2.5">
-            {learningOutcomes.length === 0 ? (
-              <p className="text-xs text-slate-400 italic">No learning outcomes added yet.</p>
-            ) : (
-              learningOutcomes.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-xs font-bold text-emerald-700">
-                    ✓
-                  </span>
-                  <input
-                    type="text"
-                    value={item}
-                    onChange={(e) => handleUpdateOutcome(idx, e.target.value)}
-                    placeholder="e.g. Demonstrate analytical problem-solving and software design..."
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-slate-400"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveOutcome(idx)}
-                    className="p-1.5 text-slate-400 hover:text-red-600"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              ))
-            )}
+          <div className="mt-4 space-y-4">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Section Heading / Display Name (Displayed on Website)
+              </label>
+              <input
+                type="text"
+                value={learningOutcomesTitle}
+                onChange={(e) => setLearningOutcomesTitle(e.target.value)}
+                placeholder="e.g. Program Learning Outcomes, Clinical Learning Outcomes"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2 text-sm outline-none focus:border-slate-400"
+              />
+              <p className="mt-1 text-xs text-slate-400">
+                Customize the title of this learning outcomes section (default: &ldquo;Program Learning Outcomes&rdquo;).
+              </p>
+            </div>
+
+            <div className="space-y-2.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Learning Outcomes List ({learningOutcomes.length})
+              </label>
+              {learningOutcomes.length === 0 ? (
+                <p className="text-xs text-slate-400 italic">No learning outcomes added yet.</p>
+              ) : (
+                learningOutcomes.map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-2">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-xs font-bold text-emerald-700">
+                      ✓
+                    </span>
+                    <input
+                      type="text"
+                      value={item}
+                      onChange={(e) => handleUpdateOutcome(idx, e.target.value)}
+                      placeholder="e.g. Demonstrate analytical problem-solving and patient care..."
+                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-slate-400"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveOutcome(idx)}
+                      className="p-1.5 text-slate-400 hover:text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Section 5: Interactive Action Labels & Special Cards */}
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="border-b border-slate-100 pb-3">
+            <h3 className="font-serif text-lg font-bold text-[#0A1F44]">
+              Interactive Action Labels & Special Cards
+            </h3>
+            <p className="mt-0.5 text-xs text-slate-500">
+              Customize action button labels and promotional degree design banners for this program.
+            </p>
+          </div>
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Degree Design Card Heading
+              </label>
+              <input
+                type="text"
+                value={degreeDesignTitle}
+                onChange={(e) => setDegreeDesignTitle(e.target.value)}
+                placeholder="DESIGN YOUR OWN DEGREE WITH GU"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2 text-sm outline-none focus:border-slate-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Expand Button Label (Collapsed)
+              </label>
+              <input
+                type="text"
+                value={readMoreText}
+                onChange={(e) => setReadMoreText(e.target.value)}
+                placeholder="Read More"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2 text-sm outline-none focus:border-slate-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Collapse Button Label (Expanded)
+              </label>
+              <input
+                type="text"
+                value={readLessText}
+                onChange={(e) => setReadLessText(e.target.value)}
+                placeholder="Read Less"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2 text-sm outline-none focus:border-slate-400"
+              />
+            </div>
           </div>
         </div>
 
