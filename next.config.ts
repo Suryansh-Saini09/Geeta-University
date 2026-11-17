@@ -33,6 +33,7 @@ const nextConfig: NextConfig = {
   generateBuildId: deploymentId ? async () => deploymentId : undefined,
   serverExternalPackages: ["@prisma/adapter-mariadb", "mariadb", "sharp"],
   experimental: {
+    agentUpgrade: "security",
     serverActions: {
       bodySizeLimit: "30mb",
     },
