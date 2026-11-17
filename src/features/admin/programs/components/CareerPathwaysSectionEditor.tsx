@@ -21,6 +21,8 @@ interface CareerPathwaysSectionEditorProps {
     privateRoles?: CareerRole[];
     recruitersTitle?: string;
     recruiters?: { name: string; logo?: string }[];
+    whoShouldPursue?: { title?: string; description: string };
+    conclusion?: string;
   };
   mediaAssets?: MediaAssetItem[];
   saved?: boolean;
@@ -54,6 +56,11 @@ export function CareerPathwaysSectionEditor({
   // Recruiters
   const [recruitersTitle, setRecruitersTitle] = useState(careerData.recruitersTitle || "Top Industry Recruiters");
   const [recruiters, setRecruiters] = useState<{ name: string; logo?: string }[]>(careerData.recruiters || []);
+
+  // Who Should Pursue & Conclusion
+  const [whoShouldPursueTitle, setWhoShouldPursueTitle] = useState(careerData.whoShouldPursue?.title || "Who Should Pursue?");
+  const [whoShouldPursueDescription, setWhoShouldPursueDescription] = useState(careerData.whoShouldPursue?.description || "");
+  const [conclusion, setConclusion] = useState(careerData.conclusion || "");
 
   // Recruiter logo picker state
   const [activeRecruiterIdx, setActiveRecruiterIdx] = useState<number | null>(null);
@@ -123,6 +130,9 @@ export function CareerPathwaysSectionEditor({
     privateRoles: privateRoles.filter((p) => p.title.trim().length > 0),
     recruitersTitle,
     recruiters: recruiters.filter((r) => r.name.trim().length > 0),
+    whoShouldPursueTitle,
+    whoShouldPursueDescription,
+    conclusion,
   };
 
   return (
@@ -431,6 +441,57 @@ export function CareerPathwaysSectionEditor({
                 ) : null}
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Section 4: Who Should Pursue & Concluding Observations */}
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+          <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
+            Who Should Pursue & Concluding Summary
+          </h3>
+          <p className="text-sm text-slate-500">
+            Define target applicant persona and concluding career outcome summary.
+          </p>
+
+          <div className="space-y-4 pt-2">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Who Should Pursue Heading
+              </label>
+              <input
+                type="text"
+                value={whoShouldPursueTitle}
+                onChange={(e) => setWhoShouldPursueTitle(e.target.value)}
+                placeholder="Who Should Pursue?"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2 text-sm outline-none focus:border-slate-400"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Who Should Pursue Description
+              </label>
+              <textarea
+                rows={3}
+                value={whoShouldPursueDescription}
+                onChange={(e) => setWhoShouldPursueDescription(e.target.value)}
+                placeholder="Describe candidate traits, aspirations, and interests suitable for this program..."
+                className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2 text-sm outline-none focus:border-slate-400"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Concluding Career Note
+              </label>
+              <textarea
+                rows={2}
+                value={conclusion}
+                onChange={(e) => setConclusion(e.target.value)}
+                placeholder="Concluding placement note or career outlook summary..."
+                className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2 text-sm outline-none focus:border-slate-400"
+              />
+            </div>
           </div>
         </div>
 

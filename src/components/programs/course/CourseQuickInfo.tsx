@@ -8,6 +8,10 @@ interface CourseQuickInfoProps {
 }
 
 export default function CourseQuickInfo({ quickInfo }: CourseQuickInfoProps) {
+  const programLabel = quickInfo.programLabel?.trim() || "Program";
+  const durationLabel = quickInfo.durationLabel?.trim() || "Duration";
+  const eligibilityLabel = quickInfo.eligibilityLabel?.trim() || "Eligibility";
+
   return (
     <section className="w-full bg-[#FFFFFF] border-b border-slate-200/80 py-7 md:py-8 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,7 +23,7 @@ export default function CourseQuickInfo({ quickInfo }: CourseQuickInfoProps) {
             </div>
             <div>
               <span className="block text-xs uppercase tracking-widest text-[#E8871A] font-extrabold mb-1">
-                Program
+                {programLabel}
               </span>
               <h2 className="text-lg md:text-xl font-bold text-[#0A1F44] leading-snug">
                 {quickInfo.program}
@@ -34,7 +38,7 @@ export default function CourseQuickInfo({ quickInfo }: CourseQuickInfoProps) {
             </div>
             <div>
               <span className="block text-xs uppercase tracking-widest text-[#E8871A] font-extrabold mb-1">
-                Duration
+                {durationLabel}
               </span>
               <p className="text-lg md:text-xl font-bold text-[#0A1F44]">
                 {quickInfo.duration}
@@ -49,7 +53,7 @@ export default function CourseQuickInfo({ quickInfo }: CourseQuickInfoProps) {
             </div>
             <div>
               <span className="block text-xs uppercase tracking-widest text-[#E8871A] font-extrabold mb-1">
-                Eligibility
+                {eligibilityLabel}
               </span>
               <p className="text-xs sm:text-sm text-[#4A5568] leading-relaxed font-medium">
                 {quickInfo.eligibility}

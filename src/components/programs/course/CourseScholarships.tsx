@@ -86,7 +86,7 @@ export default function CourseScholarships({ scholarships }: CourseScholarshipsP
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 rounded-full bg-[#F28C18] px-7 py-3 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#e47f0d] hover:shadow-xl"
               >
-                <span>Know More</span>
+                <span>{scholarships?.scholarships?.linkText || "Know More"}</span>
                 <svg
                   viewBox="0 0 20 20"
                   fill="none"
@@ -139,7 +139,7 @@ export default function CourseScholarships({ scholarships }: CourseScholarshipsP
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 rounded-full border-2 border-[#06355F] px-7 py-3 text-sm font-bold text-[#06355F] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#06355F] hover:text-white shadow-sm"
               >
-                <span>Apply Now</span>
+                <span>{scholarships?.guts?.linkText || "Apply Now"}</span>
                 <svg
                   viewBox="0 0 20 20"
                   fill="none"

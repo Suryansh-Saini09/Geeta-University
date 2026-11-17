@@ -8,8 +8,10 @@ import { CourseFAQItem } from "@/data/programs/courses/types";
 
 interface FaqSectionEditorProps {
   programId: string;
-  programName: string;
+  programName?: string;
   faqsData?: CourseFAQItem[];
+  title?: string;
+  subtitle?: string;
   saved?: boolean;
   error?: string;
 }
@@ -18,9 +20,15 @@ export function FaqSectionEditor({
   programId,
   programName,
   faqsData = [],
+  title: initialTitle = "",
+  subtitle: initialSubtitle = "",
   saved,
   error,
 }: FaqSectionEditorProps) {
+  const [title, setTitle] = useState(initialTitle || "Frequently Asked Questions");
+  const [subtitle, setSubtitle] = useState(
+    initialSubtitle || "Find answers to common questions about eligibility, courses, placements, and campus facilities."
+  );
   const [faqs, setFaqs] = useState<CourseFAQItem[]>(
     faqsData.length > 0
       ? faqsData
@@ -60,6 +68,8 @@ export function FaqSectionEditor({
   };
 
   const payload = {
+    title,
+    subtitle,
     faqs: faqs.filter((f) => f.question.trim().length > 0 && f.answer.trim().length > 0),
   };
 
@@ -83,6 +93,44 @@ export function FaqSectionEditor({
         <input type="hidden" name="id" value={programId} />
         <input type="hidden" name="section" value="faqs" />
         <input type="hidden" name="payload" value={JSON.stringify(payload)} />
+
+        {/* Custom Headings Configuration */}
+        <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-6 shadow-sm space-y-4">
+          <div>
+            <h3 className="font-serif text-lg font-bold text-amber-900">
+              FAQs Section Headings (Customizable)
+            </h3>
+            <p className="mt-0.5 text-xs text-amber-700">
+              Customize the section title and descriptive subtitle for FAQs on this program page.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Section Heading
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Frequently Asked Questions"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Section Subtitle
+              </label>
+              <input
+                type="text"
+                value={subtitle}
+                onChange={(e) => setSubtitle(e.target.value)}
+                placeholder="Find answers to common questions about eligibility, courses, placements, and campus facilities."
+                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
+              />
+            </div>
+          </div>
+        </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-4">

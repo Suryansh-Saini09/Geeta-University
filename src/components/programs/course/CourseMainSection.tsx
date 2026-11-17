@@ -24,6 +24,13 @@ interface CourseMainSectionProps {
   subjectsTitle?: string;
   subjectsParagraphs?: string[];
   learningOutcomes?: string[];
+  learningOutcomesTitle?: string;
+  readMoreText?: string;
+  readLessText?: string;
+  degreeDesignTitle?: string;
+  admissionEligibilityLabel?: string;
+  enquiryTitle?: string;
+  enquiryButtonText?: string;
   admission?: CourseAdmissionProcess;
   programName?: string;
   discipline?: string;
@@ -60,6 +67,13 @@ export default function CourseMainSection({
   subjectsTitle,
   subjectsParagraphs = [],
   learningOutcomes = [],
+  learningOutcomesTitle,
+  readMoreText,
+  readLessText,
+  degreeDesignTitle,
+  admissionEligibilityLabel,
+  enquiryTitle,
+  enquiryButtonText,
   admission,
   programName,
   discipline,
@@ -412,7 +426,7 @@ export default function CourseMainSection({
                       margin: 0,
                     }}
                   >
-                    Program Learning Outcomes
+                    {learningOutcomesTitle || "Program Learning Outcomes"}
                   </h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -515,7 +529,7 @@ export default function CourseMainSection({
                       <div className="p-3.5 rounded-lg bg-amber-50 border border-amber-200 text-[#0A1F44] text-[13.5px] sm:text-[14px] font-medium leading-relaxed">
                         {!admission.eligibility.toLowerCase().startsWith("eligibility") && (
                           <span className="font-bold text-[#E8871A] mr-1.5">
-                            Eligibility:
+                            {admission.eligibilityLabel || admissionEligibilityLabel || "Eligibility:"}
                           </span>
                         )}
                         <span>{renderBulletText(admission.eligibility)}</span>
@@ -859,7 +873,7 @@ export default function CourseMainSection({
                   onClick={() => setIsExpanded((prev) => !prev)}
                   className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-300 bg-white hover:bg-slate-50 text-[#0A1F44] font-bold text-xs sm:text-[13.5px] shadow-sm hover:border-[#E8871A] hover:text-[#E8871A] transition-all duration-200 cursor-pointer active:scale-95"
                 >
-                  <span>{isExpanded ? "Read Less" : "Read More"}</span>
+                  <span>{isExpanded ? (readLessText || "Read Less") : (readMoreText || "Read More")}</span>
                   <span className="text-[13px] font-bold">
                     {isExpanded ? "↑" : "↓"}
                   </span>
@@ -873,6 +887,8 @@ export default function CourseMainSection({
             <AdmissionFormWrapper
               initialDiscipline={discipline || "School of Humanities and Social Science"}
               initialCourse={programName || title}
+              title={admission?.enquiryTitle || enquiryTitle}
+              buttonText={admission?.enquiryButtonText || enquiryButtonText}
             />
 
             {/* Design Your Own Degree with GU - Below Inquiry Form */}
@@ -898,7 +914,7 @@ export default function CourseMainSection({
                   marginBottom: 16,
                 }}
               >
-                DESIGN YOUR OWN DEGREE WITH GU
+                {degreeDesignTitle || "DESIGN YOUR OWN DEGREE WITH GU"}
               </h3>
 
               <div className="relative w-full rounded-xl overflow-hidden bg-[#F8FAFC] border border-slate-100 p-3 sm:p-4 flex items-center justify-center">

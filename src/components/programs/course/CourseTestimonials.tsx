@@ -7,10 +7,14 @@ import type { CourseTestimonial } from "@/data/programs/courses/types";
 
 interface CourseTestimonialsProps {
   testimonials: CourseTestimonial[];
+  title?: string;
+  subtitle?: string;
 }
 
 export default function CourseTestimonials({
   testimonials,
+  title = "Student Testimonial",
+  subtitle,
 }: CourseTestimonialsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const testimonialItems = testimonials && testimonials.length > 0 ? testimonials : [];
@@ -47,8 +51,13 @@ export default function CourseTestimonials({
               letterSpacing: "-0.5px",
             }}
           >
-            Student Testimonial
+            {title || "Student Testimonial"}
           </h2>
+          {subtitle && (
+            <p className="mt-2 text-sm sm:text-base text-slate-500 max-w-2xl mx-auto">
+              {subtitle}
+            </p>
+          )}
         </div>
 
         {/* Carousel Container with Left/Right Arrows */}

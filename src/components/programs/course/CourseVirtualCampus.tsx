@@ -32,7 +32,19 @@ const itemVariants: Variants = {
   },
 };
 
-export default function VirtualCampusTourSection() {
+interface VirtualCampusTourSectionProps {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  videoUrl?: string;
+}
+
+export default function VirtualCampusTourSection({
+  eyebrow = "Explore Geeta University",
+  title = "Experience the Campus.",
+  description = "Step inside a future-ready campus built around learning, innovation, collaboration and student life.",
+  videoUrl,
+}: VirtualCampusTourSectionProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -101,7 +113,7 @@ export default function VirtualCampusTourSection() {
                     color: "var(--gu-gold)",
                   }}
                 >
-                  Explore Geeta University
+                  {eyebrow || "Explore Geeta University"}
                 </motion.p>
 
                 <motion.h2
@@ -109,23 +121,14 @@ export default function VirtualCampusTourSection() {
                   id="virtual-tour-heading"
                   className="mt-4 font-serif text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-7xl"
                 >
-                  Experience the
-                  <span
-                    className="block"
-                    style={{
-                      color: "var(--gu-gold)",
-                    }}
-                  >
-                    Campus.
-                  </span>
+                  {title || "Experience the Campus."}
                 </motion.h2>
 
                 <motion.p
                   variants={itemVariants}
                   className="mt-6 max-w-xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8"
                 >
-                  Step inside a future-ready campus built around learning,
-                  innovation, collaboration and student life.
+                  {description || "Step inside a future-ready campus built around learning, innovation, collaboration and student life."}
                 </motion.p>
 
                 {/* Play button */}

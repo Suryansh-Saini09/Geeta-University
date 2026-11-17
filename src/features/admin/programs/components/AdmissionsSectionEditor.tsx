@@ -9,9 +9,14 @@ interface AdmissionsSectionEditorProps {
   programId: string;
   programName: string;
   admissionData?: {
+    title?: string;
     eligibility?: string;
+    eligibilityLabel?: string;
     whyChooseHeading?: string;
     whyChooseParagraphs?: string[];
+    whyPreferTitle?: string;
+    enquiryTitle?: string;
+    enquiryButtonText?: string;
     applicationUrl?: string;
     process?: string[];
   };
@@ -26,8 +31,13 @@ export function AdmissionsSectionEditor({
   saved,
   error,
 }: AdmissionsSectionEditorProps) {
+  const [title, setTitle] = useState(admissionData.title || "Admission Process");
   const [eligibility, setEligibility] = useState(admissionData.eligibility || "");
+  const [eligibilityLabel, setEligibilityLabel] = useState(admissionData.eligibilityLabel || "Eligibility:");
   const [whyChooseHeading, setWhyChooseHeading] = useState(admissionData.whyChooseHeading || `Why Study ${programName} at Geeta?`);
+  const [whyPreferTitle, setWhyPreferTitle] = useState(admissionData.whyPreferTitle || "");
+  const [enquiryTitle, setEnquiryTitle] = useState(admissionData.enquiryTitle || "Enquire Now");
+  const [enquiryButtonText, setEnquiryButtonText] = useState(admissionData.enquiryButtonText || "Enquire Now");
   const [whyChooseParagraphs, setWhyChooseParagraphs] = useState<string[]>(
     admissionData.whyChooseParagraphs && admissionData.whyChooseParagraphs.length > 0
       ? admissionData.whyChooseParagraphs
@@ -66,9 +76,14 @@ export function AdmissionsSectionEditor({
   };
 
   const payload = {
+    title,
     eligibility,
+    eligibilityLabel,
     whyChooseHeading,
     whyChooseParagraphs: whyChooseParagraphs.filter((p) => p.trim().length > 0),
+    whyPreferTitle,
+    enquiryTitle,
+    enquiryButtonText,
     applicationUrl,
     process: process.filter((s) => s.trim().length > 0),
   };
@@ -93,6 +108,80 @@ export function AdmissionsSectionEditor({
         <input type="hidden" name="id" value={programId} />
         <input type="hidden" name="section" value="admissions" />
         <input type="hidden" name="payload" value={JSON.stringify(payload)} />
+
+        {/* Custom Headings & Labels Configuration */}
+        <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-6 shadow-sm space-y-4">
+          <div>
+            <h3 className="font-serif text-lg font-bold text-amber-900">
+              Admissions Headings & Form Labels (Customizable)
+            </h3>
+            <p className="mt-0.5 text-xs text-amber-700">
+              Customize how admissions headers, eligibility tags, and the sticky enquiry card appear on this program page.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Admissions Section Title
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Admission Process"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Eligibility Prefix Tag / Label
+              </label>
+              <input
+                type="text"
+                value={eligibilityLabel}
+                onChange={(e) => setEligibilityLabel(e.target.value)}
+                placeholder="Eligibility:"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Enquiry Card Title (Right Column Form)
+              </label>
+              <input
+                type="text"
+                value={enquiryTitle}
+                onChange={(e) => setEnquiryTitle(e.target.value)}
+                placeholder="Enquire Now"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Enquiry Card Button Label
+              </label>
+              <input
+                type="text"
+                value={enquiryButtonText}
+                onChange={(e) => setEnquiryButtonText(e.target.value)}
+                placeholder="Enquire Now"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Why Prefer Title (Optional Sub-heading)
+              </label>
+              <input
+                type="text"
+                value={whyPreferTitle}
+                onChange={(e) => setWhyPreferTitle(e.target.value)}
+                placeholder="e.g. Why Prefer Geeta University?"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
+              />
+            </div>
+          </div>
+        </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
           <h3 className="font-serif text-xl font-bold text-[#0A1F44]">

@@ -28,6 +28,7 @@ import {
   programFaqSectionSchema,
   programCtaSectionSchema,
   programSeoSectionSchema,
+  programCustomLabelsSchema,
 } from "@/validations/programSection";
 
 export async function createProgramAction(formData: FormData) {
@@ -317,6 +318,10 @@ export async function updateProgramSectionAction(formData: FormData) {
         ...(updatedOverview.quickInfo || {}),
         ...parsed.data,
       };
+      if (!updatedOverview.customLabels) updatedOverview.customLabels = {};
+      if (parsed.data.programLabel !== undefined) updatedOverview.customLabels.programLabel = parsed.data.programLabel;
+      if (parsed.data.durationLabel !== undefined) updatedOverview.customLabels.durationLabel = parsed.data.durationLabel;
+      if (parsed.data.eligibilityLabel !== undefined) updatedOverview.customLabels.eligibilityLabel = parsed.data.eligibilityLabel;
       if (parsed.data.duration) durationToSync = parsed.data.duration;
       if (parsed.data.level) levelToSync = parsed.data.level;
       if (parsed.data.eligibility) eligibilityToSync = parsed.data.eligibility;
@@ -335,10 +340,15 @@ export async function updateProgramSectionAction(formData: FormData) {
         image: parsed.data.image || updatedOverview.overview?.image,
       };
       if (parsed.data.takeaways) updatedOverview.takeaways = parsed.data.takeaways;
+      if (parsed.data.takeawaysTitle !== undefined) updatedOverview.takeawaysTitle = parsed.data.takeawaysTitle;
       if (parsed.data.subjects) updatedOverview.subjects = parsed.data.subjects;
       if (parsed.data.subjectsTitle !== undefined) updatedOverview.subjectsTitle = parsed.data.subjectsTitle;
       if (parsed.data.subjectsParagraphs !== undefined) updatedOverview.subjectsParagraphs = parsed.data.subjectsParagraphs;
       if (parsed.data.learningOutcomes) updatedOverview.learningOutcomes = parsed.data.learningOutcomes;
+      if (parsed.data.learningOutcomesTitle !== undefined) updatedOverview.learningOutcomesTitle = parsed.data.learningOutcomesTitle;
+      if (parsed.data.readMoreText !== undefined) updatedOverview.readMoreText = parsed.data.readMoreText;
+      if (parsed.data.readLessText !== undefined) updatedOverview.readLessText = parsed.data.readLessText;
+      if (parsed.data.degreeDesignTitle !== undefined) updatedOverview.degreeDesignTitle = parsed.data.degreeDesignTitle;
       break;
     }
 
@@ -351,8 +361,13 @@ export async function updateProgramSectionAction(formData: FormData) {
       updatedOverview.admission = {
         ...(updatedOverview.admission || {}),
         eligibility: parsed.data.eligibility || updatedOverview.admission?.eligibility || "",
+        title: parsed.data.title,
+        eligibilityLabel: parsed.data.eligibilityLabel,
         whyChooseHeading: parsed.data.whyChooseHeading,
         whyChooseParagraphs: parsed.data.whyChooseParagraphs,
+        whyPreferTitle: parsed.data.whyPreferTitle,
+        enquiryTitle: parsed.data.enquiryTitle,
+        enquiryButtonText: parsed.data.enquiryButtonText,
         applicationUrl: parsed.data.applicationUrl,
         process: parsed.data.process,
       };
@@ -391,6 +406,13 @@ export async function updateProgramSectionAction(formData: FormData) {
         privateRoles: parsed.data.privateRoles,
         recruitersTitle: parsed.data.recruitersTitle,
         recruiters: parsed.data.recruiters,
+        whoShouldPursue: (parsed.data.whoShouldPursueTitle || parsed.data.whoShouldPursueDescription)
+          ? {
+              title: parsed.data.whoShouldPursueTitle || "Who Should Pursue?",
+              description: parsed.data.whoShouldPursueDescription || "",
+            }
+          : updatedOverview.career?.whoShouldPursue,
+        conclusion: parsed.data.conclusion !== undefined ? parsed.data.conclusion : updatedOverview.career?.conclusion,
       };
       break;
     }
@@ -442,6 +464,14 @@ export async function updateProgramSectionAction(formData: FormData) {
         redirect(`/admin/programs/${id}/edit?section=${section}&error=${encodeURIComponent(msg)}`);
       }
       updatedOverview.faculty = parsed.data.faculty || [];
+      if (parsed.data.title !== undefined) {
+        updatedOverview.facultyTitle = parsed.data.title;
+        updatedOverview.mentorsTitle = parsed.data.title;
+      }
+      if (parsed.data.subtitle !== undefined) {
+        updatedOverview.facultySubtitle = parsed.data.subtitle;
+        updatedOverview.mentorsSubtitle = parsed.data.subtitle;
+      }
       break;
     }
 
@@ -452,6 +482,12 @@ export async function updateProgramSectionAction(formData: FormData) {
         redirect(`/admin/programs/${id}/edit?section=${section}&error=${encodeURIComponent(msg)}`);
       }
       updatedOverview.testimonials = parsed.data.testimonials || [];
+      if (parsed.data.title !== undefined) {
+        updatedOverview.testimonialsTitle = parsed.data.title;
+      }
+      if (parsed.data.subtitle !== undefined) {
+        updatedOverview.testimonialsSubtitle = parsed.data.subtitle;
+      }
       break;
     }
 
@@ -462,6 +498,12 @@ export async function updateProgramSectionAction(formData: FormData) {
         redirect(`/admin/programs/${id}/edit?section=${section}&error=${encodeURIComponent(msg)}`);
       }
       updatedOverview.faqs = parsed.data.faqs || [];
+      if (parsed.data.title !== undefined) {
+        updatedOverview.faqsTitle = parsed.data.title;
+      }
+      if (parsed.data.subtitle !== undefined) {
+        updatedOverview.faqsSubtitle = parsed.data.subtitle;
+      }
       break;
     }
 
@@ -478,7 +520,52 @@ export async function updateProgramSectionAction(formData: FormData) {
         applyUrl: parsed.data.applyUrl || "/admissions",
         brochureUrl: parsed.data.brochureUrl,
         helpline: parsed.data.helpline,
+        applyText: parsed.data.applyText,
+        contactText: parsed.data.contactText,
+        contactUrl: parsed.data.contactUrl,
       };
+      break;
+    }
+
+    case "customLabels": {
+      const parsed = programCustomLabelsSchema.safeParse(sectionPayload);
+      if (!parsed.success) {
+        const msg = parsed.error.issues[0]?.message ?? "Invalid custom labels";
+        redirect(`/admin/programs/${id}/edit?section=${section}&error=${encodeURIComponent(msg)}`);
+      }
+      updatedOverview.customLabels = {
+        ...(updatedOverview.customLabels || {}),
+        ...parsed.data,
+      };
+      if (parsed.data.overviewTitle !== undefined) {
+        if (!updatedOverview.overview) updatedOverview.overview = {};
+        updatedOverview.overview.title = parsed.data.overviewTitle;
+      }
+      if (parsed.data.takeawaysTitle !== undefined) updatedOverview.takeawaysTitle = parsed.data.takeawaysTitle;
+      if (parsed.data.subjectsTitle !== undefined) updatedOverview.subjectsTitle = parsed.data.subjectsTitle;
+      if (parsed.data.learningOutcomesTitle !== undefined) updatedOverview.learningOutcomesTitle = parsed.data.learningOutcomesTitle;
+      if (parsed.data.readMoreText !== undefined) updatedOverview.readMoreText = parsed.data.readMoreText;
+      if (parsed.data.readLessText !== undefined) updatedOverview.readLessText = parsed.data.readLessText;
+      if (parsed.data.degreeDesignTitle !== undefined) updatedOverview.degreeDesignTitle = parsed.data.degreeDesignTitle;
+      if (parsed.data.admissionTitle !== undefined) {
+        if (!updatedOverview.admission) updatedOverview.admission = {};
+        updatedOverview.admission.title = parsed.data.admissionTitle;
+      }
+      if (parsed.data.admissionEligibilityLabel !== undefined) {
+        if (!updatedOverview.admission) updatedOverview.admission = {};
+        updatedOverview.admission.eligibilityLabel = parsed.data.admissionEligibilityLabel;
+      }
+      if (parsed.data.facultyTitle !== undefined) {
+        updatedOverview.facultyTitle = parsed.data.facultyTitle;
+        updatedOverview.mentorsTitle = parsed.data.facultyTitle;
+      }
+      if (parsed.data.facultySubtitle !== undefined) {
+        updatedOverview.facultySubtitle = parsed.data.facultySubtitle;
+        updatedOverview.mentorsSubtitle = parsed.data.facultySubtitle;
+      }
+      if (parsed.data.testimonialsTitle !== undefined) updatedOverview.testimonialsTitle = parsed.data.testimonialsTitle;
+      if (parsed.data.faqsTitle !== undefined) updatedOverview.faqsTitle = parsed.data.faqsTitle;
+      if (parsed.data.faqsSubtitle !== undefined) updatedOverview.faqsSubtitle = parsed.data.faqsSubtitle;
       break;
     }
 

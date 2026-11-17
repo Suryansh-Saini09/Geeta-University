@@ -10,8 +10,10 @@ import { FacultyMember } from "@/data/programs/courses/types";
 
 interface FacultyMentorsSectionEditorProps {
   programId: string;
-  programName: string;
+  programName?: string;
   facultyData?: FacultyMember[];
+  title?: string;
+  subtitle?: string;
   mediaAssets?: MediaAssetItem[];
   saved?: boolean;
   error?: string;
@@ -20,10 +22,14 @@ interface FacultyMentorsSectionEditorProps {
 export function FacultyMentorsSectionEditor({
   programId,
   facultyData = [],
+  title: initialTitle = "",
+  subtitle: initialSubtitle = "",
   mediaAssets = [],
   saved,
   error,
 }: FacultyMentorsSectionEditorProps) {
+  const [title, setTitle] = useState(initialTitle || "Meet Our Mentors");
+  const [subtitle, setSubtitle] = useState(initialSubtitle || "Guiding Futures with Expertise, Experience & Empathy");
   const [faculty, setFaculty] = useState<FacultyMember[]>(
     facultyData.length > 0
       ? facultyData
@@ -84,6 +90,8 @@ export function FacultyMentorsSectionEditor({
   };
 
   const payload = {
+    title,
+    subtitle,
     faculty: faculty.filter((f) => f.name.trim().length > 0),
   };
 
@@ -107,6 +115,44 @@ export function FacultyMentorsSectionEditor({
         <input type="hidden" name="id" value={programId} />
         <input type="hidden" name="section" value="faculty" />
         <input type="hidden" name="payload" value={JSON.stringify(payload)} />
+
+        {/* Custom Headings Configuration */}
+        <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-6 shadow-sm space-y-4">
+          <div>
+            <h3 className="font-serif text-lg font-bold text-amber-900">
+              Section Headings (Customizable)
+            </h3>
+            <p className="mt-0.5 text-xs text-amber-700">
+              Customize the heading and subtitle text for the Mentors section on this program page.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Section Heading
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Meet Our Mentors"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Section Subtitle
+              </label>
+              <input
+                type="text"
+                value={subtitle}
+                onChange={(e) => setSubtitle(e.target.value)}
+                placeholder="Guiding Futures with Expertise, Experience & Empathy"
+                className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm outline-none focus:border-amber-400"
+              />
+            </div>
+          </div>
+        </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-4">
