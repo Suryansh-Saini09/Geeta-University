@@ -339,36 +339,16 @@ export async function updateProgramSectionAction(formData: FormData) {
         paragraphs: parsed.data.paragraphs || updatedOverview.overview?.paragraphs || [],
         image: parsed.data.image || updatedOverview.overview?.image,
       };
-      if (!updatedOverview.customLabels) updatedOverview.customLabels = {};
-      if (parsed.data.title !== undefined) updatedOverview.customLabels.overviewTitle = parsed.data.title;
       if (parsed.data.takeaways) updatedOverview.takeaways = parsed.data.takeaways;
-      if (parsed.data.takeawaysTitle !== undefined) {
-        updatedOverview.takeawaysTitle = parsed.data.takeawaysTitle;
-        updatedOverview.customLabels.takeawaysTitle = parsed.data.takeawaysTitle;
-      }
+      if (parsed.data.takeawaysTitle !== undefined) updatedOverview.takeawaysTitle = parsed.data.takeawaysTitle;
       if (parsed.data.subjects) updatedOverview.subjects = parsed.data.subjects;
-      if (parsed.data.subjectsTitle !== undefined) {
-        updatedOverview.subjectsTitle = parsed.data.subjectsTitle;
-        updatedOverview.customLabels.subjectsTitle = parsed.data.subjectsTitle;
-      }
+      if (parsed.data.subjectsTitle !== undefined) updatedOverview.subjectsTitle = parsed.data.subjectsTitle;
       if (parsed.data.subjectsParagraphs !== undefined) updatedOverview.subjectsParagraphs = parsed.data.subjectsParagraphs;
       if (parsed.data.learningOutcomes) updatedOverview.learningOutcomes = parsed.data.learningOutcomes;
-      if (parsed.data.learningOutcomesTitle !== undefined) {
-        updatedOverview.learningOutcomesTitle = parsed.data.learningOutcomesTitle;
-        updatedOverview.customLabels.learningOutcomesTitle = parsed.data.learningOutcomesTitle;
-      }
-      if (parsed.data.readMoreText !== undefined) {
-        updatedOverview.readMoreText = parsed.data.readMoreText;
-        updatedOverview.customLabels.readMoreText = parsed.data.readMoreText;
-      }
-      if (parsed.data.readLessText !== undefined) {
-        updatedOverview.readLessText = parsed.data.readLessText;
-        updatedOverview.customLabels.readLessText = parsed.data.readLessText;
-      }
-      if (parsed.data.degreeDesignTitle !== undefined) {
-        updatedOverview.degreeDesignTitle = parsed.data.degreeDesignTitle;
-        updatedOverview.customLabels.degreeDesignTitle = parsed.data.degreeDesignTitle;
-      }
+      if (parsed.data.learningOutcomesTitle !== undefined) updatedOverview.learningOutcomesTitle = parsed.data.learningOutcomesTitle;
+      if (parsed.data.readMoreText !== undefined) updatedOverview.readMoreText = parsed.data.readMoreText;
+      if (parsed.data.readLessText !== undefined) updatedOverview.readLessText = parsed.data.readLessText;
+      if (parsed.data.degreeDesignTitle !== undefined) updatedOverview.degreeDesignTitle = parsed.data.degreeDesignTitle;
       break;
     }
 
