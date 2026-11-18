@@ -3,27 +3,30 @@ import path from "path";
 import { execSync } from "child_process";
 
 function resolveDeploymentId(): string | undefined {
+  let id: string | undefined = undefined;
   if (process.env.NEXT_DEPLOYMENT_ID?.trim()) {
-    return process.env.NEXT_DEPLOYMENT_ID.trim();
-  }
-  if (process.env.DEPLOYMENT_ID?.trim()) {
-    return process.env.DEPLOYMENT_ID.trim();
-  }
-  if (process.env.VERCEL_GIT_COMMIT_SHA?.trim()) {
-    return process.env.VERCEL_GIT_COMMIT_SHA.trim();
-  }
-  try {
-    const gitSha = execSync("git rev-parse HEAD", {
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
-    if (gitSha && gitSha.length >= 7) {
-      return gitSha;
+    id = process.env.NEXT_DEPLOYMENT_ID.trim();
+  } else if (process.env.DEPLOYMENT_ID?.trim()) {
+    id = process.env.DEPLOYMENT_ID.trim();
+  } else if (process.env.VERCEL_GIT_COMMIT_SHA?.trim()) {
+    id = process.env.VERCEL_GIT_COMMIT_SHA.trim();
+  } else {
+    try {
+      const gitSha = execSync("git rev-parse HEAD", {
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
+      }).trim();
+      if (gitSha && gitSha.length >= 7) {
+        id = gitSha;
+      }
+    } catch {
+      // Fallback if git is unavailable in the execution environment
     }
-  } catch {
-    // Fallback if git is unavailable in the execution environment
   }
-  return undefined;
+
+  if (!id) return undefined;
+  // Vercel deploymentId must be 32 characters or less
+  return id.slice(0, 16);
 }
 
 const deploymentId = resolveDeploymentId();
