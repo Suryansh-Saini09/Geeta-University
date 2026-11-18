@@ -40,6 +40,7 @@ export default function CoursePage({ course, school }: CoursePageProps) {
         subjectsTitle={course.subjectsTitle}
         subjectsParagraphs={course.subjectsParagraphs}
         learningOutcomes={course.learningOutcomes}
+        learningOutcomesTitle={course.learningOutcomesTitle}
         admission={course.admission}
         programName={course.hero?.title || course.quickInfo?.program}
         discipline={schoolName}

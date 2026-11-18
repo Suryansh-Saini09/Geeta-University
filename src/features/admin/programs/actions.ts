@@ -335,10 +335,12 @@ export async function updateProgramSectionAction(formData: FormData) {
         image: parsed.data.image || updatedOverview.overview?.image,
       };
       if (parsed.data.takeaways) updatedOverview.takeaways = parsed.data.takeaways;
+      if (parsed.data.takeawaysTitle !== undefined) updatedOverview.takeawaysTitle = parsed.data.takeawaysTitle;
       if (parsed.data.subjects) updatedOverview.subjects = parsed.data.subjects;
       if (parsed.data.subjectsTitle !== undefined) updatedOverview.subjectsTitle = parsed.data.subjectsTitle;
       if (parsed.data.subjectsParagraphs !== undefined) updatedOverview.subjectsParagraphs = parsed.data.subjectsParagraphs;
       if (parsed.data.learningOutcomes) updatedOverview.learningOutcomes = parsed.data.learningOutcomes;
+      if (parsed.data.learningOutcomesTitle !== undefined) updatedOverview.learningOutcomesTitle = parsed.data.learningOutcomesTitle;
       break;
     }
 

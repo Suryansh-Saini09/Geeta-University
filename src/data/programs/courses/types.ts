@@ -342,6 +342,7 @@ export interface CoursePageData {
   subjectsTitle?: string;
   subjectsParagraphs?: string[];
   learningOutcomes?: string[];
+  learningOutcomesTitle?: string;
   admission?: CourseAdmissionProcess;
   career?: CourseCareerPathways;
   whyGeeta?: CourseWhyGeeta;

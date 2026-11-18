@@ -24,6 +24,7 @@ interface CourseMainSectionProps {
   subjectsTitle?: string;
   subjectsParagraphs?: string[];
   learningOutcomes?: string[];
+  learningOutcomesTitle?: string;
   admission?: CourseAdmissionProcess;
   programName?: string;
   discipline?: string;
@@ -60,6 +61,7 @@ export default function CourseMainSection({
   subjectsTitle,
   subjectsParagraphs = [],
   learningOutcomes = [],
+  learningOutcomesTitle,
   admission,
   programName,
   discipline,
@@ -412,7 +414,7 @@ export default function CourseMainSection({
                       margin: 0,
                     }}
                   >
-                    Program Learning Outcomes
+                    {learningOutcomesTitle || "Program Learning Outcomes"}
                   </h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">

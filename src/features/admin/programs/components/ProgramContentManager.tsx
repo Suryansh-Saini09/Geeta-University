@@ -637,10 +637,12 @@ export function ProgramContentManager({
                 programName={program.name}
                 overviewData={overview.overview}
                 takeaways={overview.takeaways}
+                takeawaysTitle={overview.takeawaysTitle}
                 subjects={overview.subjects}
                 subjectsTitle={overview.subjectsTitle}
                 subjectsParagraphs={overview.subjectsParagraphs}
                 learningOutcomes={overview.learningOutcomes}
+                learningOutcomesTitle={overview.learningOutcomesTitle}
                 mediaAssets={mediaAssets}
                 saved={saved}
                 error={error}

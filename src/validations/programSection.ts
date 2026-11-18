@@ -27,10 +27,12 @@ export const programAcademicOverviewSectionSchema = z.object({
   paragraphs: z.array(z.string().trim()).optional(),
   image: z.string().trim().optional(),
   takeaways: z.array(z.string().trim()).optional(),
+  takeawaysTitle: z.string().trim().optional(),
   subjects: z.array(z.string().trim()).optional(),
   subjectsTitle: z.string().trim().optional(),
   subjectsParagraphs: z.array(z.string().trim()).optional(),
   learningOutcomes: z.array(z.string().trim()).optional(),
+  learningOutcomesTitle: z.string().trim().optional(),
 });
 
 export const programAdmissionsSectionSchema = z.object({

@@ -277,10 +277,12 @@ export function transformProgramToCoursePageData(
     quickInfo: { ...defaultQuickInfo, ...(overviewData.quickInfo || {}) },
     overview: overviewData.overview || { title: program.name, paragraphs: [program.eligibility || ""] },
     takeaways: Array.isArray(overviewData.takeaways) ? overviewData.takeaways : [],
+    takeawaysTitle: overviewData.takeawaysTitle || undefined,
     subjects: Array.isArray(overviewData.subjects) ? overviewData.subjects : [],
     subjectsTitle: overviewData.subjectsTitle,
     subjectsParagraphs: overviewData.subjectsParagraphs,
     learningOutcomes: Array.isArray(overviewData.learningOutcomes) ? overviewData.learningOutcomes : [],
+    learningOutcomesTitle: overviewData.learningOutcomesTitle || undefined,
     admission: overviewData.admission || {
       eligibility: program.eligibility || "",
       whyChooseHeading: overviewData.admission?.whyChooseHeading,
