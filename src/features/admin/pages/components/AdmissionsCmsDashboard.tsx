@@ -1486,7 +1486,11 @@ function GenericSectionObjectEditor({
             keyLower.includes("paragraph") ||
             keyLower.includes("intro") ||
             keyLower.includes("text") ||
+            keyLower.includes("content") ||
+            keyLower.includes("note") ||
             keyLower.includes("notice") ||
+            keyLower.includes("guideline") ||
+            keyLower.includes("instruction") ||
             keyLower.includes("quote") ||
             keyLower.includes("bio") ||
             keyLower.includes("eligibility") ||

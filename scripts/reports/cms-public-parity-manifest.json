@@ -1723,7 +1723,7 @@
         "componentName": "FAQSection",
         "importPath": "@/components/programs/FAQSection",
         "exists": true,
-        "callProps": "title={faqsData?.title || \"FAQs – Ph.D. at Geeta University\"}\r\n          subtitle={\r\n            faqsData?.subtitle ||\r\n            \"Clear your doubts about Ph.D. eligibility, entrance examination structure, fellowships, exemptions, and coursework delivery.\"\r\n          }\r\n          faqs={faqsData?.items || phdFaqsData}",
+        "callProps": "title={faqsData?.title || \"FAQs – Ph.D. at Geeta University\"}\r\n          subtitle={\r\n            faqsData?.subtitle ||\r\n            \"\"\r\n          }\r\n          faqs={faqsData?.items || phdFaqsData}",
         "compDataImports": [
           "@/data/programs/types"
         ],

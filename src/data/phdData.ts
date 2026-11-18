@@ -35,39 +35,68 @@ export const phdDisciplines: PhdCourse[] = [
   { name: "Ph.D. in Hotel & Tourism Management", href: "#" },
 ];
 
+export interface PhdDateHighlight {
+  title: string;
+  value: string;
+  dotColor?: string;
+}
+
+export const phdHighlights: PhdDateHighlight[] = [
+  {
+    title: "Application Deadline",
+    value: "22nd January, 2027",
+    dotColor: "#E8871A",
+  },
+  {
+    title: "Ph.D. Entrance Exam (Online)",
+    value: "24th January, 2027 (Sunday)",
+    dotColor: "#0A1F44",
+  },
+  {
+    title: "Interview Round (Online)",
+    value: "Scheduled for candidates qualifying entrance exam",
+    dotColor: "#10B981",
+  },
+  {
+    title: "Fee Submission & Enrollment",
+    value: "Notified individually to selected candidates",
+    dotColor: "#6366F1",
+  },
+];
+
 export const phdImportantDates: ImportantDateRow[] = [
   {
     srNo: 1,
     activityTitle: "Online application for Ph.D Program",
     activitySubtitle: "(Only eligible candidates after the scrutiny will be allowed for the written test)",
-    dates: "25.02.2026 to 28.08.2026",
+    dates: "28.09.2026 to 22.01.2027",
   },
   {
     srNo: 2,
     activityTitle: "Conduct of Written Test (Paper-1 and Paper-2)",
     activitySubtitle: "(The schedule and guidelines for written test will be notified on the Institute Website in due course of time.)",
-    dates: "From 10:00 AM onwards on 30.08.2026",
+    dates: "From 10:00 AM onwards on 24.01.2027",
   },
   {
     srNo: 3,
     activityTitle: "Date of interview",
     activitySubtitle: "(The schedule and guidelines for the interview will be notified to the qualified candidates at the entrance in due course of time)",
-    dates: "30.08.2026",
+    dates: "24.01.2027",
   },
   {
     srNo: 4,
     activityTitle: "Issue of admission letter to the recommended candidates for admission in Ph.D. program",
-    dates: "02.09.2026",
+    dates: "29.01.2027",
   },
   {
     srNo: 5,
     activityTitle: "Timelines for Enrollment & Fee payment / Verification of Original Documents",
-    dates: "10.09.2026 to 14.09.2026",
+    dates: "29.01.2027 to 05.02.2027",
   },
   {
     srNo: 6,
     activityTitle: "Date of commencement of classes for Course Work",
-    dates: "12.09.2026",
+    dates: "06.02.2027",
   },
   {
     srNo: 7,
