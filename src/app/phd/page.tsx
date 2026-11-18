@@ -85,7 +85,7 @@ export default async function PhdPage() {
           title={faqsData?.title || "FAQs – Ph.D. at Geeta University"}
           subtitle={
             faqsData?.subtitle ||
-            "Clear your doubts about Ph.D. eligibility, entrance examination structure, fellowships, exemptions, and coursework delivery."
+            ""
           }
           faqs={faqsData?.items || phdFaqsData}
         />
