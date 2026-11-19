@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { Upload, Loader2, CheckCircle2, AlertCircle, FileText, Image as ImageIcon, X } from "lucide-react";
 import { uploadMediaAction } from "@/features/admin/media/actions";
 
-const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10 MB
-const MAX_DOCUMENT_BYTES = 25 * 1024 * 1024; // 25 MB
+const MAX_IMAGE_BYTES = 15 * 1024 * 1024; // 15 MB
+const MAX_DOCUMENT_BYTES = 30 * 1024 * 1024; // 30 MB
 const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "pdf"];
 
 export function MediaUploadForm() {
@@ -48,14 +48,14 @@ export function MediaUploadForm() {
     if (isPdf && file.size > MAX_DOCUMENT_BYTES) {
       setSelectedFile(file);
       const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
-      setClientValidationMsg(`This PDF is ${sizeMb} MB, which exceeds the permitted 25 MB limit.`);
+      setClientValidationMsg(`This PDF is ${sizeMb} MB, which exceeds the permitted 30 MB limit.`);
       return;
     }
 
     if (!isPdf && file.size > MAX_IMAGE_BYTES) {
       setSelectedFile(file);
       const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
-      setClientValidationMsg(`This image is ${sizeMb} MB, which exceeds the permitted 10 MB limit.`);
+      setClientValidationMsg(`This image is ${sizeMb} MB, which exceeds the permitted 15 MB limit.`);
       return;
     }
 
