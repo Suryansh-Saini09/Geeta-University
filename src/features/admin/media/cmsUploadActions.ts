@@ -54,10 +54,10 @@ export async function uploadCmsAssetAction(formData: FormData): Promise<UploadCm
 
     const isPdf = file.name.toLowerCase().endsWith(".pdf") || file.type === "application/pdf";
     if (isPdf && file.size > MAX_DOCUMENT_BYTES) {
-      return { success: false, error: "This PDF is larger than the permitted 25 MB limit." };
+      return { success: false, error: `This PDF is larger than the permitted ${Math.round(MAX_DOCUMENT_BYTES / (1024 * 1024))} MB limit.` };
     }
     if (!isPdf && file.size > MAX_IMAGE_BYTES) {
-      return { success: false, error: "This image is larger than the permitted 10 MB limit." };
+      return { success: false, error: `This image is larger than the permitted ${Math.round(MAX_IMAGE_BYTES / (1024 * 1024))} MB limit.` };
     }
 
     const contentArea = (formData.get("contentArea") as string) || "general";

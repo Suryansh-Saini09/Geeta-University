@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 
 import DeleteMediaButton from "@/components/admin/DeleteMediaButton";
+import { CopyMediaLinkButton } from "@/components/admin/CopyMediaLinkButton";
 import { MediaUploadForm } from "@/features/admin/media/components/MediaUploadForm";
 import { hasPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
@@ -402,6 +403,17 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
                         </div>
                       ) : null}
 
+                      {/* Status Overlay Badge */}
+                      {asset.storageStatus === "MISSING" ? (
+                        <span className="absolute top-2 left-2 rounded-md bg-rose-600 text-white px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider shadow-xs">
+                          Missing
+                        </span>
+                      ) : asset.storageStatus === "SIZE_MISMATCH" ? (
+                        <span className="absolute top-2 left-2 rounded-md bg-amber-500 text-white px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider shadow-xs">
+                          Mismatch
+                        </span>
+                      ) : null}
+
                       {/* Open Link */}
                       <a
                         href={asset.url}
@@ -433,13 +445,17 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
 
                       {/* Actions */}
                       <div className="mt-3 flex items-center justify-between gap-1 border-t border-slate-100 pt-2">
-                        <Link
-                          href={`/admin/media/${encodeURIComponent(asset.id)}/edit`}
-                          className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-100 transition"
-                        >
-                          <Pencil className="h-3 w-3 text-slate-400" />
-                          Edit
-                        </Link>
+                        <div className="flex items-center gap-1">
+                          <Link
+                            href={`/admin/media/${encodeURIComponent(asset.id)}/edit`}
+                            className="inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-100 transition"
+                            title="Edit metadata or replace file"
+                          >
+                            <Pencil className="h-3 w-3 text-slate-400" />
+                            Edit
+                          </Link>
+                          <CopyMediaLinkButton url={asset.url} />
+                        </div>
 
                         {hasPermission(session.user.role, "deleteContent") && (
                           <DeleteMediaButton
@@ -528,7 +544,17 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
                         {formattedSize}
                       </td>
                       <td className="px-4 py-3">
-                        {asset.isReferenced || asset.usageCount > 0 ? (
+                        {asset.storageStatus === "MISSING" ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 border border-rose-200 px-2 py-0.5 text-[11px] font-bold text-rose-700">
+                            <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                            Missing Binary
+                          </span>
+                        ) : asset.storageStatus === "SIZE_MISMATCH" ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-[11px] font-bold text-amber-700">
+                            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                            Size Mismatch
+                          </span>
+                        ) : asset.isReferenced || asset.usageCount > 0 ? (
                           <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700">
                             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                             In Use ({asset.usageCount})
@@ -540,13 +566,14 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
                           <Link
                             href={`/admin/media/${encodeURIComponent(asset.id)}/edit`}
-                            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition"
+                            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition"
                           >
                             <Pencil className="h-3 w-3 text-slate-400" /> Edit
                           </Link>
+                          <CopyMediaLinkButton url={asset.url} />
 
                           {hasPermission(session.user.role, "deleteContent") && (
                             <DeleteMediaButton

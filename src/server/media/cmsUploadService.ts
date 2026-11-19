@@ -7,6 +7,8 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 import { AuditAction } from "@prisma/client";
 import { prisma } from "@/server/db/client";
+import { env } from "@/lib/env";
+import { MediaStorageService } from "@/server/media/storage";
 import { serverLogger } from "@/lib/security/logger";
 import {
   optimizeImageBuffer,
@@ -14,8 +16,8 @@ import {
   type ImageOptimizationResult,
 } from "./imageOptimizer";
 
-export const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10 MB
-export const MAX_DOCUMENT_BYTES = 25 * 1024 * 1024; // 25 MB
+export const MAX_IMAGE_BYTES = env.MEDIA_MAX_IMAGE_BYTES || 15 * 1024 * 1024; // 15 MB
+export const MAX_DOCUMENT_BYTES = env.MEDIA_MAX_DOCUMENT_BYTES || 30 * 1024 * 1024; // 30 MB
 
 export interface DetectedFormat {
   mimeType: string;
@@ -113,9 +115,10 @@ export function checkUploadEnvironment(): {
   reason?: string;
 } {
   const isVercel = process.env.VERCEL === "1";
-  const hasPersistentDir = Boolean(process.env.MEDIA_STORAGE_DIR);
+  const hasPersistentDir = Boolean(process.env.MEDIA_STORAGE_DIR || process.env.MEDIA_STORAGE_ROOT);
+  const hasS3 = Boolean(process.env.MEDIA_STORAGE_DRIVER === "s3" && process.env.MEDIA_STORAGE_BUCKET);
 
-  if (isVercel && !hasPersistentDir) {
+  if (isVercel && !hasPersistentDir && !hasS3) {
     return {
       canUpload: false,
       isVercel: true,
@@ -385,73 +388,77 @@ export async function saveCmsAsset(
     notice = notice ? `${notice} ${optimizationResult.notice}` : optimizationResult.notice;
   }
 
-  // Base directory on disk
-  const uploadsCmsDir = path.join(process.cwd(), "public", "uploads", "cms", contentArea, section);
-  await mkdir(uploadsCmsDir, { recursive: true });
-
-  // Collision handling if not replacing shared
+  // Collision handling if not replacing
   const contentHash = createHash("sha256").update(bytes).digest("hex").slice(0, 8);
   let finalFileName = options.replaceUrl
     ? `${targetBaseName}-v${contentHash}.${format.extension}`
     : `${targetBaseName}.${format.extension}`;
-  let finalFilePath = path.join(uploadsCmsDir, finalFileName);
 
-  // If replacing existing URL and replaceShared is false, check if we'd overwrite an existing file
-
+  let storageKey = `uploads/cms/${contentArea}/${section}/${finalFileName}`;
+  let relativePublicUrl = `/uploads/cms/${contentArea}/${section}/${finalFileName}`;
 
   if (!options.replaceUrl) {
     let counter = 1;
-    while (true) {
-      try {
-        await stat(finalFilePath);
-        // File exists, add suffix
-        finalFileName = `${targetBaseName}-${counter}.${format.extension}`;
-        finalFilePath = path.join(uploadsCmsDir, finalFileName);
-        counter++;
-      } catch (err: any) {
-        if (err.code === "ENOENT") break; // Available!
-        throw err;
-      }
+    while (await MediaStorageService.exists(storageKey)) {
+      finalFileName = `${targetBaseName}-${counter}.${format.extension}`;
+      storageKey = `uploads/cms/${contentArea}/${section}/${finalFileName}`;
+      relativePublicUrl = `/uploads/cms/${contentArea}/${section}/${finalFileName}`;
+      counter++;
     }
   }
 
-  // Staging write: write to temp file first, verify bytes, then atomically rename
-  const stagingPath = `${finalFilePath}.tmp.${Date.now()}`;
+  // Upload to Central Persistent Storage Service (S3 or persistent volume/directory)
+  let uploadResult;
   try {
-    await writeFile(stagingPath, finalBytes);
-    const writtenStat = await stat(stagingPath);
-    if (writtenStat.size !== finalBytes.length) {
-      throw new Error("Byte length verification failed after writing.");
-    }
-    // Rename to final target
-    await writeFile(finalFilePath, finalBytes, { flag: "w" });
+    uploadResult = await MediaStorageService.upload(storageKey, finalBytes, format.mimeType);
 
-    // If replacing an existing shared file, also update the previous target file on disk so legacy references stay valid
-    if (options.replaceShared && options.replaceUrl && options.replaceUrl.startsWith("/uploads/")) {
-      const oldRelativePath = options.replaceUrl.replace(/^\/uploads\//, "");
-      const oldFilePath = path.join(process.cwd(), "public", "uploads", oldRelativePath);
-      if (oldFilePath !== finalFilePath) {
-        try {
-          await writeFile(oldFilePath, finalBytes, { flag: "w" });
-        } catch (legacyWriteErr) {
-          serverLogger.warn("Failed to update legacy shared asset file on disk", legacyWriteErr, {
-            module: "cmsUpload",
-            action: "legacySharedWrite",
-            oldFilePath,
-          });
-        }
-      }
+    // Verify stored file existence and integrity
+    const exists = await MediaStorageService.exists(storageKey);
+    if (!exists) {
+      throw new Error("Persistent storage verification failed: uploaded file could not be found.");
     }
-  } finally {
-    // Clean up staging file
-    try {
-      await unlink(stagingPath);
-    } catch {}
+    const meta = await MediaStorageService.getMetadata(storageKey);
+    if (meta && meta.sizeBytes !== finalBytes.length) {
+      throw new Error(`Persistent storage size mismatch: expected ${finalBytes.length} bytes, verified ${meta.sizeBytes} bytes.`);
+    }
+  } catch (storageErr: any) {
+    serverLogger.error("Failed to write asset to persistent storage", storageErr, {
+      module: "cmsUpload",
+      action: "uploadPersistent",
+      storageKey,
+    });
+    return {
+      success: false,
+      error: `Storage error: ${storageErr.message || "Failed to persist asset binary."}`,
+    };
   }
 
-  // URL convention: /uploads/cms/<contentArea>/<section>/<fileName>
-  const relativePublicUrl = `/uploads/cms/${contentArea}/${section}/${finalFileName}`;
-  const storageKey = `uploads/cms/${contentArea}/${section}/${finalFileName}`;
+  // Optional mirror to local public/uploads for direct static serving if directory is writable
+  const uploadsCmsDir = path.join(process.cwd(), "public", "uploads", "cms", contentArea, section);
+  const localDiskPath = path.join(uploadsCmsDir, finalFileName);
+  try {
+    await mkdir(uploadsCmsDir, { recursive: true });
+    await writeFile(localDiskPath, finalBytes, { flag: "w" });
+
+    // If replacing an existing shared file, also update legacy path if present
+    if (options.replaceShared && options.replaceUrl && options.replaceUrl.startsWith("/uploads/")) {
+      const oldRelative = options.replaceUrl.replace(/^\/uploads\//, "");
+      const oldDiskPath = path.join(process.cwd(), "public", "uploads", oldRelative);
+      const oldStorageKey = options.replaceUrl.replace(/^\//, "");
+      // Update in persistent storage as well
+      await MediaStorageService.upload(oldStorageKey, finalBytes, format.mimeType).catch(() => {});
+      if (oldDiskPath !== localDiskPath) {
+        await writeFile(oldDiskPath, finalBytes, { flag: "w" }).catch(() => {});
+      }
+    }
+  } catch (localWriteErr) {
+    // Non-fatal: persistent storage is the primary source of truth
+    serverLogger.warn("Local public directory mirror skipped or failed", localWriteErr, {
+      module: "cmsUpload",
+      action: "localMirror",
+      localDiskPath,
+    });
+  }
 
   // Upsert MediaAsset in MySQL + AuditLog
   try {
@@ -507,9 +514,10 @@ export async function saveCmsAsset(
       action: "upsertMediaAsset",
       storageKey,
     });
-    // Clean up physical file so no orphaned file is left on disk
+    // Clean up persistent storage so no orphaned file is left
     try {
-      await unlink(finalFilePath);
+      await MediaStorageService.delete(storageKey);
+      await unlink(localDiskPath).catch(() => {});
     } catch {}
 
     return {
@@ -527,7 +535,7 @@ export async function saveCmsAsset(
         if (!usage.isShared && usage.totalUsageCount <= 1) {
           const oldDiskSub = options.replaceUrl.replace(/^\/uploads\/cms\//, "");
           const oldDiskPath = path.join(process.cwd(), "public", "uploads", "cms", oldDiskSub);
-          if (oldDiskPath !== finalFilePath) {
+          if (oldDiskPath !== localDiskPath) {
             await unlink(oldDiskPath).catch(() => {});
           }
         }

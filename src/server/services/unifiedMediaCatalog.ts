@@ -7,11 +7,15 @@ import path from "node:path";
 import { AuditAction } from "@prisma/client";
 import { prisma } from "@/server/db/client";
 import { checkMediaAssetUsage } from "@/server/media/cmsUploadService";
+import { MediaStorageService } from "@/server/media/storage";
+import { optimizeImageBuffer } from "@/server/media/imageOptimizer";
+import { detectFormat } from "@/server/media/cmsUploadService";
 import { serverLogger } from "@/lib/security/logger";
 import { sanitizeErrorMessage } from "@/lib/cms/errorSanitizer";
 
 export type MediaCategory = "ALL" | "IMAGE" | "PDF" | "VIDEO";
 export type MediaSortOption = "newest" | "oldest" | "name_asc" | "name_desc" | "size_desc" | "size_asc";
+export type MediaStorageStatus = "AVAILABLE" | "MISSING" | "SIZE_MISMATCH" | "VERIFYING";
 
 export interface UnifiedMediaAsset {
   id: string; // Database cuid or "static:<url>"
@@ -30,6 +34,8 @@ export interface UnifiedMediaAsset {
   usageCount: number;
   isReferenced: boolean;
   canDelete: boolean; // false for repository static files, true only for unreferenced CMS uploads
+  storageStatus: MediaStorageStatus;
+  storageKey?: string;
 }
 
 export interface CatalogQueryFilters {
@@ -142,6 +148,7 @@ export async function getUnifiedMediaCatalog(): Promise<UnifiedMediaAsset[]> {
       usageCount: 0,
       isReferenced: false,
       canDelete: isCmsUpload,
+      storageStatus: "AVAILABLE",
     });
 
     const rootDir = item.directory.split("/")[0];
@@ -161,6 +168,17 @@ export async function getUnifiedMediaCatalog(): Promise<UnifiedMediaAsset[]> {
     if (db.mimeType === "application/pdf" || ext === "pdf") cat = "PDF";
     else if (db.mimeType.startsWith("video/") || ["mp4", "webm"].includes(ext)) cat = "VIDEO";
 
+    // Check storage availability
+    let status: MediaStorageStatus = "AVAILABLE";
+    try {
+      const exists = await MediaStorageService.exists(db.storageKey);
+      if (!exists) {
+        status = "MISSING";
+      }
+    } catch {
+      status = "MISSING";
+    }
+
     if (catalogMap.has(normUrl)) {
       // Merge with existing static item: DB record metadata takes precedence!
       const existing = catalogMap.get(normUrl)!;
@@ -173,6 +191,8 @@ export async function getUnifiedMediaCatalog(): Promise<UnifiedMediaAsset[]> {
       existing.isReferenced = relationalUsage > 0;
       existing.canDelete = isCmsUpload && relationalUsage === 0;
       existing.source = "db";
+      existing.storageStatus = status;
+      existing.storageKey = db.storageKey;
     } else {
       // Dynamic upload or /api/media/[key] asset not present in static manifest
       const dir = normUrl.startsWith("/") ? normUrl.split("/").slice(1, -1).join("/") || "(root)" : "(root)";
@@ -194,6 +214,8 @@ export async function getUnifiedMediaCatalog(): Promise<UnifiedMediaAsset[]> {
         usageCount: relationalUsage,
         isReferenced: relationalUsage > 0,
         canDelete: isCmsUpload && relationalUsage === 0,
+        storageStatus: status,
+        storageKey: db.storageKey,
       });
     }
   }
@@ -526,7 +548,7 @@ export async function deleteUnifiedMediaAssetSafe(params: {
       };
     }
 
-    // 4. Safe deletion: remove DB record and file on disk
+    // 4. Safe deletion: remove DB record, persistent storage object, and local cache
     if (dbAsset) {
       await prisma.$transaction(async (tx) => {
         await tx.mediaAsset.delete({ where: { id: dbAsset.id } });
@@ -544,6 +566,10 @@ export async function deleteUnifiedMediaAssetSafe(params: {
       });
     }
 
+    // Delete from persistent storage
+    const storageKeyToDelete = dbAsset?.storageKey || (target.url.startsWith("/") ? target.url.slice(1) : target.url);
+    await MediaStorageService.delete(storageKeyToDelete).catch(() => {});
+
     // Remove file on disk if it exists under public/uploads/cms
     if (target.url.startsWith("/uploads/cms/")) {
       const cmsSubPath = target.url.replace(/^\/uploads\/cms\//, "");
@@ -557,9 +583,126 @@ export async function deleteUnifiedMediaAssetSafe(params: {
       }
     }
 
+    resetCatalogCache();
     return { success: true };
   } catch (err: any) {
     serverLogger.error("Error deleting media asset", err, { module: "mediaCatalog", action: "deleteAsset", idOrUrl: params.idOrUrl });
     return { success: false, error: sanitizeErrorMessage(err, "Failed to delete media asset.") };
+  }
+}
+
+/**
+ * Replaces the binary contents of an existing media asset.
+ * Preserves the database ID, URL, storageKey, and all existing relationships.
+ */
+export async function replaceMediaAssetBinary(params: {
+  idOrUrl: string;
+  bytes: Buffer;
+  fileName: string;
+  userId?: string;
+}): Promise<{ success: boolean; asset?: UnifiedMediaAsset; error?: string }> {
+  try {
+    const target = await getUnifiedMediaAssetByIdOrUrl(params.idOrUrl);
+    if (!target) {
+      return { success: false, error: "Asset not found." };
+    }
+
+    // Detect format and magic bytes
+    const format = detectFormat(params.bytes);
+    if (!format) {
+      return { success: false, error: "Unsupported file format. Please upload a valid image or PDF." };
+    }
+
+    let finalBytes = params.bytes;
+    let finalWidth: number | null = null;
+    let finalHeight: number | null = null;
+
+    if (format.isImage) {
+      try {
+        const opt = await optimizeImageBuffer(params.bytes, {
+          profile: "default",
+        });
+        finalBytes = opt.buffer;
+        finalWidth = opt.width || null;
+        finalHeight = opt.height || null;
+      } catch (optErr) {
+        serverLogger.warn("Image optimization skipped during binary replace", optErr);
+      }
+    }
+
+    // Look up or ensure MediaAsset record
+    const storageKey = target.storageKey || (target.url.startsWith("/") ? target.url.slice(1) : target.url);
+
+    // 1. Write to persistent storage
+    await MediaStorageService.upload(storageKey, finalBytes, format.mimeType);
+
+    // 2. Verify write immediately
+    const verified = await MediaStorageService.verifyIntegrity(storageKey, finalBytes.length);
+    if (!verified.valid) {
+      throw new Error(`Persistent storage verification failed: ${verified.reason}`);
+    }
+
+    // 3. Mirror to local disk if public path is writable
+    if (target.url.startsWith("/uploads/cms/")) {
+      const cmsSubPath = target.url.replace(/^\/uploads\/cms\//, "");
+      const diskPath = path.join(process.cwd(), "public", "uploads", "cms", cmsSubPath);
+      try {
+        fs.mkdirSync(path.dirname(diskPath), { recursive: true });
+        fs.writeFileSync(diskPath, finalBytes);
+      } catch {}
+    }
+
+    // 4. Update database record
+    const dbAsset = await prisma.mediaAsset.findFirst({
+      where: { OR: [{ id: target.id }, { storageKey }, { url: target.url }] },
+    });
+
+    if (dbAsset) {
+      await prisma.$transaction(async (tx) => {
+        await tx.mediaAsset.update({
+          where: { id: dbAsset.id },
+          data: {
+            sizeBytes: finalBytes.length,
+            width: finalWidth,
+            height: finalHeight,
+            mimeType: format.mimeType,
+            updatedAt: new Date(),
+          },
+        });
+
+        if (params.userId) {
+          await tx.auditLog.create({
+            data: {
+              actorId: params.userId,
+              action: AuditAction.UPDATE,
+              entityType: "MediaAsset",
+              entityId: dbAsset.id,
+              after: {
+                action: "REPLACE_BINARY",
+                sizeBytes: finalBytes.length,
+                width: finalWidth,
+                height: finalHeight,
+              },
+            },
+          });
+        }
+      });
+    }
+
+    resetCatalogCache();
+    target.sizeBytes = finalBytes.length;
+    target.storageStatus = "AVAILABLE";
+
+    return { success: true, asset: target };
+  } catch (err: any) {
+    serverLogger.error("Failed to replace media asset binary", err, {
+      module: "mediaCatalog",
+      action: "replaceBinary",
+      idOrUrl: params.idOrUrl,
+    });
+    return {
+      success: false,
+      error: sanitizeErrorMessage(err, "Failed to replace asset binary."),
+    };
   }
 }

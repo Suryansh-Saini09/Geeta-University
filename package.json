@@ -16,6 +16,7 @@
     "search:reindex": "npx tsx scripts/reindexSearch.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1171.0",
     "@prisma/adapter-mariadb": "^6.19.3",
     "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.3",

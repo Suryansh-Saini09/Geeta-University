@@ -13,6 +13,7 @@ import {
 import {
   deleteUnifiedMediaAssetSafe,
   updateUnifiedMediaAssetMetadata,
+  replaceMediaAssetBinary,
 } from "@/server/services/unifiedMediaCatalog";
 import { mediaMetadataSchema } from "@/validations/media";
 import { serverLogger } from "@/lib/security/logger";
@@ -58,13 +59,13 @@ export async function uploadMediaAction(formData: FormData): Promise<{
     if (isPdf && file.size > MAX_DOCUMENT_BYTES) {
       return {
         success: false,
-        error: "This PDF is larger than the permitted 25 MB limit.",
+        error: `This PDF is larger than the permitted ${Math.round(MAX_DOCUMENT_BYTES / (1024 * 1024))} MB limit.`,
       };
     }
     if (!isPdf && file.size > MAX_IMAGE_BYTES) {
       return {
         success: false,
-        error: "This image is larger than the permitted 10 MB limit.",
+        error: `This image is larger than the permitted ${Math.round(MAX_IMAGE_BYTES / (1024 * 1024))} MB limit.`,
       };
     }
 
@@ -156,4 +157,50 @@ export async function deleteMediaAction(formData: FormData) {
     serverLogger.error("Failed to delete media asset", error, { module: "media", action: "deleteMedia", id });
     redirect(errorUrl("/admin/media", sanitizeErrorMessage(error)));
   }
+}
+
+export async function replaceMediaAction(formData: FormData) {
+  const session = await requireAdminSession();
+  assertPermission(session.user.role, "manageContent");
+  const rawId = String(formData.get("id") ?? "");
+  const id = decodeURIComponent(rawId);
+  const file = formData.get("file");
+
+  if (!(file instanceof File) || file.size === 0) {
+    redirect(errorUrl(`/admin/media/${encodeURIComponent(rawId)}/edit`, "Please select a valid file to upload."));
+  }
+
+  const isPdf = file.name.toLowerCase().endsWith(".pdf") || file.type === "application/pdf";
+  if (isPdf && file.size > MAX_DOCUMENT_BYTES) {
+    redirect(
+      errorUrl(
+        `/admin/media/${encodeURIComponent(rawId)}/edit`,
+        `This PDF is larger than the permitted ${Math.round(MAX_DOCUMENT_BYTES / (1024 * 1024))} MB limit.`
+      )
+    );
+  }
+  if (!isPdf && file.size > MAX_IMAGE_BYTES) {
+    redirect(
+      errorUrl(
+        `/admin/media/${encodeURIComponent(rawId)}/edit`,
+        `This image is larger than the permitted ${Math.round(MAX_IMAGE_BYTES / (1024 * 1024))} MB limit.`
+      )
+    );
+  }
+
+  const bytes = Buffer.from(await file.arrayBuffer());
+  const res = await replaceMediaAssetBinary({
+    idOrUrl: id,
+    bytes,
+    fileName: file.name,
+    userId: session.user.id,
+  });
+
+  if (!res.success) {
+    redirect(errorUrl(`/admin/media/${encodeURIComponent(rawId)}/edit`, res.error || "Failed to replace media binary."));
+  }
+
+  revalidatePath("/admin/media");
+  revalidatePath(`/admin/media/${encodeURIComponent(rawId)}/edit`);
+  redirect(`/admin/media/${encodeURIComponent(rawId)}/edit?replaced=1`);
 }
