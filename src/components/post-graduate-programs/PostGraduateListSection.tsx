@@ -7,9 +7,11 @@ import ScholarshipCalculator from "@/components/programs-after-12th/ScholarshipC
 export default function PostGraduateListSection({
   schoolsData,
   statsData,
+  calculatorData,
 }: {
   schoolsData?: any;
   statsData?: any;
+  calculatorData?: any;
 }) {
   const activeSchools = schoolsData?.schools || pgSchoolsData;
   const col1Schools = activeSchools.slice(0, Math.ceil(activeSchools.length / 2));
@@ -86,7 +88,15 @@ export default function PostGraduateListSection({
 
           {/* Right Side: Scholarship Calculator (4 cols) */}
           <div id="fee-calculator" className="lg:col-span-4 xl:col-span-4">
-            <ScholarshipCalculator />
+            <ScholarshipCalculator
+              programsData={calculatorData?.programsData}
+              rulesData={calculatorData?.rulesData}
+              cuetData={calculatorData?.cuetData}
+              settings={calculatorData?.settings}
+              lockedLevel="PG"
+              variant="card"
+              mode="standard"
+            />
           </div>
         </div>
 

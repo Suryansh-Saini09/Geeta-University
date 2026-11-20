@@ -7,9 +7,11 @@ import ScholarshipCalculator from "./ScholarshipCalculator";
 export default function ProgramsListSection({
   schoolsData,
   statsData,
+  calculatorData,
 }: {
   schoolsData?: any;
   statsData?: any;
+  calculatorData?: any;
 }) {
   const activeSchools = schoolsData?.schools || ugSchoolsData;
   const col1Schools = activeSchools.slice(0, Math.ceil(activeSchools.length / 2));
@@ -86,7 +88,15 @@ export default function ProgramsListSection({
 
           {/* Right Side: Scholarship Calculator (4 cols) */}
           <div id="fee-calculator" className="lg:col-span-4 xl:col-span-4">
-            <ScholarshipCalculator />
+            <ScholarshipCalculator
+              programsData={calculatorData?.programsData}
+              rulesData={calculatorData?.rulesData}
+              cuetData={calculatorData?.cuetData}
+              settings={calculatorData?.settings}
+              lockedLevel="UG"
+              variant="card"
+              mode="standard"
+            />
           </div>
         </div>
 

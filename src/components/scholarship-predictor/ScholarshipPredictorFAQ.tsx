@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { SCHOLARSHIP_PREDICTOR_FAQS } from "@/data/scholarshipPredictorData";
 
-interface ScholarshipPredictorFAQProps {
+export interface ScholarshipPredictorFAQProps {
   data?: {
     title?: string;
     items?: Array<{
@@ -15,27 +15,42 @@ interface ScholarshipPredictorFAQProps {
       answer?: string;
     }>;
   };
+  faqs?: Array<{
+    question: string;
+    answer: string;
+    category?: string;
+  }>;
 }
 
-export default function ScholarshipPredictorFAQ({ data }: ScholarshipPredictorFAQProps = {}) {
+export default function ScholarshipPredictorFAQ({
+  data,
+  faqs: dbFaqs,
+}: ScholarshipPredictorFAQProps = {}) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  if (data?.items && data.items.length === 0) {
-    return null;
-  }
-
-  const faqs = (data?.items && data.items.length > 0)
-    ? data.items.map((item) => ({
-        question: item.question || item.q || "",
-        answer: item.answer || item.a || "",
-      }))
-    : SCHOLARSHIP_PREDICTOR_FAQS;
+  // Resolution priority:
+  // 1. Explicit database FAQs passed via prop
+  // 2. Admissions page section items from CMS
+  // 3. Static fallback FAQs
+  const resolvedFaqs =
+    dbFaqs && dbFaqs.length > 0
+      ? dbFaqs
+      : data?.items && data.items.length > 0
+      ? data.items.map((item) => ({
+          question: item.question || item.q || "",
+          answer: item.answer || item.a || "",
+        }))
+      : SCHOLARSHIP_PREDICTOR_FAQS;
 
   const title = data?.title || "Scholarship FAQs";
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+
+  if (!resolvedFaqs || resolvedFaqs.length === 0) {
+    return null;
+  }
 
   return (
     <section className="bg-[#F8FAFC] py-12 md:py-16 border-t border-[#E2E8F0]">
@@ -52,7 +67,7 @@ export default function ScholarshipPredictorFAQ({ data }: ScholarshipPredictorFA
 
         {/* FAQ Accordion */}
         <div className="mx-auto max-w-4xl space-y-4">
-          {faqs.map((faq, index) => {
+          {resolvedFaqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
               <div

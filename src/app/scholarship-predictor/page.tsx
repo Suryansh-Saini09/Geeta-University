@@ -6,6 +6,9 @@ import ScholarshipTypesOverview from "@/components/scholarship-predictor/Scholar
 import ScholarshipPredictorFAQ from "@/components/scholarship-predictor/ScholarshipPredictorFAQ";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
+import { getScholarshipPredictorData } from "@/server/services/scholarshipPredictor";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { seo } = await getPublishedAdmissionsPage("scholarship-predictor");
@@ -25,7 +28,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ScholarshipPredictorPage() {
-  const { sections } = await getPublishedAdmissionsPage("scholarship-predictor");
+  const [{ sections }, predictorData] = await Promise.all([
+    getPublishedAdmissionsPage("scholarship-predictor"),
+    getScholarshipPredictorData(),
+  ]);
 
   return (
     <div className="min-w-0 overflow-x-hidden bg-[#F8FAFC] text-[#0A1F44]">
@@ -33,7 +39,16 @@ export default async function ScholarshipPredictorPage() {
       <ScholarshipPredictorHero data={sections.hero} />
 
       {/* Interactive Scholarship Calculator */}
-      <ScholarshipCalculator data={sections.calculator_overview} />
+      <ScholarshipCalculator
+        data={sections.calculator_overview}
+        programsData={predictorData.programsData}
+        rulesData={predictorData.rulesData}
+        cuetData={predictorData.cuetData}
+        settings={predictorData.settings}
+        academicYear={predictorData.academicYear}
+        scheduleTitle={predictorData.scheduleTitle}
+        variant="full"
+      />
 
       {/* Overview of Financial Aid Schemes */}
       <ScholarshipTypesOverview data={sections.types_overview} />
@@ -45,7 +60,10 @@ export default async function ScholarshipPredictorPage() {
       />
 
       {/* FAQ Section */}
-      <ScholarshipPredictorFAQ data={sections.faqs} />
+      <ScholarshipPredictorFAQ
+        data={sections.faqs}
+        faqs={predictorData.faqs}
+      />
     </div>
   );
 }

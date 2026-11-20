@@ -6,6 +6,9 @@ import TransportAndHostelPredictor from "@/components/fee-and-scholarship/Transp
 import LegacyEcosystemSection from "@/components/fee-and-scholarship/LegacyEcosystemSection";
 import FeeFaqAndCTA from "@/components/fee-and-scholarship/FeeFaqAndCTA";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
+import { getScholarshipPredictorData } from "@/server/services/scholarshipPredictor";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { seo } = await getPublishedAdmissionsPage("fee-and-scholarship");
@@ -29,12 +32,20 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function FeeAndScholarshipPage() {
-  const { sections } = await getPublishedAdmissionsPage("fee-and-scholarship");
+  const [{ sections }, predictorData] = await Promise.all([
+    getPublishedAdmissionsPage("fee-and-scholarship"),
+    getScholarshipPredictorData(),
+  ]);
 
   return (
     <div className="min-w-0 overflow-x-hidden bg-white text-[#0A1F44]">
       <FeeHero data={sections.hero} />
-      <ScholarshipPredictorSection data={sections.scholarship_predictor} />
+      <ScholarshipPredictorSection
+        data={sections.scholarship_predictor}
+        programsData={predictorData.programsData}
+        rulesData={predictorData.rulesData}
+        cuetData={predictorData.cuetData}
+      />
       <TransportAndHostelPredictor data={sections.transport_hostel} />
       <LegacyEcosystemSection data={sections.legacy_ecosystem} />
       <FeeFaqAndCTA data={sections.faqs_cta} />

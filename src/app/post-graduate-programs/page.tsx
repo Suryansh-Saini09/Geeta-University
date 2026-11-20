@@ -6,6 +6,7 @@ import FAQSection from "@/components/programs/FAQSection";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
 import { pgFaqsData } from "@/data/postGraduatePrograms";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
+import { getScholarshipPredictorData } from "@/server/services/scholarshipPredictor";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { seo } = await getPublishedAdmissionsPage("post-graduate-programs");
@@ -27,7 +28,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PostGraduateProgramsPage() {
-  const { sections } = await getPublishedAdmissionsPage("post-graduate-programs");
+  const [{ sections }, predictorData] = await Promise.all([
+    getPublishedAdmissionsPage("post-graduate-programs"),
+    getScholarshipPredictorData(),
+  ]);
 
   const heroData = sections.hero;
   const pgSchoolsData = sections.pg_schools;
@@ -41,7 +45,11 @@ export default async function PostGraduateProgramsPage() {
       <PostGraduateHero data={heroData} />
 
       {/* 2. Programs by School & Fee/Scholarship Calculator */}
-      <PostGraduateListSection schoolsData={pgSchoolsData} statsData={statsCardsData} />
+      <PostGraduateListSection
+        schoolsData={pgSchoolsData}
+        statsData={statsCardsData}
+        calculatorData={predictorData}
+      />
 
       {/* 3. Frequently Asked Questions */}
       <section id="faqs" className="w-full scroll-mt-20">
