@@ -10,6 +10,9 @@ import FAQSection from "@/components/programs/FAQSection";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
 import { cuetFaqsData } from "@/data/cuetData";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
+import { getScholarshipPredictorData } from "@/server/services/scholarshipPredictor";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { seo } = await getPublishedAdmissionsPage("cuet");
@@ -35,13 +38,20 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CuetPage() {
-  const { sections } = await getPublishedAdmissionsPage("cuet");
+  const [{ sections }, predictorData] = await Promise.all([
+    getPublishedAdmissionsPage("cuet"),
+    getScholarshipPredictorData(),
+  ]);
   const faqsData = sections.faqs;
 
   return (
     <div className="min-w-0 overflow-x-hidden bg-white text-[#0A1F44]">
       {/* 1. Hero Banner, CUET Scholarship Calculator & Lead Form */}
-      <CuetHeroAndCalculator data={sections.hero} />
+      <CuetHeroAndCalculator
+        data={sections.hero}
+        programsData={predictorData.programsData}
+        cuetData={predictorData.cuetData}
+      />
 
       {/* 2. 6-Step Fast-Track Admission Flow */}
       <CuetAdmissionProcess data={sections.admission_process} />

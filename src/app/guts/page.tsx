@@ -72,7 +72,7 @@ export default async function GutsPage() {
           title={faqsData?.title || "Frequently Asked Questions (FAQs)"}
           subtitle={
             faqsData?.subtitle ||
-            "Find answers to common questions about GUTS eligibility, registration, examination mode, and scholarships."
+            ""
           }
           faqs={faqsData?.items || gutsFaqsData}
         />

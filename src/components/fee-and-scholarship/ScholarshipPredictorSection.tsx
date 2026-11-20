@@ -1,11 +1,7 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
-import {
-  PROGRAMS_FEE_DATABASE,
-  SCHOLARSHIP_RULES_DATABASE,
-  ProgramItem,
-} from "@/data/feeAndScholarshipData";
+import React from "react";
+import ScholarshipCalculator from "@/components/scholarship-predictor/ScholarshipCalculator";
 
 interface ScholarshipPredictorSectionProps {
   data?: {
@@ -13,138 +9,17 @@ interface ScholarshipPredictorSectionProps {
     subtitle?: string;
     rulesDatabase?: any;
   };
+  programsData?: Record<string, any>;
+  rulesData?: Record<string, any>;
+  cuetData?: any;
 }
 
-export default function ScholarshipPredictorSection({ data }: ScholarshipPredictorSectionProps = {}) {
-  const rulesDb = (data?.rulesDatabase && Object.keys(data.rulesDatabase).length > 0)
-    ? data.rulesDatabase
-    : SCHOLARSHIP_RULES_DATABASE;
-
-  const areaKeys = useMemo(() => Object.keys(PROGRAMS_FEE_DATABASE), []);
-
-  const [selectedArea, setSelectedArea] = useState<string>("");
-  const [selectedProgramData, setSelectedProgramData] = useState<{
-    fee: number;
-    tuition: number;
-    name: string;
-    level: "UG" | "PG" | "Ph.D" | "Diploma";
-    scholarship_allowed?: boolean;
-  } | null>(null);
-
-  const [selectedCategoryKey, setSelectedCategoryKey] = useState<string>("");
-  const [selectedSubCategoryIdx, setSelectedSubCategoryIdx] = useState<string>("");
-  const [selectedPercent, setSelectedPercent] = useState<number | null>(null);
-
-  // Available programs for current area
-  const currentPrograms = useMemo(() => {
-    if (!selectedArea) return [];
-    return PROGRAMS_FEE_DATABASE[selectedArea]?.programs || [];
-  }, [selectedArea]);
-
-  // Filter available scholarship categories based on area and level
-  const availableCategories = useMemo<Array<[string, any]>>(() => {
-    if (!selectedProgramData || !selectedArea) return [];
-    if (selectedProgramData.scholarship_allowed === false) return [];
-    return Object.entries(rulesDb).filter(([key, rule]: [string, any]) => {
-      if (rule?.exclude_groups?.includes(selectedArea)) return false;
-      if (rule?.eligible_groups && !rule.eligible_groups.includes(selectedArea)) return false;
-      if (rule?.level_applicability && !rule.level_applicability.includes(selectedProgramData.level)) return false;
-      // GUTS is strictly for UG programs and never for PG, Pharmacy, or Ph.D
-      if (key === "GUTS") {
-        if (selectedProgramData.level !== "UG") return false;
-        if (selectedArea === "Pharmacy") return false;
-        if (/pharm|ph\.?d/i.test(selectedProgramData.name)) return false;
-      }
-      return true;
-    }) as Array<[string, any]>;
-  }, [selectedArea, selectedProgramData, rulesDb]);
-
-  // Reset category if selected category is no longer available
-  useEffect(() => {
-    if (selectedCategoryKey && !availableCategories.some(([k]) => k === selectedCategoryKey)) {
-      setSelectedCategoryKey("");
-      setSelectedSubCategoryIdx("");
-      setSelectedPercent(null);
-    }
-  }, [availableCategories, selectedCategoryKey]);
-
-  // Current selected category rule
-  const currentRule = useMemo(() => {
-    if (!selectedCategoryKey) return null;
-    return rulesDb[selectedCategoryKey] || null;
-  }, [selectedCategoryKey, rulesDb]);
-
-  // Subcategories
-  const currentSubcategories = useMemo(() => {
-    return currentRule?.subcategories || [];
-  }, [currentRule]);
-
-  // Slabs
-  const currentSlabs = useMemo(() => {
-    if (selectedSubCategoryIdx === "") return [];
-    const idx = parseInt(selectedSubCategoryIdx, 10);
-    const subcat = currentSubcategories[idx];
-    return subcat?.slabs || [];
-  }, [currentSubcategories, selectedSubCategoryIdx]);
-
-  // Handlers
-  const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newArea = e.target.value;
-    setSelectedArea(newArea);
-    setSelectedProgramData(null);
-    setSelectedCategoryKey("");
-    setSelectedSubCategoryIdx("");
-    setSelectedPercent(null);
-  };
-
-  const handleProgramChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value;
-    if (!val) {
-      setSelectedProgramData(null);
-      setSelectedCategoryKey("");
-      setSelectedSubCategoryIdx("");
-      setSelectedPercent(null);
-      return;
-    }
-    const data = JSON.parse(val);
-    setSelectedProgramData(data);
-    setSelectedCategoryKey("");
-    setSelectedSubCategoryIdx("");
-    setSelectedPercent(null);
-  };
-
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newKey = e.target.value;
-    setSelectedCategoryKey(newKey);
-    setSelectedSubCategoryIdx("");
-    setSelectedPercent(null);
-  };
-
-  const handleSubCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newIdx = e.target.value;
-    setSelectedSubCategoryIdx(newIdx);
-    setSelectedPercent(null);
-  };
-
-  const handleSlabChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value;
-    if (val === "") {
-      setSelectedPercent(null);
-      return;
-    }
-    setSelectedPercent(parseFloat(val));
-  };
-
-  // Calculations
-  const feePerSem = selectedProgramData?.fee || 0;
-  const tuitionFee = selectedProgramData?.tuition || 0;
-  const scholarshipAmount =
-    selectedPercent !== null && tuitionFee > 0
-      ? Math.round((tuitionFee * selectedPercent) / 100)
-      : null;
-  const applicableFee =
-    scholarshipAmount !== null ? Math.max(0, feePerSem - scholarshipAmount) : null;
-
+export default function ScholarshipPredictorSection({
+  data,
+  programsData,
+  rulesData,
+  cuetData,
+}: ScholarshipPredictorSectionProps = {}) {
   return (
     <section className="py-8 bg-white" id="scholarship-calculator">
       <style>{`
@@ -184,21 +59,6 @@ export default function ScholarshipPredictorSection({ data }: ScholarshipPredict
           left: 0;
           color: #06355F;
           font-weight: bold;
-        }
-
-        .form-control-custom-fee {
-          width: 100%;
-          padding: 0.5rem 0.85rem;
-          border: 1px solid #ced4da;
-          border-radius: 0.375rem;
-          font-size: 0.95rem;
-          background-color: #fff;
-          outline: none;
-          transition: border-color 0.15s ease-in-out;
-        }
-        .form-control-custom-fee:focus {
-          border-color: #06355F;
-          box-shadow: 0 0 0 0.2rem rgba(6, 53, 95, 0.15);
         }
       `}</style>
 
@@ -344,14 +204,16 @@ export default function ScholarshipPredictorSection({ data }: ScholarshipPredict
                       style={{ backgroundColor: "#f8fbff", borderLeft: "4px solid #06355F" }}
                     >
                       <p className="mb-0" style={{ color: "#444", fontSize: "0.95rem" }}>
-                        Applicable for selected programs in Engineering, Computer Applications, Management, Nutrition &amp;
-                        Dietetics, Hospitality, Humanities, Forensic Science, Pharmacy, Commerce, Agriculture, and Law programs.
+                        <strong>Conditions:</strong> Pragati Scholarship is awarded on a first-come, first-served basis per State/UT.
                       </p>
                     </div>
 
                     <div
-                      className="flex items-center p-3 rounded-lg"
-                      style={{ backgroundColor: "#FFF2E5", border: "1px solid #FFE5CC" }}
+                      className="p-3 rounded-lg flex items-center"
+                      style={{
+                        backgroundColor: "#FFF8F0",
+                        border: "1px dashed #FF7A00",
+                      }}
                     >
                       <div
                         className="flex justify-center items-center rounded-full mr-3 shrink-0"
@@ -378,183 +240,14 @@ export default function ScholarshipPredictorSection({ data }: ScholarshipPredict
               </div>
             </div>
 
-            {/* RIGHT COLUMN: FEE & SCHOLARSHIP PREDICTOR FORM */}
+            {/* RIGHT COLUMN: UNIFIED FEE & SCHOLARSHIP PREDICTOR */}
             <div className="lg:col-span-5">
-              <h3 className="finder-heading text-center">Fee &amp; Scholarship Predictor</h3>
-              <section className="bg-white rounded-2xl p-5 shadow-lg border border-[#E2E8F0]">
-                <div className="space-y-4">
-                  {/* Area of Interest */}
-                  <div className="form-group">
-                    <label className="text-dark small mb-1 block font-semibold text-sm text-[#333]">
-                      Area of Interest
-                    </label>
-                    <select
-                      value={selectedArea}
-                      onChange={handleAreaChange}
-                      className="form-control-custom-fee"
-                    >
-                      <option value="">Select</option>
-                      {areaKeys.map((area) => (
-                        <option key={area} value={area}>
-                          {area}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Program */}
-                  <div className="form-group">
-                    <label className="text-dark small mb-1 block font-semibold text-sm text-[#333]">
-                      Program
-                    </label>
-                    <select
-                      value={
-                        selectedProgramData
-                          ? JSON.stringify({
-                            fee: selectedProgramData.fee,
-                            tuition: selectedProgramData.tuition,
-                            name: selectedProgramData.name,
-                            level: selectedProgramData.level,
-                          })
-                          : ""
-                      }
-                      onChange={handleProgramChange}
-                      className="form-control-custom-fee"
-                      disabled={!selectedArea}
-                    >
-                      <option value="">Select Program</option>
-                      {currentPrograms.map((p, idx) => (
-                        <option
-                          key={idx}
-                          value={JSON.stringify({
-                            fee: p.prog_fee_per_sem,
-                            tuition: p.tuition_fee,
-                            name: p.program,
-                            level: p.level,
-                            scholarship_allowed: p.scholarship_allowed,
-                          })}
-                        >
-                          {p.program}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Category & Subcategory Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="form-group">
-                      <label className="text-dark small mb-1 block font-semibold text-sm text-[#333]">
-                        Scholarship Category
-                      </label>
-                      <select
-                        value={selectedCategoryKey}
-                        onChange={handleCategoryChange}
-                        className="form-control-custom-fee"
-                        disabled={!selectedProgramData}
-                      >
-                        <option value="">Select</option>
-                        {availableCategories.map(([key, rule]: [string, any]) => (
-                          <option key={key} value={key}>
-                            {rule.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="form-group">
-                      <label className="text-dark small mb-1 block font-semibold text-sm text-[#333]">
-                        Scholarship Subcategory
-                      </label>
-                      <select
-                        value={selectedSubCategoryIdx}
-                        onChange={handleSubCategoryChange}
-                        className="form-control-custom-fee"
-                        disabled={!selectedCategoryKey || currentSubcategories.length === 0}
-                      >
-                        <option value="">Select</option>
-                        {currentSubcategories.map((s: any, i: number) => (
-                          <option key={i} value={i.toString()}>
-                            {s.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Scholarship Slab */}
-                  <div className="form-group">
-                    <label className="text-dark small mb-1 block font-semibold text-sm text-[#333]">
-                      Scholarship Slab
-                    </label>
-                    <select
-                      value={selectedPercent !== null ? selectedPercent.toString() : ""}
-                      onChange={handleSlabChange}
-                      className="form-control-custom-fee"
-                      disabled={selectedSubCategoryIdx === "" || currentSlabs.length === 0}
-                    >
-                      <option value="">Select Slab</option>
-                      {currentSlabs.map((s: any, idx: number) => (
-                        <option key={idx} value={s.percent.toString()}>
-                          {s.label} – {s.percent}%
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* RESULT CARD IN NAVY (#06355F) */}
-                <div className="mt-5">
-                  <div
-                    className="p-6 h-full shadow-lg relative overflow-hidden text-white"
-                    style={{ background: "#06355F", borderRadius: "1rem" }}
-                  >
-                    <h4 className="text-white mb-4 font-bold text-lg font-serif">Scholarship Estimate</h4>
-
-                    <div className="mb-3 flex justify-between border-b border-white/25 pb-2.5 items-center">
-                      <span className="text-white/70 text-sm">Fee Per Semester</span>
-                      <span className="font-bold text-white text-base">
-                        {selectedProgramData ? `₹ ${feePerSem.toLocaleString("en-IN")}` : "—"}
-                      </span>
-                    </div>
-
-                    <div className="mb-3 flex justify-between border-b border-white/25 pb-2.5 items-center">
-                      <span className="text-white/70 text-sm">Tuition Fee</span>
-                      <span className="font-bold text-white text-base">
-                        {selectedProgramData ? `₹ ${tuitionFee.toLocaleString("en-IN")}` : "—"}
-                      </span>
-                    </div>
-
-                    <div className="mb-4 flex justify-between border-b border-white/25 pb-2.5 items-center">
-                      <span className="text-white/70 text-sm">Scholarship Amount</span>
-                      <span className="font-bold text-base" style={{ color: "#FF7A00" }}>
-                        {scholarshipAmount !== null ? `₹ ${scholarshipAmount.toLocaleString("en-IN")}` : "—"}
-                      </span>
-                    </div>
-
-                    <div
-                      className="text-center p-4 rounded-xl"
-                      style={{
-                        background: "rgba(255, 255, 255, 0.08)",
-                        border: "1px solid rgba(255, 255, 255, 0.15)",
-                        boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-                      }}
-                    >
-                      <p
-                        className="mb-1 uppercase font-bold text-xs"
-                        style={{ color: "#ffffff", letterSpacing: "1px" }}
-                      >
-                        Applicable Fee
-                      </p>
-                      <div
-                        className="font-black text-white w-full"
-                        style={{ fontSize: "2.4rem", lineHeight: 1.1 }}
-                      >
-                        {applicableFee !== null ? `₹ ${applicableFee.toLocaleString("en-IN")}` : "—"}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
+              <ScholarshipCalculator
+                variant="card"
+                programsData={programsData}
+                rulesData={rulesData}
+                cuetData={cuetData}
+              />
             </div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import FAQSection from "@/components/programs/FAQSection";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
 import { ugFaqsData } from "@/data/programsAfter12";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
+import { getScholarshipPredictorData } from "@/server/services/scholarshipPredictor";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { seo } = await getPublishedAdmissionsPage("programs-after-12th");
@@ -27,7 +28,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ProgramsAfter12Page() {
-  const { sections } = await getPublishedAdmissionsPage("programs-after-12th");
+  const [{ sections }, predictorData] = await Promise.all([
+    getPublishedAdmissionsPage("programs-after-12th"),
+    getScholarshipPredictorData(),
+  ]);
 
   const heroData = sections.hero;
   const ugSchoolsData = sections.ug_schools;
@@ -41,7 +45,11 @@ export default async function ProgramsAfter12Page() {
       <ProgramsAfter12Hero data={heroData} />
 
       {/* 2. Programs by School & Fee/Scholarship Calculator */}
-      <ProgramsListSection schoolsData={ugSchoolsData} statsData={statsCardsData} />
+      <ProgramsListSection
+        schoolsData={ugSchoolsData}
+        statsData={statsCardsData}
+        calculatorData={predictorData}
+      />
 
       {/* 3. Frequently Asked Questions */}
       <section id="faqs" className="w-full scroll-mt-20">

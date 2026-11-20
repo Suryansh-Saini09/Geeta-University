@@ -75,6 +75,7 @@ export const navigationGroups: NavGroup[] = [
       { label: "Pages", href: "/admin/pages" },
       { label: "Departments", href: "/admin/departments" },
       { label: "Programs", href: "/admin/programs" },
+      { label: "Scholarship & Fees", href: "/admin/scholarship-predictor" },
     ],
   },
   {

@@ -202,6 +202,7 @@ model Department {
   heroImage MediaAsset?     @relation("DepartmentHeroImage", fields: [heroImageId], references: [id], onDelete: SetNull)
   seo       SeoMetadata?    @relation(fields: [seoId], references: [id], onDelete: SetNull)
   programs  Program[]
+  programFees ProgramFee[]
   faculty   FacultyMember[]
 
   @@index([status, sortOrder])
@@ -231,6 +232,7 @@ model Program {
   seo        SeoMetadata?     @relation(fields: [seoId], references: [id], onDelete: SetNull)
   aliases    ProgramAlias[]
   faculty    FacultyProgram[]
+  programFees ProgramFee[]
 
   @@index([departmentId])
   @@index([status, sortOrder])
@@ -644,5 +646,175 @@ model SearchDocument {
   @@index([category])
   @@index([slug])
   @@map("search_documents")
+}
+
+// ============================================================================
+// ACADEMIC FEE MANAGEMENT & SCHOLARSHIP PREDICTOR MODELS
+// ============================================================================
+
+model FeeSchedule {
+  id            String        @id @default(cuid())
+  academicYear  String        @unique
+  title         String
+  status        ContentStatus @default(DRAFT)
+  isCurrent     Boolean       @default(false)
+  effectiveDate DateTime?
+  sourceNotes   String?       @db.Text
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  programFees   ProgramFee[]
+
+  @@index([status, isCurrent])
+}
+
+model ProgramFee {
+  id                 String        @id @default(cuid())
+  feeScheduleId      String
+  departmentId       String?
+  programId          String?
+  schoolName         String
+  schoolCode         String
+  programName        String
+  programCode        String
+  specializationCode String?
+  degreeLevel        String
+  durationYears      String?
+  totalFee           Int
+  tuitionFee         Int
+  developmentFee     Int
+  scholarshipAllowed Boolean       @default(true)
+  status             ContentStatus @default(PUBLISHED)
+  sortOrder          Int           @default(0)
+  sourceNotes        String?       @db.Text
+  validationStatus   String        @default("VALID")
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  feeSchedule        FeeSchedule   @relation(fields: [feeScheduleId], references: [id], onDelete: Cascade)
+  department         Department?   @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  program            Program?      @relation(fields: [programId], references: [id], onDelete: SetNull)
+
+  @@index([feeScheduleId, status, sortOrder])
+  @@index([departmentId])
+  @@index([programId])
+  @@index([schoolCode, programCode])
+  @@index([degreeLevel])
+}
+
+model ScholarshipRule {
+  id                  String                   @id @default(cuid())
+  code                String                   @unique
+  label               String
+  description         String?                  @db.Text
+  allowPrograms       String                   @default("all")
+  levelApplicability  Json?
+  excludeGroups       Json?
+  eligibleGroups      Json?
+  directPercent       Float?
+  status              ContentStatus            @default(PUBLISHED)
+  sortOrder           Int                      @default(0)
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+
+  subcategories       ScholarshipSubcategory[]
+
+  @@index([status, sortOrder])
+}
+
+model ScholarshipSubcategory {
+  id            String            @id @default(cuid())
+  ruleId        String
+  code          String?
+  label         String
+  description   String?           @db.Text
+  directPercent Float?
+  sortOrder     Int               @default(0)
+  status        ContentStatus     @default(PUBLISHED)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  rule          ScholarshipRule   @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  slabs         ScholarshipSlab[]
+
+  @@index([ruleId, status, sortOrder])
+}
+
+model ScholarshipSlab {
+  id             String                 @id @default(cuid())
+  subcategoryId  String
+  label          String
+  percentage     Float
+  minScore       Float?
+  maxScore       Float?
+  sortOrder      Int                    @default(0)
+  status         ContentStatus          @default(PUBLISHED)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  subcategory    ScholarshipSubcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+
+  @@index([subcategoryId, status, sortOrder])
+}
+
+model ScholarshipAdditionalCharge {
+  id            String        @id @default(cuid())
+  title         String
+  amount        Int
+  frequency     String
+  description   String?       @db.Text
+  applicability String?       @default("ALL")
+  isMandatory   Boolean       @default(true)
+  status        ContentStatus @default(PUBLISHED)
+  sortOrder     Int           @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([status, sortOrder])
+}
+
+model ScholarshipFAQ {
+  id           String        @id @default(cuid())
+  question     String        @db.Text
+  answer       String        @db.Text
+  category     String?       @default("General")
+  displayOrder Int           @default(0)
+  status       ContentStatus @default(PUBLISHED)
+  translations Json?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([status, displayOrder])
+}
+
+model ScholarshipPredictorSetting {
+  id                       String   @id @default("default")
+  calculatorTitle          String   @default("Scholarship Calculator")
+  calculatorEyebrow        String?
+  instructionText          String   @default("Select your discipline, academic program, and qualifying eligibility criteria to instantly view your custom tuition waiver and payable semester fee breakdown.") @db.Text
+  description              String?  @db.Text
+  supportingInformation    String?  @db.Text
+  formHeading              String   @default("Program & Eligibility Selection")
+  schoolSelectorLabel      String   @default("Area of Interest")
+  programSelectorLabel     String   @default("Program")
+  academicLevelLabel       String   @default("Academic Level")
+  categorySelectorLabel    String   @default("Scholarship Category")
+  subcategorySelectorLabel String   @default("Scholarship Subcategory")
+  slabSelectorLabel        String   @default("Scholarship Slab / Criteria")
+  calculateButtonText      String   @default("Calculate Scholarship")
+  resetButtonText          String   @default("Reset")
+  resultsHeading           String   @default("Calculation Breakdown")
+  totalFeeLabel            String   @default("Fee Per Semester")
+  tuitionFeeLabel          String?
+  developmentFeeLabel      String?
+  scholarshipAmountLabel   String   @default("Scholarship Amount")
+  payableFeeLabel          String   @default("Payable Fee After Scholarship")
+  explanatoryNotes         String?  @default("GUTS Scholarship is not valid for Pharmacy and Postgraduate (PG) / Ph.D. Programs.") @db.Text
+  disclaimer               String?  @db.Text
+  ctaLabel                 String   @default("Apply for Admission")
+  ctaUrl                   String   @default("/admissions")
+  translations             Json?
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
 }
 

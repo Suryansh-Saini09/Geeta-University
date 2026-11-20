@@ -48,6 +48,15 @@ export const CACHE_TAGS = {
   termsAndConditions: "page:terms-and-conditions",
   disclaimer: "page:disclaimer",
   scholarship: "page:scholarship",
+  scholarshipPredictor: "page:scholarship-predictor",
+  feeAndScholarship: "page:fee-and-scholarship",
+  cuet: "page:cuet",
+  programsAfter12th: "page:programs-after-12th",
+  postGraduatePrograms: "page:post-graduate-programs",
+  feeSchedules: "fee-schedules",
+  scholarshipRules: "scholarship-rules",
+  scholarshipFAQs: "scholarship-faqs",
+  scholarshipCharges: "scholarship-charges",
 } as const;
 
 /**
