@@ -642,8 +642,8 @@ export async function replaceMediaAssetBinary(params: {
       throw new Error(`Persistent storage verification failed: ${verified.reason}`);
     }
 
-    // 3. Mirror to local disk if public path is writable
-    if (target.url.startsWith("/uploads/cms/")) {
+    // 3. Mirror to local disk ONLY in non-production development
+    if (process.env.NODE_ENV !== "production" && target.url.startsWith("/uploads/cms/")) {
       const cmsSubPath = target.url.replace(/^\/uploads\/cms\//, "");
       const diskPath = path.join(process.cwd(), "public", "uploads", "cms", cmsSubPath);
       try {

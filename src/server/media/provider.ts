@@ -2,7 +2,7 @@ if (typeof window !== "undefined") {
   throw new Error("This module can only be executed on the server.");
 }
 
-import { mkdir, readFile, unlink, writeFile, stat } from "node:fs/promises";
+import { mkdir, readFile, unlink, writeFile, stat, rename } from "node:fs/promises";
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
@@ -75,36 +75,85 @@ export function sanitizeStorageKey(key: string): string {
 }
 
 /**
+ * Resolves and validates the active storage root directory dynamically at runtime.
+ * Strips surrounding quotes, validates absolute paths, and guards against ephemeral storage in production.
+ */
+export function resolveStorageRoot(customDir?: string): { rootDir: string; error?: string } {
+  if (customDir && customDir.trim()) {
+    const sanitized = customDir.trim().replace(/^["']|["']$/g, "").trim();
+    return { rootDir: path.resolve(sanitized) };
+  }
+
+  // Always read from process.env dynamically at runtime
+  let raw = (
+    process.env.MEDIA_STORAGE_ROOT ||
+    process.env.MEDIA_STORAGE_DIR ||
+    env.MEDIA_STORAGE_ROOT ||
+    env.MEDIA_STORAGE_DIR ||
+    ""
+  ).trim();
+
+  // Strip single or double quotes (e.g. from copy-pasting into Hostinger UI)
+  if ((raw.startsWith('"') && raw.endsWith('"')) || (raw.startsWith("'") && raw.endsWith("'"))) {
+    raw = raw.slice(1, -1).trim();
+  }
+
+  const isProduction = process.env.NODE_ENV === "production";
+
+  if (!raw) {
+    if (isProduction) {
+      return {
+        rootDir: "",
+        error: "CRITICAL: MEDIA_STORAGE_ROOT environment variable is not configured in production. Ephemeral storage is prohibited to prevent data loss.",
+      };
+    }
+    // Safe default for local development only
+    return { rootDir: path.resolve(process.cwd(), "storage", "media") };
+  }
+
+  const resolved = path.resolve(raw);
+
+  if (isProduction && !path.isAbsolute(raw)) {
+    return {
+      rootDir: resolved,
+      error: `CRITICAL: MEDIA_STORAGE_ROOT must be an absolute path in production (e.g. /home/u232028417/media_storage). Received: "${raw}".`,
+    };
+  }
+
+  return { rootDir: resolved };
+}
+
+/**
  * Local Filesystem Provider
  * Writes to persistent storage directory (outside deployment build dir).
  * Falls back to public repository folder for read compatibility with pre-existing assets.
  */
 export class LocalStorageProvider implements StorageProvider {
   readonly driver: StorageDriverType = "local";
-  private baseDir: string;
+  private customDir?: string;
 
   constructor(customDir?: string) {
-    const rawDir =
-      customDir ||
-      env.MEDIA_STORAGE_ROOT ||
-      env.MEDIA_STORAGE_DIR ||
-      path.join(process.cwd(), "storage", "media");
-    this.baseDir = path.resolve(rawDir);
+    this.customDir = customDir;
   }
 
   getBaseDir(): string {
-    return this.baseDir;
+    const { rootDir, error } = resolveStorageRoot(this.customDir);
+    if (error) {
+      throw new Error(error);
+    }
+    return rootDir;
   }
 
   private resolvePath(key: string): string {
     const safeKey = sanitizeStorageKey(key);
-    const fullPath = path.join(this.baseDir, safeKey);
-    const normalizedBase = path.normalize(this.baseDir);
-    const normalizedFull = path.normalize(fullPath);
-    if (!normalizedFull.startsWith(normalizedBase)) {
-      throw new Error("Path traversal violation.");
+    const baseDir = this.getBaseDir();
+    const fullPath = path.resolve(baseDir, safeKey);
+    const relative = path.relative(baseDir, fullPath);
+
+    if (relative.startsWith("..") || path.isAbsolute(relative)) {
+      throw new Error("Invalid storage key: Path traversal violation.");
     }
-    return normalizedFull;
+    return fullPath;
   }
 
   /**
@@ -158,7 +207,11 @@ export class LocalStorageProvider implements StorageProvider {
         throw new Error(`Written size mismatch: expected ${bytes.length}, wrote ${s.size}`);
       }
       // Overwrite target atomically
-      await writeFile(fullPath, bytes, { flag: "w" });
+      await rename(stagingPath, fullPath).catch(async () => {
+        // Fallback for cross-device renames if temporary file on different volume
+        await writeFile(fullPath, bytes, { flag: "w" });
+        await unlink(stagingPath).catch(() => {});
+      });
     } finally {
       try {
         await unlink(stagingPath);
