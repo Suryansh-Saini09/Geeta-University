@@ -433,31 +433,34 @@ export async function saveCmsAsset(
     };
   }
 
-  // Optional mirror to local public/uploads for direct static serving if directory is writable
+  // Mirror to local public/uploads for direct static serving ONLY in non-production development
+  const isProduction = process.env.NODE_ENV === "production";
   const uploadsCmsDir = path.join(process.cwd(), "public", "uploads", "cms", contentArea, section);
   const localDiskPath = path.join(uploadsCmsDir, finalFileName);
-  try {
-    await mkdir(uploadsCmsDir, { recursive: true });
-    await writeFile(localDiskPath, finalBytes, { flag: "w" });
 
-    // If replacing an existing shared file, also update legacy path if present
-    if (options.replaceShared && options.replaceUrl && options.replaceUrl.startsWith("/uploads/")) {
-      const oldRelative = options.replaceUrl.replace(/^\/uploads\//, "");
-      const oldDiskPath = path.join(process.cwd(), "public", "uploads", oldRelative);
-      const oldStorageKey = options.replaceUrl.replace(/^\//, "");
-      // Update in persistent storage as well
-      await MediaStorageService.upload(oldStorageKey, finalBytes, format.mimeType).catch(() => {});
-      if (oldDiskPath !== localDiskPath) {
-        await writeFile(oldDiskPath, finalBytes, { flag: "w" }).catch(() => {});
+  if (!isProduction) {
+    try {
+      await mkdir(uploadsCmsDir, { recursive: true });
+      await writeFile(localDiskPath, finalBytes, { flag: "w" });
+
+      // If replacing an existing shared file, also update legacy path if present
+      if (options.replaceShared && options.replaceUrl && options.replaceUrl.startsWith("/uploads/")) {
+        const oldRelative = options.replaceUrl.replace(/^\/uploads\//, "");
+        const oldDiskPath = path.join(process.cwd(), "public", "uploads", oldRelative);
+        const oldStorageKey = options.replaceUrl.replace(/^\//, "");
+        // Update in persistent storage as well
+        await MediaStorageService.upload(oldStorageKey, finalBytes, format.mimeType).catch(() => {});
+        if (oldDiskPath !== localDiskPath) {
+          await writeFile(oldDiskPath, finalBytes, { flag: "w" }).catch(() => {});
+        }
       }
+    } catch (localWriteErr) {
+      serverLogger.warn("Local public directory mirror skipped", localWriteErr, {
+        module: "cmsUpload",
+        action: "localMirror",
+        localDiskPath,
+      });
     }
-  } catch (localWriteErr) {
-    // Non-fatal: persistent storage is the primary source of truth
-    serverLogger.warn("Local public directory mirror skipped or failed", localWriteErr, {
-      module: "cmsUpload",
-      action: "localMirror",
-      localDiskPath,
-    });
   }
 
   // Upsert MediaAsset in MySQL + AuditLog
@@ -517,7 +520,9 @@ export async function saveCmsAsset(
     // Clean up persistent storage so no orphaned file is left
     try {
       await MediaStorageService.delete(storageKey);
-      await unlink(localDiskPath).catch(() => {});
+      if (!isProduction) {
+        await unlink(localDiskPath).catch(() => {});
+      }
     } catch {}
 
     return {

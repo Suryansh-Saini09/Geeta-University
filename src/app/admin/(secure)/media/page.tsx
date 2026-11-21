@@ -19,6 +19,7 @@ import {
 
 import DeleteMediaButton from "@/components/admin/DeleteMediaButton";
 import { CopyMediaLinkButton } from "@/components/admin/CopyMediaLinkButton";
+import { StorageDiagnosticModal } from "@/components/admin/StorageDiagnosticModal";
 import { MediaUploadForm } from "@/features/admin/media/components/MediaUploadForm";
 import { hasPermission } from "@/server/auth/permissions";
 import { requireAdminSession } from "@/server/auth/session";
@@ -115,30 +116,33 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
           </p>
         </div>
 
-        {/* View Switcher */}
-        <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-xs">
-          <Link
-            href={buildUrl({ view: "grid" })}
-            className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
-              view === "grid"
-                ? "bg-[#0A1F44] text-white"
-                : "text-slate-600 hover:bg-slate-100"
-            }`}
-          >
-            <LayoutGrid className="h-3.5 w-3.5" />
-            Grid
-          </Link>
-          <Link
-            href={buildUrl({ view: "table" })}
-            className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
-              view === "table"
-                ? "bg-[#0A1F44] text-white"
-                : "text-slate-600 hover:bg-slate-100"
-            }`}
-          >
-            <List className="h-3.5 w-3.5" />
-            Table
-          </Link>
+        {/* Action Controls & View Switcher */}
+        <div className="flex items-center gap-3">
+          <StorageDiagnosticModal />
+          <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-xs">
+            <Link
+              href={buildUrl({ view: "grid" })}
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+                view === "grid"
+                  ? "bg-[#0A1F44] text-white"
+                  : "text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              <LayoutGrid className="h-3.5 w-3.5" />
+              Grid
+            </Link>
+            <Link
+              href={buildUrl({ view: "table" })}
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+                view === "table"
+                  ? "bg-[#0A1F44] text-white"
+                  : "text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              <List className="h-3.5 w-3.5" />
+              Table
+            </Link>
+          </div>
         </div>
       </div>
 
