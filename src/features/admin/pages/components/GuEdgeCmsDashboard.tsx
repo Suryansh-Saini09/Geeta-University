@@ -25,6 +25,7 @@ import {
   ArrowRight,
   ArrowLeft,
   ChevronRight,
+  ChevronDown,
   Search,
   X,
   Loader2,
@@ -1314,6 +1315,22 @@ function FocusedGuEdgeSectionEditorView({
                   />
                 );
               }
+              if (sectionKey === "head_profile" || sectionKey === "headProfile") {
+                return (
+                  <HeadProfileSectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
+              if (sectionKey === "hackathons" || sectionKey === "hackathon") {
+                return (
+                  <HackathonsSectionEditor
+                    state={safeBody}
+                    onChange={onBodyChange}
+                  />
+                );
+              }
               if (sectionKey === "cta") {
                 return (
                   <CtaSectionEditor
@@ -1552,10 +1569,10 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
                     </div>
                     {feat.subtitle !== undefined && (
                       <div>
-                        <label className="block font-bold text-slate-600 mb-0.5">Subtitle / Tag</label>
+                        <label className="block font-bold text-slate-600 mb-0.5">Subtitle / Tagline</label>
                         <input
                           type="text"
-                          value={feat.subtitle || feat.tag || ""}
+                          value={feat.subtitle || ""}
                           onChange={(e) => {
                             const updatedFeats = [...(grid.features || [])];
                             updatedFeats[featIdx] = { ...updatedFeats[featIdx], subtitle: e.target.value };
@@ -1567,9 +1584,30 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
                     )}
                   </div>
 
+                  {(feat.tag !== undefined || feat.idealFor !== undefined) && (
+                    <div>
+                      <label className="block font-bold text-slate-600 mb-0.5">Ideal For (Target Audience)</label>
+                      <input
+                        type="text"
+                        value={feat.idealFor || feat.tag || ""}
+                        onChange={(e) => {
+                          const updatedFeats = [...(grid.features || [])];
+                          updatedFeats[featIdx] = {
+                            ...updatedFeats[featIdx],
+                            tag: e.target.value,
+                            idealFor: e.target.value,
+                          };
+                          updateGridItem(gridIdx, { ...grid, features: updatedFeats });
+                        }}
+                        placeholder="e.g. Ideal for: B.Tech, BCA, B.Sc. students..."
+                        className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
+                      />
+                    </div>
+                  )}
+
                   {feat.description !== undefined && (
                     <CmsAutoTextarea
-                      label="Card Description"
+                      label="Card Description / Taught By"
                       value={feat.description || ""}
                       onChange={(val) => {
                         const updatedFeats = [...(grid.features || [])];
@@ -1594,7 +1632,7 @@ function FeatureGridSectionEditor({ state, onChange }: { state: any; onChange: (
 
                   {Array.isArray(feat.bullets) && (
                     <CmsStringRepeater
-                      title="Bullet Points"
+                      title="Skills Covered / Bullet Points"
                       items={feat.bullets}
                       onChange={(newBullets) => {
                         const updatedFeats = [...(grid.features || [])];
@@ -1904,6 +1942,13 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
         />
       </div>
 
+      <CmsAutoTextarea
+        label="Model Subtitle / Overview"
+        value={safeState.subtitle || ""}
+        onChange={(val) => onChange({ ...safeState, subtitle: val })}
+        rows={3}
+      />
+
       <div className="flex items-center justify-between border-b border-slate-200 pb-2">
         <label className="block text-xs font-bold uppercase text-slate-800">
           Training Stages ({stages.length})
@@ -1940,7 +1985,7 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
               <div>
                 <label className="block font-bold text-slate-600 mb-0.5">Stage Name / Badge</label>
                 <input
@@ -1967,6 +2012,20 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
                   className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-slate-400"
                 />
               </div>
+              <div>
+                <label className="block font-bold text-slate-600 mb-0.5">Icon Name</label>
+                <input
+                  type="text"
+                  placeholder="Mic, FileCheck, Award..."
+                  value={stage.iconName || ""}
+                  onChange={(e) => {
+                    const copy = [...stages];
+                    copy[idx] = { ...copy[idx], iconName: e.target.value };
+                    onChange({ ...safeState, stages: copy });
+                  }}
+                  className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
+                />
+              </div>
             </div>
 
             <CmsAutoTextarea
@@ -1980,17 +2039,15 @@ function TrainingModelSectionEditor({ state, onChange }: { state: any; onChange:
               rows={2}
             />
 
-            {Array.isArray(stage.focusAreas) && (
-              <CmsStringRepeater
-                title="Focus Areas"
-                items={stage.focusAreas}
-                onChange={(newAreas) => {
-                  const copy = [...stages];
-                  copy[idx] = { ...copy[idx], focusAreas: newAreas };
-                  onChange({ ...safeState, stages: copy });
-                }}
-              />
-            )}
+            <CmsStringRepeater
+              title="Focus Areas"
+              items={Array.isArray(stage.focusAreas) ? stage.focusAreas : Array.isArray(stage.modules) ? stage.modules : []}
+              onChange={(newAreas) => {
+                const copy = [...stages];
+                copy[idx] = { ...copy[idx], focusAreas: newAreas };
+                onChange({ ...safeState, stages: copy });
+              }}
+            />
           </div>
         ))}
       </div>
@@ -2565,7 +2622,430 @@ function CtaSectionEditor({ state, onChange }: { state: any; onChange: (val: any
 }
 
 
+function HeadProfileSectionEditor({ state, onChange }: { state: any; onChange: (val: any) => void }) {
+  const safeState = state || {};
+  const fullBio = Array.isArray(safeState.fullBio) ? safeState.fullBio : [];
+  const achievements = Array.isArray(safeState.achievements) ? safeState.achievements : [];
+  const additionalParagraphs = Array.isArray(safeState.additionalParagraphs) ? safeState.additionalParagraphs : [];
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Leader Name</label>
+          <input
+            type="text"
+            value={safeState.name || ""}
+            onChange={(e) => onChange({ ...safeState, name: e.target.value })}
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Designation / Role</label>
+          <input
+            type="text"
+            value={safeState.designation || ""}
+            onChange={(e) => onChange({ ...safeState, designation: e.target.value })}
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Organization / Department</label>
+          <input
+            type="text"
+            value={safeState.organization || ""}
+            onChange={(e) => onChange({ ...safeState, organization: e.target.value })}
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:outline-none focus:border-slate-400"
+          />
+        </div>
+        <CmsImagePreviewInput
+          label="Profile Picture URL"
+          value={safeState.image || ""}
+          onChange={(val) => onChange({ ...safeState, image: val })}
+        />
+      </div>
+
+      <CmsAutoTextarea
+        label="Short Bio (First Paragraph - Always Visible)"
+        value={safeState.shortBio || ""}
+        onChange={(val) => onChange({ ...safeState, shortBio: val })}
+        rows={3}
+      />
+
+      {/* Full Bio Paragraphs */}
+      <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div className="flex items-center justify-between">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-800">
+            Full Bio Paragraphs ({fullBio.length})
+          </label>
+          <button
+            type="button"
+            onClick={() => onChange({ ...safeState, fullBio: [...fullBio, ""] })}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>Add Paragraph</span>
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          {fullBio.map((para: string, idx: number) => (
+            <div key={idx} className="rounded-lg border border-slate-200 bg-white p-3 space-y-2">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <span className="text-xs font-bold text-slate-700">Paragraph #{idx + 1}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const copy = fullBio.filter((_: any, i: number) => i !== idx);
+                    onChange({ ...safeState, fullBio: copy });
+                  }}
+                  className="text-rose-600 hover:text-rose-800 text-xs font-bold inline-flex items-center gap-1"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>Remove</span>
+                </button>
+              </div>
+              <CmsAutoTextarea
+                label={`Paragraph Content #${idx + 1}`}
+                value={para}
+                onChange={(newVal) => {
+                  const copy = [...fullBio];
+                  copy[idx] = newVal;
+                  onChange({ ...safeState, fullBio: copy });
+                }}
+                rows={3}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Key Initiatives / Achievements */}
+      <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div className="flex items-center justify-between">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-800">
+            Key Initiatives &amp; Milestones ({achievements.length})
+          </label>
+          <button
+            type="button"
+            onClick={() =>
+              onChange({
+                ...safeState,
+                achievements: [...achievements, { title: "New Initiative", description: "" }],
+              })
+            }
+            className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>Add Initiative</span>
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          {achievements.map((ach: any, idx: number) => (
+            <div key={idx} className="rounded-lg border border-slate-200 bg-white p-3 space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <span className="text-xs font-bold text-slate-800">
+                  #{idx + 1} {ach.title || "Initiative"}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const copy = achievements.filter((_: any, i: number) => i !== idx);
+                    onChange({ ...safeState, achievements: copy });
+                  }}
+                  className="text-rose-600 hover:text-rose-800 text-xs font-bold inline-flex items-center gap-1"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>Remove</span>
+                </button>
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold uppercase text-slate-500 mb-0.5">
+                  Initiative Title
+                </label>
+                <input
+                  type="text"
+                  value={ach.title || ""}
+                  onChange={(e) => {
+                    const copy = [...achievements];
+                    copy[idx] = { ...copy[idx], title: e.target.value };
+                    onChange({ ...safeState, achievements: copy });
+                  }}
+                  className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-slate-400"
+                />
+              </div>
+              <CmsAutoTextarea
+                label="Initiative Description"
+                value={ach.description || ""}
+                onChange={(newDesc) => {
+                  const copy = [...achievements];
+                  copy[idx] = { ...copy[idx], description: newDesc };
+                  onChange({ ...safeState, achievements: copy });
+                }}
+                rows={2}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Additional Paragraphs */}
+      <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div className="flex items-center justify-between">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-800">
+            Additional Bio Paragraphs ({additionalParagraphs.length})
+          </label>
+          <button
+            type="button"
+            onClick={() =>
+              onChange({
+                ...safeState,
+                additionalParagraphs: [...additionalParagraphs, ""],
+              })
+            }
+            className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>Add Paragraph</span>
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          {additionalParagraphs.map((para: string, idx: number) => (
+            <div key={idx} className="rounded-lg border border-slate-200 bg-white p-3 space-y-2">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <span className="text-xs font-bold text-slate-700">Paragraph #{idx + 1}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const copy = additionalParagraphs.filter((_: any, i: number) => i !== idx);
+                    onChange({ ...safeState, additionalParagraphs: copy });
+                  }}
+                  className="text-rose-600 hover:text-rose-800 text-xs font-bold inline-flex items-center gap-1"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>Remove</span>
+                </button>
+              </div>
+              <CmsAutoTextarea
+                label={`Paragraph Content #${idx + 1}`}
+                value={para}
+                onChange={(newVal) => {
+                  const copy = [...additionalParagraphs];
+                  copy[idx] = newVal;
+                  onChange({ ...safeState, additionalParagraphs: copy });
+                }}
+                rows={3}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HackathonsSectionEditor({ state, onChange }: { state: any; onChange: (val: any) => void }) {
+  const safeState = state || {};
+  const items = Array.isArray(safeState.items) ? safeState.items : [];
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Section Heading</label>
+          <input
+            type="text"
+            value={safeState.title || ""}
+            onChange={(e) => onChange({ ...safeState, title: e.target.value })}
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-400"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Eyebrow / Badge</label>
+          <input
+            type="text"
+            value={safeState.eyebrow || ""}
+            onChange={(e) => onChange({ ...safeState, eyebrow: e.target.value })}
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm focus:outline-none focus:border-slate-400"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-xs font-bold uppercase text-slate-700 mb-1">Section Subtitle</label>
+        <input
+          type="text"
+          value={safeState.subtitle || ""}
+          onChange={(e) => onChange({ ...safeState, subtitle: e.target.value })}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-700 focus:outline-none focus:border-slate-400"
+        />
+      </div>
+
+      <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div className="flex items-center justify-between">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-800">
+            Hackathons List ({items.length})
+          </label>
+          <button
+            type="button"
+            onClick={() => {
+              const newItem = {
+                title: "New Hackathon",
+                highlight: "",
+                description: "",
+                gallery: [],
+                isFeatured: false,
+              };
+              onChange({ ...safeState, items: [...items, newItem] });
+            }}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>Add Hackathon</span>
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {items.map((item: any, idx: number) => (
+            <div key={idx} className="rounded-xl border border-slate-200 bg-white p-4 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <span className="text-xs font-bold text-slate-800">
+                  #{idx + 1} {item.title || "Hackathon Event"} {item.isFeatured ? "(Featured Flagship)" : ""}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const copy = items.filter((_: any, i: number) => i !== idx);
+                    onChange({ ...safeState, items: copy });
+                  }}
+                  className="text-rose-600 hover:text-rose-800 text-xs font-bold inline-flex items-center gap-1"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>Remove</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label className="block font-bold text-slate-600 mb-0.5">Event Title</label>
+                  <input
+                    type="text"
+                    value={item.title || ""}
+                    onChange={(e) => {
+                      const copy = [...items];
+                      copy[idx] = { ...copy[idx], title: e.target.value };
+                      onChange({ ...safeState, items: copy });
+                    }}
+                    className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-slate-400"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold text-slate-600 mb-0.5">Highlight / Badge (Teams &amp; Participants)</label>
+                  <input
+                    type="text"
+                    value={item.highlight || ""}
+                    onChange={(e) => {
+                      const copy = [...items];
+                      copy[idx] = { ...copy[idx], highlight: e.target.value };
+                      onChange({ ...safeState, items: copy });
+                    }}
+                    className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
+                  />
+                </div>
+              </div>
+
+              <CmsAutoTextarea
+                label="Event Description"
+                value={item.description || ""}
+                onChange={(val) => {
+                  const copy = [...items];
+                  copy[idx] = { ...copy[idx], description: val };
+                  onChange({ ...safeState, items: copy });
+                }}
+                rows={3}
+              />
+
+              <div className="flex items-center gap-2 pt-1">
+                <input
+                  type="checkbox"
+                  id={`featured-${idx}`}
+                  checked={!!item.isFeatured}
+                  onChange={(e) => {
+                    const copy = [...items];
+                    copy[idx] = { ...copy[idx], isFeatured: e.target.checked };
+                    onChange({ ...safeState, items: copy });
+                  }}
+                  className="h-4 w-4 rounded border-slate-300 text-[#06355F] focus:ring-0"
+                />
+                <label htmlFor={`featured-${idx}`} className="text-xs font-semibold text-slate-700 cursor-pointer">
+                  Display as Featured Flagship Card (Dark Navy Style with CTA Button)
+                </label>
+              </div>
+
+              {item.isFeatured && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-lg border border-slate-200">
+                  <div>
+                    <label className="block font-bold text-slate-600 mb-0.5">CTA Button Label</label>
+                    <input
+                      type="text"
+                      value={item.ctaText || ""}
+                      onChange={(e) => {
+                        const copy = [...items];
+                        copy[idx] = { ...copy[idx], ctaText: e.target.value };
+                        onChange({ ...safeState, items: copy });
+                      }}
+                      className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-600 mb-0.5">CTA Target Link</label>
+                    <input
+                      type="text"
+                      value={item.ctaLink || ""}
+                      onChange={(e) => {
+                        const copy = [...items];
+                        copy[idx] = { ...copy[idx], ctaLink: e.target.value };
+                        onChange({ ...safeState, items: copy });
+                      }}
+                      className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Gallery */}
+              <CmsStringRepeater
+                title="Event Photos (Image URLs)"
+                items={Array.isArray(item.gallery) ? item.gallery : []}
+                onChange={(newPhotos) => {
+                  const copy = [...items];
+                  copy[idx] = { ...copy[idx], gallery: newPhotos };
+                  onChange({ ...safeState, items: copy });
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: any; onChange: (val: any) => void; activeSectionKey: string }) {
+  const [collapsedMap, setCollapsedMap] = useState<Record<string, boolean>>({});
+
+  const toggleCollapse = (key: string) => {
+    setCollapsedMap((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   if (!state || typeof state !== "object") {
     return (
       <div className="p-4 text-center text-sm text-slate-500 italic">
@@ -2721,6 +3201,8 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
           Array.isArray(val) &&
           !["bullets", "bulletPoints", "badges"].includes(propKey)
         ) {
+          const isStringArray = val.length === 0 || typeof val[0] === "string";
+
           return (
             <div key={propKey} className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center justify-between">
@@ -2730,7 +3212,7 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
                 <button
                   type="button"
                   onClick={() => {
-                    const newItem = typeof val[0] === "object" ? { title: "New Item" } : "New Item";
+                    const newItem = isStringArray ? "" : { title: "New Item" };
                     onChange({ ...state, [propKey]: [...val, newItem] });
                   }}
                   className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
@@ -2741,53 +3223,131 @@ function UniversalSectionEditor({ state, onChange, activeSectionKey }: { state: 
               </div>
 
               <div className="space-y-3">
-                {val.map((item: any, idx: number) => (
-                  <div key={idx} className="rounded-lg border border-slate-200 bg-white p-3 space-y-2 relative">
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                      <span className="text-xs font-bold text-slate-700">
-                        #{idx + 1} {item.title || item.name || item.stepNumber || "Item"}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newArr = val.filter((_: any, i: number) => i !== idx);
-                          onChange({ ...state, [propKey]: newArr });
-                        }}
-                        className="text-rose-600 hover:text-rose-800 text-xs font-bold inline-flex items-center gap-1"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                        <span>Remove</span>
-                      </button>
-                    </div>
+                {val.map((item: any, idx: number) => {
+                  const itemKeyId = `${propKey}_${idx}`;
+                  const isCollapsed = !!collapsedMap[itemKeyId];
+                  const itemTitle =
+                    typeof item === "string"
+                      ? item.trim().length > 0
+                        ? item.length > 55
+                          ? item.slice(0, 55) + "..."
+                          : item
+                        : "Paragraph / Item"
+                      : typeof item === "object" && item !== null
+                      ? item.title || item.name || item.heading || item.label || item.stepNumber || "Item"
+                      : "Item";
 
-                    {typeof item === "object" && item !== null && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                        {Object.keys(item).map((itemKey) => {
-                          if (typeof item[itemKey] === "string" || typeof item[itemKey] === "number") {
-                            return (
-                              <div key={itemKey} className={itemKey.toLowerCase().includes("desc") ? "sm:col-span-2" : ""}>
-                                <label className="block text-[10px] font-bold uppercase text-slate-500 mb-0.5">
-                                  {itemKey}
-                                </label>
-                                <input
-                                  type="text"
-                                  value={item[itemKey] ?? ""}
-                                  onChange={(e) => {
-                                    const updatedArr = [...val];
-                                    updatedArr[idx] = { ...updatedArr[idx], [itemKey]: e.target.value };
-                                    onChange({ ...state, [propKey]: updatedArr });
-                                  }}
-                                  className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
-                                />
-                              </div>
-                            );
-                          }
-                          return null;
-                        })}
+                  return (
+                    <div key={idx} className="rounded-lg border border-slate-200 bg-white p-3 space-y-2 relative shadow-2xs">
+                      <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleCollapse(itemKeyId)}
+                          className="flex items-center gap-2 text-left font-bold text-xs text-slate-800 hover:text-blue-700 transition-colors focus:outline-none"
+                        >
+                          {isCollapsed ? (
+                            <ChevronRight className="h-4 w-4 text-slate-400 shrink-0" />
+                          ) : (
+                            <ChevronDown className="h-4 w-4 text-slate-500 shrink-0" />
+                          )}
+                          <span>
+                            #{idx + 1} {itemTitle}
+                          </span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newArr = val.filter((_: any, i: number) => i !== idx);
+                            onChange({ ...state, [propKey]: newArr });
+                          }}
+                          className="text-rose-600 hover:text-rose-800 text-xs font-bold inline-flex items-center gap-1 transition-colors"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                          <span>Remove</span>
+                        </button>
                       </div>
-                    )}
-                  </div>
-                ))}
+
+                      {!isCollapsed && (
+                        <div>
+                          {typeof item === "string" ? (
+                            <div className="pt-1">
+                              <textarea
+                                rows={3}
+                                value={item}
+                                onChange={(e) => {
+                                  const updatedArr = [...val];
+                                  updatedArr[idx] = e.target.value;
+                                  onChange({ ...state, [propKey]: updatedArr });
+                                }}
+                                placeholder={`Enter text content for #${idx + 1}...`}
+                                className="w-full rounded-lg border border-slate-300 bg-white p-2.5 text-xs text-slate-900 focus:border-slate-400 focus:outline-none leading-relaxed"
+                              />
+                            </div>
+                          ) : typeof item === "object" && item !== null ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                              {Object.keys(item).map((itemKey) => {
+                                if (typeof item[itemKey] === "string" || typeof item[itemKey] === "number") {
+                                  const isLongText =
+                                    itemKey.toLowerCase().includes("desc") ||
+                                    itemKey.toLowerCase().includes("bio") ||
+                                    itemKey.toLowerCase().includes("content") ||
+                                    itemKey.toLowerCase().includes("overview") ||
+                                    itemKey.toLowerCase().includes("text");
+                                  return (
+                                    <div key={itemKey} className={isLongText ? "sm:col-span-2" : ""}>
+                                      <label className="block text-[10px] font-bold uppercase text-slate-500 mb-0.5">
+                                        {itemKey}
+                                      </label>
+                                      {isLongText ? (
+                                        <textarea
+                                          rows={3}
+                                          value={item[itemKey] ?? ""}
+                                          onChange={(e) => {
+                                            const updatedArr = [...val];
+                                            updatedArr[idx] = { ...updatedArr[idx], [itemKey]: e.target.value };
+                                            onChange({ ...state, [propKey]: updatedArr });
+                                          }}
+                                          className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
+                                        />
+                                      ) : (
+                                        <input
+                                          type="text"
+                                          value={item[itemKey] ?? ""}
+                                          onChange={(e) => {
+                                            const updatedArr = [...val];
+                                            updatedArr[idx] = { ...updatedArr[idx], [itemKey]: e.target.value };
+                                            onChange({ ...state, [propKey]: updatedArr });
+                                          }}
+                                          className="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:outline-none focus:border-slate-400"
+                                        />
+                                      )}
+                                    </div>
+                                  );
+                                }
+                                if (Array.isArray(item[itemKey])) {
+                                  return (
+                                    <div key={itemKey} className="sm:col-span-2 pt-2 border-t border-slate-100">
+                                      <CmsStringRepeater
+                                        title={itemKey}
+                                        items={item[itemKey] || []}
+                                        onChange={(newNested) => {
+                                          const updatedArr = [...val];
+                                          updatedArr[idx] = { ...updatedArr[idx], [itemKey]: newNested };
+                                          onChange({ ...state, [propKey]: updatedArr });
+                                        }}
+                                      />
+                                    </div>
+                                  );
+                                }
+                                return null;
+                              })}
+                            </div>
+                          ) : null}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );

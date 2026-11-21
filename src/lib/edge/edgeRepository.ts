@@ -47,11 +47,30 @@ export async function getEdgePageDataAsync(slug: string): Promise<EdgePageData |
     const cleanStats = getCleanSection(sections.stats);
     if (cleanStats) merged.stats = { ...fallback.stats, ...cleanStats };
 
+    const cleanHeadProfile = getCleanSection(
+      sections.head_profile || sections.headProfile || sections.leadership
+    );
+    if (cleanHeadProfile) merged.headProfile = cleanHeadProfile;
+
     const cleanTimeline = getCleanSection(sections.timeline);
     if (cleanTimeline) merged.timeline = { ...fallback.timeline, ...cleanTimeline };
 
-    const cleanTrainingModel = getCleanSection(sections.trainingModel);
-    if (cleanTrainingModel) merged.trainingModel = { ...fallback.trainingModel, ...cleanTrainingModel };
+    const cleanTrainingModel = getCleanSection(
+      sections.training_model ||
+      sections.trainingModel ||
+      sections["training-model"] ||
+      sections.training
+    );
+    if (cleanTrainingModel) {
+      merged.trainingModel = {
+        ...fallback.trainingModel,
+        ...cleanTrainingModel,
+        stages:
+          Array.isArray(cleanTrainingModel.stages) && cleanTrainingModel.stages.length > 0
+            ? cleanTrainingModel.stages
+            : fallback.trainingModel?.stages || [],
+      };
+    }
 
     const cleanMentors = getCleanSection(sections.mentors);
     if (cleanMentors) merged.mentors = { ...fallback.mentors, ...cleanMentors };
@@ -64,6 +83,11 @@ export async function getEdgePageDataAsync(slug: string): Promise<EdgePageData |
 
     const cleanGallery = getCleanSection(sections.gallery);
     if (cleanGallery) merged.gallery = { ...fallback.gallery, ...cleanGallery };
+
+    const cleanHackathons = getCleanSection(
+      sections.hackathons || sections.hackathon || sections.hackathons_list
+    );
+    if (cleanHackathons) merged.hackathons = { ...fallback.hackathons, ...cleanHackathons };
 
     const cleanCta = getCleanSection(sections.cta);
     if (cleanCta) merged.cta = { ...fallback.cta, ...cleanCta };

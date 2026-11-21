@@ -67,6 +67,21 @@ export interface EdgeStatsSection {
   stats: EdgeStatItem[];
 }
 
+export interface EdgeHeadProfile {
+  name: string;
+  title?: string;
+  designation: string;
+  organization?: string;
+  image: string;
+  shortBio: string;
+  fullBio?: string[];
+  achievements?: {
+    title: string;
+    description: string;
+  }[];
+  additionalParagraphs?: string[];
+}
+
 export interface EdgeMentorItem {
   name: string;
   designation: string;
@@ -86,6 +101,7 @@ export interface EdgeMentorsSection {
   eyebrow?: string;
   title: string;
   subtitle?: string;
+  headProfile?: EdgeHeadProfile;
   mentors: EdgeMentorItem[];
 }
 
@@ -100,6 +116,9 @@ export interface EdgeFeatureItem {
   badge?: string;
   bullets?: string[];
   tag?: string;
+  idealFor?: string;
+  taughtBy?: string;
+  skillsCovered?: string[];
 }
 
 export interface EdgeFeatureGridSection {
@@ -217,6 +236,25 @@ export interface EdgeCTASection {
   campusAddress?: string;
 }
 
+export interface EdgeHackathonItem {
+  id?: string;
+  title: string;
+  highlight?: string;
+  description: string;
+  gallery?: string[];
+  isFeatured?: boolean;
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+export interface EdgeHackathonsSection {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  items: EdgeHackathonItem[];
+}
+
 export interface EdgePageData {
   slug: string;
   name: string;
@@ -225,10 +263,12 @@ export interface EdgePageData {
   seo: EdgeSEO;
   hero: EdgeHero;
   stats?: EdgeStatsSection;
+  headProfile?: EdgeHeadProfile;
   timeline?: EdgeTimelineSection;
   trainingModel?: EdgeTrainingModelSection;
   features?: EdgeFeatureGridSection[];
   mentors?: EdgeMentorsSection;
+  hackathons?: EdgeHackathonsSection;
   testimonials?: EdgeTestimonialsSection;
   videos?: EdgeVideoSection;
   accordions?: EdgeAccordionSection[];

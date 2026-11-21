@@ -51,10 +51,13 @@ export const GU_EDGE_PAGES_OPTIONS: GuEdgePageOption[] = [
     sectionsList: [
       { key: "hero", label: "Hero Banner", description: "Technical hub mission, cutting-edge tech stack introduction, and banner image." },
       { key: "stats", label: "Technical Achievement Stats", description: "Hackathons won, certifications earned, and technology center impact metrics." },
-      { key: "mentors", label: "Technical Leadership & Mentors", description: "Technical leads, chief architects, engineering mentors, and profile details." },
+      { key: "head_profile", label: "COO Leadership Profile", description: "Mr. Pankaj Bajaj COO profile card, leadership initiatives, and hackathon milestones." },
+      { key: "mentors", label: "Technical Mentors Team", description: "21 technical trainers, faculty mentors, and specialized software developers." },
       { key: "features", label: "Offerings & Skill Centers", description: "Advanced labs, specialized tech tracks, center offerings, and skill domains." },
       { key: "videos", label: "Video Stories", description: "Demonstrations, student coding sprint highlights, and project walkthrough videos." },
       { key: "gallery", label: "Innovation Gallery", description: "Images of high-performance computing labs, robotics setups, and innovation spaces." },
+      { key: "hackathons", label: "Hackathons @ GTH", description: "HackForge 1.0, 2.0, NexHack 1.0, and NexHack 2.0 event showcases and galleries." },
+      { key: "cta", label: "Career Launch CTA Banner", description: "Call-to-action banner, enrollment invitation, and tech career launchpad links." },
     ],
   },
   {

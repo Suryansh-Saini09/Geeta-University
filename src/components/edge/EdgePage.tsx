@@ -5,12 +5,14 @@ import EdgeHero from "./EdgeHero";
 import EdgeTimeline from "./EdgeTimeline";
 import EdgeTrainingModel from "./EdgeTrainingModel";
 import EdgeStats from "./EdgeStats";
+import EdgeHeadProfile from "./EdgeHeadProfile";
 import EdgeFeatureGrid from "./EdgeFeatureGrid";
 import EdgeMentors from "./EdgeMentors";
 import EdgeVideoSection from "./EdgeVideoSection";
 import EdgeAccordion from "./EdgeAccordion";
 import EdgeTestimonials from "./EdgeTestimonials";
 import EdgeGallery from "./EdgeGallery";
+import EdgeHackathons from "./EdgeHackathons";
 import EdgeCTA from "./EdgeCTA";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
 
@@ -19,6 +21,8 @@ interface EdgePageProps {
 }
 
 export default function EdgePage({ data }: EdgePageProps) {
+  const headProfile = data.headProfile || data.mentors?.headProfile;
+
   return (
     <main className="min-h-screen bg-white">
       {/* 1. Hero Section */}
@@ -33,34 +37,40 @@ export default function EdgePage({ data }: EdgePageProps) {
       {/* 4. Stats Section (e.g. GTH stats, Global Edge awards) */}
       {data.stats && <EdgeStats section={data.stats} />}
 
-      {/* 5. Mentors Section (e.g. GFS 10 Mentors, GTH Mentors) */}
+      {/* 5. Head Profile Card (e.g. GTH COO Leadership) */}
+      {headProfile && <EdgeHeadProfile profile={headProfile} />}
+
+      {/* 6. Mentors Section (e.g. GFS Mentors, GTH Mentors) */}
       {data.mentors && <EdgeMentors section={data.mentors} />}
 
-      {/* 6. Feature Sections (e.g. NEP 10 Advantages, Vocational Courses, GTH Offerings) */}
+      {/* 7. Feature Sections (e.g. NEP 10 Advantages, Vocational Courses, GTH Offerings) */}
       {data.features &&
         data.features.map((featureSection) => (
           <EdgeFeatureGrid key={featureSection.id} section={featureSection} />
         ))}
 
-      {/* 7. Accordion Sections (e.g. Law programs) */}
+      {/* 8. Accordion Sections (e.g. Law programs) */}
       {data.accordions &&
         data.accordions.map((accSection) => (
           <EdgeAccordion key={accSection.id} section={accSection} />
         ))}
 
-      {/* 8. Video Spotlights / Playlists (e.g. Voices from the Hub, Vocational Masterclass) */}
+      {/* 9. Video Spotlights / Playlists (e.g. Voices from the Hub, Vocational Masterclass) */}
       {data.videos && <EdgeVideoSection section={data.videos} />}
 
-      {/* 9. Testimonials (e.g. GFS Student Transformation Stories) */}
+      {/* 10. Testimonials (e.g. GFS Student Transformation Stories) */}
       {data.testimonials && <EdgeTestimonials section={data.testimonials} />}
 
-      {/* 10. Photo Gallery / Highlights */}
+      {/* 11. Photo Gallery / Highlights */}
       {data.gallery && <EdgeGallery section={data.gallery} />}
 
-      {/* 11. Legacy & Ecosystem Section */}
+      {/* 12. Hackathons Section (e.g. HackForge, NexHack) */}
+      {data.hackathons && <EdgeHackathons section={data.hackathons} />}
+
+      {/* 13. Legacy & Ecosystem Section */}
       <LegacyEcosystem />
 
-      {/* 12. Bottom CTA Section */}
+      {/* 14. Bottom CTA Section */}
       {data.cta && <EdgeCTA cta={data.cta} />}
     </main>
   );
