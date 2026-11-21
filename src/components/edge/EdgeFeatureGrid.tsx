@@ -167,67 +167,135 @@ export default function EdgeFeatureGrid({ section }: EdgeFeatureGridProps) {
         {/* Layout: Cards (Vocational Courses, GTH Offerings, DYOD Pillars) */}
         {section.layoutStyle === "cards" && (
           <div className={`grid ${getColClass(section.columns || 3)} gap-6 md:gap-8`}>
-            {section.features.map((feature, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="group relative flex flex-col justify-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-6 md:p-8 shadow-sm transition-all duration-300 hover:border-[#E8871A]/50 hover:bg-white hover:shadow-md"
-              >
-                {/* Top Accent Strip */}
-                <div className="absolute left-0 right-0 top-0 h-1 bg-[#0A1F44] transition-colors duration-300 group-hover:bg-[#E8871A]" />
+            {section.features.map((feature, idx) => {
+              const isVocationalCard =
+                section.id === "vocational-courses" ||
+                (Boolean(feature.idealFor || feature.tag) &&
+                  Boolean(feature.bullets && feature.bullets.length > 0) &&
+                  !feature.image &&
+                  !feature.iconName);
 
-                {/* Image or Icon */}
-                {(feature.image || feature.iconName || feature.tag) && (
-                  <div className="mb-5 flex items-center justify-between gap-4">
-                    {feature.image ? (
-                      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-white p-2">
-                        <Image src={feature.image} alt={feature.title} fill sizes="56px" className="object-contain p-1" />
+              if (isVocationalCard) {
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: idx * 0.08 }}
+                    className="flex flex-col rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    {/* Dark Navy Header Banner */}
+                    <div className="bg-[#012B53] px-6 py-4">
+                      <h3 className="font-bold text-white text-base sm:text-lg tracking-wide uppercase">
+                        {feature.title}
+                      </h3>
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-4">
+                      <div className="space-y-3.5">
+                        {feature.subtitle && (
+                          <p className="text-base sm:text-lg font-medium text-slate-800 leading-snug">
+                            {feature.subtitle}
+                          </p>
+                        )}
+
+                        {feature.description && (
+                          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                            {feature.description}
+                          </p>
+                        )}
+
+                        {feature.bullets && feature.bullets.length > 0 && (
+                          <div className="pt-1">
+                            <h4 className="font-bold text-slate-900 text-base mb-2">
+                              Skills Covered:
+                            </h4>
+                            <ul className="list-disc pl-5 space-y-1.5 text-slate-700 text-sm sm:text-base">
+                              {feature.bullets.map((b, bIdx) => (
+                                <li key={bIdx} className="leading-relaxed">
+                                  {b}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
-                    ) : feature.iconName ? (
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#E8871A]">
-                        {getIcon(feature.iconName)}
-                      </div>
-                    ) : null}
 
-                    {feature.tag && (
-                      <span className="rounded-full border border-[#E8871A]/20 bg-[#E8871A]/10 px-3 py-1 text-xs font-bold text-[#E8871A]">
-                        {feature.tag}
-                      </span>
-                    )}
-                  </div>
-                )}
+                      {Boolean(feature.idealFor || feature.tag) && (
+                        <p className="pt-3 text-sm sm:text-base text-slate-800 leading-relaxed border-t border-slate-100">
+                          <strong className="font-bold text-slate-900">Ideal for: </strong>
+                          {(feature.idealFor || feature.tag || "").replace(/^Ideal for:\s*/i, "")}
+                        </p>
+                      )}
+                    </div>
+                  </motion.div>
+                );
+              }
 
-                <h3 className="font-serif text-xl font-bold text-[#0A1F44] transition-colors duration-300 group-hover:text-[#E8871A] sm:text-2xl">
-                  {feature.title}
-                </h3>
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.08 }}
+                  className="group relative flex flex-col justify-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-6 md:p-8 shadow-sm transition-all duration-300 hover:border-[#E8871A]/50 hover:bg-white hover:shadow-md"
+                >
+                  {/* Top Accent Strip */}
+                  <div className="absolute left-0 right-0 top-0 h-1 bg-[#0A1F44] transition-colors duration-300 group-hover:bg-[#E8871A]" />
 
-                {feature.subtitle && (
-                  <p className="mt-1 text-xs font-bold uppercase tracking-wider text-[#06355F]">
-                    {feature.subtitle}
-                  </p>
-                )}
+                  {/* Image or Icon */}
+                  {(feature.image || feature.iconName || feature.tag) && (
+                    <div className="mb-5 flex items-center justify-between gap-4">
+                      {feature.image ? (
+                        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-white p-2">
+                          <Image src={feature.image} alt={feature.title} fill sizes="56px" className="object-contain p-1" />
+                        </div>
+                      ) : feature.iconName ? (
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#E8871A]">
+                          {getIcon(feature.iconName)}
+                        </div>
+                      ) : null}
 
-                {feature.description && (
-                  <p className="mt-4 text-sm leading-relaxed text-slate-600">
-                    {feature.description}
-                  </p>
-                )}
+                      {feature.tag && (
+                        <span className="rounded-full border border-[#E8871A]/20 bg-[#E8871A]/10 px-3 py-1 text-xs font-bold text-[#E8871A]">
+                          {feature.tag}
+                        </span>
+                      )}
+                    </div>
+                  )}
 
-                {feature.bullets && feature.bullets.length > 0 && (
-                  <ul className="mt-6 flex-1 space-y-2.5 border-t border-slate-200 pt-6">
-                    {feature.bullets.map((b, bIdx) => (
-                      <li key={bIdx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
-                        <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#E8871A]" />
-                        <span>{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </motion.div>
-            ))}
+                  <h3 className="font-serif text-xl font-bold text-[#0A1F44] transition-colors duration-300 group-hover:text-[#E8871A] sm:text-2xl">
+                    {feature.title}
+                  </h3>
+
+                  {feature.subtitle && (
+                    <p className="mt-1 text-xs font-bold uppercase tracking-wider text-[#06355F]">
+                      {feature.subtitle}
+                    </p>
+                  )}
+
+                  {feature.description && (
+                    <p className="mt-4 text-sm leading-relaxed text-slate-600">
+                      {feature.description}
+                    </p>
+                  )}
+
+                  {feature.bullets && feature.bullets.length > 0 && (
+                    <ul className="mt-6 flex-1 space-y-2.5 border-t border-slate-200 pt-6">
+                      {feature.bullets.map((b, bIdx) => (
+                        <li key={bIdx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
+                          <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#E8871A]" />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </motion.div>
+              );
+            })}
           </div>
         )}
 

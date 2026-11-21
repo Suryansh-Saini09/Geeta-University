@@ -100,7 +100,7 @@ export default function EdgeStats({ section }: EdgeStatsProps) {
                 {stat.label}
               </h3>
 
-              {stat.sublabel && (
+              {stat.sublabel && stat.sublabel.trim() !== "" && (
                 <p className="mt-1 text-xs sm:text-sm text-slate-400 font-medium">
                   {stat.sublabel}
                 </p>

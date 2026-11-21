@@ -2,15 +2,37 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, Sparkles, Target, Compass, Award } from "lucide-react";
+import {
+  CheckCircle,
+  Sparkles,
+  Target,
+  Compass,
+  Award,
+  Mic,
+  FileCheck,
+  type LucideIcon,
+} from "lucide-react";
 import type { EdgeTrainingModelSection } from "@/data/edge/types";
 
 interface EdgeTrainingModelProps {
   section: EdgeTrainingModelSection;
 }
 
+const ICON_MAP: Record<string, LucideIcon> = {
+  Mic,
+  FileCheck,
+  Award,
+  Compass,
+  Target,
+  Sparkles,
+};
+
 export default function EdgeTrainingModel({ section }: EdgeTrainingModelProps) {
-  const getStageIcon = (stageNumber: number) => {
+  const getStageIcon = (stageNumber: number, iconName?: string) => {
+    if (iconName && ICON_MAP[iconName]) {
+      const IconComp = ICON_MAP[iconName];
+      return <IconComp size={24} className="text-[#E8871A]" />;
+    }
     switch (stageNumber) {
       case 1:
         return <Compass size={24} className="text-[#E8871A]" />;
@@ -49,56 +71,66 @@ export default function EdgeTrainingModel({ section }: EdgeTrainingModelProps) {
 
         {/* 3 Stages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {section.stages.map((stage, idx) => (
-            <motion.div
-              key={stage.stageNumber}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
-              className="relative flex flex-col rounded-2xl bg-white border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all hover:border-[#E8871A]/40 group"
-            >
-              {/* Stage Badge & Icon */}
-              <div className="flex items-center justify-between gap-4 mb-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 group-hover:bg-[#E8871A]/10 transition-colors">
-                  {getStageIcon(stage.stageNumber)}
+          {section.stages.map((stage, idx) => {
+            const items =
+              stage.focusAreas && stage.focusAreas.length > 0
+                ? stage.focusAreas
+                : stage.modules && stage.modules.length > 0
+                ? stage.modules
+                : [];
+
+            return (
+              <motion.div
+                key={stage.stageNumber || idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.1 }}
+                className="relative flex flex-col rounded-2xl bg-white border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all hover:border-[#E8871A]/40 group"
+              >
+                {/* Stage Badge & Icon */}
+                <div className="flex items-center justify-between gap-4 mb-6">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 group-hover:bg-[#E8871A]/10 transition-colors">
+                    {getStageIcon(stage.stageNumber, stage.iconName)}
+                  </div>
+                  <span className="font-serif text-2xl font-black text-[#06355F]">
+                    Stage {String(stage.stageNumber || idx + 1).padStart(2, "0")}
+                  </span>
                 </div>
-                <span className="font-serif text-2xl font-black text-[#06355F]">
-                  Stage {String(stage.stageNumber).padStart(2, "0")}
-                </span>
-              </div>
 
-              {/* Title & Subtitle */}
-              <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
-                {stage.title}
-              </h3>
-              {stage.subtitle && (
-                <p className="mt-1 text-xs font-bold uppercase tracking-wider text-[#E8871A]">
-                  {stage.subtitle}
-                </p>
-              )}
+                {/* Title & Subtitle */}
+                <h3 className="font-serif text-xl font-bold text-[#0A1F44]">
+                  {stage.title}
+                </h3>
+                {stage.subtitle && (
+                  <p className="mt-1 text-xs font-bold uppercase tracking-wider text-[#E8871A]">
+                    {stage.subtitle}
+                  </p>
+                )}
 
-              {/* Description */}
-              <p className="mt-4 text-sm leading-relaxed text-slate-600">
-                {stage.description}
-              </p>
+                {/* Description */}
+                {stage.description ? (
+                  <p className="mt-4 text-sm leading-relaxed text-slate-600">
+                    {stage.description}
+                  </p>
+                ) : null}
 
-              {/* Modules / Focus Areas list */}
-              {((stage.modules && stage.modules.length > 0) ||
-                (stage.focusAreas && stage.focusAreas.length > 0)) && (
-                <div className="mt-6 pt-6 border-t border-slate-100 space-y-2.5 flex-1">
-                  {(stage.modules || stage.focusAreas || []).map((mod, mIdx) => (
-                    <div key={mIdx} className="flex items-start gap-2">
-                      <CheckCircle size={15} className="text-[#E8871A] shrink-0 mt-0.5" />
-                      <span className="text-xs sm:text-sm font-medium text-slate-700">
-                        {mod}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </motion.div>
-          ))}
+                {/* Modules / Focus Areas list */}
+                {items.length > 0 && (
+                  <div className="mt-6 pt-6 border-t border-slate-100 space-y-2.5 flex-1">
+                    {items.map((mod, mIdx) => (
+                      <div key={mIdx} className="flex items-start gap-2">
+                        <CheckCircle size={15} className="text-[#E8871A] shrink-0 mt-0.5" />
+                        <span className="text-xs sm:text-sm font-medium text-slate-700">
+                          {mod}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
