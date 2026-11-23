@@ -242,7 +242,7 @@ export function CmsDocumentField({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-lg border border-slate-200 bg-white p-1.5 text-slate-600 hover:text-[#0A1F44] hover:bg-slate-100 transition-colors cursor-pointer"
-                title="View / Download PDF"
+                title="View PDF Document in New Tab"
               >
                 <ExternalLink className="h-3.5 w-3.5" />
               </a>

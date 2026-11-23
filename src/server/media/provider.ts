@@ -43,6 +43,7 @@ export interface StorageProvider {
   exists(key: string): Promise<boolean>;
   delete(key: string): Promise<void>;
   getPublicUrl(key: string): string;
+  getPhysicalPath(key: string): string;
   getMetadata(key: string): Promise<StorageMetadata | null>;
   verifyIntegrity(
     key: string,
@@ -307,22 +308,46 @@ export class LocalStorageProvider implements StorageProvider {
     }
   }
 
+  getPhysicalPath(key: string): string {
+    return this.resolvePath(key);
+  }
+
   async getMetadata(key: string): Promise<StorageMetadata | null> {
+    const ext = key.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "";
+    const mimeMap: Record<string, string> = {
+      webp: "image/webp",
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      png: "image/png",
+      gif: "image/gif",
+      svg: "image/svg+xml",
+      avif: "image/avif",
+      pdf: "application/pdf",
+      mp4: "video/mp4",
+      webm: "video/webm",
+      mp3: "audio/mpeg",
+      wav: "audio/wav",
+    };
+    const mimeType = mimeMap[ext] || undefined;
+
     let filePath = this.resolvePath(key);
     try {
       const s = await stat(filePath);
       return {
         sizeBytes: s.size,
         updatedAt: s.mtime,
+        mimeType,
       };
     } catch (err: any) {
       if (err.code === "ENOENT") {
         const fallbacks = this.resolveFallbackPaths(key);
         if (fallbacks.length > 0) {
           const s = await stat(fallbacks[0]);
+          const fallbackExt = fallbacks[0].split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "";
           return {
             sizeBytes: s.size,
             updatedAt: s.mtime,
+            mimeType: mimeMap[fallbackExt] || mimeType,
           };
         }
         return null;
@@ -410,6 +435,11 @@ export class S3StorageProvider implements StorageProvider {
       return `/${safeKey}`;
     }
     return `/api/media/${safeKey}`;
+  }
+
+  getPhysicalPath(key: string): string {
+    const safeKey = sanitizeStorageKey(key);
+    return `s3://${this.bucket}/${safeKey}`;
   }
 
   async save(key: string, bytes: Buffer, mimeType: string): Promise<StorageSaveResult> {

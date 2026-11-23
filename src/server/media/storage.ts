@@ -126,6 +126,15 @@ export const MediaStorageService = {
   },
 
   /**
+   * Returns the physical filesystem path or storage URI for a given storage key.
+   * Restricted to internal administrative diagnostics; NEVER exposed to public visitors.
+   */
+  getPhysicalPath(key: string): string {
+    const safeKey = sanitizeStorageKey(key);
+    return getStorageProvider().getPhysicalPath(safeKey);
+  },
+
+  /**
    * Retrieves object metadata (size, mimeType, updatedAt).
    */
   async getMetadata(key: string): Promise<StorageMetadata | null> {

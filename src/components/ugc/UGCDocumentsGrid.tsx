@@ -72,8 +72,8 @@ export default function UGCDocumentsGrid({ title, documents }: UGCDocumentsGridP
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0A1F44] px-5 py-3 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:bg-[#E8871A] hover:text-white"
                   style={{ color: "#ffffff" }}
                 >
-                  <Download className="h-4 w-4" />
-                  <span>Download / View Document</span>
+                  <ExternalLink className="h-4 w-4" />
+                  <span>View Document</span>
                 </a>
               </div>
             </div>
