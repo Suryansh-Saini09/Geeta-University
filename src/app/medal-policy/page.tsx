@@ -5,6 +5,7 @@ import {
   Trophy,
   CheckCircle2,
   Download,
+  ExternalLink,
   BookOpen,
   Layers,
   GraduationCap,
@@ -331,9 +332,9 @@ export default async function MedalPolicyPage() {
                 }
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex shrink-0 items-center gap-2.5 rounded-2xl bg-[#E8871A] px-6 py-4 text-sm font-bold text-white shadow-lg shadow-amber-500/25 transition-all hover:bg-[#F5A623] hover:shadow-amber-500/40 active:scale-95"
+                className="inline-flex shrink-0 items-center gap-2.5 rounded-2xl bg-[#E8871A] px-6 py-4 text-sm font-bold text-white shadow-lg shadow-amber-500/25 transition-all hover:bg-[#F5A623] hover:shadow-amber-500/40 active:scale-95 cursor-pointer"
               >
-                <Download className="h-4 w-4" />
+                <ExternalLink className="h-4 w-4" />
                 <span>{rankersDocument?.ctaLabel || "View Medal List PDF"}</span>
               </a>
             </div>

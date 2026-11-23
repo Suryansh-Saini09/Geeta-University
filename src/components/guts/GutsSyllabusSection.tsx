@@ -90,8 +90,8 @@ export default function GutsSyllabusSection({ data }: GutsSyllabusSectionProps =
                   rel="noopener noreferrer"
                   className="mt-2 inline-flex items-center justify-center gap-2 rounded-[12px] border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 px-4 text-[14px] font-bold text-[#0A1F44] transition-all duration-200 hover:border-[#E8871A] hover:bg-[#E8871A] hover:text-white hover:shadow-md active:scale-95"
                 >
-                  <span>Download PDF</span>
-                  <Download className="h-4 w-4" />
+                  <ExternalLink className="h-4 w-4" />
+                  <span>View Syllabus PDF</span>
                 </a>
               ) : (
                 <div className="mt-2 flex flex-col gap-1.5">

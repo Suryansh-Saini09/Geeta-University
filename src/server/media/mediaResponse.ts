@@ -2,7 +2,7 @@ if (typeof window !== "undefined") {
   throw new Error("This module can only be executed on the server.");
 }
 
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
 import { Readable } from "node:stream";
 import { MediaStorageService } from "./storage";
 import { sanitizeStorageKey } from "./provider";
@@ -11,6 +11,71 @@ export interface MediaServeOptions {
   fileName?: string;
   mimeType?: string;
   sizeBytes?: number;
+}
+
+export const SAFE_INLINE_MIME_MAP: Record<string, string> = {
+  webp: "image/webp",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  gif: "image/gif",
+  svg: "image/svg+xml",
+  avif: "image/avif",
+  pdf: "application/pdf",
+  mp4: "video/mp4",
+  webm: "video/webm",
+  mp3: "audio/mpeg",
+  wav: "audio/wav",
+  ogg: "audio/ogg",
+};
+
+/**
+ * Validates and resolves the MIME type for an asset.
+ * Prioritizes safe, verified stored MIME types, then extension mappings.
+ * Returns { mimeType, isInlineSafe }.
+ * Disallows arbitrary or executable MIME types from inlining.
+ *
+ * CRITICAL SECURITY (SVG):
+ * User-uploaded SVG files can contain embedded executable scripts (<script>, event handlers, <animate>).
+ * SVGs are marked as `isInlineSafe: false` so they are strictly served with `Content-Disposition: attachment`
+ * and a restrictive Content-Security-Policy, preventing stored cross-site scripting (XSS).
+ */
+export function resolveSafeMimeType(
+  fileNameOrKey: string,
+  suppliedMimeType?: string | null
+): { mimeType: string; isInlineSafe: boolean } {
+  const allowedInlineValues = new Set(Object.values(SAFE_INLINE_MIME_MAP));
+
+  let mime = "";
+
+  // 1. If stored/supplied MIME type is known to be inline-safe, use it
+  if (suppliedMimeType) {
+    const normalized = suppliedMimeType.toLowerCase().trim();
+    if (allowedInlineValues.has(normalized)) {
+      mime = normalized;
+    }
+  }
+
+  // 2. Infer from file extension if not supplied
+  if (!mime) {
+    const ext = fileNameOrKey.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "";
+    if (ext && SAFE_INLINE_MIME_MAP[ext]) {
+      mime = SAFE_INLINE_MIME_MAP[ext];
+    }
+  }
+
+  // 3. Fallback: unknown or dangerous formats are served as application/octet-stream with attachment
+  if (!mime) {
+    return { mimeType: "application/octet-stream", isInlineSafe: false };
+  }
+
+  // CRITICAL SECURITY: SVG files must NEVER be served inline to avoid stored XSS
+  const isSvg = mime === "image/svg+xml";
+
+  return {
+    mimeType: mime,
+    isInlineSafe: !isSvg, // Forces Content-Disposition: attachment for all SVG files
+  };
 }
 
 /**
@@ -49,6 +114,8 @@ function parseRange(
 
 /**
  * Serves binary media with full HTTP Range, caching, ETag, and Content-Disposition support.
+ * For normal browser requests, sends Content-Disposition: inline to allow inline rendering
+ * of images and PDFs. Sends attachment only when ?download=1 is explicitly requested.
  */
 export async function serveMediaObject(
   request: NextRequest,
@@ -83,8 +150,11 @@ export async function serveMediaObject(
     }
 
     const totalLength = options?.sizeBytes ?? meta.sizeBytes;
-    const mimeType = options?.mimeType || meta.mimeType || "application/octet-stream";
-    const fileName = options?.fileName || safeKey.split("/").pop() || "download";
+    const fileName = options?.fileName || safeKey.split("/").pop() || "asset";
+    const { mimeType, isInlineSafe } = resolveSafeMimeType(
+      fileName,
+      options?.mimeType || meta.mimeType
+    );
 
     // ETag validation
     const etag = `W/"${totalLength}-${meta.updatedAt ? meta.updatedAt.getTime() : "0"}"`;
@@ -115,17 +185,28 @@ export async function serveMediaObject(
       });
     }
 
-    const dispositionType = isDownload ? "attachment" : "inline";
-    const safeFileNameHeader = encodeURIComponent(fileName);
+    // Default to INLINE unless explicitly requested with ?download=1 or unsafe format (including SVGs)
+    const dispositionType = (isDownload || !isInlineSafe) ? "attachment" : "inline";
+
+    // Header Injection Protection: strip control characters (\r, \n, \t) and quotes from ASCII fallback
+    const cleanAsciiFileName = fileName
+      .replace(/[\r\n\t"]/g, "_")
+      .replace(/[^\x20-\x7E]/g, "_");
+    const encodedUtf8FileName = encodeURIComponent(fileName);
 
     const headers: Record<string, string> = {
       "Content-Type": mimeType,
       "Accept-Ranges": "bytes",
       "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
       "X-Content-Type-Options": "nosniff",
-      "Content-Disposition": `${dispositionType}; filename="${safeFileNameHeader}"; filename*=UTF-8''${safeFileNameHeader}`,
+      "Content-Disposition": `${dispositionType}; filename="${cleanAsciiFileName}"; filename*=UTF-8''${encodedUtf8FileName}`,
       ETag: etag,
     };
+
+    // Defense-in-depth: If SVG is served (as attachment), strictly disallow any script execution via CSP
+    if (mimeType === "image/svg+xml") {
+      headers["Content-Security-Policy"] = "default-src 'none'; style-src 'unsafe-inline'; sandbox";
+    }
 
     if (parsedRange) {
       const { stream, contentLength, contentRange } = await MediaStorageService.readStream(
