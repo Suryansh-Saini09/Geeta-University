@@ -4,6 +4,7 @@ import ProgramsAfter12Hero from "@/components/programs-after-12th/ProgramsAfter1
 import ProgramsListSection from "@/components/programs-after-12th/ProgramsListSection";
 import FAQSection from "@/components/programs/FAQSection";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
+import MerittoFloatingEnquiry from "@/components/integrations/MerittoFloatingEnquiry";
 import { ugFaqsData } from "@/data/programsAfter12";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
 import { getScholarshipPredictorData } from "@/server/services/scholarshipPredictor";
@@ -66,6 +67,9 @@ export default async function ProgramsAfter12Page() {
         id="legacy-ecosystem"
         contextText={legacyData?.contextText || "UG students benefit from the integrated ecosystem of:"}
       />
+
+      {/* 5. Floating Vertical Enquire Now Sidebar */}
+      <MerittoFloatingEnquiry drawerSubtitle="Connect with our Undergraduate Admissions Office" />
     </div>
   );
 }

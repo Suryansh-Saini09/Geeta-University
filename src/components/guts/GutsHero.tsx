@@ -1,7 +1,7 @@
-
 import React from "react";
 import Image from "next/image";
 import { Check } from "lucide-react";
+import AdmissionFormWrapper from "@/components/programs/AdmissionFormWrapper";
 
 interface GutsHeroProps {
   data?: {
@@ -33,58 +33,66 @@ export default function GutsHero({ data }: GutsHeroProps) {
         </div>
       </div>
 
-      {/* 2. Hero Content */}
+      {/* 2. Hero Content & Enquiry Form (2-Column Desktop Grid) */}
       <div className="gu-container py-12 sm:py-16 md:py-20 border-b border-[#E2E8F0]">
-        <div className="max-w-4xl mx-auto space-y-6">
-          <h1 className="font-serif text-[34px] sm:text-[44px] md:text-[50px] font-black text-[#0A1F44] leading-[1.15] tracking-[-1px]">
-            {title}
-          </h1>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-12 items-start">
+          {/* Left Column: Heading, Subtitle, Benefits & Metric Counters (~65%) */}
+          <div className="lg:col-span-7 xl:col-span-7 space-y-6">
+            <h1 className="font-serif text-[34px] sm:text-[44px] md:text-[50px] font-black text-[#0A1F44] leading-[1.15] tracking-[-1px]">
+              {title}
+            </h1>
 
-          <p className="text-[16.5px] sm:text-[18px] leading-[1.8] text-[#334155]">
-            {subtitle}
-          </p>
+            <p className="text-[16.5px] sm:text-[18px] leading-[1.8] text-[#334155]">
+              {subtitle}
+            </p>
 
-          {/* Benefits Box */}
-          <div className="rounded-[20px] bg-[#F8FAFC] border border-[#E2E8F0] p-6 sm:p-8 space-y-4">
-            <h3 className="font-serif text-[22px] sm:text-[24px] font-bold text-[#0A1F44]">
-              GUTS Key Benefits
-            </h3>
+            {/* Benefits Box */}
+            <div className="rounded-[20px] bg-[#F8FAFC] border border-[#E2E8F0] p-6 sm:p-8 space-y-4">
+              <h3 className="font-serif text-[22px] sm:text-[24px] font-bold text-[#0A1F44]">
+                GUTS Key Benefits
+              </h3>
 
-            <div className="space-y-3">
-              <div className="flex items-start gap-3 rounded-[12px] bg-white p-4 border border-[#E2E8F0]">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ECFDF5] text-[#10B981] shrink-0 mt-0.5">
-                  <Check className="h-4 w-4 stroke-[3]" />
+              <div className="space-y-3">
+                <div className="flex items-start gap-3 rounded-[12px] bg-white p-4 border border-[#E2E8F0]">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ECFDF5] text-[#10B981] shrink-0 mt-0.5">
+                    <Check className="h-4 w-4 stroke-[3]" />
+                  </div>
+                  <div className="text-[15.5px] font-medium text-[#1E293B] leading-snug">
+                    <strong>Enhance Your Scholarship:</strong> Increase your existing scholarship amount on admission.
+                  </div>
                 </div>
-                <div className="text-[15.5px] font-medium text-[#1E293B] leading-snug">
-                  <strong>Enhance Your Scholarship:</strong> Increase your existing scholarship amount on admission.
+
+                <div className="flex items-start gap-3 rounded-[12px] bg-white p-4 border border-[#E2E8F0]">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ECFDF5] text-[#10B981] shrink-0 mt-0.5">
+                    <Check className="h-4 w-4 stroke-[3]" />
+                  </div>
+                  <div className="text-[15.5px] font-medium text-[#1E293B] leading-snug">
+                    <strong>Up to 100% Tuition Waiver:</strong> Avail up to 100% scholarship through GUTS score, even if you are not eligible for any other GU scholarship.
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <div className="flex items-start gap-3 rounded-[12px] bg-white p-4 border border-[#E2E8F0]">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ECFDF5] text-[#10B981] shrink-0 mt-0.5">
-                  <Check className="h-4 w-4 stroke-[3]" />
-                </div>
-                <div className="text-[15.5px] font-medium text-[#1E293B] leading-snug">
-                  <strong>Up to 100% Tuition Waiver:</strong> Avail up to 100% scholarship through GUTS score, even if you are not eligible for any other GU scholarship.
-                </div>
+            {/* Metric counters */}
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-2">
+              <div className="rounded-[16px] bg-[#FFF8F2] border border-[#FFD9B3] p-4 text-center">
+                <div className="text-[26px] sm:text-[32px] font-extrabold text-[#E8871A]">100%</div>
+                <div className="text-[12px] sm:text-[13px] font-semibold text-[#8C4300] mt-0.5">Max Tuition Waiver</div>
+              </div>
+              <div className="rounded-[16px] bg-[#EFF6FF] border border-[#BFDBFE] p-4 text-center">
+                <div className="text-[26px] sm:text-[32px] font-extrabold text-[#0284C7]">60 Min</div>
+                <div className="text-[12px] sm:text-[13px] font-semibold text-[#0369A1] mt-0.5">Online Exam</div>
+              </div>
+              <div className="rounded-[16px] bg-[#F0FDF4] border border-[#BBF7D0] p-4 text-center">
+                <div className="text-[26px] sm:text-[32px] font-extrabold text-[#16A34A]">60 Qs</div>
+                <div className="text-[12px] sm:text-[13px] font-semibold text-[#15803D] mt-0.5">Aptitude &amp; Subject</div>
               </div>
             </div>
           </div>
 
-          {/* Metric counters - Normal level styling */}
-          <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-2">
-            <div className="rounded-[16px] bg-[#FFF8F2] border border-[#FFD9B3] p-4 text-center">
-              <div className="text-[26px] sm:text-[32px] font-extrabold text-[#E8871A]">100%</div>
-              <div className="text-[12px] sm:text-[13px] font-semibold text-[#8C4300] mt-0.5">Max Tuition Waiver</div>
-            </div>
-            <div className="rounded-[16px] bg-[#EFF6FF] border border-[#BFDBFE] p-4 text-center">
-              <div className="text-[26px] sm:text-[32px] font-extrabold text-[#0284C7]">60 Min</div>
-              <div className="text-[12px] sm:text-[13px] font-semibold text-[#0369A1] mt-0.5">Online Exam</div>
-            </div>
-            <div className="rounded-[16px] bg-[#F0FDF4] border border-[#BBF7D0] p-4 text-center">
-              <div className="text-[26px] sm:text-[32px] font-extrabold text-[#16A34A]">60 Qs</div>
-              <div className="text-[12px] sm:text-[13px] font-semibold text-[#15803D] mt-0.5">Aptitude &amp; Subject</div>
-            </div>
+          {/* Right Column: Sticky Meritto Enquiry Card (~35%) */}
+          <div className="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-28 flex justify-center lg:justify-end">
+            <AdmissionFormWrapper initialDiscipline="GUTS Scholarship Test" />
           </div>
         </div>
       </div>

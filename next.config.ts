@@ -208,12 +208,12 @@ const nextConfig: NextConfig = {
     const isDev = process.env.NODE_ENV === "development";
     const cspDirectives = [
       "default-src 'self'",
-      `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+      `script-src 'self' 'unsafe-inline' https://v093rne98r.in6.widgets.nopaperforms.com${isDev ? " 'unsafe-eval'" : ""}`,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: blob: https://images.unsplash.com https://geetauniversity.edu.in https://spbsb.vercel.app https://i.ytimg.com https://img.youtube.com",
       "connect-src 'self' https://script.google.com https://script.googleusercontent.com",
-      "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://maps.google.com",
+      "frame-src 'self' https://v093rne98r.in6.widgets.nopaperforms.com https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://maps.google.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self' https://script.google.com",

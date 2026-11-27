@@ -1,6 +1,6 @@
-
 import React from "react";
 import Image from "next/image";
+import AdmissionFormWrapper from "@/components/programs/AdmissionFormWrapper";
 
 export default function ProgramsAfter12Hero({ data }: { data?: any }) {
   const bannerImage = data?.bannerImage || "/programs/ug-banner.webp";
@@ -28,25 +28,33 @@ export default function ProgramsAfter12Hero({ data }: { data?: any }) {
         </div>
       </div>
 
-      {/* 2. Spacious Hero Header & Overview Description */}
-      <div className="gu-container py-16 sm:py-20 md:py-24 lg:py-28 border-b border-[#E2E8F0]">
-        <div className="max-w-5xl">
-          <h1 className="font-serif text-[38px] sm:text-[48px] md:text-[56px] lg:text-[62px] font-black text-[#0A1F44] leading-[1.12] tracking-[-1.5px]">
-            {title.includes(highlightText) ? (
-              <>
-                {title.split(highlightText)[0]}
-                <span className="text-[#E8871A]">{highlightText}</span>
-                {title.split(highlightText)[1]}
-              </>
-            ) : (
-              title
-            )}
-          </h1>
+      {/* 2. Spacious Hero Header & Overview Description + Right Column Enquiry Card */}
+      <div className="gu-container py-12 sm:py-16 md:py-20 lg:py-24 border-b border-[#E2E8F0]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-12 items-start">
+          {/* Left Column: Heading and Introductory Description (~65%) */}
+          <div className="lg:col-span-7 xl:col-span-7 space-y-6">
+            <h1 className="font-serif text-[34px] sm:text-[44px] md:text-[52px] lg:text-[58px] font-black text-[#0A1F44] leading-[1.12] tracking-[-1.5px]">
+              {title.includes(highlightText) ? (
+                <>
+                  {title.split(highlightText)[0]}
+                  <span className="text-[#E8871A]">{highlightText}</span>
+                  {title.split(highlightText)[1]}
+                </>
+              ) : (
+                title
+              )}
+            </h1>
 
-          <div className="mt-8 space-y-5 text-[18px] sm:text-[20px] md:text-[21px] leading-[1.85] text-[#334155]">
-            {paragraphs.map((p: string, idx: number) => (
-              <p key={idx}>{p}</p>
-            ))}
+            <div className="space-y-5 text-[17px] sm:text-[19px] leading-[1.8] text-[#334155]">
+              {paragraphs.map((p: string, idx: number) => (
+                <p key={idx}>{p}</p>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column: Sticky Meritto Enquiry Card (~35%) */}
+          <div className="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-28 flex justify-center lg:justify-end">
+            <AdmissionFormWrapper initialDiscipline="Undergraduate & Diploma Programs" />
           </div>
         </div>
       </div>
