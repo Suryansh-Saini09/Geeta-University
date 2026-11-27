@@ -10,6 +10,7 @@ import InternationalVideoSection from "@/components/international-admissions/Int
 import InternationalProgramsAccordion from "@/components/international-admissions/InternationalProgramsAccordion";
 import InternationalEnquiryForm from "@/components/international-admissions/InternationalEnquiryForm";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
+import MerittoFloatingEnquiry from "@/components/integrations/MerittoFloatingEnquiry";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -68,6 +69,9 @@ export default async function InternationalAdmissionsPage() {
 
       {/* Legacy & Ecosystem */}
       <LegacyEcosystem contextText={sections.legacy_ecosystem?.contextText || "International students benefit from the integrated ecosystem of:"} />
+
+      {/* Floating Vertical Enquire Now Sidebar */}
+      <MerittoFloatingEnquiry drawerSubtitle="Global Admissions Desk for International Students" />
     </main>
   );
 }

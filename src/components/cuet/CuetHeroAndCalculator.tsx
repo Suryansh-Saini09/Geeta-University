@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import ScholarshipCalculator from "@/components/scholarship-predictor/ScholarshipCalculator";
+import AdmissionFormWrapper from "@/components/programs/AdmissionFormWrapper";
 
 interface CuetHeroAndCalculatorProps {
   data?: {
@@ -38,15 +39,23 @@ export default function CuetHeroAndCalculator({
         </div>
       </div>
 
-      {/* 2. Interactive Calculator Section */}
+      {/* 2. Interactive Calculator & Meritto Enquiry Section (2-Column Desktop Grid) */}
       <div className="gu-container py-12 sm:py-16 md:py-20 border-b border-[#E2E8F0]">
-        <div className="max-w-4xl mx-auto">
-          <ScholarshipCalculator
-            mode="cuet"
-            variant="cuet-hero"
-            programsData={programsData}
-            cuetData={cuetData}
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-12 items-start">
+          {/* Left Column: CUET Scholarship Calculator (~65%) */}
+          <div className="lg:col-span-7 xl:col-span-7">
+            <ScholarshipCalculator
+              mode="cuet"
+              variant="cuet-hero"
+              programsData={programsData}
+              cuetData={cuetData}
+            />
+          </div>
+
+          {/* Right Column: Sticky Meritto Enquiry Card (~35%) */}
+          <div className="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-28 flex justify-center lg:justify-end">
+            <AdmissionFormWrapper initialDiscipline="CUET UG Admissions" />
+          </div>
         </div>
       </div>
     </section>

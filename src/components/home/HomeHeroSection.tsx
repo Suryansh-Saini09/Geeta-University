@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
+import MerittoEnquiryWidget from "@/components/integrations/MerittoEnquiryWidget";
 
 /* =========================================================
    HERO BACKGROUND DRONE SHOTS
@@ -234,86 +235,114 @@ export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
       </div>
 
       {/* =====================================================
-          MAIN HERO CONTENT (LEFT-ALIGNED ADMISSIONS HIERARCHY)
+          MAIN HERO CONTENT (LEFT-ALIGNED ADMISSIONS HIERARCHY + RIGHT ENQUIRY FORM)
       ===================================================== */}
       <div className="gu-container relative z-20 flex w-full flex-1 flex-col justify-center py-12 sm:py-16 lg:py-20">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-2xl sm:max-w-3xl"
-        >
-          {/* 1. ADMISSIONS PILL STATUS */}
-          <motion.div variants={itemVariants} className="mb-6">
-            <a
-              href={applyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 p-1 pr-4 sm:pr-5 shadow-lg backdrop-blur-md transition-all duration-300 hover:border-[#E8871A] hover:bg-white/20 active:translate-y-0"
-            >
-              {/* Badge */}
-              <span className="flex items-center gap-2 rounded-full bg-[#E8871A] px-3 py-1 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-white shadow-md">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-80" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
-                </span>
-                <span>{applyBadge}</span>
-              </span>
-
-              {/* Status Text */}
-              <span className="text-xs sm:text-sm font-semibold tracking-wider text-white transition-colors group-hover:text-amber-100">
-                {applyText}
-              </span>
-
-              {/* Arrow Indicator */}
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-white transition-all duration-300 group-hover:bg-[#E8871A]">
-                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
-              </span>
-            </a>
-          </motion.div>
-
-          {/* 2. MAIN HEADLINE */}
-          <motion.h1
-            variants={itemVariants}
-            className="font-serif text-[clamp(2rem,6vw,4.75rem)] font-bold leading-[1.1] tracking-tight drop-shadow-[0_4px_16px_rgba(10,31,68,0.7)] break-words"
-          >
-            <span className="text-white block">{headline}</span>
-            <span className="text-[#E8871A] block mt-1">{highlightedHeadline}</span>
-          </motion.h1>
-
-          {/* 3. SUPPORTING DESCRIPTION */}
-          <motion.p
-            variants={itemVariants}
-            className="mt-5 sm:mt-6 max-w-xl text-sm sm:text-base md:text-lg leading-relaxed text-slate-200 font-sans drop-shadow-[0_2px_8px_rgba(10,31,68,0.6)]"
-          >
-            {description}
-          </motion.p>
-
-          {/* 4. PRIMARY + SECONDARY CTA BUTTONS */}
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8 xl:gap-12">
+          {/* Left Column: Hero Headline, Description & Action CTAs */}
           <motion.div
-            variants={itemVariants}
-            className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="w-full lg:col-span-7 xl:col-span-7"
           >
-            <Link
-              href={primaryUrl}
-              className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#E8871A] px-8 py-4 text-xs font-bold uppercase tracking-[1.5px] text-[#0A1F44] shadow-lg shadow-[#E8871A]/25 transition-all duration-300 hover:bg-amber-500 hover:-translate-y-0.5 active:translate-y-0"
-            >
-              <span>{primaryLabel}</span>
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
+            {/* 1. ADMISSIONS PILL STATUS */}
+            <motion.div variants={itemVariants} className="mb-6">
+              <a
+                href={applyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 p-1 pr-4 sm:pr-5 shadow-lg backdrop-blur-md transition-all duration-300 hover:border-[#E8871A] hover:bg-white/20 active:translate-y-0"
+              >
+                {/* Badge */}
+                <span className="flex items-center gap-2 rounded-full bg-[#E8871A] px-3 py-1 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-white shadow-md">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-80" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+                  </span>
+                  <span>{applyBadge}</span>
+                </span>
 
-            <button
-              type="button"
-              onClick={() => setIsOpen(true)}
-              className="group inline-flex items-center justify-center gap-3 rounded-full border border-white/30 bg-white/10 px-8 py-4 text-xs font-bold uppercase tracking-[1.5px] text-white backdrop-blur-md transition-all duration-300 hover:border-white/60 hover:bg-white/20 hover:-translate-y-0.5 active:translate-y-0"
+                {/* Status Text */}
+                <span className="text-xs sm:text-sm font-semibold tracking-wider text-white transition-colors group-hover:text-amber-100">
+                  {applyText}
+                </span>
+
+                {/* Arrow Indicator */}
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-white transition-all duration-300 group-hover:bg-[#E8871A]">
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+                </span>
+              </a>
+            </motion.div>
+
+            {/* 2. MAIN HEADLINE */}
+            <motion.h1
+              variants={itemVariants}
+              className="font-serif text-[clamp(2rem,4.5vw,4.25rem)] font-bold leading-[1.1] tracking-tight drop-shadow-[0_4px_16px_rgba(10,31,68,0.7)] break-words"
             >
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-[#0A1F44] transition-colors group-hover:bg-[#E8871A] group-hover:text-white">
-                <Play className="h-2.5 w-2.5 ml-0.5 fill-current" />
-              </span>
-              <span>{secondaryLabel}</span>
-            </button>
+              <span className="text-white block">{headline}</span>
+              <span className="text-[#E8871A] block mt-1">{highlightedHeadline}</span>
+            </motion.h1>
+
+            {/* 3. SUPPORTING DESCRIPTION */}
+            <motion.p
+              variants={itemVariants}
+              className="mt-5 sm:mt-6 max-w-xl text-sm sm:text-base md:text-lg leading-relaxed text-slate-200 font-sans drop-shadow-[0_2px_8px_rgba(10,31,68,0.6)]"
+            >
+              {description}
+            </motion.p>
+
+            {/* 4. PRIMARY + SECONDARY CTA BUTTONS */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
+            >
+              <Link
+                href={primaryUrl}
+                className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#E8871A] px-8 py-4 text-xs font-bold uppercase tracking-[1.5px] text-[#0A1F44] shadow-lg shadow-[#E8871A]/25 transition-all duration-300 hover:bg-amber-500 hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <span>{primaryLabel}</span>
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setIsOpen(true)}
+                className="group inline-flex items-center justify-center gap-3 rounded-full border border-white/30 bg-white/10 px-8 py-4 text-xs font-bold uppercase tracking-[1.5px] text-white backdrop-blur-md transition-all duration-300 hover:border-white/60 hover:bg-white/20 hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-[#0A1F44] transition-colors group-hover:bg-[#E8871A] group-hover:text-white">
+                  <Play className="h-2.5 w-2.5 ml-0.5 fill-current" />
+                </span>
+                <span>{secondaryLabel}</span>
+              </button>
+            </motion.div>
           </motion.div>
-        </motion.div>
+
+          {/* Right Column: Meritto Enquiry Widget Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end"
+          >
+            <div className="w-full max-w-[420px] rounded-3xl border border-white/40 bg-[#F4F6F9]/95 shadow-2xl backdrop-blur-xl overflow-hidden transition-all duration-300">
+              {/* Top Orange / Saffron Accent Bar (Matches Geeta University Theme & Image 2) */}
+              <div className="h-1.5 w-full bg-gradient-to-r from-[#E8871A] via-[#F04F23] to-[#E8871A]" />
+
+              {/* Card Header matching Image 2 */}
+              <div className="px-5 sm:px-6 pt-5 pb-1">
+                <h2 className="font-serif text-2xl font-bold tracking-tight text-[#0A1F44]">
+                  Enquire Now
+                </h2>
+              </div>
+
+              {/* Meritto Vendor Widget */}
+              <div className="px-1.5 sm:px-2.5 pb-2.5">
+                <MerittoEnquiryWidget height="600px" />
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
       {/* =====================================================

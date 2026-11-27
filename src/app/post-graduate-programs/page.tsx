@@ -4,6 +4,7 @@ import PostGraduateHero from "@/components/post-graduate-programs/PostGraduateHe
 import PostGraduateListSection from "@/components/post-graduate-programs/PostGraduateListSection";
 import FAQSection from "@/components/programs/FAQSection";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
+import MerittoFloatingEnquiry from "@/components/integrations/MerittoFloatingEnquiry";
 import { pgFaqsData } from "@/data/postGraduatePrograms";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
 import { getScholarshipPredictorData } from "@/server/services/scholarshipPredictor";
@@ -66,6 +67,9 @@ export default async function PostGraduateProgramsPage() {
         id="legacy-ecosystem"
         contextText={legacyData?.contextText || "PG students benefit from the integrated ecosystem of:"}
       />
+
+      {/* 5. Floating Vertical Enquire Now Sidebar */}
+      <MerittoFloatingEnquiry drawerSubtitle="Connect with our Post Graduate Admissions Office" />
     </div>
   );
 }
