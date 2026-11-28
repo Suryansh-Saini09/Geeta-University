@@ -4,8 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Play, Sparkles } from "lucide-react";
 import MerittoEnquiryWidget from "@/components/integrations/MerittoEnquiryWidget";
+import { useMerittoStore } from "@/components/integrations/merittoStore";
 
 /* =========================================================
    HERO BACKGROUND DRONE SHOTS
@@ -63,6 +64,7 @@ interface HomeHeroSectionProps {
 }
 
 export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
+  const { activeSlot, openDrawer } = useMerittoStore();
   const [isOpen, setIsOpen] = useState(false);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [nextVideoPreload, setNextVideoPreload] = useState(false);
@@ -318,28 +320,37 @@ export default function HomeHeroSection({ data }: HomeHeroSectionProps) {
             </motion.div>
           </motion.div>
 
-          {/* Right Column: Meritto Enquiry Widget Card */}
+          {/* Right Column: Enquiry Widget Card */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
             className="w-full lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end"
           >
-            <div className="w-full max-w-[420px] rounded-3xl border border-white/40 bg-[#F4F6F9]/95 shadow-2xl backdrop-blur-xl overflow-hidden transition-all duration-300">
-              {/* Top Orange / Saffron Accent Bar (Matches Geeta University Theme & Image 2) */}
-              <div className="h-1.5 w-full bg-gradient-to-r from-[#E8871A] via-[#F04F23] to-[#E8871A]" />
-
-              {/* Card Header matching Image 2 */}
-              <div className="px-5 sm:px-6 pt-5 pb-1">
-                <h2 className="font-serif text-2xl font-bold tracking-tight text-[#0A1F44]">
-                  Enquire Now
-                </h2>
-              </div>
-
-              {/* Meritto Vendor Widget */}
-              <div className="px-1.5 sm:px-2.5 pb-2.5">
-                <MerittoEnquiryWidget height="600px" />
-              </div>
+            <div className="w-full max-w-[430px] rounded-3xl border border-white/80 bg-white shadow-[0_24px_60px_-18px_rgba(16,32,58,0.36),0_2px_6px_rgba(16,32,58,0.08)] overflow-hidden transition-all duration-300">
+              {activeSlot === "drawer" ? (
+                <div className="px-6 py-16 flex flex-col items-center justify-center text-center">
+                  <div className="h-12 w-12 rounded-full bg-[#E8871A]/10 text-[#E8871A] flex items-center justify-center mb-3">
+                    <Sparkles className="h-6 w-6 text-[#E8871A]" />
+                  </div>
+                  <h3 className="font-serif text-lg font-bold text-[#0A1F44]">
+                    Application Form Open in Drawer
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-1 max-w-[220px] leading-relaxed">
+                    The admissions portal is active in the sidebar panel.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={openDrawer}
+                    className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#0A1F44] px-4 py-2 text-xs font-semibold text-white hover:bg-[#E8871A] transition-colors cursor-pointer"
+                  >
+                    <span>View Active Form</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </button>
+                </div>
+              ) : (
+                <MerittoEnquiryWidget />
+              )}
             </div>
           </motion.div>
         </div>

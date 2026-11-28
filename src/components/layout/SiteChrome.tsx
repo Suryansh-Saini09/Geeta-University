@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import FloatingSocialBar from "@/components/layout/FloatingSocialBar";
+import MerittoFloatingEnquiry from "@/components/integrations/MerittoFloatingEnquiry";
 
 import type { HeaderNavigationData } from "@/server/services/navigation";
 
@@ -33,6 +34,7 @@ export default function SiteChrome({
       <FloatingSocialBar />
       <main className="w-full min-w-0 flex-1">{children}</main>
       {footer ?? <Footer />}
+      <MerittoFloatingEnquiry />
     </>
   );
 }

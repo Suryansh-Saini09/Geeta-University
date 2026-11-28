@@ -246,3 +246,59 @@ svg {
     padding-left: 48px !important;
   }
 }
+
+/* ==========================================================================
+   Enrolyx Student Widget Brand Overrides (Geeta University Theme)
+   ========================================================================== */
+.student-widget {
+  --student-widget-accent: #E8871A;
+  --student-widget-bg: #ffffff;
+  --student-widget-text: #152033;
+  --student-widget-border: #dfe4ec;
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 24px !important;
+  overflow: hidden !important;
+  text-align: left !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+.student-widget .student-widget__head {
+  position: relative !important;
+  z-index: 1 !important;
+  width: auto !important;
+  padding: 20px 24px 34px !important;
+  background: radial-gradient(120% 140% at 100% 0%, rgba(255, 255, 255, 0.22), transparent 55%),
+              linear-gradient(135deg, #E8871A 0%, #F04F23 100%) !important;
+}
+
+.student-widget .student-widget__title {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.015em !important;
+  text-transform: none !important;
+  color: #ffffff !important;
+}
+
+.student-widget .student-widget__intro {
+  margin: 6px 0 0 !important;
+  padding: 0 !important;
+  font-size: 13.5px !important;
+  line-height: 1.4 !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.student-widget .student-widget__tabs {
+  margin: -22px 16px 0 !important;
+  position: relative;
+  z-index: 2;
+}
+
+.student-widget .student-widget__form {
+  padding: 18px 20px 16px !important;
+}
