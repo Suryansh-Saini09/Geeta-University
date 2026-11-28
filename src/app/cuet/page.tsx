@@ -8,7 +8,6 @@ import CuetTestimonials from "@/components/cuet/CuetTestimonials";
 import CuetStarPerformers from "@/components/cuet/CuetStarPerformers";
 import FAQSection from "@/components/programs/FAQSection";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
-import MerittoFloatingEnquiry from "@/components/integrations/MerittoFloatingEnquiry";
 import { cuetFaqsData } from "@/data/cuetData";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
 import { getScholarshipPredictorData } from "@/server/services/scholarshipPredictor";
@@ -87,8 +86,6 @@ export default async function CuetPage() {
         contextText={sections.legacy_ecosystem?.contextText || "CUET admitted students benefit from the vast academic infrastructure and ecosystem of:"}
       />
 
-      {/* 9. Floating Vertical Enquire Now Sidebar */}
-      <MerittoFloatingEnquiry drawerSubtitle="CUET Admissions & Counseling Desk" />
     </div>
   );
 }

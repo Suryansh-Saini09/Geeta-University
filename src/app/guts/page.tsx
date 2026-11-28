@@ -9,7 +9,6 @@ import GutsVideoBanner from "@/components/guts/GutsVideoBanner";
 import GutsVirtualCampus from "@/components/guts/GutsVirtualCampus";
 import FAQSection from "@/components/programs/FAQSection";
 import LegacyEcosystem from "@/components/about/LegacyEcosystem";
-import MerittoFloatingEnquiry from "@/components/integrations/MerittoFloatingEnquiry";
 import { gutsFaqsData } from "@/data/gutsData";
 import { getPublishedAdmissionsPage } from "@/server/services/pages";
 
@@ -88,8 +87,6 @@ export default async function GutsPage() {
         contextText={sections.legacy_ecosystem?.contextText || "GUTS scholarship scholars benefit from the integrated ecosystem of:"}
       />
 
-      {/* 10. Floating Vertical Enquire Now Sidebar */}
-      <MerittoFloatingEnquiry drawerSubtitle="GUTS Scholarship Counseling Desk" />
     </div>
   );
 }

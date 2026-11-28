@@ -21,34 +21,19 @@ export default function AdmissionFormWrapper({
   return (
     <div
       id="enquiry-form"
-      className={`relative w-full max-w-[420px] mx-auto rounded-3xl border border-slate-200/90 bg-[#F4F6F9]/95 shadow-[0_12px_36px_rgba(10,31,68,0.08)] backdrop-blur-xl overflow-hidden transition-all duration-300 ${className}`}
+      className={`relative w-full max-w-[430px] mx-auto rounded-3xl border border-slate-200/90 bg-white shadow-[0_24px_60px_-18px_rgba(16,32,58,0.2),0_2px_6px_rgba(16,32,58,0.06)] overflow-hidden transition-all duration-300 ${className}`}
     >
-      {/* Top Saffron / Orange Accent Bar matching Geeta University Theme */}
-      <div className="h-1.5 w-full bg-gradient-to-r from-[#E8871A] via-[#F04F23] to-[#E8871A]" />
-
-      {/* Card Header matching Website Design System */}
-      <div className="px-5 sm:px-6 pt-5 pb-1">
-        <h3 className="font-serif text-2xl font-bold tracking-tight text-[#0A1F44]">
-          Enquire Now
-        </h3>
-        {(initialCourse || initialDiscipline) && (
-          <p className="text-xs text-slate-500 font-medium mt-0.5 truncate">
-            {initialCourse || initialDiscipline}
-          </p>
-        )}
-      </div>
-
-      {/* When Drawer is Open: Render placeholder to avoid duplicate .npf_wgts instances */}
+      {/* When Drawer is Open: Render placeholder to avoid duplicate widget instances */}
       {activeSlot === "drawer" ? (
         <div className="px-6 py-16 flex flex-col items-center justify-center text-center">
           <div className="h-12 w-12 rounded-full bg-[#E8871A]/10 text-[#E8871A] flex items-center justify-center mb-3">
             <Sparkles className="h-6 w-6 text-[#E8871A]" />
           </div>
           <h4 className="font-serif text-lg font-bold text-[#0A1F44]">
-            Enquiry Form Open in Drawer
+            Application Form Open in Drawer
           </h4>
           <p className="text-xs text-slate-500 mt-1 max-w-[220px] leading-relaxed">
-            The admissions form is active in the sidebar panel.
+            The admissions portal is active in the sidebar panel.
           </p>
           <button
             type="button"
@@ -60,10 +45,8 @@ export default function AdmissionFormWrapper({
           </button>
         </div>
       ) : (
-        /* Default: Official Meritto (NoPaperForms) Enquiry Widget */
-        <div className="px-1.5 sm:px-2.5 pb-2.5">
-          <MerittoEnquiryWidget height="600px" />
-        </div>
+        /* Default: Official Enrolyx Student Enquiry Widget */
+        <MerittoEnquiryWidget />
       )}
     </div>
   );

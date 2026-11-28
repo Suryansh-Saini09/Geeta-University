@@ -5,239 +5,272 @@ import { usePathname } from "next/navigation";
 import { AlertCircle, RefreshCw, Loader2, Phone, Mail } from "lucide-react";
 
 /**
- * Official Meritto (formerly NoPaperForms) Enquiry Widget Integration.
- * 
- * Vendor embed specification:
- * Container: <div class="npf_wgts" data-height="400px" data-w="cc53b914cae1d736d235f9adb19f5426"></div>
- * External Script: https://v093rne98r.in6.widgets.nopaperforms.com/vemwgts.js
+ * Official Enrolyx Student Enquiry Widget Integration
+ * (Migrated from legacy Meritto / NoPaperForms embed).
  */
 
-export const MERITTO_WIDGET_CONFIG = {
-  WIDGET_ID: "cc53b914cae1d736d235f9adb19f5426",
-  SCRIPT_URL: "https://v093rne98r.in6.widgets.nopaperforms.com/vemwgts.js",
-  SCRIPT_ID: "meritto-vemwgts-script",
-  DEFAULT_HEIGHT: "600px",
+export const ENROLYX_WIDGET_CONFIG = {
+  SITE_ID: "f77c7b7c-ff87-4850-8dda-dff0d1949fd4",
+  SCRIPT_URL:
+    "https://enrolyx.in/student-widget.js?site=f77c7b7c-ff87-4850-8dda-dff0d1949fd4&utm_source=website&utm_medium=embedded_widget&utm_campaign=admissions",
+  SCRIPT_ID: "enrolyx-student-widget-script",
+  // Fits cleanly below the navbar on laptop screens without clipping past the fold
+  MAX_HEIGHT: "min(620px, calc(100dvh - 165px))",
 } as const;
 
-interface MerittoEnquiryWidgetProps {
+// Backwards compatibility alias for existing codebase
+export const MERITTO_WIDGET_CONFIG = ENROLYX_WIDGET_CONFIG;
+
+interface EnrolyxEnquiryWidgetProps {
+  className?: string;
+  /** Pass "none" for full natural height with no inner scroll */
+  maxHeight?: string;
+  /** Kept for backwards compatibility with previous prop signatures */
   widgetId?: string;
   height?: string;
-  className?: string;
-}
-
-declare global {
-  interface Window {
-    cIframe?: () => void;
-  }
 }
 
 export default function MerittoEnquiryWidget({
-  widgetId = MERITTO_WIDGET_CONFIG.WIDGET_ID,
-  height = MERITTO_WIDGET_CONFIG.DEFAULT_HEIGHT,
   className = "",
-}: MerittoEnquiryWidgetProps) {
+  maxHeight = ENROLYX_WIDGET_CONFIG.MAX_HEIGHT,
+}: EnrolyxEnquiryWidgetProps) {
   const pathname = usePathname();
   const prevPathRef = useRef(pathname);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [retryCount, setRetryCount] = useState(0);
+  const [scrollState, setScrollState] = useState({
+    isScrollable: false,
+    canScrollDown: false,
+  });
 
-  const initWidget = useCallback(() => {
+  const isUnbounded = maxHeight === "none";
+
+  // Helper: check if widget has injected content
+  const checkWidgetReady = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return false;
+
+    const hasChildren = el.childElementCount > 0;
+    const hasWidgetClass = Boolean(el.querySelector(".student-widget, section, form, iframe"));
+    const isMountedFlag = el.dataset.studentWidgetMounted === "1";
+    const hasShadow = Boolean(el.shadowRoot && el.shadowRoot.childElementCount > 0);
+
+    return hasChildren || hasWidgetClass || isMountedFlag || hasShadow;
+  }, []);
+
+  const injectScript = useCallback(() => {
     if (typeof window === "undefined" || !containerRef.current) return;
 
-    setStatus("loading");
-
-    // If an iframe already exists inside this container, we are already initialized
-    const existingIframe = containerRef.current.querySelector("iframe");
-    if (existingIframe && existingIframe.src) {
+    if (checkWidgetReady()) {
       setStatus("ready");
       return;
     }
 
-    let isSubscribed = true;
-    let fallbackTimer: NodeJS.Timeout | null = null;
+    setStatus("loading");
 
-    const checkIframeInjected = () => {
-      if (!isSubscribed) return;
-      const iframe = containerRef.current?.querySelector("iframe");
-      if (iframe) {
-        setStatus("ready");
-        if (fallbackTimer) clearTimeout(fallbackTimer);
-      }
+    if (containerRef.current) {
+      delete containerRef.current.dataset.studentWidgetMounted;
+    }
+
+    const existingScript = document.getElementById(ENROLYX_WIDGET_CONFIG.SCRIPT_ID);
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    const script = document.createElement("script");
+    script.id = ENROLYX_WIDGET_CONFIG.SCRIPT_ID;
+    script.type = "text/javascript";
+    script.async = true;
+    script.src = ENROLYX_WIDGET_CONFIG.SCRIPT_URL;
+
+    script.onload = () => {
+      setTimeout(() => {
+        if (checkWidgetReady()) {
+          setStatus("ready");
+        }
+      }, 150);
     };
 
-    // 12-second safety timeout: If vendor network hangs or is blocked, show fallback
-    fallbackTimer = setTimeout(() => {
+    script.onerror = (e) => {
+      console.error("[EnrolyxWidget] Failed to load student widget script:", e);
+      setStatus("error");
+    };
+
+    document.body.appendChild(script);
+  }, [checkWidgetReady]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    let isSubscribed = true;
+    let safetyTimer: NodeJS.Timeout | null = null;
+
+    safetyTimer = setTimeout(() => {
       if (isSubscribed) {
-        const iframe = containerRef.current?.querySelector("iframe");
-        if (!iframe) {
+        if (!checkWidgetReady()) {
           setStatus("error");
-          console.warn("[MerittoWidget] Vendor script loading timed out after 12s.");
+          console.warn("[EnrolyxWidget] Widget initialization timed out after 10s.");
         } else {
           setStatus("ready");
         }
       }
-    }, 12000);
+    }, 10000);
 
-    const existingScript = document.getElementById(
-      MERITTO_WIDGET_CONFIG.SCRIPT_ID
-    ) as HTMLScriptElement | null;
+    injectScript();
 
-    if (existingScript) {
-      // Singleton script tag already exists in the DOM.
-      // If vendor function cIframe is defined, invoke it to populate the container
-      if (typeof window.cIframe === "function") {
-        try {
-          window.cIframe();
-          setTimeout(checkIframeInjected, 100);
-        } catch (err) {
-          console.error("[MerittoWidget] Error invoking vendor cIframe():", err);
-          if (isSubscribed) setStatus("error");
-        }
-      } else {
-        // Script is present but still loading over the wire
-        const onScriptLoaded = () => {
-          if (typeof window.cIframe === "function") {
-            try {
-              window.cIframe();
-              setTimeout(checkIframeInjected, 100);
-            } catch (err) {
-              console.error("[MerittoWidget] Error invoking vendor cIframe() after load:", err);
-              if (isSubscribed) setStatus("error");
-            }
-          } else {
-            setTimeout(checkIframeInjected, 200);
-          }
-        };
-
-        const onScriptError = (err: Event | string) => {
-          console.error("[MerittoWidget] Existing script failed to load:", err);
-          if (isSubscribed) setStatus("error");
-        };
-
-        existingScript.addEventListener("load", onScriptLoaded, { once: true });
-        existingScript.addEventListener("error", onScriptError, { once: true });
-      }
-    } else {
-      // Inject the vendor script as a client-side singleton
-      const script = document.createElement("script");
-      script.id = MERITTO_WIDGET_CONFIG.SCRIPT_ID;
-      script.type = "text/javascript";
-      script.async = true;
-      script.src = MERITTO_WIDGET_CONFIG.SCRIPT_URL;
-
-      script.onload = () => {
-        // The vendor script calls cIframe() automatically upon evaluation.
-        // Check iframe injection after a short tick
-        setTimeout(checkIframeInjected, 100);
-      };
-
-      script.onerror = (e) => {
-        console.error(
-          "[MerittoWidget] Failed to load vendor script from:",
-          MERITTO_WIDGET_CONFIG.SCRIPT_URL,
-          e
-        );
-        if (isSubscribed) setStatus("error");
-      };
-
-      document.body.appendChild(script);
-    }
-
-    // Set up MutationObserver to detect when the vendor iframe is attached to container
     const observer = new MutationObserver(() => {
-      const iframe = containerRef.current?.querySelector("iframe");
-      if (iframe) {
+      if (checkWidgetReady()) {
         setStatus("ready");
-        if (fallbackTimer) clearTimeout(fallbackTimer);
+        if (safetyTimer) clearTimeout(safetyTimer);
       }
     });
 
     if (containerRef.current) {
-      observer.observe(containerRef.current, { childList: true });
+      observer.observe(containerRef.current, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["data-student-widget-mounted", "class"],
+      });
     }
 
     return () => {
       isSubscribed = false;
-      if (fallbackTimer) clearTimeout(fallbackTimer);
+      if (safetyTimer) clearTimeout(safetyTimer);
       observer.disconnect();
     };
-  }, [retryCount]);
+  }, [injectScript, checkWidgetReady, retryCount]);
 
+  // SPA Route Change Handling
   useEffect(() => {
     const pathChanged = prevPathRef.current !== pathname;
     prevPathRef.current = pathname;
 
     if (pathChanged && containerRef.current) {
-      // Route changed on client navigation: clear existing iframe so cIframe regenerates with new location.href
-      const existingIframe = containerRef.current.querySelector("iframe");
-      if (existingIframe) {
-        existingIframe.remove();
+      if (!checkWidgetReady()) {
+        injectScript();
       }
     }
+  }, [pathname, checkWidgetReady, injectScript]);
 
-    const cleanup = initWidget();
-    return () => {
-      if (cleanup) cleanup();
+  // Track whether the form overflows so we can manage direct scroll & bottom fade cue
+  useEffect(() => {
+    if (typeof window === "undefined" || status !== "ready" || isUnbounded) {
+      setScrollState({ isScrollable: false, canScrollDown: false });
+      return;
+    }
+
+    const scrollEl = scrollRef.current;
+    const innerEl = containerRef.current;
+    if (!scrollEl || !innerEl) return;
+
+    const updateScrollState = () => {
+      const isScrollable = scrollEl.scrollHeight > scrollEl.clientHeight + 2;
+      const canScrollDown =
+        isScrollable &&
+        scrollEl.scrollTop + scrollEl.clientHeight < scrollEl.scrollHeight - 6;
+
+      setScrollState((prev) =>
+        prev.isScrollable === isScrollable && prev.canScrollDown === canScrollDown
+          ? prev
+          : { isScrollable, canScrollDown }
+      );
     };
-  }, [initWidget, pathname]);
+
+    updateScrollState();
+
+    const observer = new ResizeObserver(updateScrollState);
+    observer.observe(scrollEl);
+    observer.observe(innerEl);
+
+    scrollEl.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState);
+
+    return () => {
+      observer.disconnect();
+      scrollEl.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+    };
+  }, [status, maxHeight, isUnbounded]);
+
+  // Direct wheel scrolling on the form; hands scroll back to the page at top/bottom edges
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (isUnbounded || !scrollState.isScrollable) return;
+    const el = e.currentTarget;
+    const atTop = el.scrollTop <= 0 && e.deltaY < 0;
+    const atBottom =
+      el.scrollTop + el.clientHeight >= el.scrollHeight - 1 && e.deltaY > 0;
+
+    if (!atTop && !atBottom) {
+      e.stopPropagation();
+    }
+  };
 
   const handleRetry = () => {
-    // If previous script failed, remove it so we can re-attempt fetching
-    const existingScript = document.getElementById(MERITTO_WIDGET_CONFIG.SCRIPT_ID);
-    if (existingScript && status === "error") {
-      existingScript.remove();
-    }
     setRetryCount((prev) => prev + 1);
   };
 
   return (
-    <div className={`relative w-full ${className}`} style={{ minHeight: height }}>
-      {/* Loading Skeleton Placeholder (Prevents Cumulative Layout Shift) */}
+    <div className={`relative w-full ${className}`}>
+      {/* Guaranteed scrollbar hide across all browsers (overrides global scrollbar styles) */}
+      <style>{`
+        .enrolyx-scroll-area {
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
+        }
+        .enrolyx-scroll-area::-webkit-scrollbar {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+        }
+      `}</style>
+
+      {/* Loading Skeleton Placeholder */}
       {status === "loading" && (
         <div
-          style={{ minHeight: height }}
-          className="absolute inset-0 z-10 flex flex-col justify-center items-center rounded-xl bg-[#F4F6F9] p-6 text-center border border-slate-200/60 transition-opacity duration-300"
+          className="flex flex-col justify-center items-center rounded-2xl bg-[#F4F6F9] p-6 text-center border border-slate-200/60 transition-opacity duration-300 min-h-[420px]"
           aria-live="polite"
           aria-busy="true"
         >
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0A1F44]/5 text-[#E8871A] mb-3">
             <Loader2 className="h-6 w-6 animate-spin text-[#E8871A]" />
           </div>
-          <p className="text-sm font-semibold text-[#0A1F44]">Loading Admissions Form...</p>
+          <p className="text-sm font-semibold text-[#0A1F44]">Loading Admissions Portal...</p>
           <p className="text-xs text-slate-500 mt-1 max-w-xs">
-            Connecting securely to Geeta University enquiry desk.
+            Connecting securely to Geeta University admissions desk.
           </p>
           <div className="mt-4 w-full max-w-xs space-y-2.5">
-            <div className="h-8 w-full rounded-md bg-slate-200/70 animate-pulse" />
-            <div className="h-8 w-full rounded-md bg-slate-200/70 animate-pulse" />
-            <div className="h-8 w-full rounded-md bg-slate-200/70 animate-pulse" />
+            <div className="h-9 w-full rounded-md bg-slate-200/70 animate-pulse" />
+            <div className="h-9 w-full rounded-md bg-slate-200/70 animate-pulse" />
+            <div className="h-9 w-full rounded-md bg-slate-200/70 animate-pulse" />
           </div>
         </div>
       )}
 
-      {/* Fallback View (Network failure, script block, or vendor timeout) */}
+      {/* Fallback View (Network failure or vendor block) */}
       {status === "error" && (
         <div
-          style={{ minHeight: height }}
-          className="absolute inset-0 z-10 flex flex-col justify-center items-center rounded-xl bg-amber-50/90 p-6 text-center border border-amber-200/80 transition-opacity duration-300"
+          className="flex flex-col justify-center items-center rounded-2xl bg-amber-50/90 p-6 text-center border border-amber-200/80 transition-opacity duration-300 min-h-[380px]"
           role="alert"
         >
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-[#E8871A] mb-3">
             <AlertCircle className="h-6 w-6 text-[#E8871A]" />
           </div>
           <h4 className="font-serif text-base font-bold text-[#0A1F44]">
-            Enquiry Form Temporarily Unavailable
+            Admissions Portal Temporarily Unavailable
           </h4>
           <p className="text-xs text-slate-600 mt-1.5 max-w-sm leading-relaxed">
-            We are having trouble connecting to the enquiry portal. You can reach our admissions counsellors directly or try reloading.
+            We are having trouble connecting to the admissions portal. You can reach our counselors directly or try reloading.
           </p>
 
           <div className="mt-4 flex flex-col sm:flex-row items-center gap-2.5 w-full justify-center">
             <button
               type="button"
               onClick={handleRetry}
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#0A1F44] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#E8871A] transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#0A1F44] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#E8871A] transition-colors cursor-pointer"
             >
               <RefreshCw className="h-3.5 w-3.5" />
               <span>Retry Loading</span>
@@ -265,15 +298,42 @@ export default function MerittoEnquiryWidget({
         </div>
       )}
 
-      {/* Official Vendor Widget Container (Exact vendor attributes) */}
-      <div
-        ref={containerRef}
-        className="npf_wgts w-full transition-opacity duration-300"
-        data-height={height}
-        data-w={widgetId}
-        style={{ minHeight: height }}
-        suppressHydrationWarning
-      />
+      {/* Official Enrolyx Student Widget Container */}
+      <div className={`relative w-full ${status === "ready" ? "block" : "hidden"}`}>
+        <div
+          ref={scrollRef}
+          data-lenis-prevent={!isUnbounded && scrollState.isScrollable ? "" : undefined}
+          onWheel={handleWheel}
+          className={`iframe-container-inner enrolyx-scroll-area w-full max-w-full box-border overflow-x-hidden touch-pan-y ${
+            isUnbounded ? "overflow-y-visible" : "overflow-y-auto overscroll-contain"
+          }`}
+          style={{
+            height: "auto",
+            maxHeight: isUnbounded ? undefined : maxHeight,
+            WebkitOverflowScrolling: "touch",
+            boxSizing: "border-box",
+          }}
+        >
+          <div
+            ref={containerRef}
+            data-student-widget="auth"
+            className="w-full max-w-full box-border"
+            style={{ width: "100%", maxWidth: "100%", boxSizing: "border-box" }}
+            suppressHydrationWarning
+          />
+        </div>
+
+        {/* Subtle bottom fade when more fields exist below; disappears at the bottom */}
+        {!isUnbounded && scrollState.canScrollDown && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-10 rounded-b-2xl bg-gradient-to-t from-white via-white/75 to-transparent"
+          />
+        )}
+      </div>
     </div>
   );
 }
+
+// Named export for clear future usage
+export { MerittoEnquiryWidget as EnrolyxEnquiryWidget };
